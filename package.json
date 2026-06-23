@@ -1,0 +1,17 @@
+{
+  "dependencies": {
+    "@supabase/supabase-js": "^2.108.2",
+    "gray-matter": "^4.0.3"
+  },
+  "name": "aaj-marketing-skills",
+  "version": "1.0.0",
+  "description": "Agent skills for AI marketing tasks — grounded in AAJ's tested tools and methodology, not generic advice. Works with Claude Code, Cursor, OpenAI Codex, Windsurf, and any agent that supports the [Agent Skills spec](https://agentskills.io).",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs"
+}
