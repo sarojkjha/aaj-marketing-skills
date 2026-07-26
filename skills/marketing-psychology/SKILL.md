@@ -111,7 +111,7 @@ Where you're uncertain which friction dominates, say so and give the diagnostic 
 
 ## Related skills
 
-`copywriting` (turns these principles into actual words) · `positioning-statement` (fixes comprehension at the source) · `website-conversion-audit` (finds where the friction is) · `pricing-and-packaging` (anchoring and framing applied to price) · `ab-testing` (proves whether any of this worked).
+`copywriting` (turns these principles into actual words) · `positioning-statement` (fixes comprehension at the source) · `website-conversion-audit` (finds where the friction is) · `pricing-and-packaging` (anchoring and framing applied to price) · `ab-test-significance` (proves whether any of this worked).
 
 ## Credits
 

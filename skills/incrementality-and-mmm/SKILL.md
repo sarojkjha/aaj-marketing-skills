@@ -37,7 +37,7 @@ The only way to close that gap is to withhold the spend from a comparable group 
 
 ## When to use
 
-The user is designing or reading a holdout, geo, or lift test — or questioning whether attributed conversions are real. For on-site A/B tests of a page or flow, use `ab-testing`; the statistics overlap but the design question is different. For reporting results upward, use `marketing-report`.
+The user is designing or reading a holdout, geo, or lift test — or questioning whether attributed conversions are real. For on-site A/B tests of a page or flow, use `ab-test-significance`; the statistics overlap but the design question is different. For reporting results upward, use `marketing-report`.
 
 ## Before you start
 
@@ -117,7 +117,7 @@ If the test was inconclusive, say so plainly and give the sample size that would
 
 ## Related skills
 
-`ab-testing` (on-site experiments — same statistics, different design question) · `paid-media-budget-allocation` (where the reallocation decision lands) · `unit-economics` (the value-per-conversion input this depends on) · `marketing-report` (reporting the result upward) · `marketing-attribution` (the model this is designed to check).
+`ab-test-significance` (on-site experiments — same statistics, different design question) · `paid-media-budget-allocation` (where the reallocation decision lands) · `unit-economics` (the value-per-conversion input this depends on) · `marketing-report` (reporting the result upward) · `marketing-attribution` (the model this is designed to check).
 
 ## Credits
 

@@ -107,7 +107,7 @@ Use the format in `resources/output-format.md`: the split (channel, $, %, custom
 
 ## Related skills
 
-`unit-economics` (LTV and the CAC ceiling) · `marketing-budget-planning` (how much to spend in total) · `ab-testing` (prove a channel's lift before scaling) · `analytics-tracking` (measure customers, not form fills).
+`unit-economics` (LTV and the CAC ceiling) · `marketing-budget-planning` (how much to spend in total) · `ab-test-significance` (prove a channel's lift before scaling) · `analytics-tracking` (measure customers, not form fills).
 
 ## Credits
 
