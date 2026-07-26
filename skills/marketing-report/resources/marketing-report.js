@@ -151,7 +151,7 @@ function render(c){
   return out.join('\n');
 }
 
-var arg = process.argv[2];
+var arg = process.argv[2] === '--demo' ? undefined : process.argv[2];
 if (arg === '--help' || arg === '-h'){ console.log(require('fs').readFileSync(__filename,'utf8').split('*/')[0].replace(/^\/\*/,'')); process.exit(0); }
 var cfg;
 if (arg){ try { cfg = JSON.parse(arg); } catch(e){ console.error('Invalid JSON. Run --help for the schema.\n'+e.message); process.exit(1); } }

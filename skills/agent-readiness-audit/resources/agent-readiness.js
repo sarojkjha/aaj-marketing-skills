@@ -219,7 +219,7 @@ function main() {
   const flags = {};
   if (argv.includes("--all")) CHECKS.forEach(c => { flags[c.id] = true; });
 
-  const unknown = argv.filter(a => a.startsWith("--") && !FLAGMAP[a] && !["--help","-h","--json","--all"].includes(a));
+  const unknown = argv.filter(a => a.startsWith("--") && !FLAGMAP[a] && !["--help","-h","--json","--all","--demo"].includes(a));
   if (unknown.length) {
     console.error(`Unknown flag(s): ${unknown.join(", ")}\nRun --help for the list.`);
     process.exit(1);
