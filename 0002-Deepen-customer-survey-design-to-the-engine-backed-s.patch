@@ -1,0 +1,350 @@
+From f744f0dd36fe19fd7e7cb884d4f262ae2b3b0317 Mon Sep 17 00:00:00 2001
+From: test <test@test.com>
+Date: Sun, 26 Jul 2026 23:21:58 +0000
+Subject: [PATCH 2/3] Deepen customer-survey-design to the engine-backed
+ standard: sampling engine (sample/segments modes), Method section, sampling
+ triggers in description, fixed dangling related-skill refs
+
+---
+ skills/customer-survey-design/SKILL.md        |  60 +++--
+ .../resources/survey-design.js                | 214 ++++++++++++++++++
+ 2 files changed, 253 insertions(+), 21 deletions(-)
+ create mode 100644 skills/customer-survey-design/resources/survey-design.js
+
+diff --git a/skills/customer-survey-design/SKILL.md b/skills/customer-survey-design/SKILL.md
+index 6ed646f..1b0e643 100644
+--- a/skills/customer-survey-design/SKILL.md
++++ b/skills/customer-survey-design/SKILL.md
+@@ -2,11 +2,13 @@
+ name: customer-survey-design
+ description: >-
+   Use when the user wants to design a customer or market survey — choosing the
+-  questions, structure, and scales to get unbiased, decision-useful answers.
+-  Also use when the user mentions survey, questionnaire, NPS, customer feedback,
+-  market research survey, product-market fit survey, or "what should I ask my
+-  customers." Produces a structured survey with unbiased questions mapped to the
+-  decisions it should inform.
++  questions, structure, scales, and sample size to get unbiased, decision-useful
++  answers. Also use when the user mentions survey, questionnaire, NPS, customer
++  feedback, market research survey, product-market fit survey, sample size,
++  margin of error, "how many responses do I need," or "what should I ask my
++  customers." Produces a structured survey with unbiased questions mapped to
++  decisions, plus computed sample-size, invite, and segment-readability numbers
++  from a runnable engine.
+ license: MIT
+ metadata:
+   publisher: AAJ
+@@ -14,50 +16,66 @@ metadata:
+   category: Research & Personas
+   phase: Diagnose
+   difficulty: Starter
+-  version: 1.0.0
++  version: 1.1.0
+   agents: [Claude Code, Cursor, OpenAI Codex, Windsurf, Cline]
+-  inputs: The decision the survey should inform, who you'll ask, and any specific topics to cover
+-  outputs: A structured survey — questions, types, scales, and order — designed to avoid bias, with the decision each question informs
++  inputs: The decision the survey should inform, who you'll ask, audience size and expected response rate if known, and the segment cuts you plan to report
++  outputs: A structured survey — questions, types, scales, and order — designed to avoid bias, plus required completes, invites, and a per-segment readability verdict from the engine
+   related_aaj:
+     - https://aajconsult.com/tools/survey-studio
+-  related: [persona-builder, positioning-statement]
+-  tags: [survey, questionnaire, research, nps, pmf, customer-feedback]
++  related: [persona-builder, positioning-statement, ab-test-significance]
++  tags: [survey, questionnaire, research, nps, pmf, customer-feedback, sample-size, margin-of-error]
+ ---
+ 
+ # Customer Survey Design
+ 
+ Design surveys that produce **answers you can act on**, not vanity data. The discipline is starting from the decision the survey must inform and writing questions that don't lead the respondent — most surveys fail by asking biased questions that confirm what the author hoped.
+ 
++The second, quieter failure mode is fielding a survey that can't answer its own question: 60 responses split across five segments, then decisions made on ±13-point noise. This skill computes what a readable survey actually requires **before** anything is sent — and refuses to bless segment cuts the sample can't support.
++
+ ## When to use
+ 
+-The user is about to field a survey and needs the questions and structure to be right before it goes out.
++The user is about to field a survey and needs the questions, structure, and sample plan to be right before it goes out.
+ 
+ ## Before you start
+ 
+ 1. **Name the decision.** What will you do differently based on the results? If a question doesn't inform a decision, cut it.
+-2. **Identify the respondents** and how you'll reach them (existing customers, churned users, prospects, market panel) — this shapes wording and length.
+-3. **Pick the survey type** to match: PMF ("how would you feel if you could no longer use this?"), NPS + why, onboarding/CSAT, churn reason, or discovery.
++2. **Identify the respondents** and how you'll reach them (existing customers, churned users, prospects, market panel) — this shapes wording and length. Get the reachable audience size and a realistic response rate if known.
++3. **List the cuts you'll report.** If the readout says "by segment," the sample must be sized for the smallest cell, not the total.
++4. **Pick the survey type** to match: PMF ("how would you feel if you could no longer use this?"), NPS + why, onboarding/CSAT, churn reason, or discovery.
++
++## Method
++
++The engine (`resources/survey-design.js`, Node, stdlib only) computes:
++
++- **Required completes** — n₀ = z²·p(1−p)/e², with finite-population correction n = n₀/(1+(n₀−1)/N) when the audience is finite. Worked check: ±5pp at 95% (z=1.96, p=0.5) → n₀ = 384.16 → **385**; corrected for N=2,000 → **323**.
++- **Invites** — completes ÷ response rate, with a feasibility verdict against the audience size (loosen the margin, lift response, or run a census and report the achieved ±).
++- **Segment readability** — worst-case margin per cell, e = z·√(0.25/n_cell), labelled READ (≤±5pp), CAUTION (±5–8pp, directional), DON'T READ (wider). Thresholds are working labels, not laws.
++
++Modes: `sample '<json>'` and `segments '<json>'`. `--demo` runs both worked examples with no arguments; `--help` prints the schema.
+ 
+ ## Workflow
+ 
+-1. **Map questions to decisions** — list the decisions, then write the minimum questions that inform each.
+-2. **Choose question types and scales** using `resources/survey-template.md` (open-ended for discovery, closed/scale for measurement; consistent scale direction).
+-3. **Write unbiased wording** — neutral, one idea per question, no leading or loaded phrasing, balanced options.
+-4. **Order for flow and low drop-off** — easy/engaging first, sensitive/demographic last, group by topic, keep it short.
+-5. **Add the key open-ended "why"** after rating questions — that's where the actionable insight lives.
++1. **Size the survey first** — run `node resources/survey-design.js sample '<json>'` with the margin, confidence, audience, and response rate. If it's not feasible, fix the plan before writing a single question.
++2. **Check the cuts** — run `segments` mode with planned segment shares. Merge or oversample any DON'T READ cell now, not after fielding.
++3. **Map questions to decisions** — list the decisions, then write the minimum questions that inform each.
++4. **Choose question types and scales** using `resources/survey-template.md` (open-ended for discovery, closed/scale for measurement; consistent scale direction).
++5. **Write unbiased wording** — neutral, one idea per question, no leading or loaded phrasing, balanced options.
++6. **Order for flow and low drop-off** — easy/engaging first, sensitive/demographic last, group by topic, keep it short.
++7. **Add the key open-ended "why"** after rating questions — that's where the actionable insight lives.
+ 
+ ## Present the result
+ 
+-Deliver the survey in order (question, type, scale/options) with a note on the decision each informs, plus an estimated completion time and the recommended channel/timing.
++Lead with the sample plan (completes, invites, feasibility, and the segment-readability table from the engine), then the survey in order (question, type, scale/options) with the decision each informs, an estimated completion time, and the recommended channel/timing.
+ 
+ ## Guardrails & common mistakes
+ 
++- **Don't promise segment reads the sample can't support.** If a cell says DON'T READ, either resize or drop the cut from the readout.
+ - **No leading questions.** "How much did you love our amazing onboarding?" yields noise. Ask neutrally.
+ - **One idea per question.** Double-barreled questions ("Was it fast and easy?") can't be answered cleanly.
+ - **Keep it short.** Every extra question lowers completion and data quality.
+ - **Balance the scale.** Offer as many negative as positive options; include a neutral where appropriate.
+-- **Open-ended "why" is gold** — but limit them; too many tank completion.
+ - **Pilot first.** Test with a few people to catch confusing wording before fielding.
++- **Survey sampling ≠ experiment significance.** Testing whether variant B beat variant A belongs in `ab-test-significance`; this engine sizes *reads*, not experiments.
+ 
+ ## Related AAJ resources
+ 
+@@ -65,7 +83,7 @@ Deliver the survey in order (question, type, scale/options) with a note on the d
+ 
+ ## Related skills
+ 
+-`persona-builder` and `customer-research` (turn answers into insight) · `positioning-statement` (questions that test messaging) · `churn-prevention` (churn-reason surveys).
++`persona-builder` (turn answers into personas) · `positioning-statement` (questions that test messaging) · `lifecycle-and-retention` (churn-reason surveys feed the retention diagnosis) · `ab-test-significance` (experiments, not survey reads).
+ 
+ ## Credits
+ 
+diff --git a/skills/customer-survey-design/resources/survey-design.js b/skills/customer-survey-design/resources/survey-design.js
+new file mode 100644
+index 0000000..abb6e84
+--- /dev/null
++++ b/skills/customer-survey-design/resources/survey-design.js
+@@ -0,0 +1,214 @@
++#!/usr/bin/env node
++/*
++ * AAJ Customer Survey Design — sampling engine
++ * Part of the "customer-survey-design" Agent Skill.
++ *
++ * Answers the two questions every survey plan gets wrong: how many completes
++ * do you actually need, and which segment cuts will be readable afterwards.
++ *
++ * USAGE
++ *   node survey-design.js --demo                 # both modes, worked examples
++ *   node survey-design.js sample '<json>'        # required completes + invites
++ *   node survey-design.js segments '<json>'      # per-cut margin of error
++ *   node survey-design.js --help
++ *
++ * CONFIG (JSON)
++ *   sample:
++ *     { "marginOfError": 5,          // ± percentage points you can accept
++ *       "confidence": 95,            // 90 | 95 | 99
++ *       "expectedProportion": 50,    // % — use 50 if unsure (worst case)
++ *       "population": 2000,          // optional — total reachable audience
++ *       "responseRate": 20 }         // optional % — turns completes into invites
++ *   segments:
++ *     { "completes": 400, "confidence": 95,
++ *       "segments": [ { "name": "SMB", "share": 55 },
++ *                     { "name": "Mid-Market", "share": 30 },
++ *                     { "name": "Enterprise", "share": 15 } ] }
++ *
++ * Readability thresholds are working labels, not laws: ±5pp or tighter reads
++ * clean, ±5–8pp directional, wider than ±8pp is noise for most decisions.
++ */
++
++'use strict';
++
++const Z = { 90: 1.645, 95: 1.960, 99: 2.576 };
++
++function pct(v) {
++  // Accept 20 or 0.2 for "20%".
++  if (v == null || isNaN(v)) return null;
++  return v > 1 ? v / 100 : v;
++}
++
++function sampleSize(cfg) {
++  const conf = cfg.confidence || 95;
++  const z = Z[conf];
++  if (!z) throw new Error(`confidence must be 90, 95 or 99 (got ${cfg.confidence})`);
++  const e = pct(cfg.marginOfError);
++  if (!e || e <= 0 || e >= 0.5) throw new Error('marginOfError must be a positive ± in points, e.g. 5');
++  const p = pct(cfg.expectedProportion != null ? cfg.expectedProportion : 50);
++  if (p <= 0 || p >= 1) throw new Error('expectedProportion must be between 0 and 100 (exclusive)');
++
++  const n0 = (z * z * p * (1 - p)) / (e * e);
++  let n = n0, fpcApplied = false;
++  const N = cfg.population;
++  if (N && N > 0) { n = n0 / (1 + (n0 - 1) / N); fpcApplied = true; }
++  n = Math.ceil(n);
++
++  let invites = null, feasible = null;
++  const rr = pct(cfg.responseRate);
++  if (rr) {
++    if (rr <= 0 || rr > 1) throw new Error('responseRate must be between 0 and 100');
++    invites = Math.ceil(n / rr);
++    if (N) feasible = invites <= N;
++  }
++  return { z, conf, e, p, n0: Math.ceil(n0), n, N: N || null, fpcApplied, rr: rr || null, invites, feasible };
++}
++
++function segmentMoE(nSeg, z) {
++  // Worst-case p = 0.5 for a proportion read within the cell.
++  return z * Math.sqrt(0.25 / nSeg);
++}
++
++function readLabel(moePP) {
++  if (moePP <= 5) return ['READ', 'clean read'];
++  if (moePP <= 8) return ['CAUTION', 'directional only'];
++  return ['DON\u2019T READ', 'noise at this size'];
++}
++
++function segments(cfg) {
++  const conf = cfg.confidence || 95;
++  const z = Z[conf];
++  if (!z) throw new Error(`confidence must be 90, 95 or 99 (got ${cfg.confidence})`);
++  const n = cfg.completes;
++  if (!n || n < 1) throw new Error('completes must be a positive number');
++  if (!Array.isArray(cfg.segments) || !cfg.segments.length) throw new Error('segments must be a non-empty array of {name, share}');
++  const shareSum = cfg.segments.reduce((a, s) => a + (pct(s.share) || 0), 0);
++  const rows = cfg.segments.map(s => {
++    const share = pct(s.share);
++    if (share == null || share <= 0) throw new Error(`segment "${s.name}" needs a positive share`);
++    const nSeg = Math.round(n * share);
++    const moe = nSeg > 0 ? segmentMoE(nSeg, z) * 100 : Infinity;
++    const [flag, note] = readLabel(moe);
++    return { name: s.name, share, nSeg, moe, flag, note };
++  });
++  return { conf, z, n, rows, shareSum };
++}
++
++/* ---------- rendering ---------- */
++
++function bar(v, max, width) {
++  const w = Math.max(0, Math.round((v / max) * width));
++  return '\u2588'.repeat(w) + '\u2591'.repeat(width - w);
++}
++
++function renderSample(r) {
++  const L = [];
++  L.push('AAJ \u00b7 SURVEY SAMPLE SIZE');
++  L.push('\u2500'.repeat(56));
++  L.push(`Target read        \u00b1${(r.e * 100).toFixed(1)}pp at ${r.conf}% confidence (z=${r.z})`);
++  L.push(`Assumed proportion ${(r.p * 100).toFixed(0)}%${r.p === 0.5 ? ' (worst case \u2014 safest)' : ''}`);
++  L.push('');
++  L.push(`Completes needed   ${r.n}${r.fpcApplied ? `   (infinite-population n=${r.n0}, corrected for N=${r.N})` : ''}`);
++  if (r.invites != null) {
++    L.push(`Invites needed     ${r.invites}   (at ${(r.rr * 100).toFixed(0)}% response rate)`);
++  }
++  L.push('');
++  if (r.feasible === false) {
++    L.push(`\u25bc NOT FEASIBLE \u2014 you need ${r.invites} invites but only have ${r.N} people.`);
++    L.push('  Loosen the margin, lift the response rate (incentive, reminders),');
++    L.push('  or accept a census of everyone you can reach and report the achieved \u00b1.');
++  } else if (r.feasible === true) {
++    L.push(`\u25b2 FEASIBLE \u2014 ${r.invites} invites fits inside your ${r.N}-person audience.`);
++  } else {
++    L.push('\u25b8 Add "responseRate" (and "population" if finite) to turn completes into a send plan.');
++  }
++  return L.join('\n');
++}
++
++function renderSegments(r) {
++  const L = [];
++  L.push('AAJ \u00b7 SEGMENT READABILITY');
++  L.push('\u2500'.repeat(64));
++  L.push(`Total completes ${r.n} \u00b7 ${r.conf}% confidence \u00b7 worst-case p=50%`);
++  if (Math.abs(r.shareSum - 1) > 0.02) L.push(`\u26a0 segment shares sum to ${(r.shareSum * 100).toFixed(0)}% \u2014 check the mix`);
++  L.push('');
++  L.push('Segment          n     \u00b1MoE    ' + ' '.repeat(12) + 'Verdict');
++  for (const s of r.rows) {
++    L.push(
++      s.name.padEnd(14) +
++      String(s.nSeg).padStart(5) +
++      `  \u00b1${s.moe.toFixed(1)}pp  `.padEnd(11) +
++      bar(Math.min(s.moe, 15), 15, 12) + '  ' +
++      `${s.flag} (${s.note})`
++    );
++  }
++  L.push('');
++  const bad = r.rows.filter(s => s.flag !== 'READ');
++  if (!bad.length) L.push('\u25b2 Every planned cut is readable at this sample size.');
++  else {
++    const worst = bad.reduce((a, s) => (s.nSeg < a.nSeg ? s : a), bad[0]);
++    const needed = Math.ceil(0.25 * r.z * r.z / Math.pow(0.05, 2)); // n per cell for ±5pp
++    L.push(`\u25bc ${bad.length} cut(s) below a clean read. Smallest cell "${worst.name}" (n=${worst.nSeg}) is \u00b1${worst.moe.toFixed(1)}pp.`);
++    L.push(`  A \u00b15pp read needs ~${needed} completes per cell at ${r.conf}% \u2014 either boost total n,`);
++    L.push('  oversample the small segment, or merge it into a wider cut before fielding.');
++  }
++  return L.join('\n');
++}
++
++/* ---------- CLI ---------- */
++
++const HELP = `AAJ Customer Survey Design \u2014 sampling engine
++
++MODES
++  sample '<json>'     completes + invites needed for a target margin of error
++  segments '<json>'   per-segment margin of error for your planned cuts
++  --demo              run both worked examples (no arguments needed)
++
++SCHEMA
++  sample:   { "marginOfError": 5, "confidence": 95, "expectedProportion": 50,
++              "population": 2000, "responseRate": 20 }
++            population and responseRate optional; percents accept 20 or 0.2.
++  segments: { "completes": 400, "confidence": 95,
++              "segments": [ { "name": "SMB", "share": 55 }, ... ] }
++
++Confidence must be 90, 95 or 99. Margin thresholds: \u00b15pp clean, \u00b15\u20138pp
++directional, wider is noise \u2014 working labels, not laws.`;
++
++function demo() {
++  console.log('\u25b8 DEMO 1 \u2014 sample mode (Brightlane onboarding NPS-driver survey)');
++  console.log(renderSample(sampleSize({ marginOfError: 5, confidence: 95, expectedProportion: 50, population: 2000, responseRate: 20 })));
++  console.log('');
++  console.log('\u25b8 DEMO 2 \u2014 segments mode (can we read Enterprise separately?)');
++  console.log(renderSegments(segments({
++    completes: 323, confidence: 95,
++    segments: [
++      { name: 'SMB', share: 55 },
++      { name: 'Mid-Market', share: 30 },
++      { name: 'Enterprise', share: 15 }
++    ]
++  })));
++}
++
++function main() {
++  const [mode, arg] = process.argv.slice(2);
++  try {
++    if (!mode || mode === '--demo') return demo();
++    if (mode === '--help' || mode === '-h') return console.log(HELP);
++    if (mode === 'sample' || mode === 'segments') {
++      if (!arg) throw new Error(`${mode} mode needs a JSON config \u2014 run --demo to see one`);
++      let cfg;
++      try { cfg = JSON.parse(arg); }
++      catch (e) { throw new Error('Invalid JSON. Run --demo for a worked example, --help for the schema.'); }
++      const out = mode === 'sample' ? renderSample(sampleSize(cfg)) : renderSegments(segments(cfg));
++      return console.log(out);
++    }
++    throw new Error(`Unknown mode "${mode}". Modes: sample, segments, --demo, --help`);
++  } catch (e) {
++    console.error(e.message);
++    process.exit(1);
++  }
++}
++
++if (require.main === module) main();
++
++module.exports = { sampleSize, segments, segmentMoE, readLabel, pct, renderSample, renderSegments };
+-- 
+2.43.0
+
