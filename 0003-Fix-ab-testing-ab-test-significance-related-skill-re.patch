@@ -1,0 +1,77 @@
+From 865a1ea9b2badde0414b4e78c2c0d2256dee9530 Mon Sep 17 00:00:00 2001
+From: test <test@test.com>
+Date: Sun, 26 Jul 2026 23:22:34 +0000
+Subject: [PATCH 3/3] Fix ab-testing -> ab-test-significance related-skill
+ references (4 files)
+
+---
+ skills/incrementality-and-mmm/SKILL.md       | 4 ++--
+ skills/marketing-psychology/SKILL.md         | 2 +-
+ skills/paid-media-budget-allocation/SKILL.md | 2 +-
+ skills/signup-flow-optimizer/SKILL.md        | 2 +-
+ 4 files changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/skills/incrementality-and-mmm/SKILL.md b/skills/incrementality-and-mmm/SKILL.md
+index fd4501f..fa00178 100644
+--- a/skills/incrementality-and-mmm/SKILL.md
++++ b/skills/incrementality-and-mmm/SKILL.md
+@@ -37,7 +37,7 @@ The only way to close that gap is to withhold the spend from a comparable group
+ 
+ ## When to use
+ 
+-The user is designing or reading a holdout, geo, or lift test — or questioning whether attributed conversions are real. For on-site A/B tests of a page or flow, use `ab-testing`; the statistics overlap but the design question is different. For reporting results upward, use `marketing-report`.
++The user is designing or reading a holdout, geo, or lift test — or questioning whether attributed conversions are real. For on-site A/B tests of a page or flow, use `ab-test-significance`; the statistics overlap but the design question is different. For reporting results upward, use `marketing-report`.
+ 
+ ## Before you start
+ 
+@@ -117,7 +117,7 @@ If the test was inconclusive, say so plainly and give the sample size that would
+ 
+ ## Related skills
+ 
+-`ab-testing` (on-site experiments — same statistics, different design question) · `paid-media-budget-allocation` (where the reallocation decision lands) · `unit-economics` (the value-per-conversion input this depends on) · `marketing-report` (reporting the result upward) · `marketing-attribution` (the model this is designed to check).
++`ab-test-significance` (on-site experiments — same statistics, different design question) · `paid-media-budget-allocation` (where the reallocation decision lands) · `unit-economics` (the value-per-conversion input this depends on) · `marketing-report` (reporting the result upward) · `marketing-attribution` (the model this is designed to check).
+ 
+ ## Credits
+ 
+diff --git a/skills/marketing-psychology/SKILL.md b/skills/marketing-psychology/SKILL.md
+index b7da16a..ad492f9 100644
+--- a/skills/marketing-psychology/SKILL.md
++++ b/skills/marketing-psychology/SKILL.md
+@@ -111,7 +111,7 @@ Where you're uncertain which friction dominates, say so and give the diagnostic
+ 
+ ## Related skills
+ 
+-`copywriting` (turns these principles into actual words) · `positioning-statement` (fixes comprehension at the source) · `website-conversion-audit` (finds where the friction is) · `pricing-and-packaging` (anchoring and framing applied to price) · `ab-testing` (proves whether any of this worked).
++`copywriting` (turns these principles into actual words) · `positioning-statement` (fixes comprehension at the source) · `website-conversion-audit` (finds where the friction is) · `pricing-and-packaging` (anchoring and framing applied to price) · `ab-test-significance` (proves whether any of this worked).
+ 
+ ## Credits
+ 
+diff --git a/skills/paid-media-budget-allocation/SKILL.md b/skills/paid-media-budget-allocation/SKILL.md
+index 5b15603..6b78b8e 100644
+--- a/skills/paid-media-budget-allocation/SKILL.md
++++ b/skills/paid-media-budget-allocation/SKILL.md
+@@ -107,7 +107,7 @@ Use the format in `resources/output-format.md`: the split (channel, $, %, custom
+ 
+ ## Related skills
+ 
+-`unit-economics` (LTV and the CAC ceiling) · `marketing-budget-planning` (how much to spend in total) · `ab-testing` (prove a channel's lift before scaling) · `analytics-tracking` (measure customers, not form fills).
++`unit-economics` (LTV and the CAC ceiling) · `marketing-budget-planning` (how much to spend in total) · `ab-test-significance` (prove a channel's lift before scaling) · `analytics-tracking` (measure customers, not form fills).
+ 
+ ## Credits
+ 
+diff --git a/skills/signup-flow-optimizer/SKILL.md b/skills/signup-flow-optimizer/SKILL.md
+index 14bdf34..fb99279 100644
+--- a/skills/signup-flow-optimizer/SKILL.md
++++ b/skills/signup-flow-optimizer/SKILL.md
+@@ -109,7 +109,7 @@ Be explicit that the opportunity figures rank rather than forecast, and say whic
+ 
+ ## Related skills
+ 
+-`website-conversion-audit` (find where the funnel leaks before fixing this step) · `onboarding-activation` (what happens after the account exists) · `marketing-psychology` (the decision friction behind the mechanical friction) · `copywriting` (the microcopy in the flow) · `ab-testing` (prove the change worked).
++`website-conversion-audit` (find where the funnel leaks before fixing this step) · `onboarding-activation` (what happens after the account exists) · `marketing-psychology` (the decision friction behind the mechanical friction) · `copywriting` (the microcopy in the flow) · `ab-test-significance` (prove the change worked).
+ 
+ ## Credits
+ 
+-- 
+2.43.0
+
