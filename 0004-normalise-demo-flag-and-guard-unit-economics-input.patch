@@ -1,0 +1,569 @@
+diff --git a/skills/ab-test-significance/resources/significance.js b/skills/ab-test-significance/resources/significance.js
+--- a/skills/ab-test-significance/resources/significance.js	2026-07-27 01:14:10.000000000 +0000
++++ b/skills/ab-test-significance/resources/significance.js	2026-07-28 23:32:26.448987174 +0000
+@@ -22,6 +22,17 @@
+  *       baselineRate & mde are in PERCENTAGE POINTS (5% baseline, +1pt target).
+  */
+ 
++// --- AAJ arg normalisation ---------------------------------------------------
++// Accept bare `demo` / `help` as aliases for `--demo` / `--help`. First-run
++// friction: users type `node engine.js demo` and hit a JSON parse error.
++// Only these two exact tokens are rewritten, so JSON payloads and named modes
++// (design, readout, sample, segments, ...) pass through untouched.
++process.argv = process.argv.map((a, i) =>
++  i >= 2 && /^(demo|help)$/i.test(a) ? '--' + a.toLowerCase() : a
++);
++// -----------------------------------------------------------------------------
++
++
+ 'use strict';
+ 
+ // Standard normal CDF (Abramowitz-Stegun) and inverse (Acklam).
+diff --git a/skills/agent-readiness-audit/resources/agent-readiness.js b/skills/agent-readiness-audit/resources/agent-readiness.js
+--- a/skills/agent-readiness-audit/resources/agent-readiness.js	2026-07-27 01:14:10.000000000 +0000
++++ b/skills/agent-readiness-audit/resources/agent-readiness.js	2026-07-28 23:32:26.449896422 +0000
+@@ -11,6 +11,17 @@
+  *   node resources/agent-readiness.js --help
+  */
+ 
++// --- AAJ arg normalisation ---------------------------------------------------
++// Accept bare `demo` / `help` as aliases for `--demo` / `--help`. First-run
++// friction: users type `node engine.js demo` and hit a JSON parse error.
++// Only these two exact tokens are rewritten, so JSON payloads and named modes
++// (design, readout, sample, segments, ...) pass through untouched.
++process.argv = process.argv.map((a, i) =>
++  i >= 2 && /^(demo|help)$/i.test(a) ? '--' + a.toLowerCase() : a
++);
++// -----------------------------------------------------------------------------
++
++
+ // Five dimensions. Weights reflect what actually stops an agent: it can work
+ // around weak trust signals, but it cannot read a page that never renders.
+ const DIMENSIONS = [
+diff --git a/skills/brand-voice-governance/resources/voice-check.js b/skills/brand-voice-governance/resources/voice-check.js
+--- a/skills/brand-voice-governance/resources/voice-check.js	2026-07-27 01:14:10.000000000 +0000
++++ b/skills/brand-voice-governance/resources/voice-check.js	2026-07-28 23:32:26.450870056 +0000
+@@ -20,6 +20,17 @@
+  * No dependencies. Node 18+.
+  */
+ 
++// --- AAJ arg normalisation ---------------------------------------------------
++// Accept bare `demo` / `help` as aliases for `--demo` / `--help`. First-run
++// friction: users type `node engine.js demo` and hit a JSON parse error.
++// Only these two exact tokens are rewritten, so JSON payloads and named modes
++// (design, readout, sample, segments, ...) pass through untouched.
++process.argv = process.argv.map((a, i) =>
++  i >= 2 && /^(demo|help)$/i.test(a) ? '--' + a.toLowerCase() : a
++);
++// -----------------------------------------------------------------------------
++
++
+ 'use strict';
+ 
+ /* ─────────────────────────────  text utils  ───────────────────────────── */
+diff --git a/skills/copywriting/resources/copy-scorer.js b/skills/copywriting/resources/copy-scorer.js
+--- a/skills/copywriting/resources/copy-scorer.js	2026-07-27 01:14:10.000000000 +0000
++++ b/skills/copywriting/resources/copy-scorer.js	2026-07-28 23:32:26.451390257 +0000
+@@ -10,6 +10,17 @@
+  *   node resources/copy-scorer.js --help
+  */
+ 
++// --- AAJ arg normalisation ---------------------------------------------------
++// Accept bare `demo` / `help` as aliases for `--demo` / `--help`. First-run
++// friction: users type `node engine.js demo` and hit a JSON parse error.
++// Only these two exact tokens are rewritten, so JSON payloads and named modes
++// (design, readout, sample, segments, ...) pass through untouched.
++process.argv = process.argv.map((a, i) =>
++  i >= 2 && /^(demo|help)$/i.test(a) ? '--' + a.toLowerCase() : a
++);
++// -----------------------------------------------------------------------------
++
++
+ // ── word lists ──────────────────────────────────────────────────────────────
+ // Claims that assert superiority or transformation without evidence. These are
+ // the ones that get ads rejected and erode trust — flagged hardest.
+diff --git a/skills/customer-survey-design/resources/survey-design.js b/skills/customer-survey-design/resources/survey-design.js
+--- a/skills/customer-survey-design/resources/survey-design.js	2026-07-27 01:14:10.000000000 +0000
++++ b/skills/customer-survey-design/resources/survey-design.js	2026-07-28 23:32:26.451892405 +0000
+@@ -29,6 +29,17 @@
+  * clean, ±5–8pp directional, wider than ±8pp is noise for most decisions.
+  */
+ 
++// --- AAJ arg normalisation ---------------------------------------------------
++// Accept bare `demo` / `help` as aliases for `--demo` / `--help`. First-run
++// friction: users type `node engine.js demo` and hit a JSON parse error.
++// Only these two exact tokens are rewritten, so JSON payloads and named modes
++// (design, readout, sample, segments, ...) pass through untouched.
++process.argv = process.argv.map((a, i) =>
++  i >= 2 && /^(demo|help)$/i.test(a) ? '--' + a.toLowerCase() : a
++);
++// -----------------------------------------------------------------------------
++
++
+ 'use strict';
+ 
+ const Z = { 90: 1.645, 95: 1.960, 99: 2.576 };
+diff --git a/skills/email-lifecycle-sequence/resources/lifecycle-audit.js b/skills/email-lifecycle-sequence/resources/lifecycle-audit.js
+--- a/skills/email-lifecycle-sequence/resources/lifecycle-audit.js	2026-07-27 01:14:10.000000000 +0000
++++ b/skills/email-lifecycle-sequence/resources/lifecycle-audit.js	2026-07-28 23:32:26.452434718 +0000
+@@ -10,6 +10,17 @@
+  *   node resources/lifecycle-audit.js --help
+  */
+ 
++// --- AAJ arg normalisation ---------------------------------------------------
++// Accept bare `demo` / `help` as aliases for `--demo` / `--help`. First-run
++// friction: users type `node engine.js demo` and hit a JSON parse error.
++// Only these two exact tokens are rewritten, so JSON payloads and named modes
++// (design, readout, sample, segments, ...) pass through untouched.
++process.argv = process.argv.map((a, i) =>
++  i >= 2 && /^(demo|help)$/i.test(a) ? '--' + a.toLowerCase() : a
++);
++// -----------------------------------------------------------------------------
++
++
+ // Default shape of each sequence. Email counts and day windows are typical
+ // starting points, not prescriptions — override with --emails if yours differ.
+ const STAGES = [
+diff --git a/skills/geo-citation-tracker/resources/citation-tracker.js b/skills/geo-citation-tracker/resources/citation-tracker.js
+--- a/skills/geo-citation-tracker/resources/citation-tracker.js	2026-07-27 01:14:10.000000000 +0000
++++ b/skills/geo-citation-tracker/resources/citation-tracker.js	2026-07-28 23:32:26.452833827 +0000
+@@ -14,6 +14,17 @@
+  * No dependencies. Node 18+.
+  */
+ 
++// --- AAJ arg normalisation ---------------------------------------------------
++// Accept bare `demo` / `help` as aliases for `--demo` / `--help`. First-run
++// friction: users type `node engine.js demo` and hit a JSON parse error.
++// Only these two exact tokens are rewritten, so JSON payloads and named modes
++// (design, readout, sample, segments, ...) pass through untouched.
++process.argv = process.argv.map((a, i) =>
++  i >= 2 && /^(demo|help)$/i.test(a) ? '--' + a.toLowerCase() : a
++);
++// -----------------------------------------------------------------------------
++
++
+ 'use strict';
+ 
+ /* ─────────────────────────────  statistics  ───────────────────────────── */
+diff --git a/skills/incrementality-and-mmm/resources/incrementality.js b/skills/incrementality-and-mmm/resources/incrementality.js
+--- a/skills/incrementality-and-mmm/resources/incrementality.js	2026-07-27 01:14:10.000000000 +0000
++++ b/skills/incrementality-and-mmm/resources/incrementality.js	2026-07-28 23:32:26.453644233 +0000
+@@ -13,6 +13,17 @@
+  *   node resources/incrementality.js --help
+  */
+ 
++// --- AAJ arg normalisation ---------------------------------------------------
++// Accept bare `demo` / `help` as aliases for `--demo` / `--help`. First-run
++// friction: users type `node engine.js demo` and hit a JSON parse error.
++// Only these two exact tokens are rewritten, so JSON payloads and named modes
++// (design, readout, sample, segments, ...) pass through untouched.
++process.argv = process.argv.map((a, i) =>
++  i >= 2 && /^(demo|help)$/i.test(a) ? '--' + a.toLowerCase() : a
++);
++// -----------------------------------------------------------------------------
++
++
+ // Standard normal quantiles for the values anyone actually uses. Hardcoded
+ // rather than approximated — fewer moving parts, no silent precision loss.
+ const Z_ALPHA = { 0.10: 1.6449, 0.05: 1.9600, 0.01: 2.5758 };   // two-tailed
+diff --git a/skills/lifecycle-and-retention/resources/retention.js b/skills/lifecycle-and-retention/resources/retention.js
+--- a/skills/lifecycle-and-retention/resources/retention.js	2026-07-27 01:14:10.000000000 +0000
++++ b/skills/lifecycle-and-retention/resources/retention.js	2026-07-28 23:32:26.454323079 +0000
+@@ -33,6 +33,17 @@
+  *   (SaaS Quick Ratio, Social Capital). Verify against current benchmarks for your
+  *   segment (SMB retention typically runs lower than enterprise).
+  */
++
++// --- AAJ arg normalisation ---------------------------------------------------
++// Accept bare `demo` / `help` as aliases for `--demo` / `--help`. First-run
++// friction: users type `node engine.js demo` and hit a JSON parse error.
++// Only these two exact tokens are rewritten, so JSON payloads and named modes
++// (design, readout, sample, segments, ...) pass through untouched.
++process.argv = process.argv.map((a, i) =>
++  i >= 2 && /^(demo|help)$/i.test(a) ? '--' + a.toLowerCase() : a
++);
++// -----------------------------------------------------------------------------
++
+ 'use strict';
+ 
+ function pct(n){ return (Math.round(n*10)/10).toLocaleString() + '%'; }
+diff --git a/skills/marketing-budget-planning/resources/budget-planner.js b/skills/marketing-budget-planning/resources/budget-planner.js
+--- a/skills/marketing-budget-planning/resources/budget-planner.js	2026-07-27 01:14:10.000000000 +0000
++++ b/skills/marketing-budget-planning/resources/budget-planner.js	2026-07-28 23:32:26.455194593 +0000
+@@ -20,6 +20,17 @@
+  *     "growthTarget":"aggressive" } // conservative | balanced | aggressive (optional)
+  */
+ 
++// --- AAJ arg normalisation ---------------------------------------------------
++// Accept bare `demo` / `help` as aliases for `--demo` / `--help`. First-run
++// friction: users type `node engine.js demo` and hit a JSON parse error.
++// Only these two exact tokens are rewritten, so JSON payloads and named modes
++// (design, readout, sample, segments, ...) pass through untouched.
++process.argv = process.argv.map((a, i) =>
++  i >= 2 && /^(demo|help)$/i.test(a) ? '--' + a.toLowerCase() : a
++);
++// -----------------------------------------------------------------------------
++
++
+ 'use strict';
+ 
+ // % of revenue by model × stage (midpoint guidance). Earlier stage & faster
+diff --git a/skills/marketing-loops/resources/loop-model.js b/skills/marketing-loops/resources/loop-model.js
+--- a/skills/marketing-loops/resources/loop-model.js	2026-07-27 01:14:10.000000000 +0000
++++ b/skills/marketing-loops/resources/loop-model.js	2026-07-28 23:32:26.455657595 +0000
+@@ -19,6 +19,17 @@
+  * No dependencies. Node 18+.
+  */
+ 
++// --- AAJ arg normalisation ---------------------------------------------------
++// Accept bare `demo` / `help` as aliases for `--demo` / `--help`. First-run
++// friction: users type `node engine.js demo` and hit a JSON parse error.
++// Only these two exact tokens are rewritten, so JSON payloads and named modes
++// (design, readout, sample, segments, ...) pass through untouched.
++process.argv = process.argv.map((a, i) =>
++  i >= 2 && /^(demo|help)$/i.test(a) ? '--' + a.toLowerCase() : a
++);
++// -----------------------------------------------------------------------------
++
++
+ 'use strict';
+ 
+ /* ─────────────────────────────  loop math  ───────────────────────────── */
+diff --git a/skills/marketing-psychology/resources/pattern-check.js b/skills/marketing-psychology/resources/pattern-check.js
+--- a/skills/marketing-psychology/resources/pattern-check.js	2026-07-27 01:14:10.000000000 +0000
++++ b/skills/marketing-psychology/resources/pattern-check.js	2026-07-28 23:32:26.456235298 +0000
+@@ -12,6 +12,17 @@
+  *   node resources/pattern-check.js --help
+  */
+ 
++// --- AAJ arg normalisation ---------------------------------------------------
++// Accept bare `demo` / `help` as aliases for `--demo` / `--help`. First-run
++// friction: users type `node engine.js demo` and hit a JSON parse error.
++// Only these two exact tokens are rewritten, so JSON payloads and named modes
++// (design, readout, sample, segments, ...) pass through untouched.
++process.argv = process.argv.map((a, i) =>
++  i >= 2 && /^(demo|help)$/i.test(a) ? '--' + a.toLowerCase() : a
++);
++// -----------------------------------------------------------------------------
++
++
+ // Tiers:
+ //   dark    — no legitimate version exists. Remove.
+ //   verify  — legitimate ONLY if the underlying fact is literally true.
+diff --git a/skills/marketing-report/resources/marketing-report.js b/skills/marketing-report/resources/marketing-report.js
+--- a/skills/marketing-report/resources/marketing-report.js	2026-07-27 01:14:10.000000000 +0000
++++ b/skills/marketing-report/resources/marketing-report.js	2026-07-28 23:32:26.456785958 +0000
+@@ -31,6 +31,17 @@
+  * lags the spend that created it, and attribution is imperfect. Present it as a
+  * ratio with that caveat, not as return on investment.
+  */
++
++// --- AAJ arg normalisation ---------------------------------------------------
++// Accept bare `demo` / `help` as aliases for `--demo` / `--help`. First-run
++// friction: users type `node engine.js demo` and hit a JSON parse error.
++// Only these two exact tokens are rewritten, so JSON payloads and named modes
++// (design, readout, sample, segments, ...) pass through untouched.
++process.argv = process.argv.map((a, i) =>
++  i >= 2 && /^(demo|help)$/i.test(a) ? '--' + a.toLowerCase() : a
++);
++// -----------------------------------------------------------------------------
++
+ 'use strict';
+ 
+ var STAGES = [
+diff --git a/skills/paid-media-budget-allocation/resources/allocation-engine.js b/skills/paid-media-budget-allocation/resources/allocation-engine.js
+--- a/skills/paid-media-budget-allocation/resources/allocation-engine.js	2026-07-27 01:14:10.000000000 +0000
++++ b/skills/paid-media-budget-allocation/resources/allocation-engine.js	2026-07-28 23:32:26.457180771 +0000
+@@ -34,6 +34,17 @@
+  * Output is a per-channel table plus a machine-readable JSON block.
+  */
+ 
++// --- AAJ arg normalisation ---------------------------------------------------
++// Accept bare `demo` / `help` as aliases for `--demo` / `--help`. First-run
++// friction: users type `node engine.js demo` and hit a JSON parse error.
++// Only these two exact tokens are rewritten, so JSON payloads and named modes
++// (design, readout, sample, segments, ...) pass through untouched.
++process.argv = process.argv.map((a, i) =>
++  i >= 2 && /^(demo|help)$/i.test(a) ? '--' + a.toLowerCase() : a
++);
++// -----------------------------------------------------------------------------
++
++
+ 'use strict';
+ 
+ const DR_MAP = { gentle: 0.4, moderate: 0.8, aggressive: 1.5 };
+diff --git a/skills/pipeline-and-forecast/resources/forecast.js b/skills/pipeline-and-forecast/resources/forecast.js
+--- a/skills/pipeline-and-forecast/resources/forecast.js	2026-07-27 01:14:10.000000000 +0000
++++ b/skills/pipeline-and-forecast/resources/forecast.js	2026-07-28 23:32:26.457566419 +0000
+@@ -26,6 +26,17 @@
+  * Deterministic. No external dependencies.
+  */
+ 
++// --- AAJ arg normalisation ---------------------------------------------------
++// Accept bare `demo` / `help` as aliases for `--demo` / `--help`. First-run
++// friction: users type `node engine.js demo` and hit a JSON parse error.
++// Only these two exact tokens are rewritten, so JSON payloads and named modes
++// (design, readout, sample, segments, ...) pass through untouched.
++process.argv = process.argv.map((a, i) =>
++  i >= 2 && /^(demo|help)$/i.test(a) ? '--' + a.toLowerCase() : a
++);
++// -----------------------------------------------------------------------------
++
++
+ "use strict";
+ 
+ const DEMO = {
+diff --git a/skills/pricing-and-packaging/resources/price-packaging.js b/skills/pricing-and-packaging/resources/price-packaging.js
+--- a/skills/pricing-and-packaging/resources/price-packaging.js	2026-07-27 01:14:10.000000000 +0000
++++ b/skills/pricing-and-packaging/resources/price-packaging.js	2026-07-28 23:32:26.457989997 +0000
+@@ -26,6 +26,17 @@
+  * Deterministic. No external dependencies.
+  */
+ 
++// --- AAJ arg normalisation ---------------------------------------------------
++// Accept bare `demo` / `help` as aliases for `--demo` / `--help`. First-run
++// friction: users type `node engine.js demo` and hit a JSON parse error.
++// Only these two exact tokens are rewritten, so JSON payloads and named modes
++// (design, readout, sample, segments, ...) pass through untouched.
++process.argv = process.argv.map((a, i) =>
++  i >= 2 && /^(demo|help)$/i.test(a) ? '--' + a.toLowerCase() : a
++);
++// -----------------------------------------------------------------------------
++
++
+ "use strict";
+ 
+ function round(n, d) { const f = Math.pow(10, d); return Math.round(n * f) / f; }
+diff --git a/skills/programmatic-seo/resources/pseo-model.js b/skills/programmatic-seo/resources/pseo-model.js
+--- a/skills/programmatic-seo/resources/pseo-model.js	2026-07-27 01:14:10.000000000 +0000
++++ b/skills/programmatic-seo/resources/pseo-model.js	2026-07-28 23:32:26.458556838 +0000
+@@ -10,6 +10,17 @@
+  *   node resources/pseo-model.js --help
+  */
+ 
++// --- AAJ arg normalisation ---------------------------------------------------
++// Accept bare `demo` / `help` as aliases for `--demo` / `--help`. First-run
++// friction: users type `node engine.js demo` and hit a JSON parse error.
++// Only these two exact tokens are rewritten, so JSON payloads and named modes
++// (design, readout, sample, segments, ...) pass through untouched.
++process.argv = process.argv.map((a, i) =>
++  i >= 2 && /^(demo|help)$/i.test(a) ? '--' + a.toLowerCase() : a
++);
++// -----------------------------------------------------------------------------
++
++
+ // Approximate organic CTR by position. Published studies vary widely by
+ // vertical and SERP layout — treat as directional and override with your
+ // own Search Console data when you have it (--ctr).
+diff --git a/skills/seo-geo-aeo-audit/resources/score.js b/skills/seo-geo-aeo-audit/resources/score.js
+--- a/skills/seo-geo-aeo-audit/resources/score.js	2026-07-27 01:14:10.000000000 +0000
++++ b/skills/seo-geo-aeo-audit/resources/score.js	2026-07-28 23:32:26.458829798 +0000
+@@ -21,6 +21,17 @@
+  * See resources/scoring-rubric.md for what each check means and how to evaluate it.
+  */
+ 
++// --- AAJ arg normalisation ---------------------------------------------------
++// Accept bare `demo` / `help` as aliases for `--demo` / `--help`. First-run
++// friction: users type `node engine.js demo` and hit a JSON parse error.
++// Only these two exact tokens are rewritten, so JSON payloads and named modes
++// (design, readout, sample, segments, ...) pass through untouched.
++process.argv = process.argv.map((a, i) =>
++  i >= 2 && /^(demo|help)$/i.test(a) ? '--' + a.toLowerCase() : a
++);
++// -----------------------------------------------------------------------------
++
++
+ 'use strict';
+ 
+ const RUBRIC = {
+diff --git a/skills/signup-flow-optimizer/resources/friction-score.js b/skills/signup-flow-optimizer/resources/friction-score.js
+--- a/skills/signup-flow-optimizer/resources/friction-score.js	2026-07-27 01:14:10.000000000 +0000
++++ b/skills/signup-flow-optimizer/resources/friction-score.js	2026-07-28 23:32:26.459373077 +0000
+@@ -10,6 +10,17 @@
+  *   node resources/friction-score.js --help
+  */
+ 
++// --- AAJ arg normalisation ---------------------------------------------------
++// Accept bare `demo` / `help` as aliases for `--demo` / `--help`. First-run
++// friction: users type `node engine.js demo` and hit a JSON parse error.
++// Only these two exact tokens are rewritten, so JSON payloads and named modes
++// (design, readout, sample, segments, ...) pass through untouched.
++process.argv = process.argv.map((a, i) =>
++  i >= 2 && /^(demo|help)$/i.test(a) ? '--' + a.toLowerCase() : a
++);
++// -----------------------------------------------------------------------------
++
++
+ const DEFAULTS = {
+   fields: 6,            // form fields the user must complete
+   optional: 0,          // of those, how many are optional
+diff --git a/skills/target-account-list/resources/score-accounts.js b/skills/target-account-list/resources/score-accounts.js
+--- a/skills/target-account-list/resources/score-accounts.js	2026-07-27 01:14:10.000000000 +0000
++++ b/skills/target-account-list/resources/score-accounts.js	2026-07-28 23:32:26.459844779 +0000
+@@ -19,6 +19,17 @@
+  * Deterministic. No external dependencies.
+  */
+ 
++// --- AAJ arg normalisation ---------------------------------------------------
++// Accept bare `demo` / `help` as aliases for `--demo` / `--help`. First-run
++// friction: users type `node engine.js demo` and hit a JSON parse error.
++// Only these two exact tokens are rewritten, so JSON payloads and named modes
++// (design, readout, sample, segments, ...) pass through untouched.
++process.argv = process.argv.map((a, i) =>
++  i >= 2 && /^(demo|help)$/i.test(a) ? '--' + a.toLowerCase() : a
++);
++// -----------------------------------------------------------------------------
++
++
+ "use strict";
+ 
+ const DEMO_WEIGHTS = {
+diff --git a/skills/unit-economics/resources/unit-economics.js b/skills/unit-economics/resources/unit-economics.js
+--- a/skills/unit-economics/resources/unit-economics.js	2026-07-27 01:14:10.000000000 +0000
++++ b/skills/unit-economics/resources/unit-economics.js	2026-07-28 23:33:39.078866730 +0000
+@@ -25,6 +25,17 @@
+  *       "retentionYears":3, "cac":4000 }
+  */
+ 
++// --- AAJ arg normalisation ---------------------------------------------------
++// Accept bare `demo` / `help` as aliases for `--demo` / `--help`. First-run
++// friction: users type `node engine.js demo` and hit a JSON parse error.
++// Only these two exact tokens are rewritten, so JSON payloads and named modes
++// (design, readout, sample, segments, ...) pass through untouched.
++process.argv = process.argv.map((a, i) =>
++  i >= 2 && /^(demo|help)$/i.test(a) ? '--' + a.toLowerCase() : a
++);
++// -----------------------------------------------------------------------------
++
++
+ 'use strict';
+ 
+ function money(n){ return '$' + Math.round(n).toLocaleString(); }
+@@ -106,9 +117,85 @@
+   return out.join('\n');
+ }
+ 
++// --- AAJ input validation ----------------------------------------------------
++// Fail loudly on bad input. Without this, an unrecognised key name yields
++// "LTV $NaN" and a wrong-but-confident verdict, which reads as a broken tool.
++const SCHEMA = {
++  subscription: { required: ['arpaMonthly', 'grossMargin'],
++                  oneOf: [['churnMonthly', 'lifetimeMonths']],
++                  optional: ['churnMonthly', 'lifetimeMonths'] },
++  ecommerce:    { required: ['aov', 'grossMargin', 'ordersPerYear', 'retentionYears'],
++                  oneOf: [], optional: [] },
++  services:     { required: ['acv', 'grossMargin', 'retentionYears'],
++                  oneOf: [], optional: [] }
++};
++const COMMON = ['model', 'cac', 'adSpend', 'customers'];
++
++function udie(msg, hint) {
++  console.error('error: ' + msg + (hint ? '\n       ' + hint : '') +
++                '\n\nRun --help for the schema, or --demo for a worked example.');
++  process.exit(1);
++}
++
++function validate(c) {
++  if (c === null || typeof c !== 'object' || Array.isArray(c)) {
++    udie('config must be a JSON object.');
++  }
++  const model = c.model || 'subscription';
++  const s = SCHEMA[model];
++  if (!s) udie(`unknown model "${model}".`, 'Use: subscription, ecommerce, or services.');
++
++  const allowed = new Set([...COMMON, ...s.required, ...s.optional]);
++  const unknown = Object.keys(c).filter(k => !allowed.has(k));
++  if (unknown.length) {
++    const near = k => [...allowed].find(a => a.toLowerCase().startsWith(k.toLowerCase().slice(0, 3)));
++    udie(`unrecognised field(s) for model "${model}": ${unknown.join(', ')}.`,
++         unknown.map(k => near(k) ? `did you mean "${near(k)}" instead of "${k}"?` : '')
++                .filter(Boolean).join(' ') ||
++         `valid fields: ${[...allowed].join(', ')}.`);
++  }
++
++  const missing = s.required.filter(k => c[k] === undefined);
++  if (missing.length) udie(`missing required field(s) for model "${model}": ${missing.join(', ')}.`);
++
++  for (const group of s.oneOf) {
++    if (!group.some(k => c[k] !== undefined)) {
++      udie(`model "${model}" needs one of: ${group.join(' or ')}.`);
++    }
++  }
++
++  const hasCac = c.cac !== undefined;
++  const hasDerived = c.adSpend !== undefined && c.customers !== undefined;
++  if (!hasCac && !hasDerived) {
++    udie('missing CAC.', 'Provide "cac", or "adSpend" + "customers" to derive it.');
++  }
++
++  for (const [k, v] of Object.entries(c)) {
++    if (k === 'model') continue;
++    if (typeof v !== 'number' || !isFinite(v)) {
++      udie(`field "${k}" must be a finite number (got ${JSON.stringify(v)}).`);
++    }
++    if (v < 0) udie(`field "${k}" cannot be negative (got ${v}).`);
++  }
++
++  // The silent-wrong-answer case: percentages passed as proportions.
++  for (const k of ['grossMargin', 'churnMonthly']) {
++    if (c[k] !== undefined && c[k] > 0 && c[k] < 1) {
++      udie(`"${k}" looks like a proportion (${c[k]}), but this engine expects a percentage.`,
++           `Pass ${Math.round(c[k] * 100)} for ${Math.round(c[k] * 100)}%, not ${c[k]}.`);
++    }
++  }
++  if (c.grossMargin > 100) udie(`"grossMargin" cannot exceed 100 (got ${c.grossMargin}).`);
++  if (c.churnMonthly !== undefined && c.churnMonthly > 100) {
++    udie(`"churnMonthly" cannot exceed 100 (got ${c.churnMonthly}).`);
++  }
++}
++// -----------------------------------------------------------------------------
++
+ const arg = process.argv[2] === '--demo' ? undefined : process.argv[2];
+ if (arg === '--help' || arg === '-h'){ console.log(require('fs').readFileSync(__filename,'utf8').split('*/')[0].replace(/^\/\*/,'')); process.exit(0); }
+ let cfg;
+ if (arg){ try { cfg = JSON.parse(arg); } catch(e){ console.error('Invalid JSON. Run --help for the schema.\n'+e.message); process.exit(1);} }
+ else { cfg = { model:'subscription', arpaMonthly:500, grossMargin:80, churnMonthly:3, cac:3000 }; console.log('(no config — demo: subscription, $500 ARPA, 80% margin, 3% monthly churn, $3,000 CAC)'); }
++validate(cfg);
+ console.log(render(cfg));
+diff --git a/skills/website-conversion-audit/resources/score.js b/skills/website-conversion-audit/resources/score.js
+--- a/skills/website-conversion-audit/resources/score.js	2026-07-27 01:14:10.000000000 +0000
++++ b/skills/website-conversion-audit/resources/score.js	2026-07-28 23:32:26.460624559 +0000
+@@ -19,6 +19,17 @@
+  *   See resources/conversion-rubric.md for what each check means.
+  */
+ 
++// --- AAJ arg normalisation ---------------------------------------------------
++// Accept bare `demo` / `help` as aliases for `--demo` / `--help`. First-run
++// friction: users type `node engine.js demo` and hit a JSON parse error.
++// Only these two exact tokens are rewritten, so JSON payloads and named modes
++// (design, readout, sample, segments, ...) pass through untouched.
++process.argv = process.argv.map((a, i) =>
++  i >= 2 && /^(demo|help)$/i.test(a) ? '--' + a.toLowerCase() : a
++);
++// -----------------------------------------------------------------------------
++
++
+ 'use strict';
+ 
+ const RUBRIC = {
+diff --git a/skills/win-loss-analysis/resources/win-loss.js b/skills/win-loss-analysis/resources/win-loss.js
+--- a/skills/win-loss-analysis/resources/win-loss.js	2026-07-27 01:14:10.000000000 +0000
++++ b/skills/win-loss-analysis/resources/win-loss.js	2026-07-28 23:32:26.460992650 +0000
+@@ -17,6 +17,17 @@
+  *     competitor?: String }  // optional, won or lost
+  */
+ 
++// --- AAJ arg normalisation ---------------------------------------------------
++// Accept bare `demo` / `help` as aliases for `--demo` / `--help`. First-run
++// friction: users type `node engine.js demo` and hit a JSON parse error.
++// Only these two exact tokens are rewritten, so JSON payloads and named modes
++// (design, readout, sample, segments, ...) pass through untouched.
++process.argv = process.argv.map((a, i) =>
++  i >= 2 && /^(demo|help)$/i.test(a) ? '--' + a.toLowerCase() : a
++);
++// -----------------------------------------------------------------------------
++
++
+ function round1(n) { return Math.round(n * 10) / 10; }
+ function pct(part, whole) { return whole > 0 ? round1((part / whole) * 100) : 0; }
+ function sum(arr, f) { return arr.reduce((t, x) => t + f(x), 0); }
