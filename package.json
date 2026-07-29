@@ -1,21 +1,21 @@
 {
+  "name": "aaj-marketing-skills",
+  "version": "1.0.0",
+  "description": "Agent skills for AI marketing tasks. 39 skills, 23 with runnable engines you can execute directly. MIT. Works with Claude Code, Cursor, Codex, Windsurf.",
+  "type": "commonjs",
+  "license": "MIT",
+  "author": "Saroj Jha",
+  "keywords": ["agent-skills", "marketing", "seo", "geo", "aeo", "claude", "mcp"],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sarojkjha/aaj-marketing-skills.git"
+  },
+  "scripts": {
+    "sync": "node platform/scripts/sync-skills.mjs",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
   "dependencies": {
     "@supabase/supabase-js": "^2.108.2",
     "gray-matter": "^4.0.3"
-  },
-  "name": "39 marketing skills for AI agents. 23 run real engines.",
-  "version": "1.0.0",
-<<<<<<< HEAD
-  "description": "Agent skills for AI marketing tasks \u2014 grounded in AAJ's tested tools and methodology, not generic advice. Works with Claude Code, Cursor, OpenAI Codex, Windsurf, and any agent that supports the [Agent Skills spec](https://agentskills.io).",
-=======
-  "description": "Agent skills for AI marketing tasks. 39 skills, 23 with runnable engines you can execute directly. MIT. Works with Claude Code, Cursor, Codex, Windsurf.",
-  "main": "index.js",
->>>>>>> de7841c403f1536ac21634870be777645d2284f8
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "commonjs"
+  }
 }
