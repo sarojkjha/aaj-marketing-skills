@@ -1,0 +1,20 @@
+diff --git a/platform/supabase/seed-categories.sql b/platform/supabase/seed-categories.sql
+--- a/platform/supabase/seed-categories.sql	2026-07-27 01:14:10.000000000 +0000
++++ b/platform/supabase/seed-categories.sql	2026-07-29 05:57:50.328113813 +0000
+@@ -1,5 +1,5 @@
+ -- AAJ Marketing Skills — category seed (Step 4)
+--- The eight catalog categories. Run after schema.sql. Idempotent.
++-- The ten catalog categories. Run after schema.sql. Idempotent.
+ 
+ insert into public.categories (slug, name, description, sort_order) values
+   ('strategy-positioning',   'Strategy & Positioning',      'Positioning, messaging, pricing, plans, and the strategy that directs everything else.', 1),
+@@ -9,6 +9,8 @@
+   ('content-copy',           'Content & Copy',              'Copywriting, content strategy, editorial calendars, email, and social.',                  5),
+   ('paid-media-budgeting',   'Paid Media & Budgeting',      'Total marketing budget, paid channel allocation, and ad creative.',                       6),
+   ('analytics-experimentation','Analytics & Experimentation','Unit economics, analytics, and A/B testing.',                                            7),
+-  ('growth-retention-revops','Growth, Retention & RevOps',  'Referrals, lifecycle, churn prevention, prospecting, and sales enablement.',              8)
++  ('growth-retention-revops','Growth, Retention & RevOps',  'Referrals, loops, and compounding growth mechanics.',                                     8),
++  ('sales-pipeline',         'Sales & Pipeline',            'Prospecting, target accounts, discovery, objections, forecasting, and win-loss.',         9),
++  ('retention-lifecycle',    'Retention & Lifecycle',       'Onboarding, activation, lifecycle email, churn, and expansion.',                         10)
+ on conflict (slug) do update
+   set name = excluded.name, description = excluded.description, sort_order = excluded.sort_order;
