@@ -55,10 +55,12 @@ Always use **gross-margin** LTV (revenue × margin), not revenue LTV — revenue
 
 ## Run the engine
 
+> Paths assume you installed with `npx skills add`. From a clone of this repo, use `skills/unit-economics/resources/…` instead.
+
 ```bash
-node resources/unit-economics.js                     # demo (subscription)
-node resources/unit-economics.js '{"model":"ecommerce","aov":80,"grossMargin":60,"ordersPerYear":3,"retentionYears":2,"cac":40}'
-node resources/unit-economics.js --help
+node .agents/skills/unit-economics/resources/unit-economics.js  # demo (subscription)
+node .agents/skills/unit-economics/resources/unit-economics.js '{"model":"ecommerce","aov":80,"grossMargin":60,"ordersPerYear":3,"retentionYears":2,"cac":40}'
+node .agents/skills/unit-economics/resources/unit-economics.js --help
 ```
 
 It prints LTV, LTV:CAC, payback, and a verdict, plus a JSON block.

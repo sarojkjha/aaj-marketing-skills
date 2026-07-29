@@ -65,19 +65,21 @@ See `resources/incrementality-guide.md` for holdout vs geo test design, what to 
 ## Run the engine
 
 Design a test:
+> Paths assume you installed with `npx skills add`. From a clone of this repo, use `skills/incrementality-and-mmm/resources/…` instead.
+
 ```bash
-node resources/incrementality.js                                   # demo
-node resources/incrementality.js --baseline 2.5 --mde 15 --daily 4000 --value 400
-node resources/incrementality.js --baseline 1.2 --mde 25 --power 0.90 --daily 20000
+node .agents/skills/incrementality-and-mmm/resources/incrementality.js  # demo
+node .agents/skills/incrementality-and-mmm/resources/incrementality.js --baseline 2.5 --mde 15 --daily 4000 --value 400
+node .agents/skills/incrementality-and-mmm/resources/incrementality.js --baseline 1.2 --mde 25 --power 0.90 --daily 20000
 ```
 
 Read one out — supply `--treat-conv` and it switches mode:
 ```bash
-node resources/incrementality.js --control-n 50000 --control-conv 1200 \
+node .agents/skills/incrementality-and-mmm/resources/incrementality.js --control-n 50000 --control-conv 1200 \
      --treat-n 50000 --treat-conv 1380 --spend 15000 --value 400
-node resources/incrementality.js --json --control-n 5000 --control-conv 120 \
+node .agents/skills/incrementality-and-mmm/resources/incrementality.js --json --control-n 5000 --control-conv 120 \
      --treat-n 5000 --treat-conv 132
-node resources/incrementality.js --help
+node .agents/skills/incrementality-and-mmm/resources/incrementality.js --help
 ```
 
 Design mode returns sample per group, duration, and **the value you forgo by holding out** — which is the number that decides whether the test is worth running. Readout mode returns lift, p-value, confidence interval, incremental conversions against the counterfactual, iROAS, incremental CAC, and the smallest lift the test could actually detect.

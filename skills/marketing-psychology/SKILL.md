@@ -65,12 +65,14 @@ See `resources/psychology-catalog.md` for the full principle catalog organized b
 
 Check any draft for manipulative patterns before it ships:
 
+> Paths assume you installed with `npx skills add`. From a clone of this repo, use `skills/marketing-psychology/resources/…` instead.
+
 ```bash
-node resources/pattern-check.js                      # demo
-node resources/pattern-check.js "your copy here"
-node resources/pattern-check.js --file pricing.md
-node resources/pattern-check.js --json "copy"
-node resources/pattern-check.js --help
+node .agents/skills/marketing-psychology/resources/pattern-check.js  # demo
+node .agents/skills/marketing-psychology/resources/pattern-check.js "your copy here"
+node .agents/skills/marketing-psychology/resources/pattern-check.js --file pricing.md
+node .agents/skills/marketing-psychology/resources/pattern-check.js --json "copy"
+node .agents/skills/marketing-psychology/resources/pattern-check.js --help
 ```
 
 It flags three tiers: **dark patterns** (no honest version exists — confirmshaming, fabricated viewer counts), **verify-required** claims (legitimate only if literally true — scarcity, urgency, social-proof numbers), and **pressure language** (worth a second look).

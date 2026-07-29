@@ -115,8 +115,10 @@ Also watch unsubscribe rate *by sequence* and spam-complaint rate. A rising comp
 
 **Audit first:**
 
+> Paths assume you installed with `npx skills add`. From a clone of this repo, use `skills/email-lifecycle-sequence/resources/…` instead.
+
 ```bash
-node resources/lifecycle-audit.js --have welcome --signups 400 --value 900
+node .agents/skills/email-lifecycle-sequence/resources/lifecycle-audit.js --have welcome --signups 400 --value 900
 ```
 
 Coverage 1/6. Breakeven says a sequence needs about 0.2 conversions a month to pay back in six — around 0.1% of signups. That settles whether to build it.

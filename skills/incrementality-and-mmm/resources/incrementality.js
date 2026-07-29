@@ -13,6 +13,17 @@
  *   node resources/incrementality.js --help
  */
 
+// --- AAJ arg normalisation ---------------------------------------------------
+// Accept bare `demo` / `help` as aliases for `--demo` / `--help`. First-run
+// friction: users type `node engine.js demo` and hit a JSON parse error.
+// Only these two exact tokens are rewritten, so JSON payloads and named modes
+// (design, readout, sample, segments, ...) pass through untouched.
+process.argv = process.argv.map((a, i) =>
+  i >= 2 && /^(demo|help)$/i.test(a) ? '--' + a.toLowerCase() : a
+);
+// -----------------------------------------------------------------------------
+
+
 // Standard normal quantiles for the values anyone actually uses. Hardcoded
 // rather than approximated — fewer moving parts, no silent precision loss.
 const Z_ALPHA = { 0.10: 1.6449, 0.05: 1.9600, 0.01: 2.5758 };   // two-tailed

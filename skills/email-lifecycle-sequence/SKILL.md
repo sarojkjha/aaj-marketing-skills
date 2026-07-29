@@ -64,12 +64,14 @@ See `resources/lifecycle-playbook.md` for each sequence's structure, timing, exi
 
 ## Run the engine
 
+> Paths assume you installed with `npx skills add`. From a clone of this repo, use `skills/email-lifecycle-sequence/resources/…` instead.
+
 ```bash
-node resources/lifecycle-audit.js                                          # demo
-node resources/lifecycle-audit.js --have welcome,onboarding --signups 500 --value 400
-node resources/lifecycle-audit.js --have welcome --build-hours 8 --rate 150 --payback 3
-node resources/lifecycle-audit.js --json --have welcome,winback
-node resources/lifecycle-audit.js --help
+node .agents/skills/email-lifecycle-sequence/resources/lifecycle-audit.js  # demo
+node .agents/skills/email-lifecycle-sequence/resources/lifecycle-audit.js --have welcome,onboarding --signups 500 --value 400
+node .agents/skills/email-lifecycle-sequence/resources/lifecycle-audit.js --have welcome --build-hours 8 --rate 150 --payback 3
+node .agents/skills/email-lifecycle-sequence/resources/lifecycle-audit.js --json --have welcome,winback
+node .agents/skills/email-lifecycle-sequence/resources/lifecycle-audit.js --help
 ```
 
 It returns coverage across the six sequences, the gaps in build order, a **send-load check** counting every sequence that overlaps a new user's first 14 and 30 days, and a **breakeven** per sequence.

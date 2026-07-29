@@ -59,9 +59,11 @@ weights should reflect predictiveness of a good deal (win-loss evidence > gut)
 
 ## Run the tool
 
+> Paths assume you installed with `npx skills add`. From a clone of this repo, use `skills/target-account-list/resources/…` instead.
+
 ```bash
-node resources/score-accounts.js --input=accounts.json
-node resources/score-accounts.js          # built-in demo
+node .agents/skills/target-account-list/resources/score-accounts.js --input=accounts.json
+node .agents/skills/target-account-list/resources/score-accounts.js  # built-in demo
 ```
 Input JSON: `{ "weights": { "industryMatch": 30, ... }, "accounts": [ { "name": "Acme", "signals": { "industryMatch": true, ... } } ] }`. It prints each account's fit score, tier, and matched signals, plus the A/B/C tally. Use these exact scores and tiers — don't restate them from memory.
 

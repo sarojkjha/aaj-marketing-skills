@@ -64,9 +64,11 @@ healthy: top tier anchors; most revenue from the middle/top, not the entry tier
 
 ## Run the tool
 
+> Paths assume you installed with `npx skills add`. From a clone of this repo, use `skills/pricing-and-packaging/resources/…` instead.
+
 ```bash
-node resources/price-packaging.js --input=tiers.json
-node resources/price-packaging.js          # built-in demo
+node .agents/skills/pricing-and-packaging/resources/price-packaging.js --input=tiers.json
+node .agents/skills/pricing-and-packaging/resources/price-packaging.js  # built-in demo
 ```
 Input JSON: `{ "tiers": [ { "name": "Starter", "price": 29, "customers": 600 }, ... ] }`. It prints each tier's price, customers, revenue, revenue share, and price-ladder step, plus the blended ARPU, the **anchor check** (top tier vs the second-highest — flagged weak below ~1.5x), and where revenue concentrates. Use these exact numbers.
 

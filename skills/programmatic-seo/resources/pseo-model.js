@@ -10,6 +10,17 @@
  *   node resources/pseo-model.js --help
  */
 
+// --- AAJ arg normalisation ---------------------------------------------------
+// Accept bare `demo` / `help` as aliases for `--demo` / `--help`. First-run
+// friction: users type `node engine.js demo` and hit a JSON parse error.
+// Only these two exact tokens are rewritten, so JSON payloads and named modes
+// (design, readout, sample, segments, ...) pass through untouched.
+process.argv = process.argv.map((a, i) =>
+  i >= 2 && /^(demo|help)$/i.test(a) ? '--' + a.toLowerCase() : a
+);
+// -----------------------------------------------------------------------------
+
+
 // Approximate organic CTR by position. Published studies vary widely by
 // vertical and SERP layout — treat as directional and override with your
 // own Search Console data when you have it (--ctr).

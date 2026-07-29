@@ -120,8 +120,10 @@ Re-run `pseo-model.js` at each gate with measured rates. The pilot exists specif
 
 ### Attempt 1 — 40 industries
 
+> Paths assume you installed with `npx skills add`. From a clone of this repo, use `skills/programmatic-seo/resources/…` instead.
+
 ```bash
-node resources/pseo-model.js \
+node .agents/skills/programmatic-seo/resources/pseo-model.js \
   --pages 40 --volume 70 --conv 4 --value 600 \
   --unique-data strong --fixed-cost 6000 --cost-per-page 40
 ```
@@ -142,7 +144,7 @@ This is the most common way a promising pSEO idea dies, and it's invisible witho
 The fix isn't better copy, it's more surface: split each industry by company stage — `{industry} at {stage}` — giving 40 × 6 = 240 pages. Tail volume per page drops (60 rather than 70), but conversion value rises, because a visitor searching a stage-specific benchmark is closer to needing help.
 
 ```bash
-node resources/pseo-model.js \
+node .agents/skills/programmatic-seo/resources/pseo-model.js \
   --pages 240 --volume 60 --conv 4 --value 800 \
   --unique-data strong --fixed-cost 6000 --cost-per-page 35
 ```

@@ -5,8 +5,7 @@
   },
   "name": "aaj-marketing-skills",
   "version": "1.0.0",
-  "description": "Agent skills for AI marketing tasks — grounded in AAJ's tested tools and methodology, not generic advice. Works with Claude Code, Cursor, OpenAI Codex, Windsurf, and any agent that supports the [Agent Skills spec](https://agentskills.io).",
-  "main": "index.js",
+  "description": "Agent skills for AI marketing tasks \u2014 grounded in AAJ's tested tools and methodology, not generic advice. Works with Claude Code, Cursor, OpenAI Codex, Windsurf, and any agent that supports the [Agent Skills spec](https://agentskills.io).",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

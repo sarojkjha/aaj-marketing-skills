@@ -59,11 +59,13 @@ Keeping opinions out of the blocking tier is what makes the tool trustworthy at 
 
 ## Run the engine
 
+> Paths assume you installed with `npx skills add`. From a clone of this repo, use `skills/brand-voice-governance/resources/…` instead.
+
 ```bash
-node resources/voice-check.js --demo                 # worked example, no args
-node resources/voice-check.js profile '<json>'       # extract rules from a brief
-node resources/voice-check.js check '<json>'         # score content against rules
-node resources/voice-check.js --help
+node .agents/skills/brand-voice-governance/resources/voice-check.js --demo            # worked example, no args
+node .agents/skills/brand-voice-governance/resources/voice-check.js profile '<json>'  # extract rules from a brief
+node .agents/skills/brand-voice-governance/resources/voice-check.js check '<json>'    # score content against rules
+node .agents/skills/brand-voice-governance/resources/voice-check.js --help
 ```
 
 Two modes. **Profile** parses a checkable ruleset from a brand-context brief's Voice & tone section — a deterministic parse, so the rules are themselves auditable. **Check** scores content against that ruleset, block by block. Feed the profile output into check, or pass the same brief to check and it re-parses.

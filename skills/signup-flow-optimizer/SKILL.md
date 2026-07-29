@@ -61,13 +61,15 @@ See `resources/friction-patterns.md` for the field audit, the progressive-disclo
 
 ## Run the engine
 
+> Paths assume you installed with `npx skills add`. From a clone of this repo, use `skills/signup-flow-optimizer/resources/…` instead.
+
 ```bash
-node resources/friction-score.js                                       # demo
-node resources/friction-score.js --fields 7 --steps 3 --card-upfront
-node resources/friction-score.js --fields 4 --optional 1 --visitors 8000 --conv-rate 4 --value 900
-node resources/friction-score.js --no-sso --email-verify --addressable 0.20
-node resources/friction-score.js --json --fields 5
-node resources/friction-score.js --help
+node .agents/skills/signup-flow-optimizer/resources/friction-score.js  # demo
+node .agents/skills/signup-flow-optimizer/resources/friction-score.js --fields 7 --steps 3 --card-upfront
+node .agents/skills/signup-flow-optimizer/resources/friction-score.js --fields 4 --optional 1 --visitors 8000 --conv-rate 4 --value 900
+node .agents/skills/signup-flow-optimizer/resources/friction-score.js --no-sso --email-verify --addressable 0.20
+node .agents/skills/signup-flow-optimizer/resources/friction-score.js --json --fields 5
+node .agents/skills/signup-flow-optimizer/resources/friction-score.js --help
 ```
 
 It scores the flow out of 100, shows where the score went (fields, steps, blocking items), and ranks every flagged item by the monthly value of removing it.

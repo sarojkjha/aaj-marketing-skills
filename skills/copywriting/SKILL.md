@@ -53,12 +53,14 @@ See `resources/copy-frameworks.md` for the message hierarchy, headline patterns,
 
 Score any draft — yours or the user's existing copy:
 
+> Paths assume you installed with `npx skills add`. From a clone of this repo, use `skills/copywriting/resources/…` instead.
+
 ```bash
-node resources/copy-scorer.js                       # demo
-node resources/copy-scorer.js "your copy here"
-node resources/copy-scorer.js --file landing-page.md
-node resources/copy-scorer.js --json "copy"         # JSON only
-node resources/copy-scorer.js --help
+node .agents/skills/copywriting/resources/copy-scorer.js                # demo
+node .agents/skills/copywriting/resources/copy-scorer.js "your copy here"
+node .agents/skills/copywriting/resources/copy-scorer.js --file landing-page.md
+node .agents/skills/copywriting/resources/copy-scorer.js --json "copy"  # JSON only
+node .agents/skills/copywriting/resources/copy-scorer.js --help
 ```
 
 It returns an overall score with three dimensions — **clarity** (sentence length, reading level, passive voice), **claim defensibility** (unsubstantiated superlatives, hedges — weighted highest), and **concreteness** (numbers and names versus jargon and abstraction) — plus every flagged term and a ranked fix list.

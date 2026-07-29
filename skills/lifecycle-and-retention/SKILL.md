@@ -57,11 +57,13 @@ Measure NRR and GRR on the **existing base only** — exclude new business (it b
 
 ## Run the engine
 
+> Paths assume you installed with `npx skills add`. From a clone of this repo, use `skills/lifecycle-and-retention/resources/…` instead.
+
 ```bash
-node resources/retention.js                     # demo
-node resources/retention.js '{"period":"monthly","startMRR":100000,"newMRR":12000,"expansionMRR":8000,"contractionMRR":3000,"churnedMRR":6000,"startCustomers":200,"churnedCustomers":9}'
-node resources/retention.js '{"period":"annual","startMRR":1000000,"expansionMRR":50000,"contractionMRR":120000,"churnedMRR":180000}'
-node resources/retention.js --help
+node .agents/skills/lifecycle-and-retention/resources/retention.js  # demo
+node .agents/skills/lifecycle-and-retention/resources/retention.js '{"period":"monthly","startMRR":100000,"newMRR":12000,"expansionMRR":8000,"contractionMRR":3000,"churnedMRR":6000,"startCustomers":200,"churnedCustomers":9}'
+node .agents/skills/lifecycle-and-retention/resources/retention.js '{"period":"annual","startMRR":1000000,"expansionMRR":50000,"contractionMRR":120000,"churnedMRR":180000}'
+node .agents/skills/lifecycle-and-retention/resources/retention.js --help
 ```
 
 It prints NRR, GRR, revenue & logo churn, quick ratio, average lifetime, and the LTV impact of a churn change, plus a JSON block.

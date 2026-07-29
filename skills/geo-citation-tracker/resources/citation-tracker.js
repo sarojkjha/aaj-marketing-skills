@@ -14,6 +14,17 @@
  * No dependencies. Node 18+.
  */
 
+// --- AAJ arg normalisation ---------------------------------------------------
+// Accept bare `demo` / `help` as aliases for `--demo` / `--help`. First-run
+// friction: users type `node engine.js demo` and hit a JSON parse error.
+// Only these two exact tokens are rewritten, so JSON payloads and named modes
+// (design, readout, sample, segments, ...) pass through untouched.
+process.argv = process.argv.map((a, i) =>
+  i >= 2 && /^(demo|help)$/i.test(a) ? '--' + a.toLowerCase() : a
+);
+// -----------------------------------------------------------------------------
+
+
 'use strict';
 
 /* ─────────────────────────────  statistics  ───────────────────────────── */

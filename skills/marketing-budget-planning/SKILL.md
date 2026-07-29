@@ -45,10 +45,12 @@ Marketing spend as a share of revenue is **highest early and falls as you scale*
 
 ## Run the engine
 
+> Paths assume you installed with `npx skills add`. From a clone of this repo, use `skills/marketing-budget-planning/resources/…` instead.
+
 ```bash
-node resources/budget-planner.js                  # demo (B2B SaaS, Series A, $3M)
-node resources/budget-planner.js '{"model":"ecommerce","stage":"growth","annualRevenue":8000000,"growthTarget":"aggressive"}'
-node resources/budget-planner.js --help
+node .agents/skills/marketing-budget-planning/resources/budget-planner.js  # demo (B2B SaaS, Series A, $3M)
+node .agents/skills/marketing-budget-planning/resources/budget-planner.js '{"model":"ecommerce","stage":"growth","annualRevenue":8000000,"growthTarget":"aggressive"}'
+node .agents/skills/marketing-budget-planning/resources/budget-planner.js --help
 ```
 
 It returns the recommended % of revenue, the annual and monthly budget, and a split across functions (demand gen, content/SEO, brand, etc.), plus JSON.

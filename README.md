@@ -26,7 +26,10 @@ Skills span eight categories — Strategy & Positioning, Research & Personas, SE
 Some skills bundle **runnable tools**. For example, `paid-media-budget-allocation` ships an allocation engine you can run directly:
 
 ```bash
-node skills/paid-media-budget-allocation/resources/allocation-engine.js
+node .agents/skills/paid-media-budget-allocation/resources/allocation-engine.js --demo
+
+# or, from a clone of this repo:
+node skills/paid-media-budget-allocation/resources/allocation-engine.js --demo
 ```
 
 ## Authoring / contributing

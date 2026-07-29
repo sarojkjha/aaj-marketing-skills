@@ -97,8 +97,10 @@ A practical MMM-lite for a startup is usually: plot spend against outcome by cha
 A B2B SaaS company suspects retargeting is over-credited. Attributed ROAS reads 6.2x.
 
 **Design:**
+> Paths assume you installed with `npx skills add`. From a clone of this repo, use `skills/incrementality-and-mmm/resources/…` instead.
+
 ```bash
-node resources/incrementality.js --baseline 2.5 --mde 15 --daily 4000 --value 400
+node .agents/skills/incrementality-and-mmm/resources/incrementality.js --baseline 2.5 --mde 15 --daily 4000 --value 400
 ```
 ```
 Sample per group        29,191
@@ -110,7 +112,7 @@ That last line stops the conversation. Withholding $300K of pipeline value to va
 
 **Readout after running:**
 ```bash
-node resources/incrementality.js --control-n 50000 --control-conv 1200 \
+node .agents/skills/incrementality-and-mmm/resources/incrementality.js --control-n 50000 --control-conv 1200 \
      --treat-n 50000 --treat-conv 1380 --spend 15000 --value 400
 ```
 ```
@@ -125,7 +127,7 @@ The channel is genuinely incremental — but at 4.8x, not 6.2x. Attribution was 
 
 **The contrast case** — same lift, a tenth the sample:
 ```bash
-node resources/incrementality.js --control-n 5000 --control-conv 120 \
+node .agents/skills/incrementality-and-mmm/resources/incrementality.js --control-n 5000 --control-conv 120 \
      --treat-n 5000 --treat-conv 132
 ```
 ```

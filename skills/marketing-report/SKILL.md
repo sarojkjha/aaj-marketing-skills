@@ -59,10 +59,12 @@ Delta vs prior     = (current − prior) / |prior|          (per metric)
 
 ## Run the engine
 
+> Paths assume you installed with `npx skills add`. From a clone of this repo, use `skills/marketing-report/resources/…` instead.
+
 ```bash
-node resources/marketing-report.js                     # demo (quarter with prior period)
-node resources/marketing-report.js '{"period":"March","spend":40000,"leads":800,"wins":11,"newRevenue":150000}'
-node resources/marketing-report.js --help
+node .agents/skills/marketing-report/resources/marketing-report.js  # demo (quarter with prior period)
+node .agents/skills/marketing-report/resources/marketing-report.js '{"period":"March","spend":40000,"leads":800,"wins":11,"newRevenue":150000}'
+node .agents/skills/marketing-report/resources/marketing-report.js --help
 ```
 
 It prints the KPI snapshot, the funnel with stage rates, deltas vs prior, a few flags, and a JSON block. Metrics compute only where inputs allow, so partial data still produces a useful report.

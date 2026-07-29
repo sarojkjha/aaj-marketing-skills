@@ -25,6 +25,17 @@
  *       "retentionYears":3, "cac":4000 }
  */
 
+// --- AAJ arg normalisation ---------------------------------------------------
+// Accept bare `demo` / `help` as aliases for `--demo` / `--help`. First-run
+// friction: users type `node engine.js demo` and hit a JSON parse error.
+// Only these two exact tokens are rewritten, so JSON payloads and named modes
+// (design, readout, sample, segments, ...) pass through untouched.
+process.argv = process.argv.map((a, i) =>
+  i >= 2 && /^(demo|help)$/i.test(a) ? '--' + a.toLowerCase() : a
+);
+// -----------------------------------------------------------------------------
+
+
 'use strict';
 
 function money(n){ return '$' + Math.round(n).toLocaleString(); }
@@ -106,9 +117,85 @@ function render(c){
   return out.join('\n');
 }
 
+// --- AAJ input validation ----------------------------------------------------
+// Fail loudly on bad input. Without this, an unrecognised key name yields
+// "LTV $NaN" and a wrong-but-confident verdict, which reads as a broken tool.
+const SCHEMA = {
+  subscription: { required: ['arpaMonthly', 'grossMargin'],
+                  oneOf: [['churnMonthly', 'lifetimeMonths']],
+                  optional: ['churnMonthly', 'lifetimeMonths'] },
+  ecommerce:    { required: ['aov', 'grossMargin', 'ordersPerYear', 'retentionYears'],
+                  oneOf: [], optional: [] },
+  services:     { required: ['acv', 'grossMargin', 'retentionYears'],
+                  oneOf: [], optional: [] }
+};
+const COMMON = ['model', 'cac', 'adSpend', 'customers'];
+
+function udie(msg, hint) {
+  console.error('error: ' + msg + (hint ? '\n       ' + hint : '') +
+                '\n\nRun --help for the schema, or --demo for a worked example.');
+  process.exit(1);
+}
+
+function validate(c) {
+  if (c === null || typeof c !== 'object' || Array.isArray(c)) {
+    udie('config must be a JSON object.');
+  }
+  const model = c.model || 'subscription';
+  const s = SCHEMA[model];
+  if (!s) udie(`unknown model "${model}".`, 'Use: subscription, ecommerce, or services.');
+
+  const allowed = new Set([...COMMON, ...s.required, ...s.optional]);
+  const unknown = Object.keys(c).filter(k => !allowed.has(k));
+  if (unknown.length) {
+    const near = k => [...allowed].find(a => a.toLowerCase().startsWith(k.toLowerCase().slice(0, 3)));
+    udie(`unrecognised field(s) for model "${model}": ${unknown.join(', ')}.`,
+         unknown.map(k => near(k) ? `did you mean "${near(k)}" instead of "${k}"?` : '')
+                .filter(Boolean).join(' ') ||
+         `valid fields: ${[...allowed].join(', ')}.`);
+  }
+
+  const missing = s.required.filter(k => c[k] === undefined);
+  if (missing.length) udie(`missing required field(s) for model "${model}": ${missing.join(', ')}.`);
+
+  for (const group of s.oneOf) {
+    if (!group.some(k => c[k] !== undefined)) {
+      udie(`model "${model}" needs one of: ${group.join(' or ')}.`);
+    }
+  }
+
+  const hasCac = c.cac !== undefined;
+  const hasDerived = c.adSpend !== undefined && c.customers !== undefined;
+  if (!hasCac && !hasDerived) {
+    udie('missing CAC.', 'Provide "cac", or "adSpend" + "customers" to derive it.');
+  }
+
+  for (const [k, v] of Object.entries(c)) {
+    if (k === 'model') continue;
+    if (typeof v !== 'number' || !isFinite(v)) {
+      udie(`field "${k}" must be a finite number (got ${JSON.stringify(v)}).`);
+    }
+    if (v < 0) udie(`field "${k}" cannot be negative (got ${v}).`);
+  }
+
+  // The silent-wrong-answer case: percentages passed as proportions.
+  for (const k of ['grossMargin', 'churnMonthly']) {
+    if (c[k] !== undefined && c[k] > 0 && c[k] < 1) {
+      udie(`"${k}" looks like a proportion (${c[k]}), but this engine expects a percentage.`,
+           `Pass ${Math.round(c[k] * 100)} for ${Math.round(c[k] * 100)}%, not ${c[k]}.`);
+    }
+  }
+  if (c.grossMargin > 100) udie(`"grossMargin" cannot exceed 100 (got ${c.grossMargin}).`);
+  if (c.churnMonthly !== undefined && c.churnMonthly > 100) {
+    udie(`"churnMonthly" cannot exceed 100 (got ${c.churnMonthly}).`);
+  }
+}
+// -----------------------------------------------------------------------------
+
 const arg = process.argv[2] === '--demo' ? undefined : process.argv[2];
 if (arg === '--help' || arg === '-h'){ console.log(require('fs').readFileSync(__filename,'utf8').split('*/')[0].replace(/^\/\*/,'')); process.exit(0); }
 let cfg;
 if (arg){ try { cfg = JSON.parse(arg); } catch(e){ console.error('Invalid JSON. Run --help for the schema.\n'+e.message); process.exit(1);} }
 else { cfg = { model:'subscription', arpaMonthly:500, grossMargin:80, churnMonthly:3, cac:3000 }; console.log('(no config — demo: subscription, $500 ARPA, 80% margin, 3% monthly churn, $3,000 CAC)'); }
+validate(cfg);
 console.log(render(cfg));

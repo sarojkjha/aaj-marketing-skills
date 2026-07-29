@@ -64,9 +64,11 @@ commit = Σ amount for deals at prob ≥ 0.75   ·   best case = Σ amount (all 
 
 ## Run the tool
 
+> Paths assume you installed with `npx skills add`. From a clone of this repo, use `skills/pipeline-and-forecast/resources/…` instead.
+
 ```bash
-node resources/forecast.js --input=pipeline.json
-node resources/forecast.js          # built-in demo
+node .agents/skills/pipeline-and-forecast/resources/forecast.js --input=pipeline.json
+node .agents/skills/pipeline-and-forecast/resources/forecast.js  # built-in demo
 ```
 Input JSON: `{ "target": 500000, "winRate": 0.25, "stageProbabilities": { "Proposal": 0.5, ... }, "deals": [ { "name": "Acme", "amount": 60000, "stage": "Proposal" } ] }`. It prints the weighted forecast, commit vs best case, coverage ratio with a healthy/thin flag, the gap, the new pipeline needed, and the recommended lever. Use these exact numbers — don't restate them from memory.
 

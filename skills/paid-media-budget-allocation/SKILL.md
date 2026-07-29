@@ -70,15 +70,17 @@ DR presets: **gentle 0.4 · moderate 0.8 (default) · aggressive 1.5.**
 
 Don't approximate the water-filling by hand — run the bundled engine for exact numbers.
 
+> Paths assume you installed with `npx skills add`. From a clone of this repo, use `skills/paid-media-budget-allocation/resources/…` instead.
+
 ```bash
 # Demo: B2B SaaS, $30k budget
-node resources/allocation-engine.js
+node .agents/skills/paid-media-budget-allocation/resources/allocation-engine.js
 
 # Custom — pass a JSON config
-node resources/allocation-engine.js '{"model":"saas","mode":"budget","budget":30000,"diminishingReturns":"moderate","channels":[{"key":"capterra","model":"cpl","cpl":90,"l2c":22,"cap":8000}]}'
+node .agents/skills/paid-media-budget-allocation/resources/allocation-engine.js '{"model":"saas","mode":"budget","budget":30000,"diminishingReturns":"moderate","channels":[{"key":"capterra","model":"cpl","cpl":90,"l2c":22,"cap":8000}]}'
 
 # Schema and channel keys
-node resources/allocation-engine.js --help
+node .agents/skills/paid-media-budget-allocation/resources/allocation-engine.js --help
 ```
 
 The engine prints a per-channel table plus a JSON block you can parse. Always seed the per-channel inputs with the user's own account data where they have it; the benchmarks are only a starting point.

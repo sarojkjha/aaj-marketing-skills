@@ -17,6 +17,17 @@
  *     competitor?: String }  // optional, won or lost
  */
 
+// --- AAJ arg normalisation ---------------------------------------------------
+// Accept bare `demo` / `help` as aliases for `--demo` / `--help`. First-run
+// friction: users type `node engine.js demo` and hit a JSON parse error.
+// Only these two exact tokens are rewritten, so JSON payloads and named modes
+// (design, readout, sample, segments, ...) pass through untouched.
+process.argv = process.argv.map((a, i) =>
+  i >= 2 && /^(demo|help)$/i.test(a) ? '--' + a.toLowerCase() : a
+);
+// -----------------------------------------------------------------------------
+
+
 function round1(n) { return Math.round(n * 10) / 10; }
 function pct(part, whole) { return whole > 0 ? round1((part / whole) * 100) : 0; }
 function sum(arr, f) { return arr.reduce((t, x) => t + f(x), 0); }

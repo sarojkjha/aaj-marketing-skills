@@ -36,11 +36,13 @@ The user has an A/B test result to evaluate, or wants to size a test before laun
 
 **To evaluate a result:** gather visitors and conversions for control and variant, pick a confidence level (usually 95%), and run the engine. **To plan a test:** take the baseline conversion rate and the minimum lift worth detecting (the MDE), and compute the required sample size.
 
+> Paths assume you installed with `npx skills add`. From a clone of this repo, use `skills/ab-test-significance/resources/…` instead.
+
 ```bash
-node resources/significance.js                                  # demo (5.0% vs 6.2%)
-node resources/significance.js '{"control":{"visitors":4000,"conversions":200},"variant":{"visitors":4050,"conversions":250},"confidence":95}'
-node resources/significance.js '{"plan":true,"baselineRate":5,"mde":1,"confidence":95,"power":80}'   # sample size
-node resources/significance.js --help
+node .agents/skills/ab-test-significance/resources/significance.js  # demo (5.0% vs 6.2%)
+node .agents/skills/ab-test-significance/resources/significance.js '{"control":{"visitors":4000,"conversions":200},"variant":{"visitors":4050,"conversions":250},"confidence":95}'
+node .agents/skills/ab-test-significance/resources/significance.js '{"plan":true,"baselineRate":5,"mde":1,"confidence":95,"power":80}'  # sample size
+node .agents/skills/ab-test-significance/resources/significance.js --help
 ```
 
 It returns rates, relative and absolute lift, z and p, a significance verdict at your confidence level, a confidence interval on the difference, or — in plan mode — the visitors needed per variant.

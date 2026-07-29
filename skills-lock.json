@@ -1,0 +1,239 @@
+{
+  "version": 1,
+  "skills": {
+    "ab-test-significance": {
+      "source": "sarojkjha/aaj-marketing-skills",
+      "sourceType": "github",
+      "skillPath": "skills/ab-test-significance/SKILL.md",
+      "computedHash": "ddc4b6a8087804696b7d5b08571a4ff6b31a1d8487e88272d44636c9e1a65afa"
+    },
+    "agent-readiness-audit": {
+      "source": "sarojkjha/aaj-marketing-skills",
+      "sourceType": "github",
+      "skillPath": "skills/agent-readiness-audit/SKILL.md",
+      "computedHash": "4f70ad4d4839b6ada187e878bd3330ce827b3a71b8e7061bc7200e992b133d89"
+    },
+    "brand-product-context": {
+      "source": "sarojkjha/aaj-marketing-skills",
+      "sourceType": "github",
+      "skillPath": "skills/brand-product-context/SKILL.md",
+      "computedHash": "8a9999821c7b1be5a656691efbdcbcc926ac1f21705111199f026a009cf70e6d"
+    },
+    "brand-voice-governance": {
+      "source": "sarojkjha/aaj-marketing-skills",
+      "sourceType": "github",
+      "skillPath": "skills/brand-voice-governance/SKILL.md",
+      "computedHash": "bcdb9790ddd98ffd461a979735fa9c7ebe2634dc3a46748dd5485a805016868d"
+    },
+    "campaign-orchestrator": {
+      "source": "sarojkjha/aaj-marketing-skills",
+      "sourceType": "github",
+      "skillPath": "skills/campaign-orchestrator/SKILL.md",
+      "computedHash": "ab3d59cb9a534e533bd1c89618efd06f26e795f4cea8077104330037055a4b5d"
+    },
+    "cold-email-sequence": {
+      "source": "sarojkjha/aaj-marketing-skills",
+      "sourceType": "github",
+      "skillPath": "skills/cold-email-sequence/SKILL.md",
+      "computedHash": "120eb7ce4f8b95be0a938b4335b3d0ed9d81ebc5d77474a08740b4153feac576"
+    },
+    "content-calendar-planning": {
+      "source": "sarojkjha/aaj-marketing-skills",
+      "sourceType": "github",
+      "skillPath": "skills/content-calendar-planning/SKILL.md",
+      "computedHash": "dfb7e9f5c9e3c7f7d4dca18fd03a2edf96f36fca339a52442f608771439cee07"
+    },
+    "content-repurposing": {
+      "source": "sarojkjha/aaj-marketing-skills",
+      "sourceType": "github",
+      "skillPath": "skills/content-repurposing/SKILL.md",
+      "computedHash": "aa13f0f881b45420ecbb721553bfb31f915d29ae33fd690bc2ccab37e1b918b0"
+    },
+    "copywriting": {
+      "source": "sarojkjha/aaj-marketing-skills",
+      "sourceType": "github",
+      "skillPath": "skills/copywriting/SKILL.md",
+      "computedHash": "fe771961b6f9b15f6f85cba7a6410ed0a2fbc98975692154e255a191b9ce921f"
+    },
+    "customer-survey-design": {
+      "source": "sarojkjha/aaj-marketing-skills",
+      "sourceType": "github",
+      "skillPath": "skills/customer-survey-design/SKILL.md",
+      "computedHash": "d93e93b7deb0029c409f8a6da64ffa4b0bea950badc72768f9915330abb87c02"
+    },
+    "discovery-call-framework": {
+      "source": "sarojkjha/aaj-marketing-skills",
+      "sourceType": "github",
+      "skillPath": "skills/discovery-call-framework/SKILL.md",
+      "computedHash": "8382cd423be83a0d75bdeb90a1c5744db33f85b2d67129c5d535c2fbd212ff66"
+    },
+    "email-lifecycle-sequence": {
+      "source": "sarojkjha/aaj-marketing-skills",
+      "sourceType": "github",
+      "skillPath": "skills/email-lifecycle-sequence/SKILL.md",
+      "computedHash": "21ed20d632736d9f600ddc509ac0ce0918749580330d644064fb21ecfefe6e58"
+    },
+    "geo-citation-tracker": {
+      "source": "sarojkjha/aaj-marketing-skills",
+      "sourceType": "github",
+      "skillPath": "skills/geo-citation-tracker/SKILL.md",
+      "computedHash": "dfc25930f72b58b7c04656a86cf680089a11a8a983876e492a39d54b38b34eb4"
+    },
+    "geo-content-optimization": {
+      "source": "sarojkjha/aaj-marketing-skills",
+      "sourceType": "github",
+      "skillPath": "skills/geo-content-optimization/SKILL.md",
+      "computedHash": "761cd5ec5277c98d606552342d6879acb5281de932bb1d97f5d485a5c35f980d"
+    },
+    "incrementality-and-mmm": {
+      "source": "sarojkjha/aaj-marketing-skills",
+      "sourceType": "github",
+      "skillPath": "skills/incrementality-and-mmm/SKILL.md",
+      "computedHash": "0702dd91014689161619d329135ea05484c28a0788c1bf9e869aff011f406e1a"
+    },
+    "landing-page-brief": {
+      "source": "sarojkjha/aaj-marketing-skills",
+      "sourceType": "github",
+      "skillPath": "skills/landing-page-brief/SKILL.md",
+      "computedHash": "e735ef2ae586094ef8fcfe27cf769a942bb0830e66993ad4b00d17c26e6839d8"
+    },
+    "lifecycle-and-retention": {
+      "source": "sarojkjha/aaj-marketing-skills",
+      "sourceType": "github",
+      "skillPath": "skills/lifecycle-and-retention/SKILL.md",
+      "computedHash": "8822fbdef9721e6a05390e096746a917f1fe464f717972645cbfddfd0b797f64"
+    },
+    "marketing-budget-planning": {
+      "source": "sarojkjha/aaj-marketing-skills",
+      "sourceType": "github",
+      "skillPath": "skills/marketing-budget-planning/SKILL.md",
+      "computedHash": "231fa690bbc116552d6b32178c54d56e3bc6c7b4481a62e3bc11bc7028f5241d"
+    },
+    "marketing-loops": {
+      "source": "sarojkjha/aaj-marketing-skills",
+      "sourceType": "github",
+      "skillPath": "skills/marketing-loops/SKILL.md",
+      "computedHash": "288de63e880c48e94e17c7803af7333bd9ba17eff655dabaed4cc6dbc8db5cf6"
+    },
+    "marketing-psychology": {
+      "source": "sarojkjha/aaj-marketing-skills",
+      "sourceType": "github",
+      "skillPath": "skills/marketing-psychology/SKILL.md",
+      "computedHash": "45a5fb700ab02f3b95b9f5ca919c3b1fb9165547a665ff84d65cd59ef4115413"
+    },
+    "marketing-report": {
+      "source": "sarojkjha/aaj-marketing-skills",
+      "sourceType": "github",
+      "skillPath": "skills/marketing-report/SKILL.md",
+      "computedHash": "ba7db4590298c16d44838e93aa14bbca6ae7be52a6ed3736fc8e44463e503c29"
+    },
+    "messaging-framework": {
+      "source": "sarojkjha/aaj-marketing-skills",
+      "sourceType": "github",
+      "skillPath": "skills/messaging-framework/SKILL.md",
+      "computedHash": "c03313cd787bb4ef34c3d71b8f9bd92ede19de774d1a2fbaf65655cb6446328b"
+    },
+    "objection-handling": {
+      "source": "sarojkjha/aaj-marketing-skills",
+      "sourceType": "github",
+      "skillPath": "skills/objection-handling/SKILL.md",
+      "computedHash": "38f69bd91ef2487f15eb81781c3768402d87655e563be8e80ec9d0bcace7d25c"
+    },
+    "onboarding-activation": {
+      "source": "sarojkjha/aaj-marketing-skills",
+      "sourceType": "github",
+      "skillPath": "skills/onboarding-activation/SKILL.md",
+      "computedHash": "3b8a7d1c84083a132bfe2dc4efdac1805875a702553db74f59bc466c684f22b5"
+    },
+    "paid-media-budget-allocation": {
+      "source": "sarojkjha/aaj-marketing-skills",
+      "sourceType": "github",
+      "skillPath": "skills/paid-media-budget-allocation/SKILL.md",
+      "computedHash": "9066438ec8ac7f7f4bcb45735e9e7d14c656f004e170b90226fd1a1f525b71c9"
+    },
+    "persona-builder": {
+      "source": "sarojkjha/aaj-marketing-skills",
+      "sourceType": "github",
+      "skillPath": "skills/persona-builder/SKILL.md",
+      "computedHash": "802c39755a3abf1233d7b3746134ba7fc50e061b3b5b340ab67af615de30cc52"
+    },
+    "pipeline-and-forecast": {
+      "source": "sarojkjha/aaj-marketing-skills",
+      "sourceType": "github",
+      "skillPath": "skills/pipeline-and-forecast/SKILL.md",
+      "computedHash": "43e7e76e5c2510b0d74f2f5cf781f7141388870266a40b66627821dc7b160c11"
+    },
+    "positioning-statement": {
+      "source": "sarojkjha/aaj-marketing-skills",
+      "sourceType": "github",
+      "skillPath": "skills/positioning-statement/SKILL.md",
+      "computedHash": "14a12ea46d7414ce420c5b554b30d1d9954754ba94618bb9ae4add457c30633e"
+    },
+    "pricing-and-packaging": {
+      "source": "sarojkjha/aaj-marketing-skills",
+      "sourceType": "github",
+      "skillPath": "skills/pricing-and-packaging/SKILL.md",
+      "computedHash": "a15f874d54810f734bcbd92875ce002e66799e56e0e20e2dacf31bcf32f91a89"
+    },
+    "programmatic-seo": {
+      "source": "sarojkjha/aaj-marketing-skills",
+      "sourceType": "github",
+      "skillPath": "skills/programmatic-seo/SKILL.md",
+      "computedHash": "6c2ddbc795bd5c2ba102fc245cacb8f32ccd8ac2036bb3303b68bbbb850a5d94"
+    },
+    "sales-process-design": {
+      "source": "sarojkjha/aaj-marketing-skills",
+      "sourceType": "github",
+      "skillPath": "skills/sales-process-design/SKILL.md",
+      "computedHash": "c406c030a3b3eab5ed859bd901c194246d21f18ffe3f2d89abfbb0d003a5944e"
+    },
+    "seo-content-brief": {
+      "source": "sarojkjha/aaj-marketing-skills",
+      "sourceType": "github",
+      "skillPath": "skills/seo-content-brief/SKILL.md",
+      "computedHash": "0e1befded8915a4a5271c5a1b7c2d9b3c27eb012036d412a2512d8567eb22e60"
+    },
+    "seo-geo-aeo-audit": {
+      "source": "sarojkjha/aaj-marketing-skills",
+      "sourceType": "github",
+      "skillPath": "skills/seo-geo-aeo-audit/SKILL.md",
+      "computedHash": "86add8aec4014f75d78f44a15c3367d0031a3a6d368e2f28cdb2427993b7439b"
+    },
+    "signup-flow-optimizer": {
+      "source": "sarojkjha/aaj-marketing-skills",
+      "sourceType": "github",
+      "skillPath": "skills/signup-flow-optimizer/SKILL.md",
+      "computedHash": "c8ca71fdbfaefb5fd454e95c3f74ba0451572bcc485e452591d5153dc3ebc571"
+    },
+    "target-account-list": {
+      "source": "sarojkjha/aaj-marketing-skills",
+      "sourceType": "github",
+      "skillPath": "skills/target-account-list/SKILL.md",
+      "computedHash": "e1c4b219abf10a2f115f50c42861462f9a69372a9a3d92355af109bef3b7375c"
+    },
+    "unit-economics": {
+      "source": "sarojkjha/aaj-marketing-skills",
+      "sourceType": "github",
+      "skillPath": "skills/unit-economics/SKILL.md",
+      "computedHash": "88023e5fb325fbbd6014625253c29c93db59557afe43a734aa49a8ca2113de5d"
+    },
+    "value-proposition": {
+      "source": "sarojkjha/aaj-marketing-skills",
+      "sourceType": "github",
+      "skillPath": "skills/value-proposition/SKILL.md",
+      "computedHash": "6d7ac600355e94680f2eb92c563468cc9af00734c76494ee3af2c8b84e0292b6"
+    },
+    "website-conversion-audit": {
+      "source": "sarojkjha/aaj-marketing-skills",
+      "sourceType": "github",
+      "skillPath": "skills/website-conversion-audit/SKILL.md",
+      "computedHash": "1930cb68a5000c707853b1384176d49ac4e9ce4dd712b4c72034c93937ac490b"
+    },
+    "win-loss-analysis": {
+      "source": "sarojkjha/aaj-marketing-skills",
+      "sourceType": "github",
+      "skillPath": "skills/win-loss-analysis/SKILL.md",
+      "computedHash": "50f53135cd82c46f728deb2f353787e507f5d1be07b9ea6d51232f6b14b02f5f"
+    }
+  }
+}

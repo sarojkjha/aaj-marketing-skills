@@ -1,0 +1,46 @@
+diff --git a/platform/scripts/sync-skills.mjs b/platform/scripts/sync-skills.mjs
+--- a/platform/scripts/sync-skills.mjs	2026-07-27 01:14:10.000000000 +0000
++++ b/platform/scripts/sync-skills.mjs	2026-07-29 05:12:12.149004199 +0000
+@@ -1,8 +1,11 @@
+ #!/usr/bin/env node
+ // =====================================================================
+ // AAJ Marketing Skills — catalog sync (Step 4)
+-// Reads every skills/<slug>/SKILL.md frontmatter and upserts it into the
+-// Supabase catalog, so the repo stays the single source of truth.
++// Reads every skills/<slug>/SKILL.md — frontmatter AND body — and upserts it
++// into the Supabase catalog, so the repo stays the single source of truth.
++// The body is stored in skills.body_md so skill pages can server-render the
++// full text: without it every skill page is a metadata stub with nothing for
++// search engines or AI answer engines to cite.
+ //
+ // SETUP (run from the repo root):
+ //   npm init -y
+@@ -43,7 +46,7 @@
+ 
+   for (const slug of slugs) {
+     const dir = join(SKILLS_DIR, slug);
+-    const { data } = matter(readFileSync(join(dir, 'SKILL.md'), 'utf8'));
++    const { data, content } = matter(readFileSync(join(dir, 'SKILL.md'), 'utf8'));
+     const m = data.metadata || {};
+     const resDir = join(dir, 'resources');
+     const hasEngine = existsSync(resDir) && readdirSync(resDir).some(f => f.endsWith('.js') || f.endsWith('.mjs') || f.endsWith('.py'));
+@@ -63,6 +66,7 @@
+       has_engine: hasEngine,
+       repo_path: `skills/${slug}`,
+       install_cmd: `npx skills add sarojkjha/aaj-marketing-skills --skill ${data.name}`,
++      body_md: (content || '').trim() || null,
+       published: true
+     };
+     if (!catByName[m.category]) console.warn(`  ! ${slug}: category "${m.category}" not found — run seed-categories.sql`);
+@@ -86,7 +90,10 @@
+       await db.from('related_skills').insert(m.related.map(rs => ({ skill_id: skillId, related_slug: rs })));
+     }
+ 
+-    ok++; console.log(`  ✓ ${data.name}`);
++    ok++;
++    const words = (row.body_md || '').split(/\s+/).filter(Boolean).length;
++    if (!words) console.warn(`  ! ${slug}: empty body — page will render as a stub`);
++    console.log(`  ✓ ${data.name}  (${words} words)`);
+   }
+   console.log(`\nSynced ${ok}/${slugs.length} skills.`);
+ }

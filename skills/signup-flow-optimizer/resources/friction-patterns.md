@@ -96,8 +96,10 @@ The key is that later questions must **help the user**, not just you. "How many 
 
 **Current flow:** 3 steps, 8 required fields (email, password, full name, company, company size, role, phone, use case), card required, email verification before entry, no SSO.
 
+> Paths assume you installed with `npx skills add`. From a clone of this repo, use `skills/signup-flow-optimizer/resources/…` instead.
+
 ```bash
-node resources/friction-score.js \
+node .agents/skills/signup-flow-optimizer/resources/friction-score.js \
   --fields 8 --steps 3 --visitors 4000 --conv-rate 2.5 --value 900 \
   --card-upfront --email-verify --no-sso
 ```

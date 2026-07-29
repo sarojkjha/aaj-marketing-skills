@@ -1,0 +1,543 @@
+diff --git a/README.md b/README.md
+--- a/README.md	2026-07-27 01:14:10.000000000 +0000
++++ b/README.md	2026-07-29 00:42:32.460793255 +0000
+@@ -26,7 +26,10 @@
+ Some skills bundle **runnable tools**. For example, `paid-media-budget-allocation` ships an allocation engine you can run directly:
+ 
+ ```bash
+-node skills/paid-media-budget-allocation/resources/allocation-engine.js
++node .agents/skills/paid-media-budget-allocation/resources/allocation-engine.js --demo
++
++# or, from a clone of this repo:
++node skills/paid-media-budget-allocation/resources/allocation-engine.js --demo
+ ```
+ 
+ ## Authoring / contributing
+diff --git a/package.json b/package.json
+--- a/package.json	2026-07-27 01:14:10.000000000 +0000
++++ b/package.json	2026-07-29 00:42:32.461233083 +0000
+@@ -5,8 +5,7 @@
+   },
+   "name": "aaj-marketing-skills",
+   "version": "1.0.0",
+-  "description": "Agent skills for AI marketing tasks — grounded in AAJ's tested tools and methodology, not generic advice. Works with Claude Code, Cursor, OpenAI Codex, Windsurf, and any agent that supports the [Agent Skills spec](https://agentskills.io).",
+-  "main": "index.js",
++  "description": "Agent skills for AI marketing tasks \u2014 grounded in AAJ's tested tools and methodology, not generic advice. Works with Claude Code, Cursor, OpenAI Codex, Windsurf, and any agent that supports the [Agent Skills spec](https://agentskills.io).",
+   "scripts": {
+     "test": "echo \"Error: no test specified\" && exit 1"
+   },
+diff --git a/skills/ab-test-significance/SKILL.md b/skills/ab-test-significance/SKILL.md
+--- a/skills/ab-test-significance/SKILL.md	2026-07-27 01:14:10.000000000 +0000
++++ b/skills/ab-test-significance/SKILL.md	2026-07-29 00:42:32.450265716 +0000
+@@ -36,11 +36,13 @@
+ 
+ **To evaluate a result:** gather visitors and conversions for control and variant, pick a confidence level (usually 95%), and run the engine. **To plan a test:** take the baseline conversion rate and the minimum lift worth detecting (the MDE), and compute the required sample size.
+ 
++> Paths assume you installed with `npx skills add`. From a clone of this repo, use `skills/ab-test-significance/resources/…` instead.
++
+ ```bash
+-node resources/significance.js                                  # demo (5.0% vs 6.2%)
+-node resources/significance.js '{"control":{"visitors":4000,"conversions":200},"variant":{"visitors":4050,"conversions":250},"confidence":95}'
+-node resources/significance.js '{"plan":true,"baselineRate":5,"mde":1,"confidence":95,"power":80}'   # sample size
+-node resources/significance.js --help
++node .agents/skills/ab-test-significance/resources/significance.js  # demo (5.0% vs 6.2%)
++node .agents/skills/ab-test-significance/resources/significance.js '{"control":{"visitors":4000,"conversions":200},"variant":{"visitors":4050,"conversions":250},"confidence":95}'
++node .agents/skills/ab-test-significance/resources/significance.js '{"plan":true,"baselineRate":5,"mde":1,"confidence":95,"power":80}'  # sample size
++node .agents/skills/ab-test-significance/resources/significance.js --help
+ ```
+ 
+ It returns rates, relative and absolute lift, z and p, a significance verdict at your confidence level, a confidence interval on the difference, or — in plan mode — the visitors needed per variant.
+diff --git a/skills/agent-readiness-audit/SKILL.md b/skills/agent-readiness-audit/SKILL.md
+--- a/skills/agent-readiness-audit/SKILL.md	2026-07-27 01:14:10.000000000 +0000
++++ b/skills/agent-readiness-audit/SKILL.md	2026-07-29 00:42:32.450786003 +0000
+@@ -64,12 +64,14 @@
+ 
+ ## Run the engine
+ 
++> Paths assume you installed with `npx skills add`. From a clone of this repo, use `skills/agent-readiness-audit/resources/…` instead.
++
+ ```bash
+-node resources/agent-readiness.js                      # demo — nothing passing
+-node resources/agent-readiness.js --all                # everything passing
+-node resources/agent-readiness.js --ssr --schema --pricing-public --self-serve
+-node resources/agent-readiness.js --json --ssr --llms-txt
+-node resources/agent-readiness.js --help
++node .agents/skills/agent-readiness-audit/resources/agent-readiness.js        # demo — nothing passing
++node .agents/skills/agent-readiness-audit/resources/agent-readiness.js --all  # everything passing
++node .agents/skills/agent-readiness-audit/resources/agent-readiness.js --ssr --schema --pricing-public --self-serve
++node .agents/skills/agent-readiness-audit/resources/agent-readiness.js --json --ssr --llms-txt
++node .agents/skills/agent-readiness-audit/resources/agent-readiness.js --help
+ ```
+ 
+ Add a flag for each check the site passes. It returns the score by dimension, gaps ranked by point cost with the fix for each, and a plain-language summary of what an agent can and cannot do today.
+diff --git a/skills/agent-readiness-audit/resources/agent-readiness-guide.md b/skills/agent-readiness-audit/resources/agent-readiness-guide.md
+--- a/skills/agent-readiness-audit/resources/agent-readiness-guide.md	2026-07-27 01:14:10.000000000 +0000
++++ b/skills/agent-readiness-audit/resources/agent-readiness-guide.md	2026-07-29 00:42:32.457698214 +0000
+@@ -90,8 +90,10 @@
+ 
+ A B2B SaaS company scores **73 — PARTIAL**:
+ 
++> Paths assume you installed with `npx skills add`. From a clone of this repo, use `skills/agent-readiness-audit/resources/…` instead.
++
+ ```bash
+-node resources/agent-readiness.js \
++node .agents/skills/agent-readiness-audit/resources/agent-readiness.js \
+   --ssr --schema --llms-txt --clean-headings \
+   --pricing-public --self-serve --no-captcha \
+   --org-schema --claims-sourced --allows-ai-crawlers
+diff --git a/skills/brand-voice-governance/SKILL.md b/skills/brand-voice-governance/SKILL.md
+--- a/skills/brand-voice-governance/SKILL.md	2026-07-27 01:14:10.000000000 +0000
++++ b/skills/brand-voice-governance/SKILL.md	2026-07-29 00:42:32.451032936 +0000
+@@ -59,11 +59,13 @@
+ 
+ ## Run the engine
+ 
++> Paths assume you installed with `npx skills add`. From a clone of this repo, use `skills/brand-voice-governance/resources/…` instead.
++
+ ```bash
+-node resources/voice-check.js --demo                 # worked example, no args
+-node resources/voice-check.js profile '<json>'       # extract rules from a brief
+-node resources/voice-check.js check '<json>'         # score content against rules
+-node resources/voice-check.js --help
++node .agents/skills/brand-voice-governance/resources/voice-check.js --demo            # worked example, no args
++node .agents/skills/brand-voice-governance/resources/voice-check.js profile '<json>'  # extract rules from a brief
++node .agents/skills/brand-voice-governance/resources/voice-check.js check '<json>'    # score content against rules
++node .agents/skills/brand-voice-governance/resources/voice-check.js --help
+ ```
+ 
+ Two modes. **Profile** parses a checkable ruleset from a brand-context brief's Voice & tone section — a deterministic parse, so the rules are themselves auditable. **Check** scores content against that ruleset, block by block. Feed the profile output into check, or pass the same brief to check and it re-parses.
+diff --git a/skills/copywriting/SKILL.md b/skills/copywriting/SKILL.md
+--- a/skills/copywriting/SKILL.md	2026-07-27 01:14:10.000000000 +0000
++++ b/skills/copywriting/SKILL.md	2026-07-29 00:42:32.451426162 +0000
+@@ -53,12 +53,14 @@
+ 
+ Score any draft — yours or the user's existing copy:
+ 
++> Paths assume you installed with `npx skills add`. From a clone of this repo, use `skills/copywriting/resources/…` instead.
++
+ ```bash
+-node resources/copy-scorer.js                       # demo
+-node resources/copy-scorer.js "your copy here"
+-node resources/copy-scorer.js --file landing-page.md
+-node resources/copy-scorer.js --json "copy"         # JSON only
+-node resources/copy-scorer.js --help
++node .agents/skills/copywriting/resources/copy-scorer.js                # demo
++node .agents/skills/copywriting/resources/copy-scorer.js "your copy here"
++node .agents/skills/copywriting/resources/copy-scorer.js --file landing-page.md
++node .agents/skills/copywriting/resources/copy-scorer.js --json "copy"  # JSON only
++node .agents/skills/copywriting/resources/copy-scorer.js --help
+ ```
+ 
+ It returns an overall score with three dimensions — **clarity** (sentence length, reading level, passive voice), **claim defensibility** (unsubstantiated superlatives, hedges — weighted highest), and **concreteness** (numbers and names versus jargon and abstraction) — plus every flagged term and a ranked fix list.
+diff --git a/skills/email-lifecycle-sequence/SKILL.md b/skills/email-lifecycle-sequence/SKILL.md
+--- a/skills/email-lifecycle-sequence/SKILL.md	2026-07-27 01:14:10.000000000 +0000
++++ b/skills/email-lifecycle-sequence/SKILL.md	2026-07-29 00:42:32.451983278 +0000
+@@ -64,12 +64,14 @@
+ 
+ ## Run the engine
+ 
++> Paths assume you installed with `npx skills add`. From a clone of this repo, use `skills/email-lifecycle-sequence/resources/…` instead.
++
+ ```bash
+-node resources/lifecycle-audit.js                                          # demo
+-node resources/lifecycle-audit.js --have welcome,onboarding --signups 500 --value 400
+-node resources/lifecycle-audit.js --have welcome --build-hours 8 --rate 150 --payback 3
+-node resources/lifecycle-audit.js --json --have welcome,winback
+-node resources/lifecycle-audit.js --help
++node .agents/skills/email-lifecycle-sequence/resources/lifecycle-audit.js  # demo
++node .agents/skills/email-lifecycle-sequence/resources/lifecycle-audit.js --have welcome,onboarding --signups 500 --value 400
++node .agents/skills/email-lifecycle-sequence/resources/lifecycle-audit.js --have welcome --build-hours 8 --rate 150 --payback 3
++node .agents/skills/email-lifecycle-sequence/resources/lifecycle-audit.js --json --have welcome,winback
++node .agents/skills/email-lifecycle-sequence/resources/lifecycle-audit.js --help
+ ```
+ 
+ It returns coverage across the six sequences, the gaps in build order, a **send-load check** counting every sequence that overlaps a new user's first 14 and 30 days, and a **breakeven** per sequence.
+diff --git a/skills/email-lifecycle-sequence/resources/lifecycle-playbook.md b/skills/email-lifecycle-sequence/resources/lifecycle-playbook.md
+--- a/skills/email-lifecycle-sequence/resources/lifecycle-playbook.md	2026-07-27 01:14:10.000000000 +0000
++++ b/skills/email-lifecycle-sequence/resources/lifecycle-playbook.md	2026-07-29 00:42:32.458058115 +0000
+@@ -115,8 +115,10 @@
+ 
+ **Audit first:**
+ 
++> Paths assume you installed with `npx skills add`. From a clone of this repo, use `skills/email-lifecycle-sequence/resources/…` instead.
++
+ ```bash
+-node resources/lifecycle-audit.js --have welcome --signups 400 --value 900
++node .agents/skills/email-lifecycle-sequence/resources/lifecycle-audit.js --have welcome --signups 400 --value 900
+ ```
+ 
+ Coverage 1/6. Breakeven says a sequence needs about 0.2 conversions a month to pay back in six — around 0.1% of signups. That settles whether to build it.
+diff --git a/skills/geo-citation-tracker/SKILL.md b/skills/geo-citation-tracker/SKILL.md
+--- a/skills/geo-citation-tracker/SKILL.md	2026-07-27 01:14:10.000000000 +0000
++++ b/skills/geo-citation-tracker/SKILL.md	2026-07-29 00:42:32.452344477 +0000
+@@ -51,8 +51,10 @@
+ 
+ Run **design mode** before the first tracking run, so the prompt set is large enough for its results to mean anything:
+ 
++> Paths assume you installed with `npx skills add`. From a clone of this repo, use `skills/geo-citation-tracker/resources/…` instead.
++
+ ```bash
+-node resources/citation-tracker.js design '{"baselinePresence":0.30,"detectAbsoluteLift":0.15,"engines":4}'
++node .agents/skills/geo-citation-tracker/resources/citation-tracker.js design '{"baselinePresence":0.30,"detectAbsoluteLift":0.15,"engines":4}'
+ ```
+ 
+ It returns the prompts per engine needed to detect that change, and — more usefully — the smallest change detectable at sizes that are actually practical. Expect the honest answer to be uncomfortable: detecting a 15-point move at 95%/80% needs around 160 prompts per engine. Most teams should either accept a coarser detectable change, track fewer engines, or label the exercise directional monitoring and stop calling it measurement.
+@@ -60,8 +62,8 @@
+ Then log each prompt on each engine and run **readout mode**:
+ 
+ ```bash
+-node resources/citation-tracker.js readout '<json>'
+-node resources/citation-tracker.js --demo     # worked example, no arguments
++node .agents/skills/geo-citation-tracker/resources/citation-tracker.js readout '<json>'
++node .agents/skills/geo-citation-tracker/resources/citation-tracker.js --demo  # worked example, no arguments
+ ```
+ 
+ ## Metrics
+diff --git a/skills/incrementality-and-mmm/SKILL.md b/skills/incrementality-and-mmm/SKILL.md
+--- a/skills/incrementality-and-mmm/SKILL.md	2026-07-27 01:14:10.000000000 +0000
++++ b/skills/incrementality-and-mmm/SKILL.md	2026-07-29 00:42:32.453005644 +0000
+@@ -65,19 +65,21 @@
+ ## Run the engine
+ 
+ Design a test:
++> Paths assume you installed with `npx skills add`. From a clone of this repo, use `skills/incrementality-and-mmm/resources/…` instead.
++
+ ```bash
+-node resources/incrementality.js                                   # demo
+-node resources/incrementality.js --baseline 2.5 --mde 15 --daily 4000 --value 400
+-node resources/incrementality.js --baseline 1.2 --mde 25 --power 0.90 --daily 20000
++node .agents/skills/incrementality-and-mmm/resources/incrementality.js  # demo
++node .agents/skills/incrementality-and-mmm/resources/incrementality.js --baseline 2.5 --mde 15 --daily 4000 --value 400
++node .agents/skills/incrementality-and-mmm/resources/incrementality.js --baseline 1.2 --mde 25 --power 0.90 --daily 20000
+ ```
+ 
+ Read one out — supply `--treat-conv` and it switches mode:
+ ```bash
+-node resources/incrementality.js --control-n 50000 --control-conv 1200 \
++node .agents/skills/incrementality-and-mmm/resources/incrementality.js --control-n 50000 --control-conv 1200 \
+      --treat-n 50000 --treat-conv 1380 --spend 15000 --value 400
+-node resources/incrementality.js --json --control-n 5000 --control-conv 120 \
++node .agents/skills/incrementality-and-mmm/resources/incrementality.js --json --control-n 5000 --control-conv 120 \
+      --treat-n 5000 --treat-conv 132
+-node resources/incrementality.js --help
++node .agents/skills/incrementality-and-mmm/resources/incrementality.js --help
+ ```
+ 
+ Design mode returns sample per group, duration, and **the value you forgo by holding out** — which is the number that decides whether the test is worth running. Readout mode returns lift, p-value, confidence interval, incremental conversions against the counterfactual, iROAS, incremental CAC, and the smallest lift the test could actually detect.
+diff --git a/skills/incrementality-and-mmm/resources/incrementality-guide.md b/skills/incrementality-and-mmm/resources/incrementality-guide.md
+--- a/skills/incrementality-and-mmm/resources/incrementality-guide.md	2026-07-27 01:14:10.000000000 +0000
++++ b/skills/incrementality-and-mmm/resources/incrementality-guide.md	2026-07-29 00:42:32.458531339 +0000
+@@ -97,8 +97,10 @@
+ A B2B SaaS company suspects retargeting is over-credited. Attributed ROAS reads 6.2x.
+ 
+ **Design:**
++> Paths assume you installed with `npx skills add`. From a clone of this repo, use `skills/incrementality-and-mmm/resources/…` instead.
++
+ ```bash
+-node resources/incrementality.js --baseline 2.5 --mde 15 --daily 4000 --value 400
++node .agents/skills/incrementality-and-mmm/resources/incrementality.js --baseline 2.5 --mde 15 --daily 4000 --value 400
+ ```
+ ```
+ Sample per group        29,191
+@@ -110,7 +112,7 @@
+ 
+ **Readout after running:**
+ ```bash
+-node resources/incrementality.js --control-n 50000 --control-conv 1200 \
++node .agents/skills/incrementality-and-mmm/resources/incrementality.js --control-n 50000 --control-conv 1200 \
+      --treat-n 50000 --treat-conv 1380 --spend 15000 --value 400
+ ```
+ ```
+@@ -125,7 +127,7 @@
+ 
+ **The contrast case** — same lift, a tenth the sample:
+ ```bash
+-node resources/incrementality.js --control-n 5000 --control-conv 120 \
++node .agents/skills/incrementality-and-mmm/resources/incrementality.js --control-n 5000 --control-conv 120 \
+      --treat-n 5000 --treat-conv 132
+ ```
+ ```
+diff --git a/skills/lifecycle-and-retention/SKILL.md b/skills/lifecycle-and-retention/SKILL.md
+--- a/skills/lifecycle-and-retention/SKILL.md	2026-07-27 01:14:10.000000000 +0000
++++ b/skills/lifecycle-and-retention/SKILL.md	2026-07-29 00:42:32.453568315 +0000
+@@ -57,11 +57,13 @@
+ 
+ ## Run the engine
+ 
++> Paths assume you installed with `npx skills add`. From a clone of this repo, use `skills/lifecycle-and-retention/resources/…` instead.
++
+ ```bash
+-node resources/retention.js                     # demo
+-node resources/retention.js '{"period":"monthly","startMRR":100000,"newMRR":12000,"expansionMRR":8000,"contractionMRR":3000,"churnedMRR":6000,"startCustomers":200,"churnedCustomers":9}'
+-node resources/retention.js '{"period":"annual","startMRR":1000000,"expansionMRR":50000,"contractionMRR":120000,"churnedMRR":180000}'
+-node resources/retention.js --help
++node .agents/skills/lifecycle-and-retention/resources/retention.js  # demo
++node .agents/skills/lifecycle-and-retention/resources/retention.js '{"period":"monthly","startMRR":100000,"newMRR":12000,"expansionMRR":8000,"contractionMRR":3000,"churnedMRR":6000,"startCustomers":200,"churnedCustomers":9}'
++node .agents/skills/lifecycle-and-retention/resources/retention.js '{"period":"annual","startMRR":1000000,"expansionMRR":50000,"contractionMRR":120000,"churnedMRR":180000}'
++node .agents/skills/lifecycle-and-retention/resources/retention.js --help
+ ```
+ 
+ It prints NRR, GRR, revenue & logo churn, quick ratio, average lifetime, and the LTV impact of a churn change, plus a JSON block.
+diff --git a/skills/marketing-budget-planning/SKILL.md b/skills/marketing-budget-planning/SKILL.md
+--- a/skills/marketing-budget-planning/SKILL.md	2026-07-27 01:14:10.000000000 +0000
++++ b/skills/marketing-budget-planning/SKILL.md	2026-07-29 00:42:32.453874666 +0000
+@@ -45,10 +45,12 @@
+ 
+ ## Run the engine
+ 
++> Paths assume you installed with `npx skills add`. From a clone of this repo, use `skills/marketing-budget-planning/resources/…` instead.
++
+ ```bash
+-node resources/budget-planner.js                  # demo (B2B SaaS, Series A, $3M)
+-node resources/budget-planner.js '{"model":"ecommerce","stage":"growth","annualRevenue":8000000,"growthTarget":"aggressive"}'
+-node resources/budget-planner.js --help
++node .agents/skills/marketing-budget-planning/resources/budget-planner.js  # demo (B2B SaaS, Series A, $3M)
++node .agents/skills/marketing-budget-planning/resources/budget-planner.js '{"model":"ecommerce","stage":"growth","annualRevenue":8000000,"growthTarget":"aggressive"}'
++node .agents/skills/marketing-budget-planning/resources/budget-planner.js --help
+ ```
+ 
+ It returns the recommended % of revenue, the annual and monthly budget, and a split across functions (demand gen, content/SEO, brand, etc.), plus JSON.
+diff --git a/skills/marketing-loops/SKILL.md b/skills/marketing-loops/SKILL.md
+--- a/skills/marketing-loops/SKILL.md	2026-07-27 01:14:10.000000000 +0000
++++ b/skills/marketing-loops/SKILL.md	2026-07-29 00:42:32.454079609 +0000
+@@ -59,11 +59,13 @@
+ 
+ ## Run the engine
+ 
++> Paths assume you installed with `npx skills add`. From a clone of this repo, use `skills/marketing-loops/resources/…` instead.
++
+ ```bash
+-node resources/loop-model.js --demo                 # worked example, no args
+-node resources/loop-model.js score '<json>'         # compute k for one loop
+-node resources/loop-model.js project '<json>'       # compound it over time
+-node resources/loop-model.js --help
++node .agents/skills/marketing-loops/resources/loop-model.js --demo            # worked example, no args
++node .agents/skills/marketing-loops/resources/loop-model.js score '<json>'    # compute k for one loop
++node .agents/skills/marketing-loops/resources/loop-model.js project '<json>'  # compound it over time
++node .agents/skills/marketing-loops/resources/loop-model.js --help
+ ```
+ 
+ **Score** takes the loop's stages and branching factor, returns k, the verdict band, amplification, effective CAC (if a paid CAC is given), and the throttling stage. **Project** takes a k and a paid feed and shows users period by period, decomposing loop-driven from paid-driven growth so the compounding is visible rather than assumed.
+diff --git a/skills/marketing-psychology/SKILL.md b/skills/marketing-psychology/SKILL.md
+--- a/skills/marketing-psychology/SKILL.md	2026-07-27 01:14:10.000000000 +0000
++++ b/skills/marketing-psychology/SKILL.md	2026-07-29 00:42:32.454428221 +0000
+@@ -65,12 +65,14 @@
+ 
+ Check any draft for manipulative patterns before it ships:
+ 
++> Paths assume you installed with `npx skills add`. From a clone of this repo, use `skills/marketing-psychology/resources/…` instead.
++
+ ```bash
+-node resources/pattern-check.js                      # demo
+-node resources/pattern-check.js "your copy here"
+-node resources/pattern-check.js --file pricing.md
+-node resources/pattern-check.js --json "copy"
+-node resources/pattern-check.js --help
++node .agents/skills/marketing-psychology/resources/pattern-check.js  # demo
++node .agents/skills/marketing-psychology/resources/pattern-check.js "your copy here"
++node .agents/skills/marketing-psychology/resources/pattern-check.js --file pricing.md
++node .agents/skills/marketing-psychology/resources/pattern-check.js --json "copy"
++node .agents/skills/marketing-psychology/resources/pattern-check.js --help
+ ```
+ 
+ It flags three tiers: **dark patterns** (no honest version exists — confirmshaming, fabricated viewer counts), **verify-required** claims (legitimate only if literally true — scarcity, urgency, social-proof numbers), and **pressure language** (worth a second look).
+diff --git a/skills/marketing-report/SKILL.md b/skills/marketing-report/SKILL.md
+--- a/skills/marketing-report/SKILL.md	2026-07-27 01:14:10.000000000 +0000
++++ b/skills/marketing-report/SKILL.md	2026-07-29 00:42:32.454756756 +0000
+@@ -59,10 +59,12 @@
+ 
+ ## Run the engine
+ 
++> Paths assume you installed with `npx skills add`. From a clone of this repo, use `skills/marketing-report/resources/…` instead.
++
+ ```bash
+-node resources/marketing-report.js                     # demo (quarter with prior period)
+-node resources/marketing-report.js '{"period":"March","spend":40000,"leads":800,"wins":11,"newRevenue":150000}'
+-node resources/marketing-report.js --help
++node .agents/skills/marketing-report/resources/marketing-report.js  # demo (quarter with prior period)
++node .agents/skills/marketing-report/resources/marketing-report.js '{"period":"March","spend":40000,"leads":800,"wins":11,"newRevenue":150000}'
++node .agents/skills/marketing-report/resources/marketing-report.js --help
+ ```
+ 
+ It prints the KPI snapshot, the funnel with stage rates, deltas vs prior, a few flags, and a JSON block. Metrics compute only where inputs allow, so partial data still produces a useful report.
+diff --git a/skills/paid-media-budget-allocation/SKILL.md b/skills/paid-media-budget-allocation/SKILL.md
+--- a/skills/paid-media-budget-allocation/SKILL.md	2026-07-27 01:14:10.000000000 +0000
++++ b/skills/paid-media-budget-allocation/SKILL.md	2026-07-29 00:42:32.455334689 +0000
+@@ -70,15 +70,17 @@
+ 
+ Don't approximate the water-filling by hand — run the bundled engine for exact numbers.
+ 
++> Paths assume you installed with `npx skills add`. From a clone of this repo, use `skills/paid-media-budget-allocation/resources/…` instead.
++
+ ```bash
+ # Demo: B2B SaaS, $30k budget
+-node resources/allocation-engine.js
++node .agents/skills/paid-media-budget-allocation/resources/allocation-engine.js
+ 
+ # Custom — pass a JSON config
+-node resources/allocation-engine.js '{"model":"saas","mode":"budget","budget":30000,"diminishingReturns":"moderate","channels":[{"key":"capterra","model":"cpl","cpl":90,"l2c":22,"cap":8000}]}'
++node .agents/skills/paid-media-budget-allocation/resources/allocation-engine.js '{"model":"saas","mode":"budget","budget":30000,"diminishingReturns":"moderate","channels":[{"key":"capterra","model":"cpl","cpl":90,"l2c":22,"cap":8000}]}'
+ 
+ # Schema and channel keys
+-node resources/allocation-engine.js --help
++node .agents/skills/paid-media-budget-allocation/resources/allocation-engine.js --help
+ ```
+ 
+ The engine prints a per-channel table plus a JSON block you can parse. Always seed the per-channel inputs with the user's own account data where they have it; the benchmarks are only a starting point.
+diff --git a/skills/pipeline-and-forecast/SKILL.md b/skills/pipeline-and-forecast/SKILL.md
+--- a/skills/pipeline-and-forecast/SKILL.md	2026-07-27 01:14:10.000000000 +0000
++++ b/skills/pipeline-and-forecast/SKILL.md	2026-07-29 00:42:32.455578497 +0000
+@@ -64,9 +64,11 @@
+ 
+ ## Run the tool
+ 
++> Paths assume you installed with `npx skills add`. From a clone of this repo, use `skills/pipeline-and-forecast/resources/…` instead.
++
+ ```bash
+-node resources/forecast.js --input=pipeline.json
+-node resources/forecast.js          # built-in demo
++node .agents/skills/pipeline-and-forecast/resources/forecast.js --input=pipeline.json
++node .agents/skills/pipeline-and-forecast/resources/forecast.js  # built-in demo
+ ```
+ Input JSON: `{ "target": 500000, "winRate": 0.25, "stageProbabilities": { "Proposal": 0.5, ... }, "deals": [ { "name": "Acme", "amount": 60000, "stage": "Proposal" } ] }`. It prints the weighted forecast, commit vs best case, coverage ratio with a healthy/thin flag, the gap, the new pipeline needed, and the recommended lever. Use these exact numbers — don't restate them from memory.
+ 
+diff --git a/skills/pricing-and-packaging/SKILL.md b/skills/pricing-and-packaging/SKILL.md
+--- a/skills/pricing-and-packaging/SKILL.md	2026-07-27 01:14:10.000000000 +0000
++++ b/skills/pricing-and-packaging/SKILL.md	2026-07-29 00:42:32.455809594 +0000
+@@ -64,9 +64,11 @@
+ 
+ ## Run the tool
+ 
++> Paths assume you installed with `npx skills add`. From a clone of this repo, use `skills/pricing-and-packaging/resources/…` instead.
++
+ ```bash
+-node resources/price-packaging.js --input=tiers.json
+-node resources/price-packaging.js          # built-in demo
++node .agents/skills/pricing-and-packaging/resources/price-packaging.js --input=tiers.json
++node .agents/skills/pricing-and-packaging/resources/price-packaging.js  # built-in demo
+ ```
+ Input JSON: `{ "tiers": [ { "name": "Starter", "price": 29, "customers": 600 }, ... ] }`. It prints each tier's price, customers, revenue, revenue share, and price-ladder step, plus the blended ARPU, the **anchor check** (top tier vs the second-highest — flagged weak below ~1.5x), and where revenue concentrates. Use these exact numbers.
+ 
+diff --git a/skills/programmatic-seo/SKILL.md b/skills/programmatic-seo/SKILL.md
+--- a/skills/programmatic-seo/SKILL.md	2026-07-27 01:14:10.000000000 +0000
++++ b/skills/programmatic-seo/SKILL.md	2026-07-29 00:42:32.456216809 +0000
+@@ -61,12 +61,14 @@
+ 
+ Model viability before committing:
+ 
++> Paths assume you installed with `npx skills add`. From a clone of this repo, use `skills/programmatic-seo/resources/…` instead.
++
+ ```bash
+-node resources/pseo-model.js                                   # demo
+-node resources/pseo-model.js --pages 500 --volume 40 --conv 2 --value 400
+-node resources/pseo-model.js --unique-data strong --fixed-cost 8000
+-node resources/pseo-model.js --json --pages 200
+-node resources/pseo-model.js --help
++node .agents/skills/programmatic-seo/resources/pseo-model.js  # demo
++node .agents/skills/programmatic-seo/resources/pseo-model.js --pages 500 --volume 40 --conv 2 --value 400
++node .agents/skills/programmatic-seo/resources/pseo-model.js --unique-data strong --fixed-cost 8000
++node .agents/skills/programmatic-seo/resources/pseo-model.js --json --pages 200
++node .agents/skills/programmatic-seo/resources/pseo-model.js --help
+ ```
+ 
+ It runs the funnel (pages → indexed → ranking), projects sessions, conversions and value, computes payback and cost per ranking page, and flags the failure patterns — thin query volume, missing per-page data, doorway-scale builds, optimistic indexation assumptions.
+diff --git a/skills/programmatic-seo/resources/pseo-playbook.md b/skills/programmatic-seo/resources/pseo-playbook.md
+--- a/skills/programmatic-seo/resources/pseo-playbook.md	2026-07-27 01:14:10.000000000 +0000
++++ b/skills/programmatic-seo/resources/pseo-playbook.md	2026-07-29 00:42:32.459812729 +0000
+@@ -120,8 +120,10 @@
+ 
+ ### Attempt 1 — 40 industries
+ 
++> Paths assume you installed with `npx skills add`. From a clone of this repo, use `skills/programmatic-seo/resources/…` instead.
++
+ ```bash
+-node resources/pseo-model.js \
++node .agents/skills/programmatic-seo/resources/pseo-model.js \
+   --pages 40 --volume 70 --conv 4 --value 600 \
+   --unique-data strong --fixed-cost 6000 --cost-per-page 40
+ ```
+@@ -142,7 +144,7 @@
+ The fix isn't better copy, it's more surface: split each industry by company stage — `{industry} at {stage}` — giving 40 × 6 = 240 pages. Tail volume per page drops (60 rather than 70), but conversion value rises, because a visitor searching a stage-specific benchmark is closer to needing help.
+ 
+ ```bash
+-node resources/pseo-model.js \
++node .agents/skills/programmatic-seo/resources/pseo-model.js \
+   --pages 240 --volume 60 --conv 4 --value 800 \
+   --unique-data strong --fixed-cost 6000 --cost-per-page 35
+ ```
+diff --git a/skills/signup-flow-optimizer/SKILL.md b/skills/signup-flow-optimizer/SKILL.md
+--- a/skills/signup-flow-optimizer/SKILL.md	2026-07-27 01:14:10.000000000 +0000
++++ b/skills/signup-flow-optimizer/SKILL.md	2026-07-29 00:42:32.456893548 +0000
+@@ -61,13 +61,15 @@
+ 
+ ## Run the engine
+ 
++> Paths assume you installed with `npx skills add`. From a clone of this repo, use `skills/signup-flow-optimizer/resources/…` instead.
++
+ ```bash
+-node resources/friction-score.js                                       # demo
+-node resources/friction-score.js --fields 7 --steps 3 --card-upfront
+-node resources/friction-score.js --fields 4 --optional 1 --visitors 8000 --conv-rate 4 --value 900
+-node resources/friction-score.js --no-sso --email-verify --addressable 0.20
+-node resources/friction-score.js --json --fields 5
+-node resources/friction-score.js --help
++node .agents/skills/signup-flow-optimizer/resources/friction-score.js  # demo
++node .agents/skills/signup-flow-optimizer/resources/friction-score.js --fields 7 --steps 3 --card-upfront
++node .agents/skills/signup-flow-optimizer/resources/friction-score.js --fields 4 --optional 1 --visitors 8000 --conv-rate 4 --value 900
++node .agents/skills/signup-flow-optimizer/resources/friction-score.js --no-sso --email-verify --addressable 0.20
++node .agents/skills/signup-flow-optimizer/resources/friction-score.js --json --fields 5
++node .agents/skills/signup-flow-optimizer/resources/friction-score.js --help
+ ```
+ 
+ It scores the flow out of 100, shows where the score went (fields, steps, blocking items), and ranks every flagged item by the monthly value of removing it.
+diff --git a/skills/signup-flow-optimizer/resources/friction-patterns.md b/skills/signup-flow-optimizer/resources/friction-patterns.md
+--- a/skills/signup-flow-optimizer/resources/friction-patterns.md	2026-07-27 01:14:10.000000000 +0000
++++ b/skills/signup-flow-optimizer/resources/friction-patterns.md	2026-07-29 00:42:32.460081147 +0000
+@@ -96,8 +96,10 @@
+ 
+ **Current flow:** 3 steps, 8 required fields (email, password, full name, company, company size, role, phone, use case), card required, email verification before entry, no SSO.
+ 
++> Paths assume you installed with `npx skills add`. From a clone of this repo, use `skills/signup-flow-optimizer/resources/…` instead.
++
+ ```bash
+-node resources/friction-score.js \
++node .agents/skills/signup-flow-optimizer/resources/friction-score.js \
+   --fields 8 --steps 3 --visitors 4000 --conv-rate 2.5 --value 900 \
+   --card-upfront --email-verify --no-sso
+ ```
+diff --git a/skills/target-account-list/SKILL.md b/skills/target-account-list/SKILL.md
+--- a/skills/target-account-list/SKILL.md	2026-07-27 01:14:10.000000000 +0000
++++ b/skills/target-account-list/SKILL.md	2026-07-29 00:42:32.457128260 +0000
+@@ -59,9 +59,11 @@
+ 
+ ## Run the tool
+ 
++> Paths assume you installed with `npx skills add`. From a clone of this repo, use `skills/target-account-list/resources/…` instead.
++
+ ```bash
+-node resources/score-accounts.js --input=accounts.json
+-node resources/score-accounts.js          # built-in demo
++node .agents/skills/target-account-list/resources/score-accounts.js --input=accounts.json
++node .agents/skills/target-account-list/resources/score-accounts.js  # built-in demo
+ ```
+ Input JSON: `{ "weights": { "industryMatch": 30, ... }, "accounts": [ { "name": "Acme", "signals": { "industryMatch": true, ... } } ] }`. It prints each account's fit score, tier, and matched signals, plus the A/B/C tally. Use these exact scores and tiers — don't restate them from memory.
+ 
+diff --git a/skills/unit-economics/SKILL.md b/skills/unit-economics/SKILL.md
+--- a/skills/unit-economics/SKILL.md	2026-07-27 01:14:10.000000000 +0000
++++ b/skills/unit-economics/SKILL.md	2026-07-29 00:42:32.457409979 +0000
+@@ -55,10 +55,12 @@
+ 
+ ## Run the engine
+ 
++> Paths assume you installed with `npx skills add`. From a clone of this repo, use `skills/unit-economics/resources/…` instead.
++
+ ```bash
+-node resources/unit-economics.js                     # demo (subscription)
+-node resources/unit-economics.js '{"model":"ecommerce","aov":80,"grossMargin":60,"ordersPerYear":3,"retentionYears":2,"cac":40}'
+-node resources/unit-economics.js --help
++node .agents/skills/unit-economics/resources/unit-economics.js  # demo (subscription)
++node .agents/skills/unit-economics/resources/unit-economics.js '{"model":"ecommerce","aov":80,"grossMargin":60,"ordersPerYear":3,"retentionYears":2,"cac":40}'
++node .agents/skills/unit-economics/resources/unit-economics.js --help
+ ```
+ 
+ It prints LTV, LTV:CAC, payback, and a verdict, plus a JSON block.

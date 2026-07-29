@@ -51,8 +51,10 @@ The user wants to know their current standing in AI answers, wants to set up ong
 
 Run **design mode** before the first tracking run, so the prompt set is large enough for its results to mean anything:
 
+> Paths assume you installed with `npx skills add`. From a clone of this repo, use `skills/geo-citation-tracker/resources/…` instead.
+
 ```bash
-node resources/citation-tracker.js design '{"baselinePresence":0.30,"detectAbsoluteLift":0.15,"engines":4}'
+node .agents/skills/geo-citation-tracker/resources/citation-tracker.js design '{"baselinePresence":0.30,"detectAbsoluteLift":0.15,"engines":4}'
 ```
 
 It returns the prompts per engine needed to detect that change, and — more usefully — the smallest change detectable at sizes that are actually practical. Expect the honest answer to be uncomfortable: detecting a 15-point move at 95%/80% needs around 160 prompts per engine. Most teams should either accept a coarser detectable change, track fewer engines, or label the exercise directional monitoring and stop calling it measurement.
@@ -60,8 +62,8 @@ It returns the prompts per engine needed to detect that change, and — more use
 Then log each prompt on each engine and run **readout mode**:
 
 ```bash
-node resources/citation-tracker.js readout '<json>'
-node resources/citation-tracker.js --demo     # worked example, no arguments
+node .agents/skills/geo-citation-tracker/resources/citation-tracker.js readout '<json>'
+node .agents/skills/geo-citation-tracker/resources/citation-tracker.js --demo  # worked example, no arguments
 ```
 
 ## Metrics

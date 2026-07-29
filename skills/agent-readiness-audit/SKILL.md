@@ -64,12 +64,14 @@ See `resources/agent-readiness-guide.md` for each check in detail, the GEO disti
 
 ## Run the engine
 
+> Paths assume you installed with `npx skills add`. From a clone of this repo, use `skills/agent-readiness-audit/resources/…` instead.
+
 ```bash
-node resources/agent-readiness.js                      # demo — nothing passing
-node resources/agent-readiness.js --all                # everything passing
-node resources/agent-readiness.js --ssr --schema --pricing-public --self-serve
-node resources/agent-readiness.js --json --ssr --llms-txt
-node resources/agent-readiness.js --help
+node .agents/skills/agent-readiness-audit/resources/agent-readiness.js        # demo — nothing passing
+node .agents/skills/agent-readiness-audit/resources/agent-readiness.js --all  # everything passing
+node .agents/skills/agent-readiness-audit/resources/agent-readiness.js --ssr --schema --pricing-public --self-serve
+node .agents/skills/agent-readiness-audit/resources/agent-readiness.js --json --ssr --llms-txt
+node .agents/skills/agent-readiness-audit/resources/agent-readiness.js --help
 ```
 
 Add a flag for each check the site passes. It returns the score by dimension, gaps ranked by point cost with the fix for each, and a plain-language summary of what an agent can and cannot do today.

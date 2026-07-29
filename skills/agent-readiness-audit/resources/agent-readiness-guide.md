@@ -90,8 +90,10 @@ Decide deliberately, document why, and revisit it. If you block training crawler
 
 A B2B SaaS company scores **73 — PARTIAL**:
 
+> Paths assume you installed with `npx skills add`. From a clone of this repo, use `skills/agent-readiness-audit/resources/…` instead.
+
 ```bash
-node resources/agent-readiness.js \
+node .agents/skills/agent-readiness-audit/resources/agent-readiness.js \
   --ssr --schema --llms-txt --clean-headings \
   --pricing-public --self-serve --no-captcha \
   --org-schema --claims-sourced --allows-ai-crawlers
