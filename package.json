@@ -3,9 +3,14 @@
     "@supabase/supabase-js": "^2.108.2",
     "gray-matter": "^4.0.3"
   },
-  "name": "aaj-marketing-skills",
+  "name": "39 marketing skills for AI agents. 23 run real engines.",
   "version": "1.0.0",
+<<<<<<< HEAD
   "description": "Agent skills for AI marketing tasks \u2014 grounded in AAJ's tested tools and methodology, not generic advice. Works with Claude Code, Cursor, OpenAI Codex, Windsurf, and any agent that supports the [Agent Skills spec](https://agentskills.io).",
+=======
+  "description": "Agent skills for AI marketing tasks. 39 skills, 23 with runnable engines you can execute directly. MIT. Works with Claude Code, Cursor, Codex, Windsurf.",
+  "main": "index.js",
+>>>>>>> de7841c403f1536ac21634870be777645d2284f8
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
