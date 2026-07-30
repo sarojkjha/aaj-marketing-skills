@@ -1,0 +1,17 @@
+﻿AAJ ΓÇö Pipeline & Forecast
+Source: built-in demo data
+
+Target (quota):        $500,000
+Win rate:              25%
+Open pipeline:         $520,000  (7 deals)
+
+Weighted forecast:     $223,750   <- expected (╬ú amount ├ù stage probability)
+  Commit (>=75%):      $150,000
+  Best case (all open):$520,000
+
+Coverage:              1.0x   (need ~4.0x at a 25% win rate)  ->  THIN
+Gap to target:         $276,250
+New pipeline needed:   $1,105,000   (gap ├╖ win rate)
+
+Recommended lever: BUILD PIPELINE ΓÇö coverage is below what your win rate requires; add qualified pipeline.
+

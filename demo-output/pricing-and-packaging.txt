@@ -1,0 +1,23 @@
+﻿AAJ ΓÇö Pricing & Packaging model
+Source: built-in demo data
+
+Tier           Price  Customers    Revenue   Rev %  Cust %   Step
+------------  ------  ---------  ---------  ------  ------  -----
+Starter          $29        600    $17,400   19.1%     60%      ΓÇö
+Growth           $99        300    $29,700   32.6%     30%   3.4x
+Scale           $299         80    $23,920   26.3%      8%     3x
+Enterprise      $999         20    $19,980     22%      2%   3.3x
+
+Blended ARPU:   $91   (3.1x the $29 entry tier)
+Price ladder:   $29  ΓåÆ  $99  ΓåÆ  $299  ΓåÆ  $999
+Anchor check:   OK ΓÇö top tier anchors at 3.3x the tier below
+
+Read-out:
+  ΓÇó Blended ARPU is $91 ΓÇö 3.1x your entry price of $29. Your mix lifts revenue well above the entry tier.
+  ΓÇó Your revenue engine is the "Growth" tier at 32.6% of revenue.
+  ΓÇó 60% of customers sit on your entry tier but it's only 19.1% of revenue ΓÇö that gap is your expansion opportunity.
+  ΓÇó Your top tier anchors well at 3.3x the tier below ΓÇö that reframes the middle tiers and lifts willingness to pay.
+
+Note: customer counts drive the mix. For a pre-revenue design, enter an
+estimated mix (counts per 100) and treat the modeled revenue as an assumption.
+

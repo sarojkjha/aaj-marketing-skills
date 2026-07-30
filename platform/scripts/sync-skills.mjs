@@ -19,10 +19,45 @@
 // =====================================================================
 
 import { readFileSync, readdirSync, existsSync, statSync } from 'node:fs';
+import { execFileSync } from 'node:child_process';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createClient } from '@supabase/supabase-js';
 import matter from 'gray-matter';
+
+// Runs an engine's --demo and captures the output, so the worked-example email
+// can show a real run rather than a description of one. Deterministic: demos use
+// fixed sample data. Failure is non-fatal — the skill still syncs without it.
+// Per-skill demo arguments. Default is --demo. Override where the default run
+// is a poor showcase: agent-readiness-audit's --demo scores 0/100 with nothing
+// passing, and --all scores 100/100 with no gaps at all. Neither demonstrates
+// what the engine is for. This profile scores 59/100 and surfaces real gaps.
+const DEMO_ARGS = {
+  'agent-readiness-audit': [
+    '--ssr', '--schema', '--clean-headings',
+    '--self-serve', '--no-captcha',
+    '--org-schema', '--consistent-facts',
+    '--allows-ai-crawlers', '--no-agent-blocking'
+  ]
+};
+
+function captureDemo(resDir, slug) {
+  const engine = readdirSync(resDir).find(f => f.endsWith('.js') || f.endsWith('.mjs'));
+  if (!engine) return null;
+  const args = DEMO_ARGS[slug] || ['--demo'];
+  try {
+    const out = execFileSync(process.execPath, [join(resDir, engine), ...args], {
+      encoding: 'utf8',
+      timeout: 20000,
+      maxBuffer: 1024 * 1024,
+      stdio: ['ignore', 'pipe', 'pipe']
+    });
+    return (out || '').trim() || null;
+  } catch (e) {
+    console.warn(`  ! demo capture failed for ${resDir}: ${e.message.split('\n')[0]}`);
+    return null;
+  }
+}
 
 const REPO_ROOT = join(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const SKILLS_DIR = join(REPO_ROOT, 'skills');
@@ -67,6 +102,7 @@ async function main() {
       repo_path: `skills/${slug}`,
       install_cmd: `npx skills add sarojkjha/aaj-marketing-skills --skill ${data.name}`,
       body_md: (content || '').trim() || null,
+      demo_output: hasEngine ? captureDemo(resDir, slug) : null,
       published: true
     };
     if (!catByName[m.category]) console.warn(`  ! ${slug}: category "${m.category}" not found — run seed-categories.sql`);
@@ -93,7 +129,8 @@ async function main() {
     ok++;
     const words = (row.body_md || '').split(/\s+/).filter(Boolean).length;
     if (!words) console.warn(`  ! ${slug}: empty body — page will render as a stub`);
-    console.log(`  ✓ ${data.name}  (${words} words)`);
+    const demoNote = row.demo_output ? `, demo ${row.demo_output.length}c` : (hasEngine ? ', DEMO MISSING' : '');
+    console.log(`  ✓ ${data.name}  (${words} words${demoNote})`);
   }
   console.log(`\nSynced ${ok}/${slugs.length} skills.`);
 }

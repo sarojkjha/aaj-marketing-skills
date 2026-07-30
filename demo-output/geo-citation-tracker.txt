@@ -1,0 +1,75 @@
+﻿Γû╕ DEMO 1 ΓÇö design mode
+
+GEO CITATION TRACKER ΓÇö PROMPT SET DESIGN
+ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
+
+Baseline presence rate      30.0%
+Change worth detecting      +15.0 pts  (ΓåÆ 45.0%)
+Confidence / power          95.0% / 80.0%
+Engines tracked             4
+
+ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+PROMPTS PER ENGINE, PER RUN    160
+TOTAL QUERIES PER RUN          640   (160 ├ù 4 engines)
+ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+
+What you could detect at other prompt-set sizes:
+
+  prompts   smallest detectable change    
+  20        40.6 pts                      
+  30        33.1 pts                      
+  50        25.7 pts                      
+  75        21.0 pts                      
+  100       18.2 pts                      
+
+ΓÜá  VIABILITY WARNING
+   160 prompts per engine is a heavy manual run. Either accept a
+   larger detectable change, track fewer engines, or treat this as
+   directional monitoring rather than measurement ΓÇö and say so in the report.
+
+Cadence: monthly. Hold the prompt set FIXED between runs ΓÇö changing
+prompts changes the measurement, and the delta becomes uninterpretable.
+
+
+Γû╕ DEMO 2 ΓÇö readout mode
+
+GEO CITATION TRACKER ΓÇö READOUT ┬╖ Brightlane ┬╖ 2026-07-24
+ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
+
+VERDICT   ESTABLISHED
+
+  Presence rate       32.5%  ΓûêΓûêΓûêΓûêΓûêΓûêΓûêΓûê┬╖┬╖┬╖┬╖┬╖┬╖┬╖┬╖┬╖┬╖┬╖┬╖┬╖┬╖┬╖┬╖   named in 13/40 answers
+  Citation rate        5.0%  Γûê┬╖┬╖┬╖┬╖┬╖┬╖┬╖┬╖┬╖┬╖┬╖┬╖┬╖┬╖┬╖┬╖┬╖┬╖┬╖┬╖┬╖┬╖┬╖   own domain sourced in 2/40
+  Visibility score     16.5  ΓûêΓûêΓûêΓûê┬╖┬╖┬╖┬╖┬╖┬╖┬╖┬╖┬╖┬╖┬╖┬╖┬╖┬╖┬╖┬╖┬╖┬╖┬╖┬╖   rank-weighted
+  Share of voice      17.6%  ΓûêΓûêΓûêΓûê┬╖┬╖┬╖┬╖┬╖┬╖┬╖┬╖┬╖┬╖┬╖┬╖┬╖┬╖┬╖┬╖┬╖┬╖┬╖┬╖   vs 3 tracked competitors
+
+BY ENGINE
+  engine            n   presence   citation  visibility
+  chatgpt          10      40.0%      10.0%        20.8
+  perplexity       10      40.0%      10.0%        20.8
+  claude           10      30.0%       0.0%        18.3
+  ai_overviews     10      20.0%       0.0%         5.8
+
+SHARE OF VOICE
+    Userflow                 35.1%  ΓûêΓûêΓûêΓûêΓûêΓûê┬╖┬╖┬╖┬╖┬╖┬╖┬╖┬╖┬╖┬╖┬╖┬╖
+    Appcues                  31.1%  ΓûêΓûêΓûêΓûêΓûêΓûê┬╖┬╖┬╖┬╖┬╖┬╖┬╖┬╖┬╖┬╖┬╖┬╖
+  Γû╕ Brightlane               17.6%  ΓûêΓûêΓûê┬╖┬╖┬╖┬╖┬╖┬╖┬╖┬╖┬╖┬╖┬╖┬╖┬╖┬╖┬╖
+    Chameleon                16.2%  ΓûêΓûêΓûê┬╖┬╖┬╖┬╖┬╖┬╖┬╖┬╖┬╖┬╖┬╖┬╖┬╖┬╖┬╖
+
+FRAMING (of answers where mentioned)
+  recommended 4   neutral 8   negative 1
+
+MOVEMENT
+  Presence  27.5% ΓåÆ 32.5%   +5.0 pts   p = 0.626
+  ΓåÆ NOT DISTINGUISHABLE FROM NOISE. Do not report this as a result.
+     At n = 40, the smallest change you could reliably detect is 29.3 pts.
+  Citation  5.0% ΓåÆ 5.0%   +0.0 pts   p = 1.000
+
+WHAT THIS MEANS
+  Mentioned but not sourced. Engines know the brand and describe it from
+  their own priors ΓÇö they are not reading and linking your pages. This is a
+  content-extractability problem, not an awareness problem.
+  ΓåÆ Run geo-content-optimization on the pages that should be the source.
+
+(Demo data. Replace with a real logged run.)
+

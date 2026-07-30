@@ -1,0 +1,23 @@
+﻿(no config ΓÇö demo: subscription, $500 ARPA, 80% margin, 3% monthly churn, $3,000 CAC)
+
+AAJ Unit Economics ΓÇö subscription
+------------------------------------------------------
+Gross-margin LTV        $13,333   (3.0% monthly churn (~33.3 mo lifetime))
+Monthly gross profit    $400/customer
+CAC                     $3,000
+LTV : CAC               4.4:1
+CAC payback             7.5 mo
+
+Γ£ô LTV:CAC 4.4:1 is at or above the 3:1 floor.
+Γ£ô CAC payback 7.5 mo is within the ~12-month guideline for subscription.
+
+--- JSON ---
+{
+  "model": "subscription",
+  "ltv": 13333,
+  "cac": 3000,
+  "ltvCac": 4.44,
+  "cacPaybackMonths": 7.5,
+  "monthlyGrossProfit": 400
+}
+

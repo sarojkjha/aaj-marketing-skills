@@ -1,0 +1,16 @@
+﻿AAJ ΓÇö Target Account List (ICP fit scoring)
+Source: built-in demo data
+Weights: industryMatch=30, sizeBand=25, usesComplementaryTool=15, recentFunding=15, hiringSignal=15
+
+Rank  Tier  Score  Account                 Matched signals
+----  ----  -----  ----------------------  ----------------------------------
+1     A     100    Northwind SaaS          industryMatch, sizeBand, usesComplementaryTool, recentFunding, hiringSignal
+2     A      85    Globex Software         industryMatch, sizeBand, usesComplementaryTool, hiringSignal
+3     B      55    Initech                 industryMatch, sizeBand
+4     B      45    Hooli Enterprise        industryMatch, usesComplementaryTool
+5     B      40    Umbrella Retail         sizeBand, recentFunding
+6     C      15    Stark SMB               hiringSignal
+
+Tiers: A=2  B=3  C=1  (A>=70, B 40-69, C<40)
+Work A-tier first. For B-tier, the missing signal is usually the one to verify next.
+

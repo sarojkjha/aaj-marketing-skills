@@ -1,0 +1,62 @@
+﻿(no config ΓÇö demo: B2B SaaS, Series A, $3M ARR)
+
+AAJ Marketing Budget Plan ΓÇö B2B SaaS ┬╖ Series A
+----------------------------------------------------------
+Recommended spend:  30% of revenue
+Annual revenue:     $3,000,000
+Marketing budget:   $900,000 / yr   ┬╖   $75,000 / mo
+
+Allocation                               /yr        /mo
+----------------------------------------------------------
+Demand gen (paid + events)          45%     $405,000    $33,750
+Content & SEO/GEO                   25%     $225,000    $18,750
+Brand & PR                          12%     $108,000     $9,000
+Product marketing                   10%      $90,000     $7,500
+Tooling & ops                        8%      $72,000     $6,000
+
+Notes:
+ΓÇó Earlier stage and faster growth justify a higher %; cash runway caps it. Pair with the unit-economics skill to confirm you can afford the implied CAC.
+ΓÇó The demand-gen / paid slice feeds directly into the paid-media-budget-allocation skill for the channel split.
+
+--- JSON ---
+{
+  "model": "b2b_saas",
+  "stage": "series_a",
+  "pctOfRevenue": 30,
+  "annualRevenue": 3000000,
+  "annualBudget": 900000,
+  "monthlyBudget": 75000,
+  "allocation": [
+    {
+      "bucket": "Demand gen (paid + events)",
+      "pct": 45,
+      "annual": 405000,
+      "monthly": 33750
+    },
+    {
+      "bucket": "Content & SEO/GEO",
+      "pct": 25,
+      "annual": 225000,
+      "monthly": 18750
+    },
+    {
+      "bucket": "Brand & PR",
+      "pct": 12,
+      "annual": 108000,
+      "monthly": 9000
+    },
+    {
+      "bucket": "Product marketing",
+      "pct": 10,
+      "annual": 90000,
+      "monthly": 7500
+    },
+    {
+      "bucket": "Tooling & ops",
+      "pct": 8,
+      "annual": 72000,
+      "monthly": 6000
+    }
+  ]
+}
+

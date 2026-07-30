@@ -1,0 +1,23 @@
+﻿(no config ΓÇö demo: 5.0% vs 6.2%, nΓëê4000 each, 95%)
+
+AAJ A/B Test ΓÇö significance
+----------------------------------------------
+Control   5%   (200/4000)
+Variant   6.2%   (250/4050)
+Relative lift  +23.5%   (abs +1.2%)
+z = 2.29   p = 0.0220   (two-tailed, 95% threshold)
+
+Γ£ô SIGNIFICANT at 95% ΓÇö variant wins. 95% CI on the difference: 0.2% to 2.2%.
+
+--- JSON ---
+{
+  "controlRate": 0.05,
+  "variantRate": 0.0617,
+  "relativeLift": 0.2346,
+  "z": 2.29,
+  "pValue": 0.022,
+  "significant": true,
+  "confidence": 95,
+  "winner": "variant"
+}
+

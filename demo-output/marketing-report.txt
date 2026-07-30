@@ -1,0 +1,77 @@
+﻿(no config ΓÇö demo: Q2 2026 with a prior-period comparison)
+
+AAJ Marketing Report ΓÇö Q2 2026
+--------------------------------------------------------
+Spend                   $120,000   (+9.1% vs prior)
+New revenue             $510,000   (+21.4%)
+Wins                    34   (+21.4%)
+CAC                     $3,529   (-10.2%)
+Cost per lead           $46
+New revenue : spend     4.3├ù
+Pipeline : spend        10.8├ù
+Target attainment       85%
+
+Funnel
+  Sessions:       90,000
+  Leads:          2,600
+  MQLs:           900
+  SQLs:           320
+  Opportunities:  140
+  Wins:           34
+  SessionsΓåÆLeads          2.9%
+  LeadsΓåÆMQLs              34.6%
+  MQLsΓåÆSQLs               35.6%
+  SQLsΓåÆOpportunities      43.8%
+  OpportunitiesΓåÆWins      24.3%
+  OverallΓåÆWin             0.04%   (+14.7%)
+
+Γû╝ Attainment 85% ΓÇö short of target; close the gap or reset expectations.
+ΓÇó New revenue : spend 4.3├ù this period (efficiency read ΓÇö revenue can lag the spend that created it).
+Γåÿ CAC -10.2% vs prior ΓÇö acquisition got more efficient.
+Γåù Funnel conversion +14.7% vs prior.
+ΓÇó Report each stage rate with its own trend ΓÇö don't compare a SessionsΓåÆLeads rate to an MQLΓåÆSQL rate; they're different orders of magnitude.
+
+--- JSON ---
+{
+  "period": "Q2 2026",
+  "spend": 120000,
+  "newRevenue": 510000,
+  "wins": 34,
+  "cac": 3529,
+  "costPerLead": 46,
+  "newRevenueToSpend": 4.25,
+  "pipelineToSpend": 10.83,
+  "targetAttainmentPct": 85,
+  "funnelRates": [
+    {
+      "step": "Sessions->Leads",
+      "pct": 2.9
+    },
+    {
+      "step": "Leads->MQLs",
+      "pct": 34.6
+    },
+    {
+      "step": "MQLs->SQLs",
+      "pct": 35.6
+    },
+    {
+      "step": "SQLs->Opportunities",
+      "pct": 43.8
+    },
+    {
+      "step": "Opportunities->Wins",
+      "pct": 24.3
+    }
+  ],
+  "overallConversionPct": 0.04,
+  "deltasVsPrior": {
+    "spend": 9.090909090909092,
+    "newRevenue": 21.428571428571427,
+    "wins": 21.428571428571427,
+    "cac": -10.160427807486625,
+    "revToSpend": 11.309523809523805,
+    "overall": 14.682539682539675
+  }
+}
+

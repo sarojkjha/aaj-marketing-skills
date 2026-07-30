@@ -1,0 +1,31 @@
+﻿=== SUMMARY ===
+deals 14 | won 6 | lost 8
+win rate (count)   42.9%
+win rate (revenue) 38.6%
+won $382,000 | lost $608,000 | total $990,000
+
+=== BY SEGMENT (count WR / revenue WR) ===
+Enterprise   2-3    40% /   36%   (rev at stake $750,000)
+Mid-Market   2-2    50% / 47.4%   (rev at stake $190,000)
+SMB          2-3    40% /   44%   (rev at stake $50,000)
+
+=== LOSS REASONS (Pareto by lost revenue) ===
+Missing feature       $225,000     37%  cum 37%  (n=2)
+Lost to competitor    $200,000   32.9%  cum 69.9%  (n=1)
+No decision           $111,000   18.3%  cum 88.2%  (n=2)
+Price                  $72,000   11.8%  cum 100%  (n=3)
+top by revenue: Missing feature | top by count: Price
+
+=== COMPETITIVE HEAD-TO-HEAD ===
+Competitor B   0-3  0% win   (lost $435,000)
+Competitor A   2-1  66.7% win   (lost $45,000)
+
+=== BIGGEST FIXABLE LEAK ===
+Enterprise ├ù "Lost to competitor" ΓÇö $200,000
+
+=== INSIGHTS ===
+ΓÇó Your biggest loss reason by revenue is "Missing feature" ΓÇö $225,000 (37% of all lost revenue across 2 deals).
+ΓÇó By count, your most frequent loss reason is "Price" ΓÇö which means small deals are lost for a different reason than your big ones. Treat the revenue view as the priority.
+ΓÇó You're losing to Competitor B: 0-3 head-to-head (0% win rate), $435,000 lost. That's a competitive-positioning gap worth closing.
+ΓÇó Single biggest fixable leak: Enterprise deals lost to "Lost to competitor" ΓÇö $200,000. Start here.
+

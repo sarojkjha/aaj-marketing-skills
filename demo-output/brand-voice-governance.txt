@@ -1,0 +1,64 @@
+﻿Γû╕ DEMO 1 ΓÇö profile mode (extract rules from a brief)
+
+VOICE PROFILE ΓÇö Northwind Analytics
+ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
+
+Words to avoid   synergy, leverage, robust, seamless, best-in-class
+Words to prefer  short sentences, concrete examples
+Don't            enterprise jargon; synergy; "leverage
+Grade ceiling    9
+
+Ready to check against. Pass this object as "profile" to check mode,
+or pass the same brief and it will be re-parsed.
+
+
+Γû╕ DEMO 2 ΓÇö check mode (content against those rules)
+
+BRAND VOICE GOVERNANCE ΓÇö Northwind Analytics
+ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
+
+VERDICT   REVISE
+
+  Conformance     25%  ΓûêΓûêΓûêΓûêΓûêΓûê┬╖┬╖┬╖┬╖┬╖┬╖┬╖┬╖┬╖┬╖┬╖┬╖┬╖┬╖┬╖┬╖   1/4 blocks clean
+  Profile       brand profile
+  Grade ceiling 9
+
+  2 to revise ┬╖ 1 with notes ┬╖ 1 pass
+
+BANNED TERMS FOUND
+  "robust"              1├ù
+  "best-in-class"       1├ù
+  "synergy"             1├ù
+  "leverage"            1├ù
+  "seamless"            1├ù
+
+BY BLOCK
+  Γ£ù REVISE  #1   Northwind is a robust, best-in-class analytics platform.
+        Γ£ù "robust" is on this brand's avoid list
+        Γ£ù "best-in-class" is on this brand's avoid list
+  Γ£ù REVISE  #2   We help you leverage seamless data synergy across your entire organization, unlocking a...
+        Γ£ù "synergy" is on this brand's avoid list
+        Γ£ù "leverage" is on this brand's avoid list
+        Γ£ù "seamless" is on this brand's avoid list
+        ┬╖ reads at grade 19.2, ceiling is 9
+        ┬╖ 34-word sentence; consider splitting
+  Γ£ô PASS    #3   Set up in an afternoon. No SQL, no data hire.
+  ! NOTES   #4   Our platform is basically just the easiest way to actually see what your users really do.
+        ┬╖ hedge "really" weakens the claim
+        ┬╖ hedge "basically" weakens the claim
+        ┬╖ hedge "actually" weakens the claim
+        ┬╖ hedge "just" weakens the claim
+
+AUDIT TRAIL
+  11 finding(s) across 4 block(s). Each is quoted above with its
+  block number, so an editor or a compliance log can trace every flag to its
+  source. Blocking findings (Γ£ù) violate a stated brand rule; notes (┬╖) are
+  advisory and do not fail the check.
+
+WHAT THIS MEANS
+  Content violates the brand's own stated voice rules. These are not style
+  opinions ΓÇö they are the do/don't list the brand wrote for itself. Fix the
+  Γ£ù blocks before publishing; the notes can wait.
+
+(Demo data. Replace with a real brief and real content.)
+
