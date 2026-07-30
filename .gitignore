@@ -1,3 +1,6 @@
 ﻿node_modules/
 .env
+.env*
 *.zip
+demo-output/
+github-traffic-log.csv
