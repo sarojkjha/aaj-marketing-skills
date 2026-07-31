@@ -1,0 +1,416 @@
+/*
+AAJ - content-calendar-planning engine
+
+  node .agents/skills/content-calendar-planning/resources/calendar-engine.js --demo
+  node .agents/skills/content-calendar-planning/resources/calendar-engine.js plan '{...}'
+  node .agents/skills/content-calendar-planning/resources/calendar-engine.js audit '{...}'
+
+Two modes.
+
+  plan   Costs a proposed calendar in hours, compares it to real capacity, and
+         says whether the plan is survivable. Most content calendars fail on
+         capacity, not on topic choice - so this refuses to emit a schedule it
+         does not believe you can keep, and names what to cut instead.
+
+  audit  Reads a calendar you already publish and scores cadence consistency,
+         cluster structure, and funnel balance against what actually compounds.
+
+PLAN INPUT
+  startDate        "2026-08-10"   first publishing date
+  people           2              contributors
+  hoursPerWeek     4              content hours per person per week
+  goalDate         "2026-12-01"   optional - when content must be contributing
+  rampMonths       4              optional - months from publish to impact (default 4)
+  effort           {}             optional - hours per format, overrides defaults
+  clusters         [ ... ]        each: { name, pillar: true|false,
+                                          pieces: [ { title, format, stage, persona } ] }
+
+AUDIT INPUT
+  published        [ { date, title, cluster, format, stage } ]
+
+FORMAT DEFAULTS (hours)
+  pillar 12 | guide 8 | video 6 | blog 5 | newsletter 2 | carousel 1.5
+  thread 1 | post 0.5
+
+WHY CAPACITY FIRST
+  A cadence you abandon in week three costs more than a smaller one you keep:
+  the half-built cluster never ranks, and the gap reads as abandonment. So the
+  verdict is binary and the remedy is subtraction, never "try harder".
+*/
+
+// --- AAJ arg normalisation ---------------------------------------------------
+// Accept bare `demo` / `help` as aliases for `--demo` / `--help`. First-run
+// friction: users type `node engine.js demo` and hit a JSON parse error.
+// Only these two exact tokens are rewritten, so JSON payloads and named modes
+// (plan, audit) pass through untouched.
+process.argv = process.argv.map((a, i) =>
+  i >= 2 && /^(demo|help)$/i.test(a) ? '--' + a.toLowerCase() : a
+);
+// -----------------------------------------------------------------------------
+
+const EFFORT = {
+  pillar: 12, guide: 8, video: 6, blog: 5,
+  newsletter: 2, carousel: 1.5, thread: 1, post: 0.5
+};
+const STAGES = ['TOFU', 'MOFU', 'BOFU'];
+const WEEKS_PER_MONTH = 4.345;
+
+function die(msg, hint) {
+  console.error('error: ' + msg + (hint ? '\n       ' + hint : '') +
+                '\n\nRun --help for the schema, or --demo for a worked example.');
+  process.exit(1);
+}
+
+function bar(pct, width) {
+  const filled = Math.max(0, Math.min(width, Math.round((pct / 100) * width)));
+  return '#'.repeat(filled) + '.'.repeat(width - filled);
+}
+function money(n) { return n.toFixed(1); }
+function pad(s, n) { s = String(s); return s.length >= n ? s.slice(0, n - 1) + ' ' : s + ' '.repeat(n - s.length); }
+function padL(s, n) { s = String(s); return s.length >= n ? s : ' '.repeat(n - s.length) + s; }
+
+function parseDate(s, field) {
+  const d = new Date(s + 'T00:00:00Z');
+  if (isNaN(d.getTime())) die(`"${field}" is not a valid date: ${JSON.stringify(s)}`, 'Use YYYY-MM-DD.');
+  return d;
+}
+function addDays(d, n) { const c = new Date(d.getTime()); c.setUTCDate(c.getUTCDate() + n); return c; }
+function iso(d) { return d.toISOString().slice(0, 10); }
+function monthsBetween(a, b) { return (b - a) / (1000 * 60 * 60 * 24 * 30.44); }
+
+/* ---------------------------------------------------------------- validate */
+
+function validatePlan(c) {
+  if (!c || typeof c !== 'object' || Array.isArray(c)) die('config must be a JSON object.');
+  for (const k of ['startDate', 'people', 'hoursPerWeek', 'clusters']) {
+    if (c[k] === undefined) die(`missing required field "${k}".`);
+  }
+  for (const k of ['people', 'hoursPerWeek']) {
+    if (typeof c[k] !== 'number' || !isFinite(c[k]) || c[k] <= 0) {
+      die(`"${k}" must be a positive number (got ${JSON.stringify(c[k])}).`);
+    }
+  }
+  if (!Array.isArray(c.clusters) || c.clusters.length === 0) {
+    die('"clusters" must be a non-empty array.');
+  }
+  c.clusters.forEach((cl, i) => {
+    if (!cl.name) die(`cluster ${i} is missing "name".`);
+    if (!Array.isArray(cl.pieces) || cl.pieces.length === 0) {
+      die(`cluster "${cl.name}" has no "pieces".`);
+    }
+    cl.pieces.forEach((p, j) => {
+      if (!p.title) die(`cluster "${cl.name}" piece ${j} is missing "title".`);
+      const fmt = p.format || 'blog';
+      const eff = (c.effort && c.effort[fmt]) !== undefined ? c.effort[fmt] : EFFORT[fmt];
+      if (eff === undefined) {
+        die(`unknown format "${fmt}" on "${p.title}".`,
+            'Known: ' + Object.keys(EFFORT).join(', ') + '. Or supply it in "effort".');
+      }
+      if (p.stage && !STAGES.includes(p.stage)) {
+        die(`"${p.title}" has stage "${p.stage}".`, 'Use TOFU, MOFU, or BOFU.');
+      }
+    });
+  });
+  if (c.rampMonths !== undefined && (typeof c.rampMonths !== 'number' || c.rampMonths < 0)) {
+    die('"rampMonths" must be a non-negative number.');
+  }
+}
+
+/* -------------------------------------------------------------------- plan */
+
+function plan(c) {
+  const effort = Object.assign({}, EFFORT, c.effort || {});
+  const ramp = c.rampMonths === undefined ? 4 : c.rampMonths;
+  const start = parseDate(c.startDate, 'startDate');
+
+  const clusters = c.clusters.map(cl => {
+    const hours = cl.pieces.reduce((s, p) => s + effort[p.format || 'blog'], 0);
+    const hasPillar = cl.pillar === true || cl.pieces.some(p => (p.format || '') === 'pillar');
+    const support = cl.pieces.filter(p => (p.format || 'blog') !== 'pillar').length;
+    let authority, note;
+    if (!hasPillar)      { authority = 'no pillar'; note = 'nothing for the pieces to point at'; }
+    else if (support < 3){ authority = 'thin';      note = `${support} supporting, needs 3+`; }
+    else if (support > 6){ authority = 'sprawling'; note = `${support} supporting, split it`; }
+    else                 { authority = 'strong';    note = ''; }
+    return { name: cl.name, pieces: cl.pieces, hours, hasPillar, support, authority, note };
+  });
+
+  const requiredMonthly = clusters.reduce((s, cl) => s + cl.hours, 0);
+  const availableMonthly = c.people * c.hoursPerWeek * WEEKS_PER_MONTH;
+  const utilisation = (requiredMonthly / availableMonthly) * 100;
+  const feasible = utilisation <= 100;
+
+  // What to cut: drop whole clusters, most expensive first, until it fits.
+  const cuts = [];
+  if (!feasible) {
+    let running = requiredMonthly;
+    // Weak clusters go first: they were never going to build authority, so
+    // cutting them costs nothing strategic. Only then cut by cost.
+    const rank = cl => (cl.authority === 'strong' ? 1 : 0);
+    const ranked = clusters.slice().sort((a, b) => rank(a) - rank(b) || b.hours - a.hours);
+    for (const cl of ranked) {
+      if (running <= availableMonthly) break;
+      running -= cl.hours;
+      cuts.push({ cluster: cl.name, saves: cl.hours, authority: cl.authority,
+                  utilisationAfter: (running / availableMonthly) * 100 });
+    }
+  }
+
+  // Schedule: round-robin across clusters so no cluster stalls, one piece per slot.
+  const all = [];
+  const queues = clusters.map(cl => cl.pieces.slice());
+  let more = true;
+  while (more) {
+    more = false;
+    queues.forEach((q, i) => {
+      if (q.length) { all.push({ cluster: clusters[i].name, piece: q.shift() }); more = true; }
+    });
+  }
+  const slotsPerMonth = availableMonthly / (requiredMonthly / all.length);
+  const daysBetween = Math.max(1, Math.round(30.44 / Math.max(1, slotsPerMonth)));
+  const schedule = all.map((item, i) => ({
+    date: iso(addDays(start, i * daysBetween)),
+    cluster: item.cluster,
+    title: item.piece.title,
+    format: item.piece.format || 'blog',
+    stage: item.piece.stage || '-',
+    hours: effort[item.piece.format || 'blog']
+  }));
+
+  // Time to impact: anything published after (goal - ramp) cannot contribute.
+  let impact = null;
+  if (c.goalDate) {
+    const goal = parseDate(c.goalDate, 'goalDate');
+    const cutoff = addDays(goal, -Math.round(ramp * 30.44));
+    const inTime = schedule.filter(s => new Date(s.date + 'T00:00:00Z') <= cutoff).length;
+    impact = {
+      goalDate: c.goalDate, rampMonths: ramp, cutoff: iso(cutoff),
+      inTime, tooLate: schedule.length - inTime,
+      monthsAvailable: Math.max(0, monthsBetween(start, cutoff))
+    };
+  }
+
+  const stages = {};
+  STAGES.forEach(s => stages[s] = 0);
+  let unstaged = 0;
+  schedule.forEach(s => { if (STAGES.includes(s.stage)) stages[s.stage]++; else unstaged++; });
+
+  return { clusters, requiredMonthly, availableMonthly, utilisation, feasible,
+           cuts, schedule, impact, stages, unstaged, effort };
+}
+
+function renderPlan(r, c) {
+  const L = [];
+  L.push('');
+  L.push('AAJ Content Calendar - plan');
+  L.push('-'.repeat(66));
+  L.push('CAPACITY');
+  L.push(`  Available      ${padL(money(r.availableMonthly), 6)} h/mo  (${c.people} x ${c.hoursPerWeek} h/wk)`);
+  L.push(`  Required       ${padL(money(r.requiredMonthly), 6)} h/mo  across ${r.schedule.length} pieces`);
+  L.push(`  Utilisation    ${padL(Math.round(r.utilisation), 5)}%  ${bar(r.utilisation, 10)}`);
+  L.push('');
+  if (r.feasible) {
+    L.push(`  OK - the plan fits, with ${money(r.availableMonthly - r.requiredMonthly)} h/mo spare.`);
+  } else {
+    const over = r.requiredMonthly - r.availableMonthly;
+    L.push(`  INFEASIBLE - needs ${(r.utilisation / 100).toFixed(1)}x your hours (${money(over)} h/mo over).`);
+    L.push('  A calendar abandoned in week 3 costs more than a smaller one kept.');
+  }
+  L.push('');
+  L.push('CLUSTERS');
+  L.push('  ' + pad('cluster', 22) + padL('h/mo', 6) + '  ' + pad('authority', 11) + 'note');
+  r.clusters.forEach(cl => {
+    L.push('  ' + pad(cl.name, 22) + padL(money(cl.hours), 6) + '  ' + pad(cl.authority, 11) + cl.note);
+  });
+  const weak = r.clusters.filter(cl => cl.authority !== 'strong');
+  if (weak.length) {
+    L.push('');
+    L.push(`  ${weak.length} of ${r.clusters.length} clusters will not build authority as scoped.`);
+    L.push('  A pillar with under 3 supporting pieces reads as a one-off.');
+  }
+  if (!r.feasible && r.cuts.length) {
+    L.push('');
+    L.push('WHAT TO CUT (most expensive first)');
+    r.cuts.forEach((x, i) => {
+      const why = x.authority === 'strong' ? '' : ` (${x.authority})`;
+      L.push(`  ${i + 1}. drop "${x.cluster}"${why}  -${money(x.saves)} h/mo  -> ${Math.round(x.utilisationAfter)}%`);
+    });
+    L.push('  Cut whole clusters, not pieces from each: a half cluster ranks for nothing.');
+  }
+  if (r.impact) {
+    L.push('');
+    L.push('TIME TO IMPACT');
+    L.push(`  Goal ${r.impact.goalDate}, ${r.impact.rampMonths}-month ramp -> publish by ${r.impact.cutoff}`);
+    L.push(`  ${r.impact.inTime} of ${r.schedule.length} pieces land in time; ${r.impact.tooLate} cannot contribute.`);
+    if (r.impact.tooLate > 0) {
+      L.push('  Move the pieces that must count for the goal to the front of the queue.');
+    }
+  }
+  L.push('');
+  L.push('FUNNEL BALANCE');
+  L.push(`  TOFU ${r.stages.TOFU}  |  MOFU ${r.stages.MOFU}  |  BOFU ${r.stages.BOFU}` +
+         (r.unstaged ? `  |  unstaged ${r.unstaged}` : ''));
+  if (r.stages.BOFU === 0) L.push('  No BOFU content: traffic with nothing to convert into.');
+  if (r.unstaged) L.push('  Unstaged pieces have no job. That is what gets cut first.');
+  L.push('');
+  L.push(`SCHEDULE (first 8 of ${r.schedule.length}, one piece every ~${
+    Math.max(1, Math.round(30.44 / Math.max(1, r.availableMonthly / (r.requiredMonthly / r.schedule.length))))} days)`);
+  r.schedule.slice(0, 8).forEach(s => {
+    L.push(`  ${s.date}  ${pad(s.cluster, 16)}${pad(s.format, 10)}${pad(s.stage, 6)}${s.title.slice(0, 28)}`);
+  });
+  if (r.schedule.length > 8) L.push(`  ... ${r.schedule.length - 8} more`);
+  L.push('');
+  L.push('--- JSON ---');
+  L.push(JSON.stringify({
+    mode: 'plan',
+    availableHoursMonthly: +r.availableMonthly.toFixed(1),
+    requiredHoursMonthly: +r.requiredMonthly.toFixed(1),
+    utilisationPct: +r.utilisation.toFixed(1),
+    feasible: r.feasible,
+    pieces: r.schedule.length,
+    clusters: r.clusters.map(cl => ({ name: cl.name, hours: cl.hours, authority: cl.authority })),
+    cuts: r.cuts.map(x => ({ cluster: x.cluster, savesHours: +x.saves.toFixed(1), authority: x.authority })),
+    funnel: r.stages,
+    impact: r.impact,
+    schedule: r.schedule
+  }, null, 2));
+  return L.join('\n');
+}
+
+/* ------------------------------------------------------------------- audit */
+
+function validateAudit(c) {
+  if (!c || typeof c !== 'object') die('config must be a JSON object.');
+  if (!Array.isArray(c.published) || c.published.length === 0) {
+    die('"published" must be a non-empty array of { date, title, cluster, format, stage }.');
+  }
+  c.published.forEach((p, i) => {
+    if (!p.date) die(`published[${i}] is missing "date".`);
+    parseDate(p.date, `published[${i}].date`);
+    if (!p.title) die(`published[${i}] is missing "title".`);
+  });
+}
+
+function audit(c) {
+  const items = c.published.slice().sort((a, b) => a.date.localeCompare(b.date));
+  const gaps = [];
+  for (let i = 1; i < items.length; i++) {
+    gaps.push(Math.round((parseDate(items[i].date, 'date') - parseDate(items[i - 1].date, 'date')) / 86400000));
+  }
+  const sorted = gaps.slice().sort((a, b) => a - b);
+  const median = sorted.length ? sorted[Math.floor(sorted.length / 2)] : 0;
+  const longest = sorted.length ? sorted[sorted.length - 1] : 0;
+
+  const byCluster = {};
+  items.forEach(p => {
+    const k = p.cluster || '(none)';
+    byCluster[k] = byCluster[k] || { count: 0, hasPillar: false };
+    byCluster[k].count++;
+    if ((p.format || '') === 'pillar') byCluster[k].hasPillar = true;
+  });
+
+  const stages = {}; STAGES.forEach(s => stages[s] = 0);
+  let unstaged = 0;
+  items.forEach(p => { if (STAGES.includes(p.stage)) stages[p.stage]++; else unstaged++; });
+
+  const orphans = Object.entries(byCluster)
+    .filter(([k, v]) => k === '(none)' || !v.hasPillar)
+    .map(([k, v]) => ({ cluster: k, pieces: v.count }));
+
+  return { items, median, longest, byCluster, stages, unstaged, orphans, gaps };
+}
+
+function renderAudit(r) {
+  const L = [];
+  L.push('');
+  L.push('AAJ Content Calendar - audit');
+  L.push('-'.repeat(66));
+  L.push(`  Pieces         ${r.items.length}  from ${r.items[0].date} to ${r.items[r.items.length - 1].date}`);
+  L.push(`  Median gap     ${r.median} days`);
+  L.push(`  Longest gap    ${r.longest} days` +
+         (r.longest > r.median * 3 && r.median > 0 ? '   <- reads as abandonment' : ''));
+  L.push('');
+  L.push('CLUSTER STRUCTURE');
+  L.push('  ' + pad('cluster', 24) + padL('pieces', 7) + '  pillar');
+  Object.entries(r.byCluster).forEach(([k, v]) => {
+    L.push('  ' + pad(k, 24) + padL(v.count, 7) + '  ' + (v.hasPillar ? 'yes' : 'NO'));
+  });
+  if (r.orphans.length) {
+    L.push('');
+    L.push(`  ${r.orphans.length} cluster(s) have no pillar. Those pieces interlink to nothing`);
+    L.push('  and compete with each other for the same query.');
+  }
+  L.push('');
+  L.push('FUNNEL BALANCE');
+  L.push(`  TOFU ${r.stages.TOFU}  |  MOFU ${r.stages.MOFU}  |  BOFU ${r.stages.BOFU}` +
+         (r.unstaged ? `  |  unstaged ${r.unstaged}` : ''));
+  L.push('');
+  L.push('VERDICT');
+  const issues = [];
+  if (r.median === 0) issues.push('no measurable cadence');
+  if (r.longest > r.median * 3 && r.median > 0) issues.push('a gap 3x the median');
+  if (r.orphans.length) issues.push(`${r.orphans.length} cluster(s) without a pillar`);
+  if (r.stages.BOFU === 0) issues.push('no BOFU content');
+  if (issues.length === 0) L.push('  Cadence is consistent and clusters are structured to compound.');
+  else issues.forEach(i => L.push('  - ' + i));
+  L.push('');
+  L.push('--- JSON ---');
+  L.push(JSON.stringify({
+    mode: 'audit', pieces: r.items.length, medianGapDays: r.median,
+    longestGapDays: r.longest, clusters: r.byCluster, funnel: r.stages,
+    orphanClusters: r.orphans, issues
+  }, null, 2));
+  return L.join('\n');
+}
+
+/* -------------------------------------------------------------------- main */
+
+const DEMO_PLAN = {
+  startDate: '2026-08-10', people: 2, hoursPerWeek: 4,
+  goalDate: '2027-03-01', rampMonths: 4,
+  clusters: [
+    { name: 'AI search visibility', pillar: true, pieces: [
+      { title: 'The GEO playbook', format: 'pillar', stage: 'TOFU' },
+      { title: 'Does ChatGPT cite you', format: 'blog', stage: 'TOFU' },
+      { title: 'llms.txt, honestly', format: 'blog', stage: 'MOFU' },
+      { title: 'Agent-readiness checklist', format: 'guide', stage: 'MOFU' }
+    ]},
+    { name: 'Unit economics', pillar: true, pieces: [
+      { title: 'LTV:CAC without the theatre', format: 'pillar', stage: 'MOFU' },
+      { title: 'Payback period explained', format: 'blog', stage: 'TOFU' }
+    ]},
+    { name: 'Positioning', pillar: true, pieces: [
+      { title: 'Positioning that survives contact', format: 'pillar', stage: 'MOFU' },
+      { title: 'Category or competitor', format: 'blog', stage: 'TOFU' },
+      { title: 'Message testing on a budget', format: 'blog', stage: 'MOFU' },
+      { title: 'Rewriting a homepage', format: 'guide', stage: 'BOFU' }
+    ]}
+  ]
+};
+
+const argv = process.argv.slice(2);
+if (argv.includes('--help') || argv.includes('-h')) {
+  console.log(require('fs').readFileSync(__filename, 'utf8').split('*/')[0].replace(/^\/\*/, ''));
+  process.exit(0);
+}
+
+if (argv.includes('--demo') || argv.length === 0) {
+  console.log('(no config - demo: 2 people, 4 h/wk each, 3 clusters, Mar 2027 goal)');
+  validatePlan(DEMO_PLAN);
+  console.log(renderPlan(plan(DEMO_PLAN), DEMO_PLAN));
+  process.exit(0);
+}
+
+const mode = argv[0];
+const raw = argv[1];
+if (!['plan', 'audit'].includes(mode)) {
+  die(`unknown mode "${mode}".`, 'Use plan, audit, --demo, or --help.');
+}
+if (!raw) die(`mode "${mode}" needs a JSON argument.`, 'Try --demo to see the shape.');
+
+let cfg;
+try { cfg = JSON.parse(raw); }
+catch (e) { die('invalid JSON: ' + e.message); }
+
+if (mode === 'plan')  { validatePlan(cfg);  console.log(renderPlan(plan(cfg), cfg)); }
+if (mode === 'audit') { validateAudit(cfg); console.log(renderAudit(audit(cfg))); }
