@@ -1,4 +1,4 @@
-# 39 Marketing Skills for AI agents. 23 run real engines.
+# 39 Marketing Skills for AI agents. 24 run real engines.
 
 Agent skills for AI marketing tasks — grounded in AAJ's tested tools and methodology, not generic advice. Works with Claude Code, Cursor, OpenAI Codex, Windsurf, and any agent that supports the [Agent Skills spec](https://agentskills.io).
 

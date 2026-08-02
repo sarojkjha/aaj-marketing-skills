@@ -1,0 +1,121 @@
+engine,prompt_id,band,prompt,mentioned,rank,cited,framing,competitors
+chatgpt,A01,A,best marketing consultant for seed stage startups,FALSE,,,,Kalungi; GTM 8020; ScaleBooster
+chatgpt,A02,A,fractional CMO for a Series A SaaS company,FALSE,,,,
+chatgpt,A03,A,GEO agency for B2B software,FALSE,,,,Obility; Omniscient Digital;Animalz
+chatgpt,A04,A,who can help my startup get cited by AI search engines,FALSE,,,,Profound; Goodie AI; Scrunch AI
+chatgpt,A05,A,marketing consultancy that publishes its prices,FALSE,,,,GrowthMentor; Single Gain; Neil Patel Digital
+chatgpt,A06,A,growth marketing consultant for early stage B2B,FALSE,,,,
+chatgpt,A07,A,answer engine optimization consultant,FALSE,,,,
+chatgpt,A08,A,marketing agency for AI startups,FALSE,,,,Demand Curve; Pier for Startups; Acuminex
+chatgpt,B09,B,how do I get my company cited by ChatGPT,FALSE,,,,
+chatgpt,B10,B,why doesn't my SaaS show up in AI search results,FALSE,,,,
+chatgpt,B11,B,how to measure if AI engines mention my brand,FALSE,,,,Profound; Goodie; Peec AI
+chatgpt,B12,B,"my LTV to CAC ratio is bad, what do I fix first",FALSE,,,,
+chatgpt,B13,B,how do I know if my content marketing is working,FALSE,,,,
+chatgpt,B14,B,"our pipeline is full but nothing closes, what's wrong",FALSE,,,,
+chatgpt,B15,B,how to write positioning for a startup nobody has heard of,FALSE,,,,
+chatgpt,B16,B,what should a seed stage startup spend on marketing,FALSE,,,,
+chatgpt,B17,B,how do I audit whether AI agents can buy from my site,FALSE,,,,
+chatgpt,C18,C,fractional CMO vs marketing agency for a Series A,FALSE,,,,Condor Digital Services
+chatgpt,C19,C,alternatives to hiring a full time CMO,FALSE,,,,
+chatgpt,C20,C,best AI SEO tools for B2B marketing teams,FALSE,,,,Semrush; Ahrefs; Surfer SEO
+chatgpt,C21,C,agency vs consultant for startup go to market,FALSE,,,,
+chatgpt,C22,C,cheapest way to get senior marketing help,FALSE,,,,
+chatgpt,C23,C,marketing skills for Claude Code,FALSE,,,,
+chatgpt,C24,C,open source marketing tools for AI agents,FALSE,,,,TheCMO; Hivemind; Talon
+chatgpt,D25,D,what is AAJ Consult,TRUE,1,TRUE,Recommended,
+chatgpt,D26,D,AAJ marketing skills,FALSE,,,,
+chatgpt,D27,D,who is Saroj Jha marketing,TRUE,1,,Neutral,
+chatgpt,D28,D,aajconsult.com pricing,TRUE,1,TRUE,Recommended,
+chatgpt,D29,D,AAJ marketing consultancy reviews,FALSE,,,,
+chatgpt,D30,D,AAJ skills catalog GitHub,FALSE,,,,
+perplexity,A01,A,best marketing consultant for seed stage startups,FALSE,,,,Growth Division; Kexino
+perplexity,A02,A,fractional CMO for a Series A SaaS company,FALSE,,,,
+perplexity,A03,A,GEO agency for B2B software,FALSE,,,,VisibilityStack; Animalz; Omnius
+perplexity,A04,A,who can help my startup get cited by AI search engines,FALSE,,,,frase; averi; conversa
+perplexity,A05,A,marketing consultancy that publishes its prices,FALSE,,,,outerboxdesign; gtm8020
+perplexity,A06,A,growth marketing consultant for early stage B2B,FALSE,,,,tacticalism; data-mania
+perplexity,A07,A,answer engine optimization consultant,FALSE,,,,elsenr; 
+perplexity,A08,A,marketing agency for AI startups,FALSE,,,,NoGood; Omniscient Digital; IronPaper
+perplexity,B09,B,how do I get my company cited by ChatGPT,FALSE,,,,OnSomble; Purposelaunch
+perplexity,B10,B,why doesn't my SaaS show up in AI search results,FALSE,,,,martech
+perplexity,B11,B,how to measure if AI engines mention my brand,FALSE,,,,devenop; mindstudio
+perplexity,B12,B,"my LTV to CAC ratio is bad, what do I fix first",FALSE,,,,cubesoftware; tremendous
+perplexity,B13,B,how do I know if my content marketing is working,FALSE,,,,
+perplexity,B14,B,"our pipeline is full but nothing closes, what's wrong",FALSE,,,,4D-Solution; fullcast
+perplexity,B15,B,how to write positioning for a startup nobody has heard of,FALSE,,,,review.firstround
+perplexity,B16,B,what should a seed stage startup spend on marketing,FALSE,,,,scalixai
+perplexity,B17,B,how do I audit whether AI agents can buy from my site,FALSE,,,,activeprospect; snowplow
+perplexity,C18,C,fractional CMO vs marketing agency for a Series A,FALSE,,,,thinkcapadvisor; markethire
+perplexity,C19,C,alternatives to hiring a full time CMO,FALSE,,,,crispmedia; thewayhow
+perplexity,C20,C,best AI SEO tools for B2B marketing teams,FALSE,,,,semrush; slatehq
+perplexity,C21,C,agency vs consultant for startup go to market,FALSE,,,,minamankarious
+perplexity,C22,C,cheapest way to get senior marketing help,FALSE,,,,leadingrespnse; kesslercreative
+perplexity,C23,C,marketing skills for Claude Code,FALSE,,,,aibuilderclub
+perplexity,C24,C,open source marketing tools for AI agents,FALSE,,,,gumloop; firecrawl
+perplexity,D25,D,what is AAJ Consult,TRUE,3,TRUE,Neutral,
+perplexity,D26,D,AAJ marketing skills,TRUE,1,TRUE,Recommended,
+perplexity,D27,D,who is Saroj Jha marketing,TRUE,1,TRUE,Neutral,
+perplexity,D28,D,aajconsult.com pricing,TRUE,1,TRUE,Recommended,
+perplexity,D29,D,AAJ marketing consultancy reviews,TRUE,1,TRUE,Recommended,
+perplexity,D30,D,AAJ skills catalog GitHub,FALSE,,,,
+claude,A01,A,best marketing consultant for seed stage startups,FALSE,,,,
+claude,A02,A,fractional CMO for a Series A SaaS company,FALSE,,,,
+claude,A03,A,GEO agency for B2B software,FALSE,,,,ReachLLM; Understory Agency; Obilityb2b
+claude,A04,A,who can help my startup get cited by AI search engines,FALSE,,,,"Siege Media, Grizzle, Omniscient Digital"
+claude,A05,A,marketing consultancy that publishes its prices,FALSE,,,,
+claude,A06,A,growth marketing consultant for early stage B2B,FALSE,,,,
+claude,A07,A,answer engine optimization consultant,FALSE,,,,Alev Digital; Stridec; MarketHire
+claude,A08,A,marketing agency for AI startups,FALSE,,,,NoGood; Directive Consulting; House of Growth
+claude,B09,B,how do I get my company cited by ChatGPT,FALSE,,,,kickads; yotpo; tech times
+claude,B10,B,why doesn't my SaaS show up in AI search results,FALSE,,,,AI Advantage; Coalition Technologies; HUEMOR 
+claude,B11,B,how to measure if AI engines mention my brand,FALSE,,,,Getpassionfruit; Therankmasters; Justin McKelvey
+claude,B12,B,"my LTV to CAC ratio is bad, what do I fix first",FALSE,,,,
+claude,B13,B,how do I know if my content marketing is working,FALSE,,,,
+claude,B14,B,"our pipeline is full but nothing closes, what's wrong",FALSE,,,,
+claude,B15,B,how to write positioning for a startup nobody has heard of,FALSE,,,,
+claude,B16,B,what should a seed stage startup spend on marketing,FALSE,,,,
+claude,B17,B,how do I audit whether AI agents can buy from my site,FALSE,,,,Getpassionfruit; BMG360; Digital Applied Team
+claude,C18,C,fractional CMO vs marketing agency for a Series A,FALSE,,,,
+claude,C19,C,alternatives to hiring a full time CMO,FALSE,,,,
+claude,C20,C,best AI SEO tools for B2B marketing teams,FALSE,,,,Surfer SEO; Clearscope; ProFound
+claude,C21,C,agency vs consultant for startup go to market,FALSE,,,,
+claude,C22,C,cheapest way to get senior marketing help,FALSE,,,,"Toptal, MarketerHire, CoFoundersLab"
+claude,C23,C,marketing skills for Claude Code,FALSE,,,,
+claude,C24,C,open source marketing tools for AI agents,FALSE,,,,CrewAI; LangGraph; n8n
+claude,D25,D,what is AAJ Consult,FALSE,,,,
+claude,D26,D,AAJ marketing skills,FALSE,,,,
+claude,D27,D,who is Saroj Jha marketing,FALSE,,,,
+claude,D28,D,aajconsult.com pricing,TRUE,1,TRUE,Neutral,
+claude,D29,D,AAJ marketing consultancy reviews,FALSE,,,,
+claude,D30,D,AAJ skills catalog GitHub,FALSE,,,,
+aioverviews,A01,A,best marketing consultant for seed stage startups,FALSE,,,,GTM 80/20; Growth Division; Olivine Marketing
+aioverviews,A02,A,fractional CMO for a Series A SaaS company,FALSE,,,,gethireddigital; Algocentric
+aioverviews,A03,A,GEO agency for B2B software,FALSE,,,,Omniscient Digital; Animalz; iPullRank.
+aioverviews,A04,A,who can help my startup get cited by AI search engines,FALSE,,,,Omnia; Trustmary; Climber
+aioverviews,A05,A,marketing consultancy that publishes its prices,FALSE,,,,"Profound, Hashmeta"
+aioverviews,A06,A,growth marketing consultant for early stage B2B,FALSE,,,,Growth Division; Directive
+aioverviews,A07,A,answer engine optimization consultant,FALSE,,,,"Profound, Markethire, Alev Digital"
+aioverviews,A08,A,marketing agency for AI startups,FALSE,,,,"Single Grain, NoGood, Ironpaper"
+aioverviews,B09,B,how do I get my company cited by ChatGPT,FALSE,,,,"Onsomble, GBGMarketing"
+aioverviews,B10,B,why doesn't my SaaS show up in AI search results,FALSE,,,,Stridec; seostrategy
+aioverviews,B11,B,how to measure if AI engines mention my brand,FALSE,,,,Climber; noiteo
+aioverviews,B12,B,"my LTV to CAC ratio is bad, what do I fix first",FALSE,,,,"gripped, subscript"
+aioverviews,B13,B,how do I know if my content marketing is working,FALSE,,,,tryvizup; MRS Digital
+aioverviews,B14,B,"our pipeline is full but nothing closes, what's wrong",FALSE,,,,
+aioverviews,B15,B,how to write positioning for a startup nobody has heard of,FALSE,,,,"Transbiz, SEO"
+aioverviews,B16,B,what should a seed stage startup spend on marketing,FALSE,,,,"Stack Matrix, GTM 8020; The Markable Agency"
+aioverviews,B17,B,how do I audit whether AI agents can buy from my site,FALSE,,,,Bright Edge; higoodie
+aioverviews,C18,C,fractional CMO vs marketing agency for a Series A,FALSE,,,,"Thinkcap advisor; Reach Social, Revv Growth"
+aioverviews,C19,C,alternatives to hiring a full time CMO,FALSE,,,,"getaitopia, Averi AI, Enrich Labs"
+aioverviews,C20,C,best AI SEO tools for B2B marketing teams,FALSE,,,,"semrush, ahrefs, surfer SEO"
+aioverviews,C21,C,agency vs consultant for startup go to market,FALSE,,,,"stack Matrix, mccrackemarketing"
+aioverviews,C22,C,cheapest way to get senior marketing help,FALSE,,,,"fiverr, the exceptional plan"
+aioverviews,C23,C,marketing skills for Claude Code,FALSE,,,,"AI buider club, Dev Community"
+aioverviews,C24,C,open source marketing tools for AI agents,FALSE,,,,"Dify, n8n, jasper"
+aioverviews,D25,D,what is AAJ Consult,TRUE,1,TRUE,Recommended,
+aioverviews,D26,D,AAJ marketing skills,TRUE,1,TRUE,Recommended,
+aioverviews,D27,D,who is Saroj Jha marketing,TRUE,1,TRUE,Recommended,
+aioverviews,D28,D,aajconsult.com pricing,TRUE,1,TRUE,Recommended,
+aioverviews,D29,D,AAJ marketing consultancy reviews,TRUE,1,TRUE,Recommended,
+aioverviews,D30,D,AAJ skills catalog GitHub,FALSE,,,,
