@@ -88,7 +88,7 @@ Lead with the three numbers (LTV, LTV:CAC, payback), then the verdict, then the 
 
 ## Related skills
 
-`paid-media-budget-allocation` (uses the CAC ceiling this produces) · `marketing-budget-planning` · `churn-prevention` (the biggest LTV lever).
+`paid-media-budget-allocation` (uses the CAC ceiling this produces) · `marketing-budget-planning` · `lifecycle-and-retention` (the biggest LTV lever).
 
 ## Credits
 

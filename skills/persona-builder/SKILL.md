@@ -63,7 +63,7 @@ Deliver the ICP plus each persona in the template format, with a "validate next"
 
 ## Related skills
 
-`customer-research` and `customer-survey-design` (gather the signal) · `positioning-statement` (sharpen the "for whom") · `competitor-profiling` (the alternatives they weigh).
+`customer-survey-design` (gather the signal) · `positioning-statement` (sharpen the "for whom") · `win-loss-analysis` (the alternatives they weigh).
 
 ## Credits
 

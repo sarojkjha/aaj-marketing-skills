@@ -119,7 +119,7 @@ If the test was inconclusive, say so plainly and give the sample size that would
 
 ## Related skills
 
-`ab-test-significance` (on-site experiments — same statistics, different design question) · `paid-media-budget-allocation` (where the reallocation decision lands) · `unit-economics` (the value-per-conversion input this depends on) · `marketing-report` (reporting the result upward) · `marketing-attribution` (the model this is designed to check).
+`ab-test-significance` (on-site experiments — same statistics, different design question) · `paid-media-budget-allocation` (where the reallocation decision lands) · `unit-economics` (the value-per-conversion input this depends on) · `marketing-report` (reporting the result upward).
 
 ## Credits
 

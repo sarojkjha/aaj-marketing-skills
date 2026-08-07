@@ -70,7 +70,7 @@ Lead with the headline score and grade, then the five-category bar, then the top
 
 ## Related skills
 
-`geo-content-optimization` (fix the GEO/AEO gaps this finds) · `schema` (structured data) · `site-architecture` and `programmatic-seo` (scale the technical fixes).
+`geo-content-optimization` (fix the GEO/AEO gaps this finds) · `programmatic-seo` (scale the technical fixes).
 
 ## Credits
 

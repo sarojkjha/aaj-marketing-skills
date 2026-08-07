@@ -76,7 +76,7 @@ Deliver the optimized content (or a marked-up diff of what to change), the answe
 
 ## Related skills
 
-`seo-geo-aeo-audit` (find the gaps first) · `schema` (structured data) · `copywriting` (the prose) · `content-strategy` (where this fits in the calendar).
+`seo-geo-aeo-audit` (find the gaps first) · `copywriting` (the prose) · `content-calendar-planning` (where this fits in the calendar).
 
 ## Credits
 

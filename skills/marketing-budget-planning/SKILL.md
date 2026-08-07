@@ -79,7 +79,7 @@ Lead with the headline budget (% of revenue, $/yr, $/mo), then the function spli
 
 ## Related skills
 
-`unit-economics` (affordability) · `paid-media-budget-allocation` (split the paid slice) · `marketing-plan` (the strategy the budget funds).
+`unit-economics` (affordability) · `paid-media-budget-allocation` (split the paid slice) · `campaign-orchestrator` (the strategy the budget funds).
 
 ## Credits
 

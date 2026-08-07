@@ -67,7 +67,7 @@ Use the output format in `resources/positioning-template.md`: the core statement
 
 ## Related skills
 
-`customer-research` and `persona-builder` (sharpen the "for whom") · `competitor-profiling` (sharpen the "versus what") · `copywriting` (turn positioning into page copy).
+`customer-survey-design` and `persona-builder` (sharpen the "for whom") · `win-loss-analysis` (sharpen the "versus what") · `copywriting` (turn positioning into page copy).
 
 ## Credits
 
