@@ -7,3 +7,9 @@ github-traffic-log.csv
 
 .agents/
 .claude/
+
+AAJ-Skills-Launch-Handoff-Brief*.md
+*.csv
+paths.ts
+.agents/
+.claude/
