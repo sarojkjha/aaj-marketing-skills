@@ -4,3 +4,6 @@
 *.zip
 demo-output/
 github-traffic-log.csv
+
+.agents/
+.claude/
