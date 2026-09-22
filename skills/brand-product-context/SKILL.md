@@ -20,7 +20,8 @@ metadata:
   inputs: Whatever the business can share — website, deck, marketing copy, sales-call notes, and the user's own answers.
   outputs: A structured .agents/product-marketing.md brief — company, product, ICP, positioning, value, voice, goals, funnel, and competitors.
   related_aaj:
-    - https://aajconsult.com/tools
+    - https://aajconsult.com/hub
+    - https://aajconsult.com/methodology
   tags: [brand-context, icp, positioning, brand-voice, foundation]
 ---
 

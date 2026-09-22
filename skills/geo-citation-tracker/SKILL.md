@@ -23,6 +23,7 @@ metadata:
   related_aaj:
     - https://aajconsult.com/tools/seo-geo-readiness-scorer
     - https://aajconsult.com/playbooks/geo-aeo-playbook
+    - https://aajconsult.com/blog/what-is-geo-ai-citations
   tags: [geo, aeo, ai-search, citation-tracking, share-of-voice, llm-visibility, monitoring, measurement]
 ---
 

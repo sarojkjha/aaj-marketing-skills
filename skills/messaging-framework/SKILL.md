@@ -19,7 +19,8 @@ metadata:
   inputs: The positioning, value proposition, ICP/segments, differentiator, proof, and voice.
   outputs: A messaging framework — one core message, 3–4 proof-backed pillars with "say this" lines, audience variants, and off-message notes.
   related_aaj:
-    - https://aajconsult.com/tools
+    - https://aajconsult.com/tools/positioning-statement-generator
+    - https://aajconsult.com/resources/positioning-messaging-workbook
   tags: [messaging, message-hierarchy, pillars, talking-points]
 ---
 

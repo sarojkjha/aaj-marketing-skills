@@ -20,8 +20,9 @@ metadata:
   inputs: Baseline conversion rate, the lift worth detecting, available daily traffic or eligible geos, channel spend, and value per conversion — or, for a readout, the control and treatment group sizes and conversions
   outputs: Required sample size and test duration with the cost of the holdout, or a readout giving incremental conversions, iROAS, incremental CAC, significance, and an explicit verdict on whether the test could ever have detected the effect
   related_aaj:
-    - https://aajconsult.com/tools/ab-test-significance-calculator
+    - https://aajconsult.com/resources/mmm-lite-starter-kit
     - https://aajconsult.com/tools/marketing-kpi-report
+    - https://aajconsult.com/tools/ab-test-significance-calculator
   tags: [incrementality, holdout-test, geo-test, iroas, mmm, attribution, measurement]
 ---
 

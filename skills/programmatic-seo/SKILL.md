@@ -20,7 +20,7 @@ metadata:
   outputs: A viability verdict with the indexation/ranking funnel and payback, the template spec, the per-page uniqueness requirement, internal-linking and indexation plan, and a staged rollout
   related_aaj:
     - https://aajconsult.com/tools/seo-geo-readiness-scorer
-    - https://aajconsult.com/tools/website-grader
+    - https://aajconsult.com/playbooks/content-creation-playbook
   tags: [programmatic-seo, pseo, scaled-content, template-pages, technical-seo, indexation]
 ---
 

@@ -22,6 +22,7 @@ metadata:
   outputs: A structured survey — questions, types, scales, and order — designed to avoid bias, plus required completes, invites, and a per-segment readability verdict from the engine
   related_aaj:
     - https://aajconsult.com/tools/survey-studio
+    - https://aajconsult.com/playbooks/survey-playbook
   related: [persona-builder, positioning-statement, ab-test-significance]
   tags: [survey, questionnaire, research, nps, pmf, customer-feedback, sample-size, margin-of-error]
 ---

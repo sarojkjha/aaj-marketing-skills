@@ -20,6 +20,7 @@ metadata:
   outputs: A 0–100 conversion score across Message, CTA, Trust, Friction, Speed, and Tracking, a grade, and a prioritized fix list
   related_aaj:
     - https://aajconsult.com/tools/website-grader
+    - https://aajconsult.com/playbooks/website-cro-playbook
   related: [seo-geo-aeo-audit, landing-page-brief, ab-test-significance]
   tags: [cro, conversion, landing-page, audit, ux, trust, forms]
 ---

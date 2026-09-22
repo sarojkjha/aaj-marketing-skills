@@ -19,7 +19,8 @@ metadata:
   inputs: Audience/personas, business goals, target topics or keywords, publishing capacity, and channels
   outputs: A capacity feasibility verdict, a topic-cluster plan with authority scoring, a dated publishing schedule, and a repurposing flow from each core asset to social
   related_aaj:
-    - https://aajconsult.com/tools/content-calendar-template
+    - https://aajconsult.com/resources/content-calendar-repurposing-tracker
+    - https://aajconsult.com/playbooks/content-creation-playbook
   related: [persona-builder, geo-content-optimization]
   tags: [content-calendar, editorial, content-strategy, topic-clusters, repurposing, seo]
 ---

@@ -23,7 +23,7 @@ metadata:
   outputs: An inventory of reusable units (claims, stats, quotes, frameworks) and drafted, channel-adapted derivatives — carousel, threads, posts, newsletter blurb, stat-card lines, a video script — plus a sequencing plan
   related_aaj:
     - https://aajconsult.com/tools/social-studio
-    - https://aajconsult.com/tools/content-calendar-template
+    - https://aajconsult.com/resources/content-calendar-repurposing-tracker
   related: [content-calendar-planning, geo-content-optimization, positioning-statement]
   tags: [content-repurposing, atomization, distribution, linkedin-carousel, twitter-thread, newsletter, social, seo, geo]
 ---

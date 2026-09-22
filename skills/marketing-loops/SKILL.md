@@ -22,7 +22,7 @@ metadata:
   outputs: The loop factor k with a verdict, the amplification and effective-CAC it buys, the throttling stage to fix first, and a period-by-period projection decomposing loop-driven from paid-driven growth
   related_aaj:
     - https://aajconsult.com/tools/unit-economics-calculator
-    - https://aajconsult.com/playbooks/geo-aeo-playbook
+    - https://aajconsult.com/playbooks/customer-onboarding-retention-playbook
   tags: [growth-loops, viral-coefficient, k-factor, referral, network-effects, compounding, flywheel]
 ---
 

@@ -19,6 +19,8 @@ metadata:
   outputs: One or more structured buyer personas (and an ICP) covering role, goals, pains, triggers, objections, channels, and buying role
   related_aaj:
     - https://aajconsult.com/tools/persona-builder
+    - https://aajconsult.com/tools/survey-studio
+    - https://aajconsult.com/playbooks/icp-account-scoring
   related: [customer-survey-design, positioning-statement]
   tags: [personas, icp, audience, buyer-journey, segmentation, research]
 ---

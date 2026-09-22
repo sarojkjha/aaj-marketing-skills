@@ -21,7 +21,7 @@ metadata:
   outputs: A per-channel budget split with projected customers, blended CAC, LTV:CAC, ROAS, payback, and weekly/daily pacing
   related_aaj:
     - https://aajconsult.com/tools/paid-media-budget-allocator
-    - https://aajconsult.com/blog/how-to-allocate-paid-ads-budget
+    - https://aajconsult.com/playbooks/paid-media-budget-allocation-playbook
   related: [unit-economics, marketing-budget-planning, ab-test-significance]
   tags: [paid-media, ppc, budget, cac, channel-mix, media-planning, ltv-cac]
 ---

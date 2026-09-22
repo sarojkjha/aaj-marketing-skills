@@ -19,7 +19,9 @@ metadata:
   inputs: A piece of content (draft or published URL/text) and its target question/topic
   outputs: A GEO/AEO-optimized version with answer-first passages, statistics, citations, quotations, precise terminology, and the schema/llms.txt to add
   related_aaj:
-    - https://aajconsult.com/blog/how-to-allocate-paid-ads-budget
+    - https://aajconsult.com/playbooks/geo-aeo-playbook
+    - https://aajconsult.com/tools/seo-geo-readiness-scorer
+    - https://aajconsult.com/blog/what-is-geo-ai-citations
   related: [seo-geo-aeo-audit, content-calendar-planning]
   tags: [geo, aeo, ai-search, content-optimization, llms-txt, citations, schema]
 ---

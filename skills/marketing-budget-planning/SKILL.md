@@ -20,6 +20,7 @@ metadata:
   outputs: A recommended marketing budget (% of revenue, annual, monthly) and a split across functions
   related_aaj:
     - https://aajconsult.com/tools/marketing-budget-calculator
+    - https://aajconsult.com/resources/marketing-budget-planner
     - https://aajconsult.com/blog/how-much-should-a-startup-spend-on-marketing
   related: [unit-economics, paid-media-budget-allocation]
   tags: [marketing-budget, budget-planning, percent-of-revenue, saas, stage]

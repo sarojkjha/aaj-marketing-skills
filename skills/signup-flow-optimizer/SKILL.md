@@ -19,8 +19,8 @@ metadata:
   inputs: The current flow step by step, every field and whether it's required, monthly visitors reaching step one, current conversion rate, and the value of a signup
   outputs: A friction score with the penalty breakdown, fixes ranked by monthly value, the rebuilt flow specified step by step, and what to test first
   related_aaj:
+    - https://aajconsult.com/playbooks/website-cro-playbook
     - https://aajconsult.com/tools/website-grader
-    - https://aajconsult.com/tools/ab-test-significance-calculator
   tags: [signup-flow, conversion-optimization, form-optimization, trial-conversion, cro, onboarding]
 ---
 

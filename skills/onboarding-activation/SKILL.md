@@ -19,6 +19,7 @@ metadata:
   inputs: The current first-run experience step by step, retention by cohort if available, which actions correlate with users who stay, and where new users currently drop off
   outputs: A defined activation moment with the evidence for it, the stall points ranked, a redesigned first-run experience, and the activation metric to instrument
   related_aaj:
+    - https://aajconsult.com/playbooks/customer-onboarding-retention-playbook
     - https://aajconsult.com/tools/churn-nrr-calculator
     - https://aajconsult.com/resources/retention-nrr-workbook
   tags: [onboarding, activation, time-to-value, aha-moment, product-adoption, retention]

@@ -21,7 +21,8 @@ metadata:
   outputs: A readiness score across five dimensions, the hard blockers named first, gaps ranked by cost, a plain statement of what an agent can and cannot do today, and the fixes in order
   related_aaj:
     - https://aajconsult.com/tools/seo-geo-readiness-scorer
-    - https://aajconsult.com/tools/website-grader
+    - https://aajconsult.com/resources/ai-visibility-starter-kit
+    - https://aajconsult.com/playbooks/geo-aeo-playbook
   tags: [agent-readiness, machine-customers, agentic-commerce, llms-txt, structured-data, ai-agents]
 ---
 

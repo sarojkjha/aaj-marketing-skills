@@ -20,7 +20,9 @@ metadata:
   inputs: The target/quota, open deals (amount + stage), the stage-to-probability mapping, and the average win rate.
   outputs: A weighted forecast (commit vs best case), coverage ratio, gap to target, new pipeline needed, and the recommended lever.
   related_aaj:
-    - https://aajconsult.com/tools
+    - https://aajconsult.com/tools/pipeline-forecast-calculator
+    - https://aajconsult.com/resources/sales-pipeline-forecast-tracker
+    - https://aajconsult.com/playbooks/pipeline-coverage-forecasting
   tags: [forecast, pipeline-coverage, weighted-pipeline, quota]
 ---
 

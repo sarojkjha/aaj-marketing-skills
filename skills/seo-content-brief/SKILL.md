@@ -22,6 +22,7 @@ metadata:
   related_aaj:
     - https://aajconsult.com/tools/seo-geo-readiness-scorer
     - https://aajconsult.com/resources/content-calendar-repurposing-tracker
+    - https://aajconsult.com/playbooks/content-creation-playbook
   tags: [seo, content-brief, search-intent, keyword-targeting, aeo, content-planning]
 ---
 

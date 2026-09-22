@@ -19,6 +19,7 @@ metadata:
   outputs: A section-by-section landing page brief with copy direction, CTAs, proof placement, and SEO/GEO notes
   related_aaj:
     - https://aajconsult.com/tools/webgen-ai
+    - https://aajconsult.com/playbooks/website-cro-playbook
   related: [positioning-statement, website-conversion-audit, geo-content-optimization]
   tags: [landing-page, brief, wireframe, conversion, copy, web]
 ---

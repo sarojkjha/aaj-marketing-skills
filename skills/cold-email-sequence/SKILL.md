@@ -20,7 +20,8 @@ metadata:
   inputs: The ICP's sharpest pain, the differentiator and one proof point, the role being emailed, and the relevance hook.
   outputs: A 4–6 touch cold email sequence with subject lines, send timing, the angle per touch, and alternate first-touch subjects.
   related_aaj:
-    - https://aajconsult.com/tools
+    - https://aajconsult.com/tools/icp-fit-scorer
+    - https://aajconsult.com/playbooks/icp-account-scoring
   tags: [cold-email, outbound, sequence, prospecting, copywriting]
 ---
 

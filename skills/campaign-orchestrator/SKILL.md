@@ -21,6 +21,7 @@ metadata:
   outputs: A named Play, the phase the work should start in with the evidence for that, the ordered skill sequence, the exit criteria for each phase, and the first concrete step
   related_aaj:
     - https://aajconsult.com/tools/marketing-maturity-scorecard
+    - https://aajconsult.com/hub
     - https://aajconsult.com/methodology
   tags: [orchestration, marketing-plan, gtm-plan, campaign-planning, diagnosis, routing]
 ---

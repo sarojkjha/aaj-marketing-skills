@@ -20,6 +20,7 @@ metadata:
   outputs: Conversion rates, relative lift, p-value, significance verdict, confidence interval, and required sample size
   related_aaj:
     - https://aajconsult.com/tools/ab-test-significance-calculator
+    - https://aajconsult.com/blog/ab-testing-complete-guide
   related: [website-conversion-audit, paid-media-budget-allocation]
   tags: [ab-testing, significance, p-value, sample-size, cro, experimentation]
 ---

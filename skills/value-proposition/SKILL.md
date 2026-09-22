@@ -18,7 +18,8 @@ metadata:
   inputs: The ICP/segment, the core capability, the top customer pain, the differentiator, and proof.
   outputs: A hero value proposition, a full For/who/is-the/that/because statement, proof points, and per-segment variants.
   related_aaj:
-    - https://aajconsult.com/tools
+    - https://aajconsult.com/tools/positioning-statement-generator
+    - https://aajconsult.com/resources/positioning-messaging-workbook
   tags: [value-proposition, messaging, positioning, hero-message]
 ---
 

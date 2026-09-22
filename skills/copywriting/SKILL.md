@@ -21,6 +21,7 @@ metadata:
   related_aaj:
     - https://aajconsult.com/tools/positioning-statement-generator
     - https://aajconsult.com/resources/positioning-messaging-workbook
+    - https://aajconsult.com/playbooks/content-creation-playbook
   tags: [copywriting, headlines, landing-page, ad-copy, messaging, conversion-copy]
 ---
 

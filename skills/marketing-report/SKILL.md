@@ -21,8 +21,9 @@ metadata:
   inputs: One period of spend, funnel volumes (sessions, leads, MQLs, SQLs, opps, wins — any subset), new revenue, pipeline created, and target; plus the prior period for deltas
   outputs: A full-funnel KPI snapshot (stage conversion, CAC, cost per lead, new-revenue-to-spend, pipeline-to-spend, target attainment), period-over-period deltas, and a board-ready narrative structure
   related_aaj:
+    - https://aajconsult.com/tools/marketing-kpi-report
+    - https://aajconsult.com/resources/marketing-kpi-board-report
     - https://aajconsult.com/tools/pipeline-forecast-calculator
-    - https://aajconsult.com/tools/unit-economics-calculator
   related: [unit-economics, pipeline-and-forecast, paid-media-budget-allocation]
   tags: [marketing-report, kpi-dashboard, reporting, board-deck, funnel, cac, attribution, metrics]
 ---

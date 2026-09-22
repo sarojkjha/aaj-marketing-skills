@@ -21,6 +21,8 @@ metadata:
   outputs: NRR, GRR, revenue & logo churn, quick ratio, average lifetime, the LTV impact of a churn change, and a prioritized retention plan across onboarding, churn drivers, and expansion
   related_aaj:
     - https://aajconsult.com/tools/churn-nrr-calculator
+    - https://aajconsult.com/resources/retention-nrr-workbook
+    - https://aajconsult.com/playbooks/customer-onboarding-retention-playbook
   related: [unit-economics, pricing-and-packaging, customer-survey-design]
   tags: [retention, churn, nrr, grr, net-revenue-retention, onboarding, lifecycle, expansion, saas-metrics]
 ---

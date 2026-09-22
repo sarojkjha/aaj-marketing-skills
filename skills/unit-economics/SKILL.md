@@ -20,6 +20,7 @@ metadata:
   outputs: LTV, CAC, LTV:CAC, CAC payback, and a verdict against the 3:1 and payback benchmarks
   related_aaj:
     - https://aajconsult.com/tools/unit-economics-calculator
+    - https://aajconsult.com/blog/ltv-cac-which-number-to-fix
   related: [paid-media-budget-allocation, marketing-budget-planning]
   tags: [unit-economics, ltv, cac, ltv-cac, payback, churn, saas-metrics]
 ---

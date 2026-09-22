@@ -19,7 +19,8 @@ metadata:
   inputs: The ICP, the common pains, and the qualification criteria.
   outputs: A discovery call flow with a prioritized question bank, qualification checks, and next-step language.
   related_aaj:
-    - https://aajconsult.com/tools
+    - https://aajconsult.com/playbooks/pipeline-coverage-forecasting
+    - https://aajconsult.com/tools/pipeline-forecast-calculator
   tags: [discovery, sales-call, qualifying-questions, needs-analysis]
 ---
 

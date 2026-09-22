@@ -21,6 +21,7 @@ metadata:
   related_aaj:
     - https://aajconsult.com/tools/churn-nrr-calculator
     - https://aajconsult.com/resources/retention-nrr-workbook
+    - https://aajconsult.com/playbooks/customer-onboarding-retention-playbook
   tags: [email-marketing, lifecycle, drip-campaign, onboarding-email, win-back, retention]
 ---
 

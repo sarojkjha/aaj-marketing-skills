@@ -20,6 +20,7 @@ metadata:
   outputs: A 0–100 readiness score across Technical, On-Page, AEO, GEO, and Authority, a letter grade, and a prioritized fix list
   related_aaj:
     - https://aajconsult.com/tools/seo-geo-readiness-scorer
+    - https://aajconsult.com/playbooks/geo-aeo-playbook
   related: [geo-content-optimization, website-conversion-audit]
   tags: [seo, geo, aeo, ai-search, llms-txt, schema, crawlability, audit]
 ---

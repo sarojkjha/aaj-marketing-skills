@@ -21,7 +21,7 @@ metadata:
   outputs: A named friction diagnosis, the 2-4 principles that address it with concrete applications, a manipulation check on the resulting copy, and what to test
   related_aaj:
     - https://aajconsult.com/tools/website-grader
-    - https://aajconsult.com/tools/ab-test-significance-calculator
+    - https://aajconsult.com/playbooks/website-cro-playbook
   tags: [marketing-psychology, behavioral-economics, persuasion, cognitive-bias, conversion, decision-making]
 ---
 

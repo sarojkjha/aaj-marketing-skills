@@ -21,7 +21,8 @@ metadata:
   inputs: The content to check, and the brand's voice rules — either the brand-context brief or an explicit avoid-list, prefer-list, and reading-grade ceiling
   outputs: A block-by-block conformance report — pass/revise per block, every banned term and hedge quoted with its location, a conformance score, and an audit trail that traces each flag to its source
   related_aaj:
-    - https://aajconsult.com/tools/website-grader
+    - https://aajconsult.com/playbooks/brand-voice-playbook
+    - https://aajconsult.com/resources/brand-voice-guide
     - https://aajconsult.com/playbooks/content-creation-playbook
   tags: [brand-voice, governance, tone-consistency, content-review, guardrails, ai-content, compliance]
 ---

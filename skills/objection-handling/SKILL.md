@@ -20,7 +20,8 @@ metadata:
   inputs: The real objections, the differentiator and proof, and the main competitors.
   outputs: An objection-handling framework and competitor battlecards, plus disqualify signals.
   related_aaj:
-    - https://aajconsult.com/tools
+    - https://aajconsult.com/tools/win-loss-analyzer
+    - https://aajconsult.com/playbooks/win-loss-analysis
   tags: [objections, battlecards, rebuttals, competitive]
 ---
 

@@ -20,6 +20,7 @@ metadata:
   outputs: A positioning statement, 3 proof points, a one-line value proposition, and audience-lens variants
   related_aaj:
     - https://aajconsult.com/tools/positioning-statement-generator
+    - https://aajconsult.com/resources/positioning-messaging-workbook
   related: [persona-builder, customer-survey-design, landing-page-brief]
   tags: [positioning, messaging, value-proposition, differentiation, brand-strategy]
 ---

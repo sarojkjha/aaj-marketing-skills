@@ -20,7 +20,8 @@ metadata:
   inputs: How deals flow today, the average deal size and sales cycle, who's involved, and the ICP.
   outputs: A stage-by-stage sales process with entry triggers, verifiable exit criteria, owner actions, qualification framework, and stall rules.
   related_aaj:
-    - https://aajconsult.com/tools
+    - https://aajconsult.com/playbooks/pipeline-coverage-forecasting
+    - https://aajconsult.com/tools/pipeline-forecast-calculator
   tags: [sales-process, pipeline-stages, qualification, sales-playbook]
 ---
 

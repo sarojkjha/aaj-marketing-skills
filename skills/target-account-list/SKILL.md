@@ -19,7 +19,9 @@ metadata:
   inputs: The ICP and its predictive signals, plus a list of candidate accounts carrying those attributes.
   outputs: A fit-scored, tiered (A/B/C) account list with matched signals and the weighting used.
   related_aaj:
-    - https://aajconsult.com/tools
+    - https://aajconsult.com/tools/icp-fit-scorer
+    - https://aajconsult.com/resources/icp-target-account-scorecard
+    - https://aajconsult.com/playbooks/icp-account-scoring
   tags: [target-accounts, icp-scoring, abm, account-tiering]
 ---
 
