@@ -16,6 +16,7 @@ metadata:
   phase: Design
   difficulty: Intermediate
   version: 1.0.0
+  topic: paid-media
   agents: [Claude Code, Cursor, OpenAI Codex, Windsurf, Cline]
   inputs: Business model, monthly budget OR CAC target OR customer goal, LTV, and per-channel CPC / click-to-lead % / lead-to-customer % (or cost-per-lead for directories)
   outputs: A per-channel budget split with projected customers, blended CAC, LTV:CAC, ROAS, payback, and weekly/daily pacing

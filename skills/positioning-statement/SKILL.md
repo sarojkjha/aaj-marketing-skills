@@ -15,6 +15,7 @@ metadata:
   phase: Design
   difficulty: Starter
   version: 1.0.0
+  topic: strategy-positioning
   agents: [Claude Code, Cursor, OpenAI Codex, Windsurf, Cline]
   inputs: Target customer, the problem/need, product category, key benefit, primary competitive alternative, and the differentiator (plus any proof)
   outputs: A positioning statement, 3 proof points, a one-line value proposition, and audience-lens variants

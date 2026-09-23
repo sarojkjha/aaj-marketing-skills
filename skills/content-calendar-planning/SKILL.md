@@ -15,6 +15,8 @@ metadata:
   phase: Execute
   difficulty: Starter
   version: 1.1.0
+  topic: content-seo
+  secondary_topics: [social-community]
   agents: [Claude Code, Cursor, OpenAI Codex, Windsurf, Cline]
   inputs: Audience/personas, business goals, target topics or keywords, publishing capacity, and channels
   outputs: A capacity feasibility verdict, a topic-cluster plan with authority scoring, a dated publishing schedule, and a repurposing flow from each core asset to social

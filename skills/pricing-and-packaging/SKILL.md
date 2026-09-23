@@ -15,6 +15,7 @@ metadata:
   phase: Design
   difficulty: Advanced
   version: 1.1.0
+  topic: pricing-monetization
   agents: [Claude Code, Cursor, OpenAI Codex, Windsurf, Cline]
   inputs: The ICP/segments and what each values, the differentiator, proof, rough willingness to pay, and competitor pricing.
   outputs: A value metric, good-better-best tiers with prices, a modeled blended ARPU, revenue mix, price ladder and anchor check, and the upgrade logic.

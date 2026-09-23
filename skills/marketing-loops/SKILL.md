@@ -17,6 +17,8 @@ metadata:
   phase: Design
   difficulty: Intermediate
   version: 1.0.0
+  topic: gtm-growth-planning
+  secondary_topics: [retention-expansion]
   agents: [Claude Code, Cursor, OpenAI Codex, Windsurf, Cline]
   inputs: The stages of one turn of the loop with their conversion rates, the output per completion (e.g. invites sent), and optionally a paid CAC and a paid feed rate for projection
   outputs: The loop factor k with a verdict, the amplification and effective-CAC it buys, the throttling stage to fix first, and a period-by-period projection decomposing loop-driven from paid-driven growth

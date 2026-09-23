@@ -17,6 +17,7 @@ metadata:
   phase: Execute
   difficulty: Intermediate
   version: 1.0.0
+  topic: ai-search
   agents: [Claude Code, Cursor, OpenAI Codex, Windsurf, Cline]
   inputs: The brand, its category prompts, the engines to track, the competitors to track against — and, for a readout, the logged result of each prompt on each engine
   outputs: A required prompt-set size, or a scored run giving presence rate, citation rate, rank-weighted visibility, share of voice, framing, and an explicit verdict on whether movement since the last run is real

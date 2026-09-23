@@ -15,6 +15,8 @@ metadata:
   phase: Diagnose
   difficulty: Intermediate
   version: 1.0.0
+  topic: ai-search
+  secondary_topics: [content-seo]
   agents: [Claude Code, Cursor, OpenAI Codex, Windsurf, Cline]
   inputs: A URL (or page HTML/source), and access to fetch the page, its robots.txt, sitemap, and llms.txt
   outputs: A 0–100 readiness score across Technical, On-Page, AEO, GEO, and Authority, a letter grade, and a prioritized fix list

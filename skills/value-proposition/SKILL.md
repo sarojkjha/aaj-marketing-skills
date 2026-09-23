@@ -14,6 +14,8 @@ metadata:
   phase: Design
   difficulty: Starter
   version: 1.0.0
+  topic: strategy-positioning
+  secondary_topics: [website-conversion]
   agents: [Claude Code, Cursor, OpenAI Codex, Windsurf, Cline]
   inputs: The ICP/segment, the core capability, the top customer pain, the differentiator, and proof.
   outputs: A hero value proposition, a full For/who/is-the/that/because statement, proof points, and per-segment variants.

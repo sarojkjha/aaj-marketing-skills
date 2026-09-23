@@ -16,6 +16,8 @@ metadata:
   phase: Design
   difficulty: Starter
   version: 1.0.0
+  topic: website-conversion
+  secondary_topics: [strategy-positioning]
   agents: [Claude Code, Cursor, OpenAI Codex, Windsurf, Cline]
   inputs: The conversion surface and its one job, where people currently drop off, the audience and their state of awareness, and the claims or offer being made
   outputs: A named friction diagnosis, the 2-4 principles that address it with concrete applications, a manipulation check on the resulting copy, and what to test

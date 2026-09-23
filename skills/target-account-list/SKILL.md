@@ -15,6 +15,8 @@ metadata:
   phase: Design
   difficulty: Intermediate
   version: 1.0.0
+  topic: sales-pipeline
+  secondary_topics: [audience-research]
   agents: [Claude Code, Cursor, OpenAI Codex, Windsurf, Cline]
   inputs: The ICP and its predictive signals, plus a list of candidate accounts carrying those attributes.
   outputs: A fit-scored, tiered (A/B/C) account list with matched signals and the weighting used.

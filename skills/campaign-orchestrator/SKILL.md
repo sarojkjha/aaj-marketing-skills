@@ -16,6 +16,8 @@ metadata:
   phase: Diagnose
   difficulty: Starter
   version: 1.0.0
+  topic: gtm-growth-planning
+  secondary_topics: [strategy-positioning]
   agents: [Claude Code, Cursor, OpenAI Codex, Windsurf, Cline]
   inputs: The symptom or goal in the user's own words, what's already been tried, the stage and business model, and whatever numbers exist — even partial ones
   outputs: A named Play, the phase the work should start in with the evidence for that, the ordered skill sequence, the exit criteria for each phase, and the first concrete step

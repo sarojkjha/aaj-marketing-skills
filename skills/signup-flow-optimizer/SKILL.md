@@ -15,6 +15,7 @@ metadata:
   phase: Execute
   difficulty: Starter
   version: 1.0.0
+  topic: website-conversion
   agents: [Claude Code, Cursor, OpenAI Codex, Windsurf, Cline]
   inputs: The current flow step by step, every field and whether it's required, monthly visitors reaching step one, current conversion rate, and the value of a signup
   outputs: A friction score with the penalty breakdown, fixes ranked by monthly value, the rebuilt flow specified step by step, and what to test first

@@ -16,6 +16,8 @@ metadata:
   phase: Diagnose
   difficulty: Starter
   version: 1.0.0
+  topic: strategy-positioning
+  secondary_topics: [brand-voice]
   agents: [Claude Code, Cursor, OpenAI Codex, Windsurf, Cline]
   inputs: Whatever the business can share — website, deck, marketing copy, sales-call notes, and the user's own answers.
   outputs: A structured .agents/product-marketing.md brief — company, product, ICP, positioning, value, voice, goals, funnel, and competitors.

@@ -15,6 +15,8 @@ metadata:
   phase: Execute
   difficulty: Starter
   version: 1.0.0
+  topic: analytics-budget
+  secondary_topics: [website-conversion]
   agents: [Claude Code, Cursor, OpenAI Codex, Windsurf, Cline]
   inputs: Visitors and conversions for control and variant (to evaluate) OR baseline rate and minimum detectable effect (to size a test)
   outputs: Conversion rates, relative lift, p-value, significance verdict, confidence interval, and required sample size

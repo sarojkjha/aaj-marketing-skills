@@ -14,6 +14,7 @@ metadata:
   phase: Execute
   difficulty: Starter
   version: 1.0.0
+  topic: website-conversion
   agents: [Claude Code, Cursor, OpenAI Codex, Windsurf, Cline]
   inputs: The offer, target audience, conversion goal, key benefits/proof, and the primary competitive alternative
   outputs: A section-by-section landing page brief with copy direction, CTAs, proof placement, and SEO/GEO notes

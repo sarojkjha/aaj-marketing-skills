@@ -15,6 +15,8 @@ metadata:
   phase: Execute
   difficulty: Starter
   version: 1.0.0
+  topic: content-seo
+  secondary_topics: [website-conversion]
   agents: [Claude Code, Cursor, OpenAI Codex, Windsurf, Cline]
   inputs: The asset and its one job, the audience, the positioning (or the raw inputs for it), the competitive alternative, and any proof — numbers, named customers, specifics
   outputs: Drafted copy laddered to the positioning, a scored read on clarity/concreteness/claim-defensibility, and a list of claims that still need proof

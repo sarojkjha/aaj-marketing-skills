@@ -16,6 +16,7 @@ metadata:
   phase: Diagnose
   difficulty: Intermediate
   version: 1.0.0
+  topic: ai-search
   agents: [Claude Code, Cursor, OpenAI Codex, Windsurf, Cline]
   inputs: The site's rendering method, what structured data exists, whether pricing and specs are published, what actions can complete without a human, and the robots.txt stance on AI crawlers
   outputs: A readiness score across five dimensions, the hard blockers named first, gaps ranked by cost, a plain statement of what an agent can and cannot do today, and the fixes in order

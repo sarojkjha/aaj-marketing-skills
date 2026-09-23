@@ -15,6 +15,7 @@ metadata:
   phase: Execute
   difficulty: Starter
   version: 1.0.0
+  topic: retention-expansion
   agents: [Claude Code, Cursor, OpenAI Codex, Windsurf, Cline]
   inputs: Which sequences already run, the product's activation moment, monthly signup volume, value per conversion, and the audience's awareness state
   outputs: A coverage map with gaps in build order, a send-load check across overlapping sequences, breakeven per sequence, and drafted emails with triggers, timing and exit conditions

@@ -103,7 +103,10 @@ async function main() {
 
     const row = {
       slug: data.name,
-      name: m.slug ? (data.title || data.name) : data.name,   // display name fallback
+      // Display name: the body's H1 is the human title the author already wrote
+      // ("A/B Test Design & Significance"), so prefer it over the slug, which
+      // renders as "Ab Test Significance".
+      name: data.title || (/^#\s+(.+)$/m.exec(content || '')?.[1] || '').trim() || data.name,
       summary: (data.description || '').trim(),
       category_id: catByName[m.category] || null,
       phase: m.phase || null,
@@ -129,7 +132,19 @@ async function main() {
     if (Array.isArray(m.secondary_topics)) row.secondary_topics = m.secondary_topics;
     if (!catByName[m.category]) console.warn(`  ! ${slug}: category "${m.category}" not found — run seed-categories.sql`);
 
-    const { data: up, error: uErr } = await db.from('skills').upsert(row, { onConflict: 'slug' }).select('id').single();
+    // Upsert, tolerating a column this database has not been given yet. When a
+    // column is missing (for example secondary_topics, added to the schema after
+    // the first taxonomy pass), drop that field and retry rather than failing the
+    // whole skill — and say so, so the gap gets fixed rather than hidden.
+    let up, uErr;
+    for (let attempt = 0; attempt < 3; attempt++) {
+      ({ data: up, error: uErr } = await db.from('skills').upsert(row, { onConflict: 'slug' }).select('id').single());
+      if (!uErr) break;
+      const missing = /Could not find the '([^']+)' column/.exec(uErr.message || '');
+      if (!missing || !(missing[1] in row)) break;
+      console.warn(`  ! ${slug}: no '${missing[1]}' column in this database — syncing without it. Add the column, then re-run.`);
+      delete row[missing[1]];
+    }
     if (uErr) { console.error(`  ✗ ${slug}:`, uErr.message); continue; }
     const skillId = up.id;
 

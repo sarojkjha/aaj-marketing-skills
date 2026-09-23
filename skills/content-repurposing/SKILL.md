@@ -18,6 +18,8 @@ metadata:
   phase: Execute
   difficulty: Starter
   version: 1.0.0
+  topic: content-seo
+  secondary_topics: [social-community]
   agents: [Claude Code, Cursor, OpenAI Codex, Windsurf, Cline]
   inputs: One pillar asset (report, blog post, webinar, case study, or data study), the target channels, and brand voice
   outputs: An inventory of reusable units (claims, stats, quotes, frameworks) and drafted, channel-adapted derivatives — carousel, threads, posts, newsletter blurb, stat-card lines, a video script — plus a sequencing plan

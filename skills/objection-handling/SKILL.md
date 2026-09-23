@@ -16,6 +16,8 @@ metadata:
   phase: Design
   difficulty: Starter
   version: 1.0.0
+  topic: sales-pipeline
+  secondary_topics: [strategy-positioning]
   agents: [Claude Code, Cursor, OpenAI Codex, Windsurf, Cline]
   inputs: The real objections, the differentiator and proof, and the main competitors.
   outputs: An objection-handling framework and competitor battlecards, plus disqualify signals.

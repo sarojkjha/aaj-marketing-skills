@@ -17,6 +17,8 @@ metadata:
   phase: Execute
   difficulty: Intermediate
   version: 1.0.0
+  topic: brand-voice
+  secondary_topics: [content-seo]
   agents: [Claude Code, Cursor, OpenAI Codex, Windsurf, Cline]
   inputs: The content to check, and the brand's voice rules — either the brand-context brief or an explicit avoid-list, prefer-list, and reading-grade ceiling
   outputs: A block-by-block conformance report — pass/revise per block, every banned term and hedge quoted with its location, a conformance score, and an audit trail that traces each flag to its source

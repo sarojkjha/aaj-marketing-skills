@@ -14,6 +14,7 @@ metadata:
   phase: Design
   difficulty: Starter
   version: 1.0.0
+  topic: audience-research
   agents: [Claude Code, Cursor, OpenAI Codex, Windsurf, Cline]
   inputs: Product/offer, who buys it today (or hypotheses), and any customer research, interviews, reviews, or sales notes available
   outputs: One or more structured buyer personas (and an ICP) covering role, goals, pains, triggers, objections, channels, and buying role

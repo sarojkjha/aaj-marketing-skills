@@ -15,6 +15,8 @@ metadata:
   phase: Execute
   difficulty: Intermediate
   version: 1.0.0
+  topic: ai-search
+  secondary_topics: [content-seo]
   agents: [Claude Code, Cursor, OpenAI Codex, Windsurf, Cline]
   inputs: A piece of content (draft or published URL/text) and its target question/topic
   outputs: A GEO/AEO-optimized version with answer-first passages, statistics, citations, quotations, precise terminology, and the schema/llms.txt to add

@@ -15,6 +15,7 @@ metadata:
   phase: Execute
   difficulty: Starter
   version: 1.0.0
+  topic: sales-pipeline
   agents: [Claude Code, Cursor, OpenAI Codex, Windsurf, Cline]
   inputs: The ICP, the common pains, and the qualification criteria.
   outputs: A discovery call flow with a prioritized question bank, qualification checks, and next-step language.

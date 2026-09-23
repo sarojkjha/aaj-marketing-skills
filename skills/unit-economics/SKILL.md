@@ -15,6 +15,8 @@ metadata:
   phase: Diagnose
   difficulty: Starter
   version: 1.0.0
+  topic: analytics-budget
+  secondary_topics: [pricing-monetization]
   agents: [Claude Code, Cursor, OpenAI Codex, Windsurf, Cline]
   inputs: Business model, revenue per customer (ARPA/ACV/AOV), gross margin, retention or churn, and CAC (or ad spend + customers)
   outputs: LTV, CAC, LTV:CAC, CAC payback, and a verdict against the 3:1 and payback benchmarks

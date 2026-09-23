@@ -16,6 +16,8 @@ metadata:
   phase: Diagnose
   difficulty: Intermediate
   version: 1.0.0
+  topic: analytics-budget
+  secondary_topics: [paid-media]
   agents: [Claude Code, Cursor, OpenAI Codex, Windsurf, Cline]
   inputs: Baseline conversion rate, the lift worth detecting, available daily traffic or eligible geos, channel spend, and value per conversion — or, for a readout, the control and treatment group sizes and conversions
   outputs: Required sample size and test duration with the cost of the holdout, or a readout giving incremental conversions, iROAS, incremental CAC, significance, and an explicit verdict on whether the test could ever have detected the effect

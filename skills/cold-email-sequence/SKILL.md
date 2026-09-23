@@ -16,6 +16,7 @@ metadata:
   phase: Execute
   difficulty: Starter
   version: 1.0.0
+  topic: sales-pipeline
   agents: [Claude Code, Cursor, OpenAI Codex, Windsurf, Cline]
   inputs: The ICP's sharpest pain, the differentiator and one proof point, the role being emailed, and the relevance hook.
   outputs: A 4–6 touch cold email sequence with subject lines, send timing, the angle per touch, and alternate first-touch subjects.

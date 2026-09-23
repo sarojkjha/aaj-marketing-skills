@@ -17,6 +17,7 @@ metadata:
   phase: Diagnose
   difficulty: Starter
   version: 1.1.0
+  topic: audience-research
   agents: [Claude Code, Cursor, OpenAI Codex, Windsurf, Cline]
   inputs: The decision the survey should inform, who you'll ask, audience size and expected response rate if known, and the segment cuts you plan to report
   outputs: A structured survey — questions, types, scales, and order — designed to avoid bias, plus required completes, invites, and a per-segment readability verdict from the engine

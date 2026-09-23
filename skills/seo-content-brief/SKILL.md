@@ -16,6 +16,8 @@ metadata:
   phase: Design
   difficulty: Starter
   version: 1.0.0
+  topic: content-seo
+  secondary_topics: [ai-search]
   agents: [Claude Code, Cursor, OpenAI Codex, Windsurf, Cline]
   inputs: Target query, the audience and their awareness state, what currently ranks for it, existing pages on the topic, and the business outcome the page should drive
   outputs: A writer-ready brief — intent classification, the 40-60 word answer block, H2/H3 structure, entities and subtopics to cover, citation and statistic targets, internal links, schema type, and success criteria

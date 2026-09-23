@@ -15,6 +15,8 @@ metadata:
   phase: Design
   difficulty: Starter
   version: 1.0.0
+  topic: analytics-budget
+  secondary_topics: [paid-media]
   agents: [Claude Code, Cursor, OpenAI Codex, Windsurf, Cline]
   inputs: Business model, company stage, annual revenue, and growth ambition
   outputs: A recommended marketing budget (% of revenue, annual, monthly) and a split across functions

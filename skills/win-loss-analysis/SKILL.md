@@ -16,6 +16,7 @@ metadata:
   phase: Diagnose
   difficulty: Intermediate
   version: 1.1.0
+  topic: sales-pipeline
   agents: [Claude Code, Cursor, OpenAI Codex, Windsurf, Cline]
   inputs: A list of recent closed deals (won and lost) with outcome, segment, competitor, and any reason notes.
   outputs: A win-loss summary — ranked win/loss reasons, patterns by segment and competitor, no-decision rate, and prioritized fixes.

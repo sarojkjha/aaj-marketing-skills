@@ -16,6 +16,7 @@ metadata:
   phase: Design
   difficulty: Intermediate
   version: 1.0.0
+  topic: retention-expansion
   agents: [Claude Code, Cursor, OpenAI Codex, Windsurf, Cline]
   inputs: One period of revenue movement (starting recurring revenue, new, expansion, contraction, churned), customer counts, and where available the top churn reasons, the activation milestone, and the current onboarding steps
   outputs: NRR, GRR, revenue & logo churn, quick ratio, average lifetime, the LTV impact of a churn change, and a prioritized retention plan across onboarding, churn drivers, and expansion

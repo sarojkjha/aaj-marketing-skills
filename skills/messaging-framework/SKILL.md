@@ -15,6 +15,8 @@ metadata:
   phase: Design
   difficulty: Intermediate
   version: 1.0.0
+  topic: strategy-positioning
+  secondary_topics: [brand-voice]
   agents: [Claude Code, Cursor, OpenAI Codex, Windsurf, Cline]
   inputs: The positioning, value proposition, ICP/segments, differentiator, proof, and voice.
   outputs: A messaging framework — one core message, 3–4 proof-backed pillars with "say this" lines, audience variants, and off-message notes.

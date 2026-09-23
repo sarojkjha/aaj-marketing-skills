@@ -16,6 +16,8 @@ metadata:
   phase: Execute
   difficulty: Intermediate
   version: 1.0.0
+  topic: sales-pipeline
+  secondary_topics: [analytics-budget]
   agents: [Claude Code, Cursor, OpenAI Codex, Windsurf, Cline]
   inputs: The target/quota, open deals (amount + stage), the stage-to-probability mapping, and the average win rate.
   outputs: A weighted forecast (commit vs best case), coverage ratio, gap to target, new pipeline needed, and the recommended lever.
