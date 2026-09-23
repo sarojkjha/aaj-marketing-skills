@@ -15,6 +15,7 @@ metadata:
   phase: Diagnose
   difficulty: Starter
   version: 1.0.0
+  sprint: unit-economics-retention
   topic: website-conversion
   agents: [Claude Code, Cursor, OpenAI Codex, Windsurf, Cline]
   inputs: A URL or page content/screenshot, and what the page is meant to convert (signup, lead, purchase, demo)

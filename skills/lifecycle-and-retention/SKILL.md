@@ -16,6 +16,7 @@ metadata:
   phase: Design
   difficulty: Intermediate
   version: 1.0.0
+  sprint: unit-economics-retention
   topic: retention-expansion
   agents: [Claude Code, Cursor, OpenAI Codex, Windsurf, Cline]
   inputs: One period of revenue movement (starting recurring revenue, new, expansion, contraction, churned), customer counts, and where available the top churn reasons, the activation milestone, and the current onboarding steps

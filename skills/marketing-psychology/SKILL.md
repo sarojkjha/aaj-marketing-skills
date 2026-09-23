@@ -16,6 +16,7 @@ metadata:
   phase: Design
   difficulty: Starter
   version: 1.0.0
+  sprint: unit-economics-retention
   topic: website-conversion
   secondary_topics: [strategy-positioning]
   agents: [Claude Code, Cursor, OpenAI Codex, Windsurf, Cline]

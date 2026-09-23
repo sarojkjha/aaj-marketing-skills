@@ -15,6 +15,7 @@ metadata:
   phase: Execute
   difficulty: Intermediate
   version: 1.0.0
+  sprint: unit-economics-retention
   topic: retention-expansion
   secondary_topics: [website-conversion]
   agents: [Claude Code, Cursor, OpenAI Codex, Windsurf, Cline]

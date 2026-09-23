@@ -15,6 +15,7 @@ metadata:
   phase: Design
   difficulty: Intermediate
   version: 1.0.0
+  sprint: gtm-pipeline
   topic: sales-pipeline
   secondary_topics: [audience-research]
   agents: [Claude Code, Cursor, OpenAI Codex, Windsurf, Cline]

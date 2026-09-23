@@ -16,6 +16,7 @@ metadata:
   phase: Diagnose
   difficulty: Intermediate
   version: 1.0.0
+  sprint: unit-economics-retention
   topic: analytics-budget
   secondary_topics: [paid-media]
   agents: [Claude Code, Cursor, OpenAI Codex, Windsurf, Cline]

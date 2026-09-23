@@ -17,6 +17,7 @@ metadata:
   phase: Execute
   difficulty: Intermediate
   version: 1.0.0
+  sprint: ai-visibility
   topic: ai-search
   agents: [Claude Code, Cursor, OpenAI Codex, Windsurf, Cline]
   inputs: The brand, its category prompts, the engines to track, the competitors to track against — and, for a readout, the logged result of each prompt on each engine

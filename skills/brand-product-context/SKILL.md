@@ -16,6 +16,7 @@ metadata:
   phase: Diagnose
   difficulty: Starter
   version: 1.0.0
+  sprint: positioning-message
   topic: strategy-positioning
   secondary_topics: [brand-voice]
   agents: [Claude Code, Cursor, OpenAI Codex, Windsurf, Cline]

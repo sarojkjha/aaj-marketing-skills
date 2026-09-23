@@ -15,6 +15,7 @@ metadata:
   phase: Execute
   difficulty: Starter
   version: 1.0.0
+  sprint: unit-economics-retention
   topic: website-conversion
   agents: [Claude Code, Cursor, OpenAI Codex, Windsurf, Cline]
   inputs: The current flow step by step, every field and whether it's required, monthly visitors reaching step one, current conversion rate, and the value of a signup

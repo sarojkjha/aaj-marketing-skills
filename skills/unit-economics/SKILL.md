@@ -15,6 +15,7 @@ metadata:
   phase: Diagnose
   difficulty: Starter
   version: 1.0.0
+  sprint: unit-economics-retention
   topic: analytics-budget
   secondary_topics: [pricing-monetization]
   agents: [Claude Code, Cursor, OpenAI Codex, Windsurf, Cline]

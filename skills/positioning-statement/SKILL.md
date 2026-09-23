@@ -15,6 +15,7 @@ metadata:
   phase: Design
   difficulty: Starter
   version: 1.0.0
+  sprint: positioning-message
   topic: strategy-positioning
   agents: [Claude Code, Cursor, OpenAI Codex, Windsurf, Cline]
   inputs: Target customer, the problem/need, product category, key benefit, primary competitive alternative, and the differentiator (plus any proof)

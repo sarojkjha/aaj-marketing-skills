@@ -16,6 +16,7 @@ metadata:
   phase: Design
   difficulty: Starter
   version: 1.0.0
+  sprint: ai-visibility
   topic: content-seo
   secondary_topics: [ai-search]
   agents: [Claude Code, Cursor, OpenAI Codex, Windsurf, Cline]

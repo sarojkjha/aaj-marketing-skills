@@ -130,6 +130,11 @@ async function main() {
     // taxonomy too, which is what a new skill needs to appear under its filter.
     if (m.topic) row.topic_slug = m.topic;
     if (Array.isArray(m.secondary_topics)) row.secondary_topics = m.secondary_topics;
+
+    // Sprint membership, same rule: sent only when the frontmatter declares it.
+    // A skill with no `sprint:` renders no sprint line rather than falling back
+    // to a default one — an offer the skill does not belong to is worse than none.
+    if (m.sprint) row.sprint_slug = m.sprint;
     if (!catByName[m.category]) console.warn(`  ! ${slug}: category "${m.category}" not found — run seed-categories.sql`);
 
     // Upsert, tolerating a column this database has not been given yet. When a

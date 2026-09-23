@@ -17,6 +17,7 @@ metadata:
   phase: Diagnose
   difficulty: Starter
   version: 1.1.0
+  sprint: positioning-message
   topic: audience-research
   agents: [Claude Code, Cursor, OpenAI Codex, Windsurf, Cline]
   inputs: The decision the survey should inform, who you'll ask, audience size and expected response rate if known, and the segment cuts you plan to report

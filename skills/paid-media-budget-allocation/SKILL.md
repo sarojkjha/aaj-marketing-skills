@@ -16,6 +16,7 @@ metadata:
   phase: Design
   difficulty: Intermediate
   version: 1.0.0
+  sprint: unit-economics-retention
   topic: paid-media
   agents: [Claude Code, Cursor, OpenAI Codex, Windsurf, Cline]
   inputs: Business model, monthly budget OR CAC target OR customer goal, LTV, and per-channel CPC / click-to-lead % / lead-to-customer % (or cost-per-lead for directories)

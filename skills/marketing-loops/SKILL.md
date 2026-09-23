@@ -17,6 +17,7 @@ metadata:
   phase: Design
   difficulty: Intermediate
   version: 1.0.0
+  sprint: unit-economics-retention
   topic: gtm-growth-planning
   secondary_topics: [retention-expansion]
   agents: [Claude Code, Cursor, OpenAI Codex, Windsurf, Cline]

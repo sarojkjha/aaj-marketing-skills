@@ -16,6 +16,7 @@ metadata:
   phase: Diagnose
   difficulty: Starter
   version: 1.0.0
+  sprint: gtm-pipeline
   topic: gtm-growth-planning
   secondary_topics: [strategy-positioning]
   agents: [Claude Code, Cursor, OpenAI Codex, Windsurf, Cline]

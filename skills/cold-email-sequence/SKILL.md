@@ -16,6 +16,7 @@ metadata:
   phase: Execute
   difficulty: Starter
   version: 1.0.0
+  sprint: gtm-pipeline
   topic: sales-pipeline
   agents: [Claude Code, Cursor, OpenAI Codex, Windsurf, Cline]
   inputs: The ICP's sharpest pain, the differentiator and one proof point, the role being emailed, and the relevance hook.

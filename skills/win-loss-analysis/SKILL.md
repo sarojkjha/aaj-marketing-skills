@@ -16,6 +16,7 @@ metadata:
   phase: Diagnose
   difficulty: Intermediate
   version: 1.1.0
+  sprint: gtm-pipeline
   topic: sales-pipeline
   agents: [Claude Code, Cursor, OpenAI Codex, Windsurf, Cline]
   inputs: A list of recent closed deals (won and lost) with outcome, segment, competitor, and any reason notes.

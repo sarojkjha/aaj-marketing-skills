@@ -17,6 +17,7 @@ metadata:
   phase: Execute
   difficulty: Intermediate
   version: 1.0.0
+  sprint: positioning-message
   topic: brand-voice
   secondary_topics: [content-seo]
   agents: [Claude Code, Cursor, OpenAI Codex, Windsurf, Cline]

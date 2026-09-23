@@ -14,6 +14,7 @@ metadata:
   phase: Execute
   difficulty: Starter
   version: 1.0.0
+  sprint: positioning-message
   topic: website-conversion
   agents: [Claude Code, Cursor, OpenAI Codex, Windsurf, Cline]
   inputs: The offer, target audience, conversion goal, key benefits/proof, and the primary competitive alternative

@@ -16,6 +16,7 @@ metadata:
   phase: Design
   difficulty: Starter
   version: 1.0.0
+  sprint: gtm-pipeline
   topic: sales-pipeline
   secondary_topics: [strategy-positioning]
   agents: [Claude Code, Cursor, OpenAI Codex, Windsurf, Cline]

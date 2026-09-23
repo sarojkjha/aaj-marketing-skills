@@ -16,6 +16,7 @@ metadata:
   phase: Execute
   difficulty: Intermediate
   version: 1.0.0
+  sprint: unit-economics-retention
   topic: sales-pipeline
   secondary_topics: [analytics-budget]
   agents: [Claude Code, Cursor, OpenAI Codex, Windsurf, Cline]

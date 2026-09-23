@@ -14,6 +14,7 @@ metadata:
   phase: Design
   difficulty: Starter
   version: 1.0.0
+  sprint: positioning-message
   topic: audience-research
   agents: [Claude Code, Cursor, OpenAI Codex, Windsurf, Cline]
   inputs: Product/offer, who buys it today (or hypotheses), and any customer research, interviews, reviews, or sales notes available

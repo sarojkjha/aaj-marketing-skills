@@ -16,6 +16,7 @@ metadata:
   phase: Design
   difficulty: Intermediate
   version: 1.0.0
+  sprint: gtm-pipeline
   topic: sales-pipeline
   agents: [Claude Code, Cursor, OpenAI Codex, Windsurf, Cline]
   inputs: How deals flow today, the average deal size and sales cycle, who's involved, and the ICP.

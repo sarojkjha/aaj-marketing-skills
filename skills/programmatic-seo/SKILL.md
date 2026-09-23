@@ -15,6 +15,7 @@ metadata:
   phase: Design
   difficulty: Intermediate
   version: 1.0.0
+  sprint: ai-visibility
   topic: content-seo
   agents: [Claude Code, Cursor, OpenAI Codex, Windsurf, Cline]
   inputs: The dataset or head-term × modifier pattern, expected page count and query volume, conversion rate and value per conversion, build cost, and what unique data exists per page

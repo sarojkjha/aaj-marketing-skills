@@ -17,6 +17,7 @@ metadata:
   phase: Execute
   difficulty: Intermediate
   version: 1.0.0
+  sprint: unit-economics-retention
   topic: analytics-budget
   agents: [Claude Code, Cursor, OpenAI Codex, Windsurf, Cline]
   inputs: One period of spend, funnel volumes (sessions, leads, MQLs, SQLs, opps, wins — any subset), new revenue, pipeline created, and target; plus the prior period for deltas
