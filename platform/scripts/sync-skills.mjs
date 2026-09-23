@@ -67,8 +67,23 @@ const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
 if (!url || !key) { console.error('Set SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY.'); process.exit(1); }
 const db = createClient(url, key, { auth: { persistSession: false } });
 
+// kind must stay within the values the schema allows: tool | playbook | guide | other.
+// The LABEL is what the page shows, so templates, articles and reports get their
+// own wording without a schema change.
 const linkKind = (u) =>
-  u.includes('/tools/') ? 'tool' : u.includes('/blog/') ? 'playbook' : u.includes('/guide') ? 'guide' : 'other';
+  u.includes('/tools/') ? 'tool'
+  : u.includes('/playbooks/') ? 'playbook'
+  : u.includes('/guide') ? 'guide'
+  : 'other';
+
+const linkLabel = (u) =>
+  u.includes('/tools/') ? 'Interactive tool'
+  : u.includes('/playbooks/') ? 'Playbook'
+  : u.includes('/resources/') ? 'Template'
+  : u.includes('/blog/') ? 'Article'
+  : (u.includes('/benchmarks') || u.includes('/reports/')) ? 'Report'
+  : u.includes('/guide') ? 'Guide'
+  : 'Resource';
 
 async function main() {
   // category name -> id
@@ -105,6 +120,13 @@ async function main() {
       demo_output: hasEngine ? captureDemo(resDir, slug) : null,
       published: true
     };
+
+    // Topic assignment. Only sent when the frontmatter declares it, so the
+    // skills whose topics were backfilled in the database are left untouched.
+    // Declaring `topic:` in SKILL.md makes the repo the source of truth for the
+    // taxonomy too, which is what a new skill needs to appear under its filter.
+    if (m.topic) row.topic_slug = m.topic;
+    if (Array.isArray(m.secondary_topics)) row.secondary_topics = m.secondary_topics;
     if (!catByName[m.category]) console.warn(`  ! ${slug}: category "${m.category}" not found — run seed-categories.sql`);
 
     const { data: up, error: uErr } = await db.from('skills').upsert(row, { onConflict: 'slug' }).select('id').single();
@@ -114,9 +136,7 @@ async function main() {
     // resource_links: replace from related_aaj
     await db.from('resource_links').delete().eq('skill_id', skillId);
     const links = (m.related_aaj || []).filter(Boolean).map((u, i) => ({
-      skill_id: skillId, url: u, kind: linkKind(u),
-      label: linkKind(u) === 'tool' ? 'Interactive tool' : linkKind(u) === 'playbook' ? 'Playbook' : 'Resource',
-      sort_order: i
+      skill_id: skillId, url: u, kind: linkKind(u), label: linkLabel(u), sort_order: i
     }));
     if (links.length) await db.from('resource_links').insert(links);
 
