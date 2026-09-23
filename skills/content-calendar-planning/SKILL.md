@@ -104,7 +104,7 @@ Deliver the cluster map (pillar + supporting pieces per theme), the dated schedu
 
 ## Related AAJ resources
 
-- Interactive tool: https://aajconsult.com/tools/content-calendar-template
+- Template: https://aajconsult.com/resources/content-calendar-repurposing-tracker
 
 ## Related skills
 

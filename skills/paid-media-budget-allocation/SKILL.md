@@ -105,7 +105,7 @@ Use the format in `resources/output-format.md`: the split (channel, $, %, custom
 ## Related AAJ resources
 
 - Interactive tool: https://aajconsult.com/tools/paid-media-budget-allocator
-- Full method (the "why"): https://aajconsult.com/blog/how-to-allocate-paid-ads-budget
+- Full method (the "why"): https://aajconsult.com/playbooks/paid-media-budget-allocation-playbook
 
 ## Related skills
 

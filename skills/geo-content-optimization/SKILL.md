@@ -74,7 +74,7 @@ Deliver the optimized content (or a marked-up diff of what to change), the answe
 
 ## Related AAJ resources
 
-- Method context: https://aajconsult.com/blog/how-to-allocate-paid-ads-budget (an example of GEO/AEO-built content)
+- Method context: https://aajconsult.com/playbooks/geo-aeo-playbook (the full GEO and AEO method)
 
 ## Related skills
 

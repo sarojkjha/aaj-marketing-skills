@@ -78,7 +78,7 @@ Deliver the **unit inventory**, then the **drafted derivatives** — a carousel 
 ## Related AAJ resources
 
 - Social composer: https://aajconsult.com/tools/social-studio
-- Content calendar: https://aajconsult.com/tools/content-calendar-template
+- Content calendar: https://aajconsult.com/resources/content-calendar-repurposing-tracker
 
 ## Related skills
 
