@@ -13,3 +13,6 @@ AAJ-Skills-Launch-Handoff-Brief*.md
 paths.ts
 .agents/
 .claude/
+
+aaj-marketing-skills/
+*.local
