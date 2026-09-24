@@ -412,7 +412,9 @@ const STOPWORDS = new Set((
   "the and for with that this from are but not all any more most very just about into over than " +
   "then them they you your how why what when who does doing done can will would should could " +
   "keep keeps keeping get gets getting make makes making need needs want wants help helps " +
-  "work works working use uses using our their its his her was were been has have had"
+  "work works working use uses using our their its his her was were been has have had " +
+  "whether sure much many some each other others where which while such both either neither " +
+  "still even only also every there here been being those these thing things way ways"
 ).split(" "));
 
 function toolSearchSkills({ query, limit }) {

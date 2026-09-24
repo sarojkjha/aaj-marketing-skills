@@ -92,6 +92,16 @@ above itself. If you've moved the file, set `AAJ_SKILLS_ROOT` to the repo root:
 **An engine hangs** — it's killed after 30 seconds and reported as a timeout.
 Engine output is capped at 120 KB.
 
+**Checking every engine** — the smoke test starts the server exactly as a client
+would and runs each engine's demo through it:
+
+```bash
+node platform/mcp/smoke-test.mjs
+```
+
+It exits non-zero if any engine fails, so it drops straight into CI.
+`node platform/mcp/server.mjs --engines` lists the ids alone.
+
 **Checking it by hand** — the server speaks JSON-RPC 2.0 over newline-delimited
 JSON on stdin:
 

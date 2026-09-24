@@ -1,6 +1,6 @@
-# 39 Marketing Skills for AI agents. 24 run real engines.
+# 43 Marketing Skills for AI agents. 28 run real engines.
 
-Agent skills for marketing work — grounded in AAJ's tested tools and methodology, not generic advice. **24 of the 39 ship a runnable engine**: a Node script you execute directly that takes your numbers and returns a verdict, not a template to fill in.
+Agent skills for marketing work — grounded in AAJ's tested tools and methodology, not generic advice. **28 of the 43 ship a runnable engine**: a Node script you execute directly that takes your numbers and returns a verdict, not a template to fill in.
 
 Works with Claude Code, Cursor, OpenAI Codex, Windsurf, and any agent supporting the [Agent Skills spec](https://agentskills.io). Free, [MIT](LICENSE), no signup, nothing routed through a server.
 
@@ -11,18 +11,19 @@ Built by [Saroj Jha](https://github.com/sarojkjha) / [AAJ](https://aajconsult.co
 ## Contents
 
 - [Quick start](#quick-start)
+- [Use it from an MCP client](#use-it-from-an-mcp-client)
 - [What a runnable engine means](#what-a-runnable-engine-means)
 - [The catalog](#the-catalog)
   - [Strategy & Positioning](#strategy-positioning) — 7 skills, 2 engines
   - [Research & Personas](#research-personas) — 2 skills, 1 engine
   - [SEO, GEO & AEO](#seo-geo-aeo) — 6 skills, 4 engines
-  - [Content & Copy](#content-copy) — 4 skills, 3 engines
+  - [Content & Copy](#content-copy) — 7 skills, 6 engines
   - [Conversion & Web](#conversion-web) — 3 skills, 2 engines
   - [Paid Media & Budgeting](#paid-media-budgeting) — 2 skills, 2 engines
   - [Analytics & Experimentation](#analytics-experimentation) — 4 skills, 4 engines
   - [Sales & Pipeline](#sales-pipeline) — 7 skills, 3 engines
   - [Retention & Lifecycle](#retention-lifecycle) — 3 skills, 2 engines
-  - [Growth, Retention & RevOps](#growth-retention-revops) — 1 skill, 1 engine
+  - [Growth, Retention & RevOps](#growth-retention-revops) — 2 skills, 2 engines
 - [Engines at a glance](#engines-at-a-glance)
 - [Methodology](#methodology)
 - [Authoring & contributing](#authoring-contributing)
@@ -66,6 +67,43 @@ CAC payback             7.5 mo
 Swap the demo values for your own and it works the same way.
 
 > From a clone of this repo, paths are `skills/<slug>/resources/…` instead of `.agents/skills/<slug>/resources/…`.
+
+---
+
+## Use it from an MCP client
+
+Instead of installing the skills into a project, you can expose all 43 skills and
+all 28 engines to any MCP client — Claude Desktop, Claude Code, Cursor, Windsurf —
+as five tools:
+
+| Tool | What it does |
+|---|---|
+| `list_engines` | Every runnable engine, grouped by category |
+| `describe_engine` | One engine's input schema, units and worked example |
+| `run_engine` | Runs it on your numbers, or the demo if you pass none |
+| `search_skills` | Finds a skill by the problem, not the name |
+| `get_skill` | The full method for one skill |
+
+Clone the repo and point your client at one file. Node 18+, no dependencies,
+no build step:
+
+```json
+{
+  "mcpServers": {
+    "aaj-engines": {
+      "command": "node",
+      "args": ["/absolute/path/to/aaj-marketing-skills/platform/mcp/server.mjs"]
+    }
+  }
+}
+```
+
+Your agent can then find the right method for a problem and run the math on your
+numbers, rather than estimating. Nothing leaves your machine — the engines are
+local, deterministic, and make no network calls.
+
+Setup for each client, troubleshooting, and the smoke test:
+[`platform/mcp/README.md`](platform/mcp/README.md).
 
 ---
 
@@ -122,10 +160,13 @@ Every engine accepts `--demo` (a worked example, no config), `--help` (the input
 
 | | Skill | What it does | Phase |
 |---|---|---|---|
+| **E** | [`ai-marketing-governance`](skills/ai-marketing-governance) | Scores whether a team's AI use is governed, and refuses citations that cannot be checked. | Execute |
 | **E** | [`brand-voice-governance`](skills/brand-voice-governance) | Checks content block by block against your own voice rules, with a pass/revise verdict. | Execute |
 | **E** | [`content-calendar-planning`](skills/content-calendar-planning) | Costs a content plan in hours against real capacity, and names what to cut. | Execute |
 |  | [`content-repurposing`](skills/content-repurposing) | Turns one pillar asset into channel-adapted derivatives, reusing only what it says. | Execute |
 | **E** | [`copywriting`](skills/copywriting) | Rewrites page copy to ladder to the positioning, scored on claim-defensibility. | Execute |
+| **E** | [`founder-led-content`](skills/founder-led-content) | Scores a founder's channel setup, and checks a post against the themes only they can write. | Execute |
+| **E** | [`pr-and-earned-media`](skills/pr-and-earned-media) | Scores a story before it is pitched, and aims it at twenty of the right people. | Execute |
 
 ### Conversion & Web
 
@@ -176,6 +217,7 @@ Every engine accepts `--demo` (a worked example, no config), `--help` (the input
 | | Skill | What it does | Phase |
 |---|---|---|---|
 | **E** | [`marketing-loops`](skills/marketing-loops) | Computes the loop factor, finds the throttling stage, projects users over time. | Design |
+| **E** | [`partnerships-and-co-marketing`](skills/partnerships-and-co-marketing) | Scores partners on audience overlap rather than fame, and judges the result on pipeline. | Execute |
 
 ---
 
@@ -187,11 +229,13 @@ Every runnable engine, and the command to try it:
 |---|---|
 | `ab-test-significance` | `node .agents/skills/ab-test-significance/resources/significance.js --demo` |
 | `agent-readiness-audit` | `node .agents/skills/agent-readiness-audit/resources/agent-readiness.js --demo` |
+| `ai-marketing-governance` | `node .agents/skills/ai-marketing-governance/resources/ai-governance.js --demo` |
 | `brand-voice-governance` | `node .agents/skills/brand-voice-governance/resources/voice-check.js --demo` |
 | `content-calendar-planning` | `node .agents/skills/content-calendar-planning/resources/calendar-engine.js --demo` |
 | `copywriting` | `node .agents/skills/copywriting/resources/copy-scorer.js --demo` |
 | `customer-survey-design` | `node .agents/skills/customer-survey-design/resources/survey-design.js --demo` |
 | `email-lifecycle-sequence` | `node .agents/skills/email-lifecycle-sequence/resources/lifecycle-audit.js --demo` |
+| `founder-led-content` | `node .agents/skills/founder-led-content/resources/founder-channel.js --demo` |
 | `geo-citation-tracker` | `node .agents/skills/geo-citation-tracker/resources/citation-tracker.js --demo` |
 | `incrementality-and-mmm` | `node .agents/skills/incrementality-and-mmm/resources/incrementality.js --demo` |
 | `lifecycle-and-retention` | `node .agents/skills/lifecycle-and-retention/resources/retention.js --demo` |
@@ -199,7 +243,9 @@ Every runnable engine, and the command to try it:
 | `marketing-loops` | `node .agents/skills/marketing-loops/resources/loop-model.js --demo` |
 | `marketing-psychology` | `node .agents/skills/marketing-psychology/resources/pattern-check.js --demo` |
 | `marketing-report` | `node .agents/skills/marketing-report/resources/marketing-report.js --demo` |
+| `pr-and-earned-media` | `node .agents/skills/pr-and-earned-media/resources/newsworthiness.js --demo` |
 | `paid-media-budget-allocation` | `node .agents/skills/paid-media-budget-allocation/resources/allocation-engine.js --demo` |
+| `partnerships-and-co-marketing` | `node .agents/skills/partnerships-and-co-marketing/resources/partner-fit.js --demo` |
 | `pipeline-and-forecast` | `node .agents/skills/pipeline-and-forecast/resources/forecast.js --demo` |
 | `pricing-and-packaging` | `node .agents/skills/pricing-and-packaging/resources/price-packaging.js --demo` |
 | `programmatic-seo` | `node .agents/skills/programmatic-seo/resources/pseo-model.js --demo` |
