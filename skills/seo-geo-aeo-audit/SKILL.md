@@ -14,6 +14,8 @@ metadata:
   category: SEO, GEO & AEO
   phase: Diagnose
   difficulty: Intermediate
+  card: >-
+    Scores a page 0-100 across SEO, GEO and AEO, with fixes in priority order.
   version: 1.0.0
   sprint: ai-visibility
   topic: ai-search

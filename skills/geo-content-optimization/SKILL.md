@@ -14,6 +14,8 @@ metadata:
   category: SEO, GEO & AEO
   phase: Execute
   difficulty: Intermediate
+  card: >-
+    Rewrites a page to maximise the chance an AI engine cites it.
   version: 1.0.0
   sprint: ai-visibility
   topic: ai-search

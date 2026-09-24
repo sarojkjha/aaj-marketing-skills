@@ -17,6 +17,9 @@ metadata:
   category: Content & Copy
   phase: Execute
   difficulty: Intermediate
+  card: >-
+    Scores a founder's channel setup, and checks a post against the themes only they
+    can write.
   version: 1.0.0
   topic: social-community
   secondary_topics: [brand-voice, content-seo]

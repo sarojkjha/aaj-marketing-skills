@@ -15,6 +15,8 @@ metadata:
   category: Sales & Pipeline
   phase: Design
   difficulty: Intermediate
+  card: >-
+    Designs the stages and exit criteria a forecast can rely on.
   version: 1.0.0
   sprint: gtm-pipeline
   topic: sales-pipeline

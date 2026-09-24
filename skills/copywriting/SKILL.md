@@ -14,6 +14,8 @@ metadata:
   category: Content & Copy
   phase: Execute
   difficulty: Starter
+  card: >-
+    Rewrites page copy to ladder to the positioning, scored on claim-defensibility.
   version: 1.0.0
   sprint: positioning-message
   topic: content-seo

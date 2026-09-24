@@ -16,6 +16,9 @@ metadata:
   category: Content & Copy
   phase: Execute
   difficulty: Intermediate
+  card: >-
+    Scores whether a team's AI use is governed, and refuses citations that cannot be
+    checked.
   version: 1.0.0
   topic: ops-ai-team
   secondary_topics: [brand-voice, content-seo]

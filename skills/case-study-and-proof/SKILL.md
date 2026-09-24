@@ -15,6 +15,9 @@ metadata:
   category: Content & Copy
   phase: Execute
   difficulty: Starter
+  card: >-
+    Scores whether proof would convince a sceptic, and whether you may publish it at
+    all.
   version: 1.0.0
   topic: website-conversion
   secondary_topics: [content-seo, sales-pipeline]

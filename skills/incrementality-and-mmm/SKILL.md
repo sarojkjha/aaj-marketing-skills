@@ -15,6 +15,9 @@ metadata:
   category: Analytics & Experimentation
   phase: Diagnose
   difficulty: Intermediate
+  card: >-
+    Designs and reads holdout tests honestly, including whether they could ever have
+    answered.
   version: 1.0.0
   sprint: unit-economics-retention
   topic: analytics-budget

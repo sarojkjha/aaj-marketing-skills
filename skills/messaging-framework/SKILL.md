@@ -14,6 +14,8 @@ metadata:
   category: Strategy & Positioning
   phase: Design
   difficulty: Intermediate
+  card: >-
+    Structures the message hierarchy beneath the positioning.
   version: 1.0.0
   sprint: positioning-message
   topic: strategy-positioning

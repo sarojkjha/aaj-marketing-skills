@@ -14,6 +14,8 @@ metadata:
   category: Analytics & Experimentation
   phase: Execute
   difficulty: Starter
+  card: >-
+    Checks whether an A/B result is significant, or sizes a test before you run it.
   version: 1.0.0
   sprint: unit-economics-retention
   topic: analytics-budget

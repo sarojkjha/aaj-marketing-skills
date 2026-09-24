@@ -13,6 +13,8 @@ metadata:
   category: Conversion & Web
   phase: Execute
   difficulty: Starter
+  card: >-
+    Specs a landing page before anyone designs it.
   version: 1.0.0
   sprint: positioning-message
   topic: website-conversion

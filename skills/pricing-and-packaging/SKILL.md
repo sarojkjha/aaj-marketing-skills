@@ -14,6 +14,8 @@ metadata:
   category: Strategy & Positioning
   phase: Design
   difficulty: Advanced
+  card: >-
+    Designs tiers with an anchor check and a willingness-to-pay read.
   version: 1.1.0
   sprint: unit-economics-retention
   topic: pricing-monetization

@@ -14,6 +14,8 @@ metadata:
   category: SEO, GEO & AEO
   phase: Design
   difficulty: Intermediate
+  card: >-
+    Models whether a template-page build pays back before anything gets written.
   version: 1.0.0
   sprint: ai-visibility
   topic: content-seo

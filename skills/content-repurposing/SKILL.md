@@ -17,6 +17,9 @@ metadata:
   category: Content & Copy
   phase: Execute
   difficulty: Starter
+  card: >-
+    Turns one pillar asset into channel-adapted derivatives, reusing only what it
+    says.
   version: 1.0.0
   sprint: ai-visibility
   topic: content-seo

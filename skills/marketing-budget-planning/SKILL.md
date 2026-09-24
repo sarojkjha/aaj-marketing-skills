@@ -14,6 +14,8 @@ metadata:
   category: Paid Media & Budgeting
   phase: Design
   difficulty: Starter
+  card: >-
+    Plans a budget from a CAC target rather than a percentage of revenue.
   version: 1.0.0
   sprint: unit-economics-retention
   topic: analytics-budget

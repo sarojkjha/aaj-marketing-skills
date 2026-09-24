@@ -14,6 +14,8 @@ metadata:
   category: Conversion & Web
   phase: Diagnose
   difficulty: Starter
+  card: >-
+    Audits a page for conversion friction and grades it.
   version: 1.0.0
   sprint: unit-economics-retention
   topic: website-conversion

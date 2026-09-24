@@ -15,6 +15,8 @@ metadata:
   category: Sales & Pipeline
   phase: Design
   difficulty: Starter
+  card: >-
+    Builds responses to the objections that actually lose deals.
   version: 1.0.0
   sprint: gtm-pipeline
   topic: sales-pipeline

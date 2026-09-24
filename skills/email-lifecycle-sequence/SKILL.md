@@ -14,6 +14,8 @@ metadata:
   category: Retention & Lifecycle
   phase: Execute
   difficulty: Starter
+  card: >-
+    Maps which lifecycle sequences exist, checks send load, writes the missing ones.
   version: 1.0.0
   sprint: unit-economics-retention
   topic: retention-expansion

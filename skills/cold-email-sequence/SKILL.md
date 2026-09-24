@@ -15,6 +15,8 @@ metadata:
   category: Sales & Pipeline
   phase: Execute
   difficulty: Starter
+  card: >-
+    Writes outbound sequences that survive a reply-rate audit.
   version: 1.0.0
   sprint: gtm-pipeline
   topic: sales-pipeline

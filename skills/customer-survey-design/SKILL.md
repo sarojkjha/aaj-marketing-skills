@@ -16,6 +16,8 @@ metadata:
   category: Research & Personas
   phase: Diagnose
   difficulty: Starter
+  card: >-
+    Designs surveys that produce usable answers, with sample sizing and segments.
   version: 1.1.0
   sprint: positioning-message
   topic: audience-research

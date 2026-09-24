@@ -13,6 +13,8 @@ metadata:
   category: Strategy & Positioning
   phase: Design
   difficulty: Starter
+  card: >-
+    Sharpens the value proposition into something defensible.
   version: 1.0.0
   sprint: positioning-message
   topic: strategy-positioning

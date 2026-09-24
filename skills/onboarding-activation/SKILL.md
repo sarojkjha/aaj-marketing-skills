@@ -14,6 +14,8 @@ metadata:
   category: Retention & Lifecycle
   phase: Execute
   difficulty: Intermediate
+  card: >-
+    Defines the activation moment from data and finds where new users stall.
   version: 1.0.0
   sprint: unit-economics-retention
   topic: retention-expansion

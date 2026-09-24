@@ -15,6 +15,8 @@ metadata:
   category: Retention & Lifecycle
   phase: Design
   difficulty: Intermediate
+  card: >-
+    Computes churn, NRR, GRR and quick ratio, then diagnoses which one to fix.
   version: 1.0.0
   sprint: unit-economics-retention
   topic: retention-expansion

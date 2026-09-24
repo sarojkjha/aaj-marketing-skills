@@ -14,6 +14,8 @@ metadata:
   category: Conversion & Web
   phase: Execute
   difficulty: Starter
+  card: >-
+    Scores signup friction and ranks what to remove by what it's worth.
   version: 1.0.0
   sprint: unit-economics-retention
   topic: website-conversion

@@ -14,6 +14,9 @@ metadata:
   category: Strategy & Positioning
   phase: Design
   difficulty: Starter
+  card: >-
+    Produces a positioning statement pressure-tested against the competitive
+    alternative.
   version: 1.0.0
   sprint: positioning-message
   topic: strategy-positioning

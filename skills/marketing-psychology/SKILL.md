@@ -15,6 +15,9 @@ metadata:
   category: Strategy & Positioning
   phase: Design
   difficulty: Starter
+  card: >-
+    Diagnoses which decision friction blocks the buyer, with a line between persuasion
+    and manipulation.
   version: 1.0.0
   sprint: unit-economics-retention
   topic: website-conversion

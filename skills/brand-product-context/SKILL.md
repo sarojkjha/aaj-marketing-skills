@@ -15,6 +15,8 @@ metadata:
   category: Strategy & Positioning
   phase: Diagnose
   difficulty: Starter
+  card: >-
+    Builds the shared brand brief every other skill reads first.
   version: 1.0.0
   sprint: positioning-message
   topic: strategy-positioning

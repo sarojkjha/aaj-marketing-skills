@@ -16,6 +16,9 @@ metadata:
   category: Content & Copy
   phase: Execute
   difficulty: Intermediate
+  card: >-
+    Checks content block by block against your own voice rules, with a pass/revise
+    verdict.
   version: 1.0.0
   sprint: positioning-message
   topic: brand-voice

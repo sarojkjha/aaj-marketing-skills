@@ -15,6 +15,8 @@ metadata:
   category: Strategy & Positioning
   phase: Diagnose
   difficulty: Starter
+  card: >-
+    Diagnoses which play applies, then sequences the other skills in order.
   version: 1.0.0
   sprint: gtm-pipeline
   topic: gtm-growth-planning

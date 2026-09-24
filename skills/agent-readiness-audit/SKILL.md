@@ -15,6 +15,9 @@ metadata:
   category: SEO, GEO & AEO
   phase: Diagnose
   difficulty: Intermediate
+  card: >-
+    Scores whether an AI agent buying for a customer can find, evaluate and transact
+    with you.
   version: 1.0.0
   sprint: ai-visibility
   topic: ai-search

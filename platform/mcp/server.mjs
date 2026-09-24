@@ -18,9 +18,9 @@
  * stdout carries protocol traffic only — all logging goes to stderr.
  */
 import { spawn } from "node:child_process";
-import { readdirSync, readFileSync, existsSync, statSync } from "node:fs";
 import { join, dirname, resolve, basename } from "node:path";
 import { fileURLToPath } from "node:url";
+import { listSkills, engineHelp, firstSentence } from "../lib/catalog.mjs";
 
 const SERVER_NAME = "aaj-engines";
 const SERVER_VERSION = "1.0.0";
@@ -45,90 +45,6 @@ const log = (...a) => process.stderr.write("[aaj-engines] " + a.join(" ") + "\n"
  * Discovery
  * ------------------------------------------------------------------ */
 
-const isDir = (p) => { try { return statSync(p).isDirectory(); } catch { return false; } };
-const readText = (p) => readFileSync(p, "utf8").replace(/\r\n/g, "\n");
-
-/**
- * Parse the frontmatter our SKILL.md files actually use: YAML with folded
- * block scalars (`description: >-`) and a nested `metadata:` map holding
- * category, phase, topic and version. Keys are flattened, first occurrence
- * winning, so a top-level key is never shadowed by a nested one.
- */
-function frontmatter(text) {
-  const m = text.match(/^---\n([\s\S]*?)\n---\n?/);
-  if (!m) return { data: {}, body: text };
-  const lines = m[1].split("\n");
-  const data = {};
-
-  for (let i = 0; i < lines.length; i++) {
-    const line = lines[i];
-    if (!line.trim() || /^\s*#/.test(line)) continue;
-    const kv = line.match(/^(\s*)([A-Za-z0-9_-]+):\s*(.*)$/);
-    if (!kv) continue;                       // list items and continuations
-    const indent = kv[1].length;
-    const key = kv[2];
-    let v = kv[3].trim();
-
-    if (/^[|>][-+]?$/.test(v)) {             // block scalar
-      const folded = v[0] === ">";
-      const block = [];
-      while (i + 1 < lines.length) {
-        const next = lines[i + 1];
-        if (next.trim() && next.length - next.trimStart().length <= indent) break;
-        block.push(next.trim());
-        i++;
-      }
-      v = folded ? block.join(" ").trim() : block.join("\n").trim();
-    } else if (v === "") {
-      continue;                              // a parent key such as `metadata:`
-    } else if (v.startsWith("[") && v.endsWith("]")) {
-      v = v.slice(1, -1).split(",").map((s) => s.trim().replace(/^["']|["']$/g, "")).filter(Boolean);
-    } else {
-      v = v.replace(/^["']|["']$/g, "");
-    }
-    if (!(key in data)) data[key] = v;
-  }
-  return { data, body: text.slice(m[0].length) };
-}
-
-/**
- * The header comment of every engine is its documented input schema — it is
- * literally what `--help` prints. Read it statically rather than spawning.
- */
-function engineHelp(file) {
-  const src = readText(file);
-  const start = src.indexOf("/*");
-  if (start === -1) return "";
-  const end = src.indexOf("*/", start);
-  if (end === -1) return "";
-  return src.slice(start + 2, end).replace(/^[ \t]*\*[ \t]?/gm, "").trim();
-}
-
-const ACRONYMS = new Set(["ab","seo","geo","aeo","mmm","pr","ai","abm","kpi","nrr","gtm","icp","roi","cac","ltv","b2b","b2c","crm"]);
-
-/** "pr-and-earned-media" -> "PR & Earned Media". Frontmatter `name` is the slug. */
-function titleize(slug) {
-  return slug.split("-").map((w) => {
-    if (w === "and") return "&";
-    if (ACRONYMS.has(w)) return w.toUpperCase();
-    return w.charAt(0).toUpperCase() + w.slice(1);
-  }).join(" ").replace(/\bCo (\w)/g, "Co-$1");
-}
-
-/**
- * One line saying what an engine answers. The skill description is written for
- * exactly this job ("Use when the user wants to ..."), so take its first
- * sentence; fall back to the engine header's opening paragraph.
- */
-function firstSentence(s, cap = 180) {
-  const t = String(s || "").replace(/\s+/g, " ").trim();
-  if (!t) return "";
-  const m = t.match(/^(.+?[.!?])(\s|$)/);
-  let out = m ? m[1] : t;
-  if (out.length > cap) out = out.slice(0, cap).replace(/\s+\S*$/, "") + "…";
-  return out;
-}
-
 function engineSummary(help, fallback) {
   const fromDescription = firstSentence(fallback);
   if (fromDescription) return fromDescription;
@@ -146,51 +62,29 @@ function engineSummary(help, fallback) {
 }
 
 function discover() {
-  if (!isDir(SKILLS_DIR)) {
-    log(`no skills directory at ${SKILLS_DIR} — set AAJ_SKILLS_ROOT to the repo root`);
+  const found = listSkills(REPO_ROOT);
+  if (!found.length) {
+    log(`no skills found under ${SKILLS_DIR} — set AAJ_SKILLS_ROOT to the repo root`);
     return { skills: [], engines: new Map() };
   }
   const skills = [];
   const engines = new Map();
 
-  for (const slug of readdirSync(SKILLS_DIR).sort()) {
-    const dir = join(SKILLS_DIR, slug);
-    if (!isDir(dir)) continue;
-    const skillMd = join(dir, "SKILL.md");
-    if (!existsSync(skillMd)) continue;
-
-    const { data, body } = frontmatter(readText(skillMd));
-    const resources = join(dir, "resources");
-    const jsFiles = isDir(resources)
-      ? readdirSync(resources).filter((f) => f.endsWith(".js")).sort()
-      : [];
-
-    const skill = {
-      slug,
-      name: data.name || slug,
-      title: data.title || titleize(slug),
-      description: data.description || "",
-      category: data.category || "",
-      topic: data.topic || "",
-      phase: data.phase || "",
-      url: `${SKILLS_SITE}/skills/${slug}`,
-      path: skillMd,
-      body,
-      hasEngine: jsFiles.length > 0,
-    };
+  for (const s of found) {
+    const skill = { ...s, url: `${SKILLS_SITE}/skills/${s.slug}`, path: s.skillMd };
     skills.push(skill);
 
-    for (const f of jsFiles) {
-      const file = join(resources, f);
+    for (const f of s.jsFiles) {
+      const file = join(s.resourcesDir, f);
       // One engine per skill in every current case, so the skill slug is the
       // engine id. A second engine in the same skill gets a suffixed id.
-      const id = jsFiles.length === 1 ? slug : `${slug}:${basename(f, ".js")}`;
+      const id = s.jsFiles.length === 1 ? s.slug : `${s.slug}:${basename(f, ".js")}`;
       const help = engineHelp(file);
       engines.set(id, {
-        id, slug, file, help,
-        summary: engineSummary(help, skill.description),
-        skillName: skill.title,
-        category: skill.category,
+        id, slug: s.slug, file, help,
+        summary: engineSummary(help, s.description),
+        skillName: s.title,
+        category: s.category,
       });
     }
   }

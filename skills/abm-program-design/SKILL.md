@@ -15,6 +15,9 @@ metadata:
   category: Sales & Pipeline
   phase: Design
   difficulty: Intermediate
+  card: >-
+    Checks whether the team can run the account list and whether the list hits the
+    number.
   version: 1.0.0
   topic: gtm-growth-planning
   secondary_topics: [sales-pipeline, audience-research]

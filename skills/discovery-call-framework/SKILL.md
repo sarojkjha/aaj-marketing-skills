@@ -14,6 +14,8 @@ metadata:
   category: Sales & Pipeline
   phase: Execute
   difficulty: Starter
+  card: >-
+    Structures discovery so the call qualifies rather than pitches.
   version: 1.0.0
   sprint: gtm-pipeline
   topic: sales-pipeline

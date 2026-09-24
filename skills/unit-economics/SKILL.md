@@ -14,6 +14,9 @@ metadata:
   category: Analytics & Experimentation
   phase: Diagnose
   difficulty: Starter
+  card: >-
+    Computes LTV, CAC, payback and the ratio, then returns a verdict against
+    benchmarks.
   version: 1.0.0
   sprint: unit-economics-retention
   topic: analytics-budget

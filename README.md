@@ -1,6 +1,6 @@
-# 43 Marketing Skills for AI agents. 28 run real engines.
+# <!-- aaj:n skills -->45<!-- aaj:/n --> Marketing Skills for AI agents. <!-- aaj:n engines -->30<!-- aaj:/n --> run real engines.
 
-Agent skills for marketing work — grounded in AAJ's tested tools and methodology, not generic advice. **28 of the 43 ship a runnable engine**: a Node script you execute directly that takes your numbers and returns a verdict, not a template to fill in.
+Agent skills for marketing work — grounded in AAJ's tested tools and methodology, not generic advice. **<!-- aaj:n engines -->30<!-- aaj:/n --> of the <!-- aaj:n skills -->45<!-- aaj:/n --> ship a runnable engine**: a Node script you execute directly that takes your numbers and returns a verdict, not a template to fill in.
 
 Works with Claude Code, Cursor, OpenAI Codex, Windsurf, and any agent supporting the [Agent Skills spec](https://agentskills.io). Free, [MIT](LICENSE), no signup, nothing routed through a server.
 
@@ -14,16 +14,18 @@ Built by [Saroj Jha](https://github.com/sarojkjha) / [AAJ](https://aajconsult.co
 - [Use it from an MCP client](#use-it-from-an-mcp-client)
 - [What a runnable engine means](#what-a-runnable-engine-means)
 - [The catalog](#the-catalog)
+<!-- aaj:begin catalog-contents -->
   - [Strategy & Positioning](#strategy-positioning) — 7 skills, 2 engines
   - [Research & Personas](#research-personas) — 2 skills, 1 engine
   - [SEO, GEO & AEO](#seo-geo-aeo) — 6 skills, 4 engines
-  - [Content & Copy](#content-copy) — 7 skills, 6 engines
+  - [Content & Copy](#content-copy) — 8 skills, 7 engines
   - [Conversion & Web](#conversion-web) — 3 skills, 2 engines
   - [Paid Media & Budgeting](#paid-media-budgeting) — 2 skills, 2 engines
   - [Analytics & Experimentation](#analytics-experimentation) — 4 skills, 4 engines
-  - [Sales & Pipeline](#sales-pipeline) — 7 skills, 3 engines
+  - [Sales & Pipeline](#sales-pipeline) — 8 skills, 4 engines
   - [Retention & Lifecycle](#retention-lifecycle) — 3 skills, 2 engines
   - [Growth, Retention & RevOps](#growth-retention-revops) — 2 skills, 2 engines
+<!-- aaj:end catalog-contents -->
 - [Engines at a glance](#engines-at-a-glance)
 - [Methodology](#methodology)
 - [Authoring & contributing](#authoring-contributing)
@@ -126,6 +128,7 @@ Every engine accepts `--demo` (a worked example, no config), `--help` (the input
 
 **E** marks a skill with a runnable engine. Phase refers to AAJ's Diagnose → Design → Execute method.
 
+<!-- aaj:begin catalog -->
 ### Strategy & Positioning
 
 | | Skill | What it does | Phase |
@@ -162,6 +165,7 @@ Every engine accepts `--demo` (a worked example, no config), `--help` (the input
 |---|---|---|---|
 | **E** | [`ai-marketing-governance`](skills/ai-marketing-governance) | Scores whether a team's AI use is governed, and refuses citations that cannot be checked. | Execute |
 | **E** | [`brand-voice-governance`](skills/brand-voice-governance) | Checks content block by block against your own voice rules, with a pass/revise verdict. | Execute |
+| **E** | [`case-study-and-proof`](skills/case-study-and-proof) | Scores whether proof would convince a sceptic, and whether you may publish it at all. | Execute |
 | **E** | [`content-calendar-planning`](skills/content-calendar-planning) | Costs a content plan in hours against real capacity, and names what to cut. | Execute |
 |  | [`content-repurposing`](skills/content-repurposing) | Turns one pillar asset into channel-adapted derivatives, reusing only what it says. | Execute |
 | **E** | [`copywriting`](skills/copywriting) | Rewrites page copy to ladder to the positioning, scored on claim-defensibility. | Execute |
@@ -196,6 +200,7 @@ Every engine accepts `--demo` (a worked example, no config), `--help` (the input
 
 | | Skill | What it does | Phase |
 |---|---|---|---|
+| **E** | [`abm-program-design`](skills/abm-program-design) | Checks whether the team can run the account list and whether the list hits the number. | Design |
 |  | [`cold-email-sequence`](skills/cold-email-sequence) | Writes outbound sequences that survive a reply-rate audit. | Execute |
 |  | [`discovery-call-framework`](skills/discovery-call-framework) | Structures discovery so the call qualifies rather than pitches. | Execute |
 |  | [`objection-handling`](skills/objection-handling) | Builds responses to the objections that actually lose deals. | Design |
@@ -218,6 +223,7 @@ Every engine accepts `--demo` (a worked example, no config), `--help` (the input
 |---|---|---|---|
 | **E** | [`marketing-loops`](skills/marketing-loops) | Computes the loop factor, finds the throttling stage, projects users over time. | Design |
 | **E** | [`partnerships-and-co-marketing`](skills/partnerships-and-co-marketing) | Scores partners on audience overlap rather than fame, and judges the result on pipeline. | Execute |
+<!-- aaj:end catalog -->
 
 ---
 
@@ -225,12 +231,15 @@ Every engine accepts `--demo` (a worked example, no config), `--help` (the input
 
 Every runnable engine, and the command to try it:
 
+<!-- aaj:begin engines -->
 | Skill | Command |
 |---|---|
 | `ab-test-significance` | `node .agents/skills/ab-test-significance/resources/significance.js --demo` |
+| `abm-program-design` | `node .agents/skills/abm-program-design/resources/abm-design.js --demo` |
 | `agent-readiness-audit` | `node .agents/skills/agent-readiness-audit/resources/agent-readiness.js --demo` |
 | `ai-marketing-governance` | `node .agents/skills/ai-marketing-governance/resources/ai-governance.js --demo` |
 | `brand-voice-governance` | `node .agents/skills/brand-voice-governance/resources/voice-check.js --demo` |
+| `case-study-and-proof` | `node .agents/skills/case-study-and-proof/resources/proof-check.js --demo` |
 | `content-calendar-planning` | `node .agents/skills/content-calendar-planning/resources/calendar-engine.js --demo` |
 | `copywriting` | `node .agents/skills/copywriting/resources/copy-scorer.js --demo` |
 | `customer-survey-design` | `node .agents/skills/customer-survey-design/resources/survey-design.js --demo` |
@@ -243,10 +252,10 @@ Every runnable engine, and the command to try it:
 | `marketing-loops` | `node .agents/skills/marketing-loops/resources/loop-model.js --demo` |
 | `marketing-psychology` | `node .agents/skills/marketing-psychology/resources/pattern-check.js --demo` |
 | `marketing-report` | `node .agents/skills/marketing-report/resources/marketing-report.js --demo` |
-| `pr-and-earned-media` | `node .agents/skills/pr-and-earned-media/resources/newsworthiness.js --demo` |
 | `paid-media-budget-allocation` | `node .agents/skills/paid-media-budget-allocation/resources/allocation-engine.js --demo` |
 | `partnerships-and-co-marketing` | `node .agents/skills/partnerships-and-co-marketing/resources/partner-fit.js --demo` |
 | `pipeline-and-forecast` | `node .agents/skills/pipeline-and-forecast/resources/forecast.js --demo` |
+| `pr-and-earned-media` | `node .agents/skills/pr-and-earned-media/resources/newsworthiness.js --demo` |
 | `pricing-and-packaging` | `node .agents/skills/pricing-and-packaging/resources/price-packaging.js --demo` |
 | `programmatic-seo` | `node .agents/skills/programmatic-seo/resources/pseo-model.js --demo` |
 | `seo-geo-aeo-audit` | `node .agents/skills/seo-geo-aeo-audit/resources/score.js --demo` |
@@ -255,6 +264,7 @@ Every runnable engine, and the command to try it:
 | `unit-economics` | `node .agents/skills/unit-economics/resources/unit-economics.js --demo` |
 | `website-conversion-audit` | `node .agents/skills/website-conversion-audit/resources/score.js --demo` |
 | `win-loss-analysis` | `node .agents/skills/win-loss-analysis/resources/win-loss.js --demo` |
+<!-- aaj:end engines -->
 
 ---
 
@@ -262,9 +272,9 @@ Every runnable engine, and the command to try it:
 
 Every skill is tagged to a phase, and the ordering is deliberate — the catalog refuses to let you execute before you have diagnosed.
 
-- **Diagnose** (9 skills) — find out what is actually broken before choosing a fix.
-- **Design** (15 skills) — decide the approach, with the trade-offs stated.
-- **Execute** (15 skills) — build and ship it.
+- **Diagnose** (<!-- aaj:n phase-diagnose -->9<!-- aaj:/n --> skills) — find out what is actually broken before choosing a fix.
+- **Design** (<!-- aaj:n phase-design -->16<!-- aaj:/n --> skills) — decide the approach, with the trade-offs stated.
+- **Execute** (<!-- aaj:n phase-execute -->20<!-- aaj:/n --> skills) — build and ship it.
 
 If you do not know where to start, `campaign-orchestrator` diagnoses which play applies and sequences the rest for you.
 

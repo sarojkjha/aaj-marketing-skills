@@ -16,6 +16,8 @@ metadata:
   category: Growth, Retention & RevOps
   phase: Design
   difficulty: Intermediate
+  card: >-
+    Computes the loop factor, finds the throttling stage, projects users over time.
   version: 1.0.0
   sprint: unit-economics-retention
   topic: gtm-growth-planning

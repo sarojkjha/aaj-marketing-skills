@@ -15,6 +15,8 @@ metadata:
   category: Sales & Pipeline
   phase: Diagnose
   difficulty: Intermediate
+  card: >-
+    Finds the Pareto of why deals are actually lost, by revenue.
   version: 1.1.0
   sprint: gtm-pipeline
   topic: sales-pipeline

@@ -15,6 +15,9 @@ metadata:
   category: Paid Media & Budgeting
   phase: Design
   difficulty: Intermediate
+  card: >-
+    Splits spend across channels to hit a CAC target, with diminishing returns
+    modelled.
   version: 1.0.0
   sprint: unit-economics-retention
   topic: paid-media

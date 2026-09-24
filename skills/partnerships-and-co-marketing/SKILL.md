@@ -15,6 +15,9 @@ metadata:
   category: Growth, Retention & RevOps
   phase: Execute
   difficulty: Intermediate
+  card: >-
+    Scores partners on audience overlap rather than fame, and judges the result on
+    pipeline.
   version: 1.0.0
   topic: pr-partnerships-events
   secondary_topics: [gtm-growth-planning, audience-research]

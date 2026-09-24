@@ -15,6 +15,8 @@ metadata:
   category: SEO, GEO & AEO
   phase: Design
   difficulty: Starter
+  card: >-
+    Produces a writer-ready brief: intent, answer block, entities, internal links.
   version: 1.0.0
   sprint: ai-visibility
   topic: content-seo

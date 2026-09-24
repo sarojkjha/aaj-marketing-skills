@@ -13,6 +13,8 @@ metadata:
   category: Research & Personas
   phase: Design
   difficulty: Starter
+  card: >-
+    Builds personas from evidence rather than imagination.
   version: 1.0.0
   sprint: positioning-message
   topic: audience-research

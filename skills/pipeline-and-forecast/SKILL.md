@@ -15,6 +15,8 @@ metadata:
   category: Sales & Pipeline
   phase: Execute
   difficulty: Intermediate
+  card: >-
+    Weights pipeline by stage and says whether coverage is real.
   version: 1.0.0
   sprint: unit-economics-retention
   topic: sales-pipeline

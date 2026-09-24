@@ -14,6 +14,8 @@ metadata:
   category: Sales & Pipeline
   phase: Design
   difficulty: Intermediate
+  card: >-
+    Scores and tiers accounts by ICP fit, showing the signals each matched.
   version: 1.0.0
   sprint: gtm-pipeline
   topic: sales-pipeline

@@ -14,6 +14,8 @@ metadata:
   category: Content & Copy
   phase: Execute
   difficulty: Starter
+  card: >-
+    Costs a content plan in hours against real capacity, and names what to cut.
   version: 1.1.0
   sprint: ai-visibility
   topic: content-seo
