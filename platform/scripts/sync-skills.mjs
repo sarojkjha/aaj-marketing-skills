@@ -14,6 +14,13 @@
 //   export SUPABASE_SERVICE_ROLE_KEY="<service-role-key>"   # server-side only — never ship to the browser
 //   node platform/scripts/sync-skills.mjs
 //
+// LOVABLE CLOUD (no service role key available): deploy the catalog-sync edge
+// function (platform/supabase/functions/catalog-sync) in the skills project, set
+// its CATALOG_SYNC_TOKEN secret, then instead of the two variables above:
+//   CATALOG_SYNC_URL="https://<project>.supabase.co/functions/v1/catalog-sync"
+//   CATALOG_SYNC_TOKEN="<the same token>"
+// The rows are built here exactly as below and the function does the writes.
+//
 // Run schema.sql and seed-categories.sql first. Re-run this any time skills change
 // (e.g. in CI on push to main).
 // =====================================================================
@@ -64,8 +71,39 @@ const SKILLS_DIR = join(REPO_ROOT, 'skills');
 
 const url = process.env.SUPABASE_URL;
 const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
-if (!url || !key) { console.error('Set SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY.'); process.exit(1); }
-const db = createClient(url, key, { auth: { persistSession: false } });
+const syncUrl = process.env.CATALOG_SYNC_URL;
+const syncToken = process.env.CATALOG_SYNC_TOKEN;
+const VIA_FUNCTION = !!(syncUrl && syncToken);
+if (!VIA_FUNCTION && (!url || !key)) {
+  console.error('Set CATALOG_SYNC_URL and CATALOG_SYNC_TOKEN (Lovable Cloud), or SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY.');
+  process.exit(1);
+}
+if (VIA_FUNCTION && !/^https:\/\/[a-z0-9]+\.supabase\.co\/functions\/v1\/catalog-sync$/.test(syncUrl)) {
+  console.error('CATALOG_SYNC_URL should look like https://<project>.supabase.co/functions/v1/catalog-sync');
+  process.exit(1);
+}
+const db = VIA_FUNCTION ? null : createClient(url, key, { auth: { persistSession: false } });
+const BATCH = 5;
+
+async function postBatch(batch) {
+  const res = await fetch(syncUrl, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'x-sync-token': syncToken },
+    body: JSON.stringify({ skills: batch.map((b) => b.payload) })
+  });
+  const text = await res.text();
+  let out; try { out = JSON.parse(text); } catch { out = null; }
+  if (!res.ok && !(out && out.results)) throw new Error(`catalog-sync returned ${res.status}: ${text.slice(0, 300)}`);
+  let ok = 0;
+  for (const r of out.results) {
+    const b = batch.find((x) => x.payload.row.slug === r.slug);
+    for (const w of r.warnings || []) console.warn(`  ! ${r.slug}: ${w}`);
+    if (!r.ok) { console.error(`  \u2717 ${r.slug}:`, r.error); continue; }
+    ok++;
+    console.log(`  \u2713 ${b ? b.label : r.slug}`);
+  }
+  return ok;
+}
 
 // kind must stay within the values the schema allows: tool | playbook | guide | other.
 // The LABEL is what the page shows, so templates, articles and reports get their
@@ -86,10 +124,14 @@ const linkLabel = (u) =>
   : 'Resource';
 
 async function main() {
-  // category name -> id
-  const { data: cats, error: cErr } = await db.from('categories').select('id,name');
-  if (cErr) throw cErr;
-  const catByName = Object.fromEntries((cats || []).map(c => [c.name, c.id]));
+  // category name -> id (the edge function resolves names itself)
+  let catByName = {};
+  if (!VIA_FUNCTION) {
+    const { data: cats, error: cErr } = await db.from('categories').select('id,name');
+    if (cErr) throw cErr;
+    catByName = Object.fromEntries((cats || []).map(c => [c.name, c.id]));
+  }
+  const pending = [];
 
   const slugs = readdirSync(SKILLS_DIR).filter(d => existsSync(join(SKILLS_DIR, d, 'SKILL.md')));
   let ok = 0;
@@ -135,6 +177,22 @@ async function main() {
     // A skill with no `sprint:` renders no sprint line rather than falling back
     // to a default one — an offer the skill does not belong to is worse than none.
     if (m.sprint) row.sprint_slug = m.sprint;
+    if (VIA_FUNCTION) {
+      delete row.category_id;
+      const words = (row.body_md || '').split(/\s+/).filter(Boolean).length;
+      if (!words) console.warn(`  ! ${slug}: empty body — page will render as a stub`);
+      const demoNote = row.demo_output ? `, demo ${row.demo_output.length}c` : (hasEngine ? ', DEMO MISSING' : '');
+      pending.push({
+        label: `${data.name}  (${words} words${demoNote})`,
+        payload: {
+          row,
+          category: m.category || '',
+          links: (m.related_aaj || []).filter(Boolean).map((u, i) => ({ url: u, kind: linkKind(u), label: linkLabel(u), sort_order: i })),
+          ...(Array.isArray(m.related) ? { related: m.related } : {})
+        }
+      });
+      continue;
+    }
     if (!catByName[m.category]) console.warn(`  ! ${slug}: category "${m.category}" not found — run seed-categories.sql`);
 
     // Upsert, tolerating a column this database has not been given yet. When a
@@ -172,7 +230,9 @@ async function main() {
     const demoNote = row.demo_output ? `, demo ${row.demo_output.length}c` : (hasEngine ? ', DEMO MISSING' : '');
     console.log(`  ✓ ${data.name}  (${words} words${demoNote})`);
   }
-  console.log(`\nSynced ${ok}/${slugs.length} skills.`);
+  for (let i = 0; i < pending.length; i += BATCH) ok += await postBatch(pending.slice(i, i + BATCH));
+  console.log(`\nSynced ${ok}/${slugs.length} skills${VIA_FUNCTION ? ' via catalog-sync' : ''}.`);
+  if (ok < slugs.length) process.exitCode = 1;
 }
 
 main().catch(e => { console.error(e); process.exit(1); });

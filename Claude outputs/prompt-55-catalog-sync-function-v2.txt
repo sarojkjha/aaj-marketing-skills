@@ -1,0 +1,155 @@
+GOAL
+Add one edge function, catalog-sync, to THIS project's backend so an external script
+can write the skills catalogue tables (categories, skills, resource_links,
+related_skills) using this backend's own service role key.
+
+=== 0. CHECK FIRST - STOP IF EITHER FAILS ===
+- This project's backend ref must be pwxmqaqrxqomyqrckzty. If it is anything else,
+  stop, tell me the ref, and change nothing.
+- The tables categories, skills, resource_links and related_skills must exist in
+  this backend. If any is missing, stop and tell me which.
+
+=== 1. ADD THE FUNCTION ===
+Create supabase/functions/catalog-sync/index.ts with the code at the bottom of
+this prompt, exactly as written. Do not edit it.
+
+Add to supabase/config.toml:
+  [functions.catalog-sync]
+  verify_jwt = false
+
+The function checks its own token (header x-sync-token) and refuses every request
+when the secret is missing or shorter than 32 characters.
+
+Deploy it. Change nothing else in the project.
+
+=== 2. SECRET ===
+Request a secret named CATALOG_SYNC_TOKEN through the secure secret form. Do not
+generate a value and do not print it.
+
+=== 3. REPORT ===
+- Call the function once with no x-sync-token header and show the 401 response.
+- Give the full function URL:
+  https://pwxmqaqrxqomyqrckzty.supabase.co/functions/v1/catalog-sync
+- Do not call it with the real token and do not write any rows.
+
+=== supabase/functions/catalog-sync/index.ts ===
+// =====================================================================
+// catalog-sync - writes the skills catalog from the aaj-marketing-skills repo.
+//
+// Why this exists: on Lovable Cloud the service role key never leaves the
+// server, so the repo's sync script cannot write to the catalog directly. The
+// script now builds each skill's row locally (frontmatter, body, demo output)
+// and POSTs it here; this function does the same writes the script used to do,
+// with the key it already has.
+//
+// Auth: header `x-sync-token` must equal the CATALOG_SYNC_TOKEN secret. No
+// token configured -> every request is refused. Only the table writes below are
+// possible through it; it cannot run arbitrary SQL.
+//
+// Body: { skills: [ { row, category, links, related } ] }  (max 10 per call)
+//   row      - the skills row, without category_id
+//   category - category NAME; resolved to its id here
+//   links    - [{ url, kind, label, sort_order }] replaces resource_links
+//   related  - optional [slug] replaces related_skills when present
+// =====================================================================
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+
+const MAX_SKILLS = 10;
+const SLUG = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+const KINDS = new Set(["tool", "playbook", "guide", "other"]);
+// Columns this function will write on `skills`. Anything else in `row` is dropped.
+const ROW_KEYS = [
+  "slug", "name", "summary", "phase", "difficulty", "version", "agents", "inputs", "outputs",
+  "tags", "has_engine", "repo_path", "install_cmd", "body_md", "demo_output", "published",
+  "topic_slug", "secondary_topics", "sprint_slug",
+];
+
+const json = (body: unknown, status = 200) =>
+  new Response(JSON.stringify(body), { status, headers: { "Content-Type": "application/json" } });
+
+function sameToken(a: string, b: string): boolean {
+  const x = new TextEncoder().encode(a), y = new TextEncoder().encode(b);
+  if (x.length !== y.length) return false;
+  let d = 0;
+  for (let i = 0; i < x.length; i++) d |= x[i] ^ y[i];
+  return d === 0;
+}
+
+Deno.serve(async (req) => {
+  if (req.method !== "POST") return json({ ok: false, error: "method_not_allowed" }, 405);
+
+  const expected = Deno.env.get("CATALOG_SYNC_TOKEN") ?? "";
+  const given = req.headers.get("x-sync-token") ?? "";
+  if (expected.length < 32 || !sameToken(given, expected)) return json({ ok: false, error: "unauthorized" }, 401);
+
+  let body: { skills?: unknown };
+  try { body = await req.json(); } catch { return json({ ok: false, error: "bad_json" }, 400); }
+  const items = Array.isArray(body.skills) ? body.skills : null;
+  if (!items || items.length === 0 || items.length > MAX_SKILLS) {
+    return json({ ok: false, error: `send 1 to ${MAX_SKILLS} skills per call` }, 400);
+  }
+
+  const db = createClient(Deno.env.get("SUPABASE_URL")!, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!, {
+    auth: { persistSession: false },
+  });
+
+  const { data: cats, error: cErr } = await db.from("categories").select("id,name");
+  if (cErr) return json({ ok: false, error: `categories: ${cErr.message}` }, 500);
+  const catByName = Object.fromEntries((cats ?? []).map((c: { id: string; name: string }) => [c.name, c.id]));
+
+  const results: Array<Record<string, unknown>> = [];
+  for (const raw of items as Array<Record<string, unknown>>) {
+    const src = (raw?.row ?? {}) as Record<string, unknown>;
+    const slug = String(src.slug ?? "");
+    if (!SLUG.test(slug)) { results.push({ slug, ok: false, error: "bad slug" }); continue; }
+
+    const row: Record<string, unknown> = {};
+    for (const k of ROW_KEYS) if (k in src) row[k] = src[k];
+    const category = String(raw.category ?? "");
+    row.category_id = catByName[category] ?? null;
+    const warnings: string[] = [];
+    if (!row.category_id) warnings.push(`category "${category}" not found`);
+
+    // Tolerate a column this database has not been given yet, as the script did.
+    let up: { id: string } | null = null;
+    let uErr: { message: string } | null = null;
+    for (let attempt = 0; attempt < 3; attempt++) {
+      ({ data: up, error: uErr } = await db.from("skills").upsert(row, { onConflict: "slug" }).select("id").single());
+      if (!uErr) break;
+      const missing = /Could not find the '([^']+)' column/.exec(uErr.message || "");
+      if (!missing || !(missing[1] in row)) break;
+      warnings.push(`no '${missing[1]}' column - synced without it`);
+      delete row[missing[1]];
+    }
+    if (uErr || !up) { results.push({ slug, ok: false, error: uErr?.message ?? "no id returned", warnings }); continue; }
+
+    const links = (Array.isArray(raw.links) ? raw.links : [])
+      .map((l: Record<string, unknown>, i: number) => ({
+        skill_id: up!.id,
+        url: String(l.url ?? ""),
+        kind: KINDS.has(String(l.kind)) ? String(l.kind) : "other",
+        label: String(l.label ?? "Resource"),
+        sort_order: Number.isInteger(l.sort_order) ? l.sort_order : i,
+      }))
+      .filter((l: { url: string }) => /^https:\/\//.test(l.url));
+    const { error: dErr } = await db.from("resource_links").delete().eq("skill_id", up.id);
+    if (dErr) warnings.push(`resource_links delete: ${dErr.message}`);
+    if (links.length) {
+      const { error: iErr } = await db.from("resource_links").insert(links);
+      if (iErr) warnings.push(`resource_links insert: ${iErr.message}`);
+    }
+
+    if (Array.isArray(raw.related)) {
+      const rel = (raw.related as unknown[]).map(String).filter((s) => SLUG.test(s));
+      await db.from("related_skills").delete().eq("skill_id", up.id);
+      if (rel.length) {
+        const { error: rErr } = await db.from("related_skills").insert(rel.map((r) => ({ skill_id: up!.id, related_slug: r })));
+        if (rErr) warnings.push(`related_skills insert: ${rErr.message}`);
+      }
+    }
+
+    results.push({ slug, ok: true, links: links.length, warnings });
+  }
+
+  return json({ ok: results.every((r) => r.ok), results });
+});
