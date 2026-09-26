@@ -16,8 +16,9 @@ metadata:
   phase: Design
   difficulty: Starter
   card: >-
-    Builds responses to the objections that actually lose deals.
-  version: 1.0.0
+    Builds responses to the objections that lose deals, and checks the battlecard
+    before reps use it.
+  version: 1.1.0
   sprint: gtm-pipeline
   topic: sales-pipeline
   secondary_topics: [strategy-positioning]
@@ -25,6 +26,7 @@ metadata:
   inputs: The real objections, the differentiator and proof, and the main competitors.
   outputs: An objection-handling framework and competitor battlecards, plus disqualify signals.
   related_aaj:
+    - https://aajconsult.com/tools/battlecard-builder
     - https://aajconsult.com/tools/win-loss-analyzer
     - https://aajconsult.com/playbooks/win-loss-analysis
   tags: [objections, battlecards, rebuttals, competitive]
@@ -57,9 +59,27 @@ Classify each objection — real blocker, misunderstanding, or smokescreen — b
 5. **Build competitor battlecards** — where you win, where they win (honestly), and the reframing question.
 6. **Mark the disqualifiers** and present the framework.
 
-## Reference
+## Run the tool
 
-This skill bundles no data files. Pull the differentiator, proof, and competitor set from `.agents/product-marketing.md`; pull the live objections from `win-loss-analysis` or the user.
+```
+node resources/battlecard.js --demo
+```
+
+`build(config)` assembles the battlecard and checks it against the guardrails below before a rep
+sees it:
+
+- every point where you win has proof, and the card admits where the rival wins;
+- every fact about the competitor has a source and a date, and anything unchecked for more than
+  90 days is flagged (a rule of this engine: pricing and packaging change often);
+- every objection is typed and answered in all three steps - acknowledge, reframe, prove;
+- no disparaging language, and no absolutes a buyer can disprove with one counterexample;
+- the won/lost record against this competitor, with a 90% interval so a handful of deals is not
+  read as a trend.
+
+It returns "Ready for reps" or "Fix before sharing" with every finding. Pull the differentiator,
+proof and competitor set from `.agents/product-marketing.md`, and the live objections and deal
+record from `win-loss-analysis` or the user. The same engine runs in the free Battlecard Builder
+at aajconsult.com/tools/battlecard-builder.
 
 ## Present the result
 
@@ -73,9 +93,11 @@ This skill bundles no data files. Pull the differentiator, proof, and competitor
 - **Never disparage competitors or overclaim.** Honesty about where a rival wins is more persuasive than spin.
 - **Ground every response in real proof** from context — a clever rebuttal with no substance erodes trust.
 - **Know when to walk.** Some objections mean disqualify; trying to "overcome" bad fit wastes everyone's time.
+- **Source and date every fact about the rival.** The claim a buyer checks is the one about the competitor, and a stale price is worse than none.
 
 ## Related AAJ resources
 
+- Battlecard Builder (same engine) — https://aajconsult.com/tools/battlecard-builder
 - AAJ tools — https://aajconsult.com/tools (positioning and messaging).
 
 ## Related skills

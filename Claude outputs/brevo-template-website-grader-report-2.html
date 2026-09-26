@@ -1,0 +1,202 @@
+<!-- ==========================================================================
+     AAJ — Website Grader Report (Brevo TRANSACTIONAL template)
+     Brevo: Transactional > Email > Templates > New template > paste as HTML.
+     Subject line (set in the template settings, not here):
+       Website report for {{ params.host }}
+     Leave Brevo's own "preview text" field EMPTY — the hidden preheader div
+     below supplies it, and filling both makes the inbox show it twice.
+     Put the resulting template ID into BREVO_TEMPLATE_GRADER_REPORT.
+
+     >>> BEFORE SENDING: replace [ADD POSTAL ADDRESS] in the footer. A physical
+     >>> mailing address is required by CAN-SPAM and its absence is a real
+     >>> spam-filter signal.
+
+     Params from send-grader-report:
+       url, score, grade, verdict, issue_count, passing_count,
+       categories[{name,score}], issues[{category,issue,severity,evidence}],
+       report_url, booking_url
+
+     Deliverability choices made here, on purpose:
+       - One image (the logo), everything else live text. Image-heavy mail with
+         little text is the classic Promotions/spam signal.
+       - One call to action, below the content it earned — not a banner up top.
+       - The first line states why this email exists and what was requested.
+       - No exclamation marks, no "free", no urgency language, no shorteners.
+       - Single column, 600px, tables and inline styles, no background images.
+       - Explicit width/height/alt on the image so a blocked image still reads.
+     ========================================================================== -->
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<meta name="supported-color-schemes" content="light">
+<title>Your website report</title>
+</head>
+<body style="margin:0; padding:0; background-color:#F2F1ED; -webkit-font-smoothing:antialiased;">
+
+<div style="display:none; font-size:1px; color:#F2F1ED; line-height:1px; max-height:0; max-width:0; opacity:0; overflow:hidden;">
+  {% if params.issue_count > 0 %}Grade {{ params.grade }}, {{ params.score }} out of 100, with the {{ params.issue_count }} items to fix first.{% else %}Grade {{ params.grade }}, {{ params.score }} out of 100. Every measured check passed.{% endif %}
+</div>
+
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#F2F1ED" style="background-color:#F2F1ED;">
+<tr><td align="center" style="padding:24px 12px 32px 12px;">
+
+<table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="width:600px; max-width:600px; background-color:#ffffff;">
+
+  <!-- header: the one image in the email -->
+  <tr>
+    <td bgcolor="#0B182D" style="background-color:#0B182D; padding:20px 32px;">
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr>
+        <td align="left" valign="middle">
+          <img src="https://aajconsult.com/email/aaj-logo-white.png" alt="AAJ" width="120" height="48"
+               style="display:block; width:120px; height:48px; border:0; outline:none; text-decoration:none;">
+        </td>
+        <td align="right" valign="middle" style="font-family:Helvetica,Arial,sans-serif; font-size:11px; letter-spacing:1.5px; text-transform:uppercase; color:#FBA800;">Website report</td>
+      </tr></table>
+    </td>
+  </tr>
+
+  <!-- why this email exists: stated first, in plain text -->
+  <tr>
+    <td style="padding:32px 32px 0 32px;">
+      <p style="margin:0 0 20px 0; font-family:Helvetica,Arial,sans-serif; font-size:15px; line-height:24px; color:#374151;">
+        You asked the AAJ Website Grader to audit <strong style="color:#111827;">{{ params.url }}</strong>.
+        Here is the full result: a score across eight categories, and every item that did not pass.
+      </p>
+    </td>
+  </tr>
+
+  <!-- score -->
+  <tr>
+    <td style="padding:0 32px;">
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border:1px solid #E5E3DD;">
+        <tr>
+          <td width="130" align="center" valign="middle" bgcolor="#0B182D" style="background-color:#0B182D; padding:22px 10px;">
+            <div style="font-family:Georgia,'Times New Roman',serif; font-size:46px; line-height:1; font-weight:bold; color:{% if params.score >= 80 %}#3DDC97{% else %}{% if params.score >= 60 %}#FBA800{% else %}#FF6B6B{% endif %}{% endif %};">{{ params.grade }}</div>
+            <div style="font-family:Helvetica,Arial,sans-serif; font-size:12px; color:#9ca3af; padding-top:8px;">{{ params.score }} out of 100</div>
+          </td>
+          <td valign="middle" style="padding:20px 22px;">
+            <p style="margin:0 0 6px 0; font-family:Helvetica,Arial,sans-serif; font-size:11px; letter-spacing:1.5px; text-transform:uppercase; color:#F36F01; font-weight:bold;">{{ params.verdict }}</p>
+            <p style="margin:0; font-family:Helvetica,Arial,sans-serif; font-size:14px; line-height:22px; color:#374151;">
+              {{ params.passing_count }} checks passed{% if params.issue_count > 0 %}. {{ params.issue_count }} need attention, listed below in priority order{% endif %}.
+            </p>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+
+  <!-- categories -->
+  <tr>
+    <td style="padding:32px 32px 0 32px;">
+      <p style="margin:0 0 16px 0; font-family:Georgia,'Times New Roman',serif; font-size:19px; color:#0B182D;">Category scores</p>
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+        {% for c in params.categories %}
+        <tr>
+          <td style="padding:7px 0 0 0; font-family:Helvetica,Arial,sans-serif; font-size:14px; color:#374151;">{{ c.name }}</td>
+          <td width="56" align="right" style="padding:7px 0 0 0; font-family:Helvetica,Arial,sans-serif; font-size:14px; font-weight:bold; color:#0B182D;">{{ c.score }}</td>
+        </tr>
+        <tr><td colspan="2" style="padding:5px 0 6px 0;">
+          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#EDEBE5" style="background-color:#EDEBE5;"><tr>
+            <td width="{{ c.score }}%" height="4" bgcolor="{% if c.score >= 80 %}#3DDC97{% else %}{% if c.score >= 60 %}#FBA800{% else %}#FF6B6B{% endif %}{% endif %}" style="font-size:0; line-height:0;">&nbsp;</td>
+            <td height="4" style="font-size:0; line-height:0;">&nbsp;</td>
+          </tr></table>
+        </td></tr>
+        {% endfor %}
+      </table>
+    </td>
+  </tr>
+
+  <!-- issues -->
+  <tr>
+    <td style="padding:30px 32px 0 32px;">
+      {% if params.issue_count == 0 %}
+        <p style="margin:0; font-family:Helvetica,Arial,sans-serif; font-size:15px; line-height:24px; color:#374151;">
+          Every check we can measure passed. That is uncommon, and nothing here needs fixing today.
+        </p>
+      {% else %}
+        <p style="margin:0 0 4px 0; font-family:Georgia,'Times New Roman',serif; font-size:19px; color:#0B182D;">What to fix</p>
+        <p style="margin:0 0 18px 0; font-family:Helvetica,Arial,sans-serif; font-size:13px; line-height:20px; color:#6b7280;">
+          Ordered by impact. Each line shows what the audit observed on your page.
+        </p>
+
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+          {% for i in params.issues %}
+          <tr><td style="padding:0 0 10px 0;">
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" bgcolor="#FAF9F6"
+                   style="background-color:#FAF9F6; border-left:3px solid {% if i.severity == 'Fix first' %}#F36F01{% else %}#D8D4CA{% endif %};">
+              <tr><td style="padding:12px 16px;">
+                <p style="margin:0 0 3px 0; font-family:Helvetica,Arial,sans-serif; font-size:10px; letter-spacing:1.2px; text-transform:uppercase; color:{% if i.severity == 'Fix first' %}#F36F01{% else %}#9ca3af{% endif %}; font-weight:bold;">{{ i.severity }} &middot; {{ i.category }}</p>
+                <p style="margin:0; font-family:Helvetica,Arial,sans-serif; font-size:14px; line-height:21px; color:#111827; font-weight:bold;">{{ i.issue }}</p>
+                {% if i.evidence != "" %}<p style="margin:4px 0 0 0; font-family:Helvetica,Arial,sans-serif; font-size:13px; line-height:20px; color:#6b7280;">{{ i.evidence }}</p>{% endif %}
+              </td></tr>
+            </table>
+          </td></tr>
+          {% endfor %}
+        </table>
+      {% endif %}
+    </td>
+  </tr>
+
+  <!-- how it was measured -->
+  <tr>
+    <td style="padding:22px 32px 0 32px;">
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border-top:1px solid #E5E3DD;"><tr><td style="padding-top:18px;">
+        <p style="margin:0 0 10px 0; font-family:Helvetica,Arial,sans-serif; font-size:13px; line-height:21px; color:#6b7280;">
+          Measured from one fetch of the page you entered, plus its public robots.txt and sitemap.
+          Core Web Vitals come from Google PageSpeed Insights where field data exists. Anything we
+          could not observe is left out rather than estimated.
+        </p>
+        <p style="margin:0; font-family:Helvetica,Arial,sans-serif; font-size:13px; line-height:21px; color:#6b7280;">
+          The on-screen report adds why each item matters, how to fix it, and which are quick wins:
+          <a href="{{ params.report_url }}" style="color:#B45309; text-decoration:underline;">aajconsult.com/tools/website-grader</a>
+        </p>
+      </td></tr></table>
+    </td>
+  </tr>
+
+  <!-- single CTA, after the content it earned -->
+  <tr>
+    <td style="padding:26px 32px 34px 32px;">
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border:1px solid #E5E3DD;">
+        <tr><td style="padding:22px 24px;">
+          <p style="margin:0 0 6px 0; font-family:Georgia,'Times New Roman',serif; font-size:17px; line-height:25px; color:#0B182D;">Want someone to fix this list?</p>
+          <p style="margin:0 0 18px 0; font-family:Helvetica,Arial,sans-serif; font-size:14px; line-height:22px; color:#4b5563;">
+            AAJ works on the page, the copy and the measurement behind it. A Growth Audit starts with what you just read.
+          </p>
+          <table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr>
+            <td bgcolor="#0B182D" style="background-color:#0B182D;">
+              <a href="{{ params.booking_url }}" style="display:inline-block; padding:12px 24px; font-family:Helvetica,Arial,sans-serif; font-size:14px; font-weight:bold; color:#ffffff; text-decoration:none;">Book a Growth Audit</a>
+            </td>
+          </tr></table>
+        </td></tr>
+      </table>
+    </td>
+  </tr>
+
+  <!-- footer: sender identity, postal address, why received, unsubscribe -->
+  <tr>
+    <td bgcolor="#FAF9F6" style="background-color:#FAF9F6; padding:22px 32px; border-top:1px solid #E5E3DD;">
+      <p style="margin:0 0 8px 0; font-family:Helvetica,Arial,sans-serif; font-size:12px; line-height:19px; color:#4b5563;">
+        <strong>AAJ</strong> &mdash; marketing consultancy &middot; Saroj Jha &middot;
+        <a href="mailto:saroj@aajconsult.com" style="color:#4b5563; text-decoration:underline;">saroj@aajconsult.com</a>
+      </p>
+      <!-- REPLACE the bracketed text below with a real postal address before sending. -->
+      <p style="margin:0 0 8px 0; font-family:Helvetica,Arial,sans-serif; font-size:12px; line-height:19px; color:#9ca3af;">
+        [ADD POSTAL ADDRESS], Fremont, CA, USA
+      </p>
+      <p style="margin:0; font-family:Helvetica,Arial,sans-serif; font-size:12px; line-height:19px; color:#9ca3af;">
+        You received this because you requested a website report for {{ params.url }}.
+        <a href="{{ unsubscribe }}" style="color:#9ca3af; text-decoration:underline;">Unsubscribe</a>
+      </p>
+    </td>
+  </tr>
+
+</table>
+
+</td></tr>
+</table>
+</body>
+</html>

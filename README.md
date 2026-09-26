@@ -1,6 +1,6 @@
-# <!-- aaj:n skills -->45<!-- aaj:/n --> Marketing Skills for AI agents. <!-- aaj:n engines -->30<!-- aaj:/n --> run real engines.
+# <!-- aaj:n skills -->47<!-- aaj:/n --> Marketing Skills for AI agents. <!-- aaj:n engines -->33<!-- aaj:/n --> run real engines.
 
-Agent skills for marketing work — grounded in AAJ's tested tools and methodology, not generic advice. **<!-- aaj:n engines -->30<!-- aaj:/n --> of the <!-- aaj:n skills -->45<!-- aaj:/n --> ship a runnable engine**: a Node script you execute directly that takes your numbers and returns a verdict, not a template to fill in.
+Agent skills for marketing work — grounded in AAJ's tested tools and methodology, not generic advice. **<!-- aaj:n engines -->33<!-- aaj:/n --> of the <!-- aaj:n skills -->47<!-- aaj:/n --> ship a runnable engine**: a Node script you execute directly that takes your numbers and returns a verdict, not a template to fill in.
 
 Works with Claude Code, Cursor, OpenAI Codex, Windsurf, and any agent supporting the [Agent Skills spec](https://agentskills.io). Free, [MIT](LICENSE), no signup, nothing routed through a server.
 
@@ -15,16 +15,16 @@ Built by [Saroj Jha](https://github.com/sarojkjha) / [AAJ](https://aajconsult.co
 - [What a runnable engine means](#what-a-runnable-engine-means)
 - [The catalog](#the-catalog)
 <!-- aaj:begin catalog-contents -->
-  - [Strategy & Positioning](#strategy-positioning) — 7 skills, 2 engines
+  - [Strategy & Positioning](#strategy-positioning) — 8 skills, 3 engines
   - [Research & Personas](#research-personas) — 2 skills, 1 engine
   - [SEO, GEO & AEO](#seo-geo-aeo) — 6 skills, 4 engines
   - [Content & Copy](#content-copy) — 8 skills, 7 engines
   - [Conversion & Web](#conversion-web) — 3 skills, 2 engines
   - [Paid Media & Budgeting](#paid-media-budgeting) — 2 skills, 2 engines
   - [Analytics & Experimentation](#analytics-experimentation) — 4 skills, 4 engines
-  - [Sales & Pipeline](#sales-pipeline) — 8 skills, 4 engines
+  - [Sales & Pipeline](#sales-pipeline) — 8 skills, 5 engines
   - [Retention & Lifecycle](#retention-lifecycle) — 3 skills, 2 engines
-  - [Growth, Retention & RevOps](#growth-retention-revops) — 2 skills, 2 engines
+  - [Growth, Retention & RevOps](#growth-retention-revops) — 3 skills, 3 engines
 <!-- aaj:end catalog-contents -->
 - [Engines at a glance](#engines-at-a-glance)
 - [Methodology](#methodology)
@@ -135,6 +135,7 @@ Every engine accepts `--demo` (a worked example, no config), `--help` (the input
 |---|---|---|---|
 |  | [`brand-product-context`](skills/brand-product-context) | Builds the shared brand brief every other skill reads first. | Diagnose |
 |  | [`campaign-orchestrator`](skills/campaign-orchestrator) | Diagnoses which play applies, then sequences the other skills in order. | Diagnose |
+| **E** | [`market-sizing`](skills/market-sizing) | Sizes TAM, SAM and SOM bottom-up, with SOM set by capacity rather than a share of the market. | Diagnose |
 | **E** | [`marketing-psychology`](skills/marketing-psychology) | Diagnoses which decision friction blocks the buyer, with a line between persuasion and manipulation. | Design |
 |  | [`messaging-framework`](skills/messaging-framework) | Structures the message hierarchy beneath the positioning. | Design |
 |  | [`positioning-statement`](skills/positioning-statement) | Produces a positioning statement pressure-tested against the competitive alternative. | Design |
@@ -203,7 +204,7 @@ Every engine accepts `--demo` (a worked example, no config), `--help` (the input
 | **E** | [`abm-program-design`](skills/abm-program-design) | Checks whether the team can run the account list and whether the list hits the number. | Design |
 |  | [`cold-email-sequence`](skills/cold-email-sequence) | Writes outbound sequences that survive a reply-rate audit. | Execute |
 |  | [`discovery-call-framework`](skills/discovery-call-framework) | Structures discovery so the call qualifies rather than pitches. | Execute |
-|  | [`objection-handling`](skills/objection-handling) | Builds responses to the objections that actually lose deals. | Design |
+| **E** | [`objection-handling`](skills/objection-handling) | Builds responses to the objections that lose deals, and checks the battlecard before reps use it. | Design |
 | **E** | [`pipeline-and-forecast`](skills/pipeline-and-forecast) | Weights pipeline by stage and says whether coverage is real. | Execute |
 |  | [`sales-process-design`](skills/sales-process-design) | Designs the stages and exit criteria a forecast can rely on. | Design |
 | **E** | [`target-account-list`](skills/target-account-list) | Scores and tiers accounts by ICP fit, showing the signals each matched. | Design |
@@ -223,6 +224,7 @@ Every engine accepts `--demo` (a worked example, no config), `--help` (the input
 |---|---|---|---|
 | **E** | [`marketing-loops`](skills/marketing-loops) | Computes the loop factor, finds the throttling stage, projects users over time. | Design |
 | **E** | [`partnerships-and-co-marketing`](skills/partnerships-and-co-marketing) | Scores partners on audience overlap rather than fame, and judges the result on pipeline. | Execute |
+| **E** | [`product-launch`](skills/product-launch) | Tiers a launch, scores readiness on a twelve-item gate, and builds the dated work-back plan. | Execute |
 <!-- aaj:end catalog -->
 
 ---
@@ -248,15 +250,18 @@ Every runnable engine, and the command to try it:
 | `geo-citation-tracker` | `node .agents/skills/geo-citation-tracker/resources/citation-tracker.js --demo` |
 | `incrementality-and-mmm` | `node .agents/skills/incrementality-and-mmm/resources/incrementality.js --demo` |
 | `lifecycle-and-retention` | `node .agents/skills/lifecycle-and-retention/resources/retention.js --demo` |
+| `market-sizing` | `node .agents/skills/market-sizing/resources/market-size.js --demo` |
 | `marketing-budget-planning` | `node .agents/skills/marketing-budget-planning/resources/budget-planner.js --demo` |
 | `marketing-loops` | `node .agents/skills/marketing-loops/resources/loop-model.js --demo` |
 | `marketing-psychology` | `node .agents/skills/marketing-psychology/resources/pattern-check.js --demo` |
 | `marketing-report` | `node .agents/skills/marketing-report/resources/marketing-report.js --demo` |
+| `objection-handling` | `node .agents/skills/objection-handling/resources/battlecard.js --demo` |
 | `paid-media-budget-allocation` | `node .agents/skills/paid-media-budget-allocation/resources/allocation-engine.js --demo` |
 | `partnerships-and-co-marketing` | `node .agents/skills/partnerships-and-co-marketing/resources/partner-fit.js --demo` |
 | `pipeline-and-forecast` | `node .agents/skills/pipeline-and-forecast/resources/forecast.js --demo` |
 | `pr-and-earned-media` | `node .agents/skills/pr-and-earned-media/resources/newsworthiness.js --demo` |
 | `pricing-and-packaging` | `node .agents/skills/pricing-and-packaging/resources/price-packaging.js --demo` |
+| `product-launch` | `node .agents/skills/product-launch/resources/launch.js --demo` |
 | `programmatic-seo` | `node .agents/skills/programmatic-seo/resources/pseo-model.js --demo` |
 | `seo-geo-aeo-audit` | `node .agents/skills/seo-geo-aeo-audit/resources/score.js --demo` |
 | `signup-flow-optimizer` | `node .agents/skills/signup-flow-optimizer/resources/friction-score.js --demo` |
@@ -272,9 +277,9 @@ Every runnable engine, and the command to try it:
 
 Every skill is tagged to a phase, and the ordering is deliberate — the catalog refuses to let you execute before you have diagnosed.
 
-- **Diagnose** (<!-- aaj:n phase-diagnose -->9<!-- aaj:/n --> skills) — find out what is actually broken before choosing a fix.
+- **Diagnose** (<!-- aaj:n phase-diagnose -->10<!-- aaj:/n --> skills) — find out what is actually broken before choosing a fix.
 - **Design** (<!-- aaj:n phase-design -->16<!-- aaj:/n --> skills) — decide the approach, with the trade-offs stated.
-- **Execute** (<!-- aaj:n phase-execute -->20<!-- aaj:/n --> skills) — build and ship it.
+- **Execute** (<!-- aaj:n phase-execute -->21<!-- aaj:/n --> skills) — build and ship it.
 
 If you do not know where to start, `campaign-orchestrator` diagnoses which play applies and sequences the rest for you.
 

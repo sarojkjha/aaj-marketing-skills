@@ -1,0 +1,105 @@
+GOAL
+Publish one new template to /resources: the Case Study Kit. It joins the Website & Conversion hub,
+which is already live, so it gets a live hub chip. Nothing else changes. If you find yourself
+editing another template, a hub page layout, or held/live styling, you have gone too far - stop and
+tell me.
+
+=== THE ASSET ===
+Title: Case Study Kit
+File: AAJ-Case-Study-Kit.docx (I will attach it)
+Type: template  |  Lane: Build  |  Primary topic: website-conversion
+Secondary topics: sales-pipeline, retention-expansion
+Phase: Execute
+Access: Free, emailed - same gate as the other templates (subscribeToBrevo, source "case-study-kit")
+Slug: case-study-kit  ->  /resources/case-study-kit
+
+Follow /resources/brand-voice-guide exactly for structure: hero with the email form, preview
+carousel, "what's inside", FAQ, related links, HubBacklink. Do not invent a new page layout.
+
+=== IMAGES (I will attach all five) ===
+  og-resources-case-study-kit.png      -> public/og/og-resources-case-study-kit.png
+                                          (og:image AND twitter:image for the page)
+  case-study-kit-cover.png             -> the cover, same place the Brand Voice Guide cover sits
+  preview-csk-1-kickoff-baseline.png   -> preview 1
+  preview-csk-2-evidence.png           -> preview 2
+  preview-csk-3-permission.png         -> preview 3
+
+Cover and OG are byte-identical 1600x1000 files - deliberate, same as the other templates. Keep both
+filenames; do not point one at the other.
+
+Alt text:
+  cover      -> "The Case Study Kit template - free from AAJ"
+  preview 1  -> "The kickoff clause and the baseline record"
+  preview 2  -> "The evidence worksheet a sceptical buyer checks"
+  preview 3  -> "The permission request email"
+
+Confirm resolveOgImage in plugins/seo-prerender.ts resolves this route to
+og-resources-case-study-kit.png rather than a default.
+
+Summary line (use verbatim, in hubdata and wherever a one-line summary is shown):
+"Turn a customer result into proof you can publish - the permission to use it, the evidence that
+makes it believable, and the write-up."
+
+=== LANDING PAGE COPY ===
+Roughly 150 words, in my first-person founder voice.
+
+Say what the kit covers and who it is for: a founder who has results and no published proof,
+because nobody asked the customer at the time and asking now feels awkward. The idea that makes this
+one different: every case study has two separate questions - does it convince a sceptic, and may you
+publish it - and most teams tangle them together, which is why both stall. The kit keeps them apart
+and puts each step where it belongs in time, starting with a clause at kickoff.
+
+"What's inside" - the ten sections, in order: the kickoff clause; the baseline record; the results
+interview; the evidence worksheet; the permission request; the consent record; the write-up; the
+anonymised version; the check before it goes live; running it with your agent.
+
+FAQ - use these four:
+  Q: What is the difference between a testimonial and a case study?
+  A: A case study has a measured before and after. Without a baseline, what you have is a
+     testimonial - a different asset with a different job, not a weaker case study. The kit tells
+     you which one you have before you write anything.
+  Q: What if the customer will not let us name them?
+  A: Publish an anonymised version with the real numbers. A specific descriptor - size, what they
+     do, and where - carries most of the credibility of a name and needs far less to approve. The
+     kit shows how to build one.
+  Q: Is the kickoff clause legal advice?
+  A: No. It is a starting point for your contract. Have your own counsel review it.
+  Q: Is the template free, and what format is it?
+  A: Free, in exchange for an email address. It is a Word .docx you can type into directly, and it
+     opens editable in Word, Google Docs, Pages and LibreOffice.
+
+Related links: /case-studies, /playbooks/website-cro-playbook, /tools/website-grader,
+https://skills.aajconsult.com/skills/case-study-and-proof (the agent skill - label it "Run it in
+your agent").
+
+Constraints:
+  - No statistic anywhere on the page. The worked example inside the docx (72 hours to 4) is
+    illustrative and stays inside the docx; do not quote it on the page.
+  - No client names, logos or testimonials. The example company in the docx is invented and
+    labelled as such; do not surface it.
+  - Do not claim the kit guarantees permission or "ensures" credibility. It gives a team a process
+    and something to check against. Say that.
+  - Hyphens, not em dashes, in title, meta description and summary - a guardrail rejects them.
+
+=== META ===
+  title:        "Case Study Kit - Permission, Evidence and the Write-Up | AAJ"
+  description:  "Free Case Study Kit: a kickoff clause, the eight things a sceptical buyer checks, a
+                 permission request and consent record, and an anonymised fallback. Word template."
+Keep pageMeta.ts, the seo-prerender.ts entry and the React <SEO> identical - verify-prerender-react-meta
+fails on any difference. Add the route to sitemap.xml, llms.txt and src/lib/siteIndex.ts, and bump
+the route count in scripts/verify-prerender-react-meta.mjs by one.
+
+=== REGISTRY ===
+Add the asset in scripts/hub/hubdata.py and run npm run hub:generate. Never hand-edit the generated
+files - the guardrail will catch it. Add a crawler body for /resources/case-study-kit in
+cloudflare-worker/route-content.js next to the brand-voice-guide one: the same page copy as prose,
+no statistics, no figure that is not also on the rendered page (verify-crawler-only-claims).
+Report the new asset count for website-conversion.
+
+=== ACCEPTANCE ===
+- The template downloadable from /resources/case-study-kit behind the usual email gate, and listed
+  on /resources.
+- The asset shows on /hub/website-conversion with a live chip.
+- /resources/case-study-kit prerendered with its own OG image - verify by fetching the route as a
+  crawler, not by reading the config.
+- All guardrails pass. Tell me the preflight count.
