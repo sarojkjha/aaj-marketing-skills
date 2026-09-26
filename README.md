@@ -1,6 +1,6 @@
-# <!-- aaj:n skills -->47<!-- aaj:/n --> Marketing Skills for AI agents. <!-- aaj:n engines -->33<!-- aaj:/n --> run real engines.
+# <!-- aaj:n skills -->49<!-- aaj:/n --> Marketing Skills for AI agents. <!-- aaj:n engines -->35<!-- aaj:/n --> run real engines.
 
-Agent skills for marketing work — grounded in AAJ's tested tools and methodology, not generic advice. **<!-- aaj:n engines -->33<!-- aaj:/n --> of the <!-- aaj:n skills -->47<!-- aaj:/n --> ship a runnable engine**: a Node script you execute directly that takes your numbers and returns a verdict, not a template to fill in.
+Agent skills for marketing work — grounded in AAJ's tested tools and methodology, not generic advice. **<!-- aaj:n engines -->35<!-- aaj:/n --> of the <!-- aaj:n skills -->49<!-- aaj:/n --> ship a runnable engine**: a Node script you execute directly that takes your numbers and returns a verdict, not a template to fill in.
 
 Works with Claude Code, Cursor, OpenAI Codex, Windsurf, and any agent supporting the [Agent Skills spec](https://agentskills.io). Free, [MIT](LICENSE), no signup, nothing routed through a server.
 
@@ -20,11 +20,11 @@ Built by [Saroj Jha](https://github.com/sarojkjha) / [AAJ](https://aajconsult.co
   - [SEO, GEO & AEO](#seo-geo-aeo) — 6 skills, 4 engines
   - [Content & Copy](#content-copy) — 8 skills, 7 engines
   - [Conversion & Web](#conversion-web) — 3 skills, 2 engines
-  - [Paid Media & Budgeting](#paid-media-budgeting) — 2 skills, 2 engines
+  - [Paid Media & Budgeting](#paid-media-budgeting) — 3 skills, 3 engines
   - [Analytics & Experimentation](#analytics-experimentation) — 4 skills, 4 engines
   - [Sales & Pipeline](#sales-pipeline) — 8 skills, 5 engines
   - [Retention & Lifecycle](#retention-lifecycle) — 3 skills, 2 engines
-  - [Growth, Retention & RevOps](#growth-retention-revops) — 3 skills, 3 engines
+  - [Growth, Retention & RevOps](#growth-retention-revops) — 4 skills, 4 engines
 <!-- aaj:end catalog-contents -->
 - [Engines at a glance](#engines-at-a-glance)
 - [Methodology](#methodology)
@@ -185,6 +185,7 @@ Every engine accepts `--demo` (a worked example, no config), `--help` (the input
 
 | | Skill | What it does | Phase |
 |---|---|---|---|
+| **E** | [`ad-creative-testing`](skills/ad-creative-testing) | Sizes a creative test before it runs, and refuses to name a winner the data cannot back. | Execute |
 | **E** | [`marketing-budget-planning`](skills/marketing-budget-planning) | Plans a budget from a CAC target rather than a percentage of revenue. | Design |
 | **E** | [`paid-media-budget-allocation`](skills/paid-media-budget-allocation) | Splits spend across channels to hit a CAC target, with diminishing returns modelled. | Design |
 
@@ -222,6 +223,7 @@ Every engine accepts `--demo` (a worked example, no config), `--help` (the input
 
 | | Skill | What it does | Phase |
 |---|---|---|---|
+| **E** | [`creator-partnerships`](skills/creator-partnerships) | Pays creators for the buyers they reach, not their follower count, and judges the result on what it sold. | Execute |
 | **E** | [`marketing-loops`](skills/marketing-loops) | Computes the loop factor, finds the throttling stage, projects users over time. | Design |
 | **E** | [`partnerships-and-co-marketing`](skills/partnerships-and-co-marketing) | Scores partners on audience overlap rather than fame, and judges the result on pipeline. | Execute |
 | **E** | [`product-launch`](skills/product-launch) | Tiers a launch, scores readiness on a twelve-item gate, and builds the dated work-back plan. | Execute |
@@ -238,12 +240,14 @@ Every runnable engine, and the command to try it:
 |---|---|
 | `ab-test-significance` | `node .agents/skills/ab-test-significance/resources/significance.js --demo` |
 | `abm-program-design` | `node .agents/skills/abm-program-design/resources/abm-design.js --demo` |
+| `ad-creative-testing` | `node .agents/skills/ad-creative-testing/resources/creative-test.js --demo` |
 | `agent-readiness-audit` | `node .agents/skills/agent-readiness-audit/resources/agent-readiness.js --demo` |
 | `ai-marketing-governance` | `node .agents/skills/ai-marketing-governance/resources/ai-governance.js --demo` |
 | `brand-voice-governance` | `node .agents/skills/brand-voice-governance/resources/voice-check.js --demo` |
 | `case-study-and-proof` | `node .agents/skills/case-study-and-proof/resources/proof-check.js --demo` |
 | `content-calendar-planning` | `node .agents/skills/content-calendar-planning/resources/calendar-engine.js --demo` |
 | `copywriting` | `node .agents/skills/copywriting/resources/copy-scorer.js --demo` |
+| `creator-partnerships` | `node .agents/skills/creator-partnerships/resources/creator-fit.js --demo` |
 | `customer-survey-design` | `node .agents/skills/customer-survey-design/resources/survey-design.js --demo` |
 | `email-lifecycle-sequence` | `node .agents/skills/email-lifecycle-sequence/resources/lifecycle-audit.js --demo` |
 | `founder-led-content` | `node .agents/skills/founder-led-content/resources/founder-channel.js --demo` |
@@ -279,7 +283,7 @@ Every skill is tagged to a phase, and the ordering is deliberate — the catalog
 
 - **Diagnose** (<!-- aaj:n phase-diagnose -->10<!-- aaj:/n --> skills) — find out what is actually broken before choosing a fix.
 - **Design** (<!-- aaj:n phase-design -->16<!-- aaj:/n --> skills) — decide the approach, with the trade-offs stated.
-- **Execute** (<!-- aaj:n phase-execute -->21<!-- aaj:/n --> skills) — build and ship it.
+- **Execute** (<!-- aaj:n phase-execute -->23<!-- aaj:/n --> skills) — build and ship it.
 
 If you do not know where to start, `campaign-orchestrator` diagnoses which play applies and sequences the rest for you.
 
