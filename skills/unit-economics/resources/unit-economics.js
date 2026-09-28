@@ -3,8 +3,14 @@
  * AAJ Unit Economics Calculator — engine
  * Part of the "unit-economics" Agent Skill.
  *
- * Computes LTV, LTV:CAC, CAC payback, and a verdict against healthy benchmarks
- * for subscription, ecommerce, and services/contract models.
+ * Computes LTV, LTV:CAC, CAC payback, and a verdict against named reference
+ * points for subscription, ecommerce, and services/contract models:
+ *   LTV:CAC above 3:1 and CAC payback within 12 months — David Skok,
+ *     "SaaS Metrics 2.0" (forentrepreneurs.com/saas-metrics-2/). SaaS guidance.
+ *   CAC payback under 12 / 18 / 24 months for SMB / mid-market / enterprise —
+ *     Bessemer Venture Partners, "Scaling to $100 Million" (2021).
+ * There is no sourced payback guideline here for ecommerce or services, so the
+ * engine compares those to your own paybackTargetMonths, if you give one.
  *
  * USAGE
  *   node unit-economics.js                  # demo (subscription)
@@ -23,6 +29,10 @@
  *   Services / contract:
  *     { "model":"services", "acv":12000, "grossMargin":55,
  *       "retentionYears":3, "cac":4000 }
+ *   Optional, any model:
+ *     "paybackTargetMonths": 9      your own payback bar (overrides the default)
+ *     "segment": "smb"              subscription only: smb | midmarket | enterprise
+ *                                   (uses Bessemer's 12 / 18 / 24-month bar)
  */
 
 // --- AAJ arg normalisation ---------------------------------------------------
@@ -76,21 +86,39 @@ function compute(c){
   return { ltv, cac, ltvCac, paybackMonths, monthlyGP, lifetimeLabel, gm };
 }
 
-function verdict(r, model){
+const BESSEMER_PAYBACK = { smb: 12, midmarket: 18, enterprise: 24 };
+const SEGMENT_LABEL = { smb: 'SMB', midmarket: 'mid-market', enterprise: 'enterprise' };
+
+// Which payback bar applies, and where it comes from. null = no sourced bar.
+function paybackBar(c, model){
+  if (c.paybackTargetMonths != null) return { months: c.paybackTargetMonths, source: 'your own target' };
+  if (model !== 'subscription') return null;
+  if (c.segment) return { months: BESSEMER_PAYBACK[c.segment], source: `Bessemer's ${SEGMENT_LABEL[c.segment]} guideline` };
+  return { months: 12, source: "David Skok's SaaS guidance" };
+}
+
+function verdict(r, c, model){
   const lines = [];
   if (r.ltvCac == null) { lines.push('• No CAC supplied — provide cac, or adSpend + customers, to assess efficiency.'); return lines; }
-  if (r.ltvCac >= 3) lines.push(`✓ LTV:CAC ${one(r.ltvCac)}:1 is at or above the 3:1 floor.`);
-  else if (r.ltvCac >= 1) lines.push(`▼ LTV:CAC ${one(r.ltvCac)}:1 is below the 3:1 floor — acquisition is inefficient; lift LTV (retention, margin, ARPA) or cut CAC before scaling.`);
-  else lines.push(`✗ LTV:CAC ${one(r.ltvCac)}:1 is below 1:1 — you lose money on every customer. Fix unit economics before any spend increase.`);
-  if (r.ltvCac >= 5) lines.push(`• A ${one(r.ltvCac)}:1 ratio often signals UNDER-investment — if demand exists, you can likely spend more to grow faster.`);
+  const scope = model === 'subscription' ? '' : ` (SaaS guidance — a reference point for ${model}, not a benchmark for it)`;
+  if (r.ltvCac >= 3) lines.push(`✓ LTV:CAC ${one(r.ltvCac)}:1 is above 3:1, David Skok's reference point${scope}.`);
+  else if (r.ltvCac >= 1) lines.push(`▼ LTV:CAC ${one(r.ltvCac)}:1 is below 3:1, David Skok's reference point${scope} — lift LTV (retention, margin, ARPA) or cut CAC before scaling.`);
+  else lines.push(`✗ LTV:CAC ${one(r.ltvCac)}:1 is below 1:1 — you lose money on every customer (arithmetic, not a benchmark). Fix unit economics before any spend increase.`);
+  if (r.ltvCac >= 5) lines.push(`• At ${one(r.ltvCac)}:1, check whether you are under-investing: if demand exists, more spend may still pay back. (AAJ's read, not a benchmark.)`);
 
-  const paybackBar = model === 'ecommerce' ? 6 : 12;
   if (r.paybackMonths != null){
-    if (r.paybackMonths <= paybackBar) lines.push(`✓ CAC payback ${one(r.paybackMonths)} mo is within the ~${paybackBar}-month guideline for ${model}.`);
-    else lines.push(`▼ CAC payback ${one(r.paybackMonths)} mo exceeds the ~${paybackBar}-month guideline — cash is tied up longer; watch burn.`);
+    const bar = paybackBar(c, model);
+    if (!bar) lines.push(`• CAC payback ${one(r.paybackMonths)} mo. No sourced payback guideline for ${model} — set "paybackTargetMonths" from your cash runway to get a verdict.`);
+    else if (r.paybackMonths <= bar.months) lines.push(`✓ CAC payback ${one(r.paybackMonths)} mo is within ${bar.months} months (${bar.source}).`);
+    else lines.push(`▼ CAC payback ${one(r.paybackMonths)} mo exceeds ${bar.months} months (${bar.source}) — cash is tied up longer; watch burn.`);
   }
   return lines;
 }
+
+const REFERENCES = [
+  { figure: 'LTV:CAC above 3:1; CAC payback within 12 months', source: 'David Skok, SaaS Metrics 2.0', url: 'https://www.forentrepreneurs.com/saas-metrics-2/' },
+  { figure: 'CAC payback under 12 / 18 / 24 months (SMB / mid-market / enterprise)', source: 'Bessemer Venture Partners, Scaling to $100 Million (2021)', url: 'https://www.bvp.com/atlas/scaling-to-100-million' }
+];
 
 function render(c){
   const r = compute(c);
@@ -104,7 +132,9 @@ function render(c){
   out.push(`LTV : CAC               ${r.ltvCac != null ? one(r.ltvCac)+':1' : '—'}`);
   out.push(`CAC payback             ${r.paybackMonths != null ? one(r.paybackMonths)+' mo' : '—'}`);
   out.push('');
-  verdict(r, c.model || 'subscription').forEach(l => out.push(l));
+  verdict(r, c, c.model || 'subscription').forEach(l => out.push(l));
+  out.push('');
+  out.push('Reference points: ' + REFERENCES.map(x => `${x.source} (${x.url})`).join('; '));
   out.push('');
   out.push('--- JSON ---');
   out.push(JSON.stringify({
@@ -112,7 +142,9 @@ function render(c){
     ltv: Math.round(r.ltv), cac: r.cac != null ? Math.round(r.cac) : null,
     ltvCac: r.ltvCac != null ? Math.round(r.ltvCac*100)/100 : null,
     cacPaybackMonths: r.paybackMonths != null ? Math.round(r.paybackMonths*10)/10 : null,
-    monthlyGrossProfit: Math.round(r.monthlyGP)
+    monthlyGrossProfit: Math.round(r.monthlyGP),
+    paybackBar: (b => b ? { months: b.months, source: b.source } : null)(paybackBar(c, c.model || 'subscription')),
+    references: REFERENCES
   }, null, 2));
   return out.join('\n');
 }
@@ -129,7 +161,7 @@ const SCHEMA = {
   services:     { required: ['acv', 'grossMargin', 'retentionYears'],
                   oneOf: [], optional: [] }
 };
-const COMMON = ['model', 'cac', 'adSpend', 'customers'];
+const COMMON = ['model', 'cac', 'adSpend', 'customers', 'paybackTargetMonths', 'segment'];
 
 function udie(msg, hint) {
   console.error('error: ' + msg + (hint ? '\n       ' + hint : '') +
@@ -170,8 +202,12 @@ function validate(c) {
     udie('missing CAC.', 'Provide "cac", or "adSpend" + "customers" to derive it.');
   }
 
+  if (c.segment !== undefined) {
+    if (model !== 'subscription') udie('"segment" applies to the subscription model only.');
+    if (!BESSEMER_PAYBACK[c.segment]) udie(`unknown segment "${c.segment}".`, 'Use: smb, midmarket, or enterprise.');
+  }
   for (const [k, v] of Object.entries(c)) {
-    if (k === 'model') continue;
+    if (k === 'model' || k === 'segment') continue;
     if (typeof v !== 'number' || !isFinite(v)) {
       udie(`field "${k}" must be a finite number (got ${JSON.stringify(v)}).`);
     }

@@ -32,5 +32,5 @@ Guidance:
 - Round money to whole dollars and customers to one decimal.
 - Always label the CAC as paid-media CAC at least once.
 - If the objective was a CAC target that's infeasible (below every channel's base CAC), say so plainly and recommend raising the target or improving the funnels — don't present a $0 plan as if it were valid.
-- If the user has real account data, use it and note that the benchmarks were only the starting point.
+- If the user has real account data, use it. If any channel still runs on the engine's defaults, say so plainly: those are AAJ placeholders, not benchmarks.
 - Offer the AAJ tool for live what-if exploration and the playbook for the full method.

@@ -6,7 +6,7 @@ description: >-
   services business. Also use when the user mentions lifetime value, customer
   acquisition cost, payback period, churn, contribution margin, or "are our
   unit economics healthy / can we afford to spend more." Produces the metrics
-  plus a verdict against healthy benchmarks and what to fix.
+  plus a verdict against named reference points (Skok, Bessemer) and what to fix.
 license: MIT
 metadata:
   publisher: AAJ
@@ -16,14 +16,14 @@ metadata:
   difficulty: Starter
   card: >-
     Computes LTV, CAC, payback and the ratio, then returns a verdict against
-    benchmarks.
-  version: 1.0.0
+    named reference points.
+  version: 1.1.0
   sprint: unit-economics-retention
   topic: analytics-budget
   secondary_topics: [pricing-monetization]
   agents: [Claude Code, Cursor, OpenAI Codex, Windsurf, Cline]
   inputs: Business model, revenue per customer (ARPA/ACV/AOV), gross margin, retention or churn, and CAC (or ad spend + customers)
-  outputs: LTV, CAC, LTV:CAC, CAC payback, and a verdict against the 3:1 and payback benchmarks
+  outputs: LTV, CAC, LTV:CAC, CAC payback, and a verdict against the 3:1 and payback reference points, with sources
   related_aaj:
     - https://aajconsult.com/tools/unit-economics-calculator
     - https://aajconsult.com/blog/ltv-cac-which-number-to-fix
@@ -33,7 +33,7 @@ metadata:
 
 # Unit Economics & LTV:CAC
 
-Establish whether a business can profitably acquire customers — the foundation under every budget and growth decision. Get **LTV**, **LTV:CAC**, and **CAC payback**, then judge them against healthy ranges. This is usually the first thing to run before any paid-media or budget work.
+Establish whether a business can profitably acquire customers — the foundation under every budget and growth decision. Get **LTV**, **LTV:CAC**, and **CAC payback**, then judge them against named reference points. This is usually the first thing to run before any paid-media or budget work.
 
 ## When to use
 
@@ -74,8 +74,8 @@ It prints LTV, LTV:CAC, payback, and a verdict, plus a JSON block.
 
 ## Interpret the result
 
-- **LTV:CAC ≥ 3:1** is the healthy floor. Below 3:1, acquisition is inefficient — fix economics before scaling spend. **At 5:1+ you may be under-investing** — if demand exists, you can likely spend more to grow faster.
-- **CAC payback:** under ~12 months is the common B2B guideline; under ~6 months for ecommerce. Longer payback ties up cash — watch burn.
+- **LTV:CAC above 3:1** is David Skok's reference point for SaaS ([SaaS Metrics 2.0](https://www.forentrepreneurs.com/saas-metrics-2/)); he notes the best SaaS businesses sometimes reach 7 or 8. Below 3:1, fix economics before scaling spend. For ecommerce and services the engine shows 3:1 as a SaaS reference point, not a benchmark for those models. A very high ratio can mean under-investment if demand exists — that's AAJ's read, not a benchmark.
+- **CAC payback:** Skok puts the line at 12 months for SaaS. Bessemer's guideline ([Scaling to $100 Million](https://www.bvp.com/atlas/scaling-to-100-million), 2021) varies by segment: under 12 months for SMB, 18 for mid-market, 24 for enterprise — pass `"segment"` to use it. There is no sourced payback guideline in this skill for ecommerce or services; pass `"paybackTargetMonths"` from your own cash runway to get a verdict.
 - The biggest LTV levers are usually **retention/churn and margin**, not ARPA. A small churn improvement compounds through LTV.
 
 ## Present the result

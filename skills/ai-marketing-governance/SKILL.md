@@ -19,7 +19,7 @@ metadata:
   card: >-
     Scores whether a team's AI use is governed, and refuses citations that cannot be
     checked.
-  version: 1.0.0
+  version: 1.0.1
   topic: ops-ai-team
   secondary_topics: [brand-voice, content-seo]
   agents: [Claude Code, Cursor, OpenAI Codex, Windsurf, Cline]
@@ -73,10 +73,12 @@ right magnitude, attributed to a firm that genuinely publishes research in that 
 size that sounds like a real study. It reads as evidence because it was built from the shape of
 evidence:
 
-- *"CB Insights' analysis of 483 startup post-mortems found 42% failed from no market need."*
+- *"In CB Insights' 2021 analysis of 110+ startup post-mortems, 35% of failed startups cited no market need."*
 - *"CB Insights found Series A companies with strong positioning raise their next round 30% faster."*
 
-The first is real. The second does not exist. To a reader — and to the model that wrote them — they
+The first is real, and even it is easy to get wrong: an older CB Insights edition put the figure at
+42%, and the page that used to host it now serves a newer edition with different numbers. The edition
+and the year travel with the figure, or the figure is wrong. The second does not exist. To a reader — and to the model that wrote them — they
 are indistinguishable. That is not carelessness; it is what generation does when no document is in
 the loop.
 

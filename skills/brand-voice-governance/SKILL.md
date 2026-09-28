@@ -19,7 +19,7 @@ metadata:
   card: >-
     Checks content block by block against your own voice rules, with a pass/revise
     verdict.
-  version: 1.0.0
+  version: 1.0.1
   sprint: positioning-message
   topic: brand-voice
   secondary_topics: [content-seo]
@@ -41,7 +41,7 @@ This is the enforcement layer over `brand-product-context`. That skill captures 
 
 **The distinction this skill exists to enforce is conformance versus quality.** `copywriting`'s scorer asks whether copy is clear, concrete, and defensible — a judgment that's the same for every brand. This asks a different, brand-specific question: does this sound like *this* brand? The same sentence passes for a playful brand and fails for a clinical one. A general quality score cannot answer that, because it has no opinion about which voice is correct — only the brand's own brief does.
 
-**The problem it exists to solve is scale.** One marketer writing one page holds the voice in their head. Ten people and an AI assistant producing forty pages a week do not — 74% of new web pages now contain AI-generated content, and AI writes to a generic professional register that drifts toward exactly the words most brands ban. Governance by eyeball doesn't survive that volume; a check that quotes every violation with its location does. And when 2026 state privacy laws require a transparency trail for AI-assisted decisions, an audit log of what was flagged and why stops being a nicety.
+**The problem it exists to solve is scale.** One marketer writing one page holds the voice in their head. Ten people and an AI assistant producing forty pages a week do not. Ahrefs' detector found AI-generated text in 74% of 900,000 new English-language pages published in April 2025, mostly mixed with human writing ([Ahrefs, May 2025](https://ahrefs.com/blog/what-percentage-of-new-content-is-ai-generated); detectors are imperfect, so read it as a scale, not a precise count). AI writes to a generic professional register that drifts toward exactly the words most brands ban. Governance by eyeball doesn't survive that volume; a check that quotes every violation with its location does, and its log of what was flagged and why is the record you want when someone asks how AI-assisted copy was reviewed.
 
 ## When to use
 
@@ -51,7 +51,7 @@ The user is reviewing content for brand conformance, setting up a guardrail befo
 
 1. **Get the voice rules.** Read `.agents/product-marketing.md` — the Voice & tone section has the do/don't and words-to-avoid. If no brief exists, run `brand-product-context` first, or supply an explicit avoid-list, prefer-list, and grade ceiling. Without real brand rules the check falls back to AAJ house defaults, which catch generic jargon but aren't *this* brand.
 2. **Get the content as blocks.** Paragraphs, list items, headings — the units an editor actually fixes. The engine splits on blank lines and list markers.
-3. **Confirm the reading-grade ceiling.** Most B2B copy should sit at grade 8–10. A brand writing for a technical audience may set it higher; say so, or the grade note will fire on legitimately dense copy.
+3. **Confirm the reading-grade ceiling.** The engine defaults to a grade-10 ceiling, AAJ's working default for B2B copy rather than a published standard. A brand writing for a technical audience may set it higher; say so, or the grade note will fire on legitimately dense copy.
 
 ## Method
 

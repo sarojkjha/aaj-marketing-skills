@@ -16,7 +16,7 @@ metadata:
   difficulty: Intermediate
   card: >-
     Models whether a template-page build pays back before anything gets written.
-  version: 1.0.0
+  version: 1.0.1
   sprint: ai-visibility
   topic: content-seo
   agents: [Claude Code, Cursor, OpenAI Codex, Windsurf, Cline]
@@ -77,7 +77,7 @@ node .agents/skills/programmatic-seo/resources/pseo-model.js --help
 
 It runs the funnel (pages → indexed → ranking), projects sessions, conversions and value, computes payback and cost per ranking page, and flags the failure patterns — thin query volume, missing per-page data, doorway-scale builds, optimistic indexation assumptions.
 
-Defaults imply roughly 18% of built pages produce any traffic. That is deliberately sobering and roughly matches what teams report. Override every assumption with your own Search Console data as soon as you have it — the model's job is to make the assumptions explicit, not to be right by default.
+The defaults — 60% of pages indexed, 30% of those reaching page 1 — mean about 18% of built pages earn any traffic. Both rates are AAJ assumptions chosen to be sobering, not measured industry rates. CTR by position comes from Backlinko's study of 4 million Google results (2019, updated April 2025), which predates AI Overviews; the AI Overview drag is an AAJ assumption informed by Ahrefs' February 2026 finding of a 58% lower position-1 CTR where an overview shows. Override every assumption with your own Search Console data as soon as you have it — the model's job is to make the assumptions explicit, not to be right by default.
 
 ## Workflow
 

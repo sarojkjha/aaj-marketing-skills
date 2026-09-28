@@ -14,7 +14,7 @@
  *
  * CONFIG (JSON)
  *   {
- *     "model": "saas",                 // saas | ecom | local | market (picks default channels + benchmarks)
+ *     "model": "saas",                 // saas | ecom | local | market (picks default channels + placeholder numbers)
  *     "mode": "budget",                // budget | cac | goal
  *     "budget": 30000,                 // mode=budget
  *     "cacTarget": 700,                // mode=cac
@@ -56,8 +56,9 @@ const LABEL = {
   snapchat: 'Snapchat', nextdoor: 'Nextdoor', yelp: 'Yelp', applesearch: 'Apple Search'
 };
 
-// Benchmark starting points by business model. Replace with the client's own
-// data whenever available — these are calibration, not truth.
+// AAJ illustrative defaults by business model — round placeholders, not
+// benchmarks, and not traced to any published survey. Replace with the
+// client's own account data before the output informs a decision.
 const PRESETS = {
   saas: {
     label: 'B2B SaaS', acv: 6000, margin: 80, ltv: 15000,
@@ -163,11 +164,14 @@ function buildChannels(cfg) {
   const preset = PRESETS[cfg.model] || PRESETS.saas;
   const map = {};
   // Seed defaults from the preset.
-  preset.defaults.forEach(k => { map[k] = Object.assign({ key: k, model: 'funnel' }, preset.ch[k]); });
-  // Apply overrides / additions from cfg.channels.
+  preset.defaults.forEach(k => { map[k] = Object.assign({ key: k, model: 'funnel', placeholder: true }, preset.ch[k]); });
+  // Apply overrides / additions from cfg.channels. A channel counts as the
+  // user's own data only when every economic input came from the config.
   (cfg.channels || []).forEach(o => {
     const base = preset.ch[o.key] || {};
-    map[o.key] = Object.assign({ key: o.key, model: 'funnel' }, base, o);
+    const need = o.model === 'cpl' ? ['cpl', 'l2c', 'cap'] : ['cpc', 'cvr', 'l2c', 'cap'];
+    const placeholder = need.some(f => o[f] == null);
+    map[o.key] = Object.assign({ key: o.key, model: 'funnel' }, base, o, { placeholder });
   });
   return Object.keys(map).map(k => econ(map[k]));
 }
@@ -209,7 +213,8 @@ function run(cfg) {
       cac: customers > 0 ? Math.round(spend / customers) : null,
       marginalCAC: Math.round(marginalCAC(spend, c.baseCAC, c.cap, DR)),
       baseCAC: Math.round(c.baseCAC),
-      leads: Math.round(leads)
+      leads: Math.round(leads),
+      placeholderInputs: !!c.placeholder
     };
   });
   const blendedCAC = totCust > 0 ? totSpend / totCust : 0;
@@ -236,9 +241,11 @@ function run(cfg) {
   out.push(pad('BLENDED', 14) + padl(money(totSpend), 10) + padl('100%', 6) + padl(one(totCust), 11) + padl(money(blendedCAC), 9));
   out.push('');
   out.push(`LTV:CAC ${one(ltvcac)}:1   ·   ROAS ${one(roas)}x   ·   CAC payback ${one(payback)} mo`);
-  out.push(ltvcac >= 3 ? '✓ LTV:CAC is at or above the 3:1 floor.' : '▼ LTV:CAC is below the 3:1 floor — lift LTV or cut CAC before scaling.');
+  out.push(ltvcac >= 3 ? '✓ LTV:CAC is above 3:1, David Skok\'s SaaS reference point (paid-media CAC only).' : '▼ LTV:CAC is below 3:1, David Skok\'s SaaS reference point — lift LTV or cut CAC before scaling.');
   const thin = rows.filter(r => r.spend > 0 && r.spend < 1500);
-  if (thin.length >= 2) out.push(`⚠ ${thin.length} channels are funded under ~$1,500/mo (${thin.map(t => t.channel).join(', ')}) — below most platforms' learning minimums. Consider consolidating.`);
+  if (thin.length >= 2) out.push(`⚠ ${thin.length} channels are funded under ~$1,500/mo (${thin.map(t => t.channel).join(', ')}) — this engine's rule of thumb for enough budget to learn from. Consider consolidating.`);
+  const ph = rows.filter(r => r.placeholderInputs);
+  if (ph.length) out.push(`⚠ Placeholder inputs: ${ph.map(p => p.channel).join(', ')} ${ph.length === 1 ? 'uses' : 'use'} AAJ's illustrative defaults, not benchmarks. Replace with account data before budgeting from this.`);
   const zero = rows.filter(r => r.spend === 0);
   if (zero.length) out.push(`• Excluded at this budget (base CAC too high to compete): ${zero.map(z => z.channel).join(', ')}.`);
   out.push('');
@@ -248,6 +255,8 @@ function run(cfg) {
     totalSpend: Math.round(totSpend), customers: Math.round(totCust * 10) / 10,
     blendedCAC: Math.round(blendedCAC), ltvCac: Math.round(ltvcac * 100) / 100,
     roas: Math.round(roas * 100) / 100, cacPaybackMonths: Math.round(payback * 10) / 10,
+    placeholderChannels: rows.filter(r => r.placeholderInputs).map(r => r.channel),
+    ltvCacReference: { figure: 'LTV:CAC above 3:1', source: 'David Skok, SaaS Metrics 2.0', url: 'https://www.forentrepreneurs.com/saas-metrics-2/' },
     allocation: rows
   }, null, 2));
   return out.join('\n');

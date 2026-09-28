@@ -1,6 +1,8 @@
-# Channel benchmarks & default sets
+# Channel defaults & default sets
 
-Starting points only. A client's own account data always wins — these move 30–50% by vertical, offer, and creative. Sources: WordStream/LocaliQ 2025 Google benchmarks, LinkedIn 2025 benchmark reports (Closely, HockeyStack), Dreamdata/eMarketer (channel ROAS & share), Flyweel (CPL/CAC index). Figures reflect early-2026 conditions.
+**These are AAJ's illustrative defaults, not benchmarks.** Each number is a round placeholder chosen so the engine runs and the demo reads sensibly. None is traced to a published survey, and the `cap` values are pure modelling assumptions. Replace every figure with the client's own account data before the output informs a decision. CPC, conversion and close rates vary widely by vertical, offer, audience and creative, so a default can be off by a multiple, not a margin.
+
+If you need an outside reference point while you collect account data, cite one published study by name, year and sample (for example a vendor's annual Google Ads benchmark report) and say which of its figures you used. Don't present these defaults as industry numbers.
 
 All channels use the **funnel** model — `CPC`, `click→lead %`, `lead→customer %` — except pay-per-lead directories (Capterra/G2), which take **cost-per-lead** directly plus a close rate (`model: "cpl"`). `cap` is "scale headroom": the monthly spend beyond which that channel saturates and marginal CAC climbs steeply.
 
@@ -9,17 +11,17 @@ All channels use the **funnel** model — `CPC`, `click→lead %`, `lead→custo
 | Channel | Role | Notes |
 |---|---|---|
 | Google | Capture intent | Harvest in-market search demand; caps at search volume |
-| Microsoft (Bing) | Capture intent | ~20–30% cheaper CPCs than Google; import the Google setup |
-| LinkedIn | B2B targeting | Premium price, best lead quality for B2B; strong closed-won CAC |
+| Microsoft (Bing) | Capture intent | Often cheaper CPCs than Google — check your own auction data; import the Google setup |
+| LinkedIn | B2B targeting | Premium price; job-title and company targeting for B2B |
 | Meta | Reach & demand | Cheap reach/volume, lower intent, needs nurturing |
-| TikTok | Reach & demand | Younger/consumer audiences; rising fast |
+| TikTok | Reach & demand | Younger/consumer audiences |
 | YouTube | Awareness | Demos, brand, consideration; more top-funnel |
 | Amazon | Bottom-funnel | Ecommerce purchase intent; closed-loop attribution |
 | Capterra / G2 | High-intent leads | B2B software evaluation; pay per lead |
 | Reddit / Quora | Community / research | Technical and research-mode audiences |
 | Pinterest / Snapchat | Discovery / reach | DTC discovery, younger reach |
 
-## Default sets & starting numbers
+## Default sets & placeholder numbers
 
 ### B2B SaaS  — ACV $6,000 · margin 80% · LTV $15,000
 Defaults: **Google, LinkedIn, Microsoft, Meta, YouTube** · add-ons: Capterra/G2, Reddit, Quora, X

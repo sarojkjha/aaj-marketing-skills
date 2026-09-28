@@ -18,7 +18,7 @@ metadata:
   card: >-
     Splits spend across channels to hit a CAC target, with diminishing returns
     modelled.
-  version: 1.0.0
+  version: 1.1.0
   sprint: unit-economics-retention
   topic: paid-media
   agents: [Claude Code, Cursor, OpenAI Codex, Windsurf, Cline]
@@ -43,7 +43,7 @@ Allocate a paid advertising budget across channels by **cost per customer**, not
 
 ## Method
 
-1. **Set the CAC ceiling from LTV.** A healthy LTV:CAC ratio is **≥ 3:1**. Work backwards: ceiling ≈ LTV ÷ 3. This is the most you should pay per customer from ads (blended). Note this is *paid-media* CAC; fully-loaded CAC is higher.
+1. **Set the CAC ceiling from LTV.** David Skok's SaaS guidance puts LTV:CAC **above 3:1** ([SaaS Metrics 2.0](https://www.forentrepreneurs.com/saas-metrics-2/)). Work backwards: ceiling ≈ LTV ÷ 3. This is the most you should pay per customer from ads (blended). Note this is *paid-media* CAC; fully-loaded CAC is higher.
 2. **Pick the channel set for the model.** Don't run every channel — pick the 3–5 where the buyer actually researches and purchases. See `resources/channel-benchmarks.md` for the default set per model.
 3. **Get a base CAC per channel** from the funnel inputs (formula below). This is the cost per customer at efficient, modest spend.
 4. **Allocate against diminishing returns.** Each channel gets more expensive as you scale (you exhaust the best-matched audience), so the cheapest channel is *not* where all the budget goes. Fund each channel until the cost of its next customer hits the target, then stop. Channels whose first customer already costs more than the target drop out — correctly.
@@ -88,11 +88,11 @@ node .agents/skills/paid-media-budget-allocation/resources/allocation-engine.js 
 node .agents/skills/paid-media-budget-allocation/resources/allocation-engine.js --help
 ```
 
-The engine prints a per-channel table plus a JSON block you can parse. Always seed the per-channel inputs with the user's own account data where they have it; the benchmarks are only a starting point.
+The engine prints a per-channel table plus a JSON block you can parse. Always seed the per-channel inputs with the user's own account data; the defaults exist so the engine runs.
 
-## Channel benchmarks
+## Channel defaults
 
-Starting CPC / conversion / close-rate defaults and the default channel set per business model are in `resources/channel-benchmarks.md`. Treat them as calibration, not truth — a client's real numbers move the answer far more than any benchmark.
+The default channel set per business model and placeholder CPC / conversion / close-rate numbers are in `resources/channel-benchmarks.md`. They are AAJ's illustrative defaults, not benchmarks, and aren't traced to a published survey. Say so whenever an output still uses them, and replace them with the client's own numbers before anyone budgets from the result.
 
 ## Present the result
 
@@ -102,7 +102,7 @@ Use the format in `resources/output-format.md`: the split (channel, $, %, custom
 
 - **Optimize on customers/revenue, not cost-per-lead.** Cheap leads that never close are the most expensive thing in paid media.
 - **Don't pour everything into the cheapest channel** — average CAC hides diminishing returns; the next customer there may already cost more than elsewhere.
-- **Right-size the channel count.** Three to five channels funded above their learning minimums beat many channels starved of budget. If two or more channels would get under ~$1,500/mo, recommend consolidating (the engine flags this).
+- **Right-size the channel count.** Three to five channels funded above their learning minimums beat many channels starved of budget. If two or more channels would get under ~$1,500/mo, recommend consolidating (the engine flags this; $1,500 is this engine's rule of thumb, not a platform minimum).
 - **Mind attribution and lag.** In B2B, deals close weeks after the click — track ROAS to 90 days and year one, not month one.
 - **Rebalance monthly, not daily.** Large budget swings reset platform learning; give a change two to four weeks.
 - **Be explicit that this is paid-media CAC.** Fully-loaded CAC (salaries, tools, content) is higher, so LTV:CAC and payback here reflect ad efficiency only.

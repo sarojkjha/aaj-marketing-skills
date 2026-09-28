@@ -16,7 +16,7 @@ metadata:
   difficulty: Intermediate
   card: >-
     Scores a page 0-100 across SEO, GEO and AEO, with fixes in priority order.
-  version: 1.0.0
+  version: 1.0.1
   sprint: ai-visibility
   topic: ai-search
   secondary_topics: [content-seo]
@@ -52,16 +52,16 @@ The user wants to know why a page isn't ranking or being cited by AI, or wants a
    node resources/score.js --help
    ```
    It returns category scores, a 0–100 total, a letter grade, and the failing checks.
-3. **Prioritize fixes** by impact: rendering/crawlability first (it gates everything), then the cheapest high-value GEO/AEO wins (answer-first passage, FAQPage schema, llms.txt, inline statistics and citations), then on-page and authority polish.
+3. **Prioritize fixes** by impact: rendering/crawlability first (it gates everything), then the cheapest high-value GEO/AEO wins (answer-first passage, sourced statistics and inline citations, question-first headings), then on-page and authority polish. FAQPage schema and llms.txt are cheap hygiene, not Google levers: FAQ rich results stopped showing on 7 May 2026, and Google says llms.txt isn't needed for Search.
 4. **Present** the score, the category breakdown, and a short, ordered remediation plan.
 
 ## Scoring model
 
-Five weighted categories: **Technical & Crawlability 25 · On-Page SEO 20 · AEO 20 · GEO 20 · Authority & Trust 15.** Each category scores by pass-rate × weight. Grades: A ≥ 90, B 75–89, C 60–74, D 45–59, F < 45. GEO checks are anchored to the Princeton GEO study's measured citation lifts (statistics, citations, quotations, terminology).
+Five weighted categories: **Technical & Crawlability 25 · On-Page SEO 20 · AEO 20 · GEO 20 · Authority & Trust 15.** Each category scores by pass-rate × weight. Grades: A ≥ 90, B 75–89, C 60–74, D 45–59, F < 45. GEO checks follow the levers tested in the GEO study (Aggarwal et al., KDD 2024 — statistics, citations, quotations, terminology). That study measured share of an answer inside a fixed context; end-to-end studies since found the gains don't transfer reliably, so the checks score whether claims are checkable and never imply a predicted lift.
 
 ## Present the result
 
-Lead with the headline score and grade, then the five-category bar, then the top fixes in priority order with the expected effect of each. Be concrete: name the missing schema, the absent llms.txt, the empty-shell render — not "improve SEO."
+Lead with the headline score and grade, then the five-category bar, then the top fixes in priority order with what each one fixes (don't attach a percentage lift). Be concrete: name the missing schema, the absent llms.txt, the empty-shell render — not "improve SEO."
 
 ## Guardrails & common mistakes
 

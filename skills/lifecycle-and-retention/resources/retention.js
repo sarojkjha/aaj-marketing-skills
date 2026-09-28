@@ -27,11 +27,14 @@
  * and used solely for the quick ratio. Amounts may be ARR instead of MRR; set
  * period:"annual" so lifetime is expressed correctly.
  *
- * Benchmarks used in the verdict (thresholds, not medians):
- *   NRR >100% grows the base without new logos; ~120%+ is best-in-class (Bessemer
- *   cloud benchmarks). GRR 90%+ is strong. Quick ratio >=4 is efficient growth
- *   (SaaS Quick Ratio, Social Capital). Verify against current benchmarks for your
- *   segment (SMB retention typically runs lower than enterprise).
+ * Reference points used in the verdict (both are annual figures, so they are
+ * applied only when period is "annual"):
+ *   NRR above 100% grows the base without new logos (arithmetic). Bessemer's State
+ *   of the Cloud 2023 sets 100% good, 110% better and 120%+ best, for Series B/C
+ *   enterprise software; expect lower earlier and in SMB.
+ *   GRR: SaaS Capital's 2026 survey puts the median at 91% for bootstrapped B2B
+ *   SaaS companies between $3M and $20M ARR. Compare with your own segment.
+ *   Quick ratio: dollars added per dollar lost. No threshold is applied.
  */
 
 // --- AAJ arg normalisation ---------------------------------------------------
@@ -107,20 +110,19 @@ function verdict(r){
   const L = [];
   const unit = r.period === 'annual' ? '/yr' : '/mo';
   if (r.nrr != null){
-    if (r.nrr >= 120) L.push(`\u2713 NRR ${pct(r.nrr)} \u2014 best-in-class; the base compounds without new logos.`);
-    else if (r.nrr >= 110) L.push(`\u2713 NRR ${pct(r.nrr)} \u2014 strong; expansion clearly outpaces churn.`);
-    else if (r.nrr >= 100) L.push(`\u2713 NRR ${pct(r.nrr)} \u2014 healthy; the base grows on its own.`);
-    else if (r.nrr >= 90)  L.push(`\u25bc NRR ${pct(r.nrr)} \u2014 under 100%: the base is shrinking; expansion isn't covering churn.`);
-    else L.push(`\u2717 NRR ${pct(r.nrr)} \u2014 the base is leaking; fix retention before scaling acquisition.`);
+    const annual = r.period === 'annual';
+    if (annual && r.nrr >= 120) L.push(`\u2713 NRR ${pct(r.nrr)} \u2014 in Bessemer's 'best' band (120%+, set for Series B/C enterprise software); the base compounds without new logos.`);
+    else if (annual && r.nrr >= 110) L.push(`\u2713 NRR ${pct(r.nrr)} \u2014 in Bessemer's 'better' band (110%+); expansion clearly outpaces churn.`);
+    else if (r.nrr >= 100) L.push(`\u2713 NRR ${pct(r.nrr)}${unit} \u2014 the base grows on its own, without new logos.`);
+    else L.push(`\u25bc NRR ${pct(r.nrr)}${unit} \u2014 under 100%: the base is shrinking; fix retention before scaling acquisition.`);
   }
   if (r.grr != null){
-    if (r.grr >= 90) L.push(`\u2713 GRR ${pct(r.grr)} \u2014 strong retention of committed revenue.`);
-    else if (r.grr >= 80) L.push(`\u2022 GRR ${pct(r.grr)} \u2014 typical; room to tighten churn and downgrades.`);
-    else L.push(`\u25bc GRR ${pct(r.grr)} \u2014 leaky: over a fifth of revenue is lost each period before any expansion.`);
+    if (r.period !== 'annual') L.push(`\u2022 GRR ${pct(r.grr)}/mo \u2014 about ${pct(Math.pow(r.grr/100,12)*100)} a year if every month looked like this one. Published medians are annual; compare the annual figure.`);
+    else if (r.grr >= 91) L.push(`\u2713 GRR ${pct(r.grr)} \u2014 at or above SaaS Capital's 2026 median of 91% for bootstrapped B2B SaaS ($3M\u2013$20M ARR).`);
+    else L.push(`\u25bc GRR ${pct(r.grr)} \u2014 below SaaS Capital's 2026 median of 91% for bootstrapped B2B SaaS ($3M\u2013$20M ARR); compare with your own segment.`);
   }
   if (r.quickRatio != null){
-    if (r.quickRatio >= 4) L.push(`\u2713 Quick ratio ${one(r.quickRatio)} \u2014 efficient growth (\u22654).`);
-    else if (r.quickRatio >= 1) L.push(`\u2022 Quick ratio ${one(r.quickRatio)} \u2014 growing, but churn eats much of new + expansion (aim \u22654).`);
+    if (r.quickRatio >= 1) L.push(`\u2022 Quick ratio ${one(r.quickRatio)} \u2014 ${one(r.quickRatio)} added for every 1 lost; adds outpace losses.`);
     else L.push(`\u2717 Quick ratio ${one(r.quickRatio)} \u2014 losing more than you add; the base is contracting.`);
   }
   if (r.logoChurn != null){
@@ -129,7 +131,7 @@ function verdict(r){
     L.push(`\u2022 ~${one(r.lifetimeMonths)} mo average lifetime at current revenue churn.`);
   }
   if (r.impact){
-    L.push(`\u2197 Cutting ${r.impact.basis} ${pct(r.impact.fromPct)} \u2192 ${pct(r.impact.toPct)} lifts LTV ~${pct(r.impact.ltvLiftPct)} (lifetime \u2192 ~${one(r.impact.newLifetimeMonths)} mo). Retention is the biggest LTV lever.`);
+    L.push(`\u2197 Cutting ${r.impact.basis} ${pct(r.impact.fromPct)} \u2192 ${pct(r.impact.toPct)} lifts LTV ~${pct(r.impact.ltvLiftPct)} (lifetime \u2192 ~${one(r.impact.newLifetimeMonths)} mo). Retention is a direct LTV lever.`);
   }
   return L;
 }

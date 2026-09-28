@@ -30,7 +30,7 @@ The standard projection:
 10,000 pages × 50 searches/mo × 3% CTR = 15,000 visits/mo
 ```
 
-What actually happens:
+What the funnel looks like (illustrative rates — AAJ assumptions, not measured industry figures):
 
 ```
 10,000 pages built
@@ -40,7 +40,7 @@ What actually happens:
   × ~85% (AI Overviews)     →  2,679 visits/mo
 ```
 
-Roughly a fifth of the naive projection — and both rates are optimistic for a template-generated set with weak per-page data. Indexation rates well under half are common at large page counts.
+Roughly a fifth of the naive projection. None of these rates is an industry figure: they're assumptions to replace with your own Search Console data, and for a template-generated set with weak per-page data, assume they could be lower.
 
 Model it explicitly. `resources/pseo-model.js` does this, and every rate is overridable once you have real data.
 
@@ -55,7 +55,7 @@ UNIQUE        Genuinely different per page — the part that earns the ranking
 GENERATED     Computed from the data — comparisons, rankings, calculations
 ```
 
-A safe rule: **at least 40–50% of visible body content should be UNIQUE or GENERATED**. If FIXED and VARIABLE dominate, you've built near-duplicates with the nouns swapped.
+AAJ's rule of thumb (not a Google threshold): **at least 40–50% of visible body content should be UNIQUE or GENERATED**. If FIXED and VARIABLE dominate, you've built near-duplicates with the nouns swapped.
 
 **Every page also needs:**
 - A 40–60 word answer block near the top (the AEO/GEO requirement — see `seo-content-brief`)
@@ -129,7 +129,7 @@ node .agents/skills/programmatic-seo/resources/pseo-model.js \
 ```
 
 ```
-MARGINAL — Payback in 21 months.
+MARGINAL — Payback in 18 months.
   Reaching page 1  × 30%      7
   [MEDIUM] Only ~7 pages are projected to rank. Below about 20, this isn't
            a programme — it's a handful of pages you could write by hand, better.
@@ -137,7 +137,7 @@ MARGINAL — Payback in 21 months.
 
 Good data, good economics, and it still fails — because 40 pages through the funnel leaves only seven earning anything, against a fixed build cost. **The honest answer at this size is to hand-write the best ten pages**, which will be better than any template output.
 
-This is the most common way a promising pSEO idea dies, and it's invisible without the funnel.
+In AAJ's work this is a common way a promising pSEO idea dies, and it's invisible without the funnel.
 
 ### Attempt 2 — expand the pattern
 
@@ -150,11 +150,11 @@ node .agents/skills/programmatic-seo/resources/pseo-model.js \
 ```
 
 ```
-BUILD — Payback in 6 months. Strong case — pilot 50 pages first.
+BUILD — Payback in 5 months. Strong case — pilot 50 pages first.
   Reaching page 1  × 30%      43
-  Sessions                    77/mo
+  Sessions                    88/mo
   Investment                  $14,400
-  Year 1 net                  $15,211
+  Year 1 net                  $19,441
   No risks flagged.
 ```
 

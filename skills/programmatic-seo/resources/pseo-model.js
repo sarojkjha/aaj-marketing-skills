@@ -21,19 +21,24 @@ process.argv = process.argv.map((a, i) =>
 // -----------------------------------------------------------------------------
 
 
-// Approximate organic CTR by position. Published studies vary widely by
-// vertical and SERP layout — treat as directional and override with your
-// own Search Console data when you have it (--ctr).
-const CTR = { 1: 0.27, 2: 0.15, 3: 0.11, 4: 0.08, 5: 0.06, 6: 0.045, 7: 0.035, 8: 0.03, 9: 0.025, 10: 0.022 };
+// Organic CTR by position, from Backlinko's analysis of 4 million Google
+// results (Brian Dean, 2019, updated April 2025; Semrush and Search Console
+// data): https://backlinko.com/google-ctr-stats
+// It predates AI Overviews and varies by vertical and SERP layout, so treat
+// it as a ceiling and override with your own Search Console data (--ctr).
+const CTR = { 1: 0.276, 2: 0.155, 3: 0.114, 4: 0.089, 5: 0.072, 6: 0.051, 7: 0.040, 8: 0.032, 9: 0.028, 10: 0.027 };
 
 const DEFAULTS = {
   pages: 500,          // pages the template would generate
   volume: 40,          // avg monthly searches per page's target query
-  indexRate: 0.60,     // share of pages Google actually indexes
-  rankRate: 0.30,      // share of indexed pages that reach page 1
+  indexRate: 0.60,     // share of pages Google actually indexes (AAJ assumption)
+  rankRate: 0.30,      // share of indexed pages that reach page 1 (AAJ assumption)
   position: 7,         // avg position for pages that do rank
   ctr: null,           // override CTR directly (0-1)
-  aiDrag: 0.85,        // click retention where AI Overviews appear (1 = no effect)
+  aiDrag: 0.85,        // blended click retention after AI Overviews (1 = no effect).
+                       // AAJ assumption: Ahrefs (Feb 2026, 300k keywords) found a 58%
+                       // lower position-1 CTR where an AI Overview shows; 0.85 is about
+                       // a quarter of your queries showing one. Set it from your SERPs.
   conv: 2.0,           // visitor -> conversion, %
   value: 200,          // value per conversion, $
   costPerPage: 8,      // marginal cost per page (content, data, QA), $
@@ -160,8 +165,9 @@ function report(o, r) {
   L.push("ASSUMPTIONS — change these before trusting the output");
   L.push(`  Indexation ${(num(o.indexRate) * 100).toFixed(0)}% · page-1 rate ${(num(o.rankRate) * 100).toFixed(0)}% · avg position ${o.position} (CTR ${(r.ctr * 100).toFixed(1)}%)`);
   L.push(`  AI-Overview click retention ${(num(o.aiDrag) * 100).toFixed(0)}% · conversion ${o.conv}% · value ${fmtMoney(num(o.value))}`);
-  L.push("  CTR curve is approximate and varies by vertical. Use your own Search");
-  L.push("  Console data via --ctr as soon as you have it.");
+  L.push("  Index and page-1 rates and AI drag are AAJ assumptions. CTR curve:");
+  L.push("  Backlinko, 4M results (2019, updated 2025), pre-AI Overviews. Use your");
+  L.push("  own Search Console data via --ctr as soon as you have it.");
   L.push("");
   L.push("JSON");
   L.push(JSON.stringify({
@@ -190,7 +196,7 @@ Options            Default   Meaning
   --rank-rate      0.30      Share of indexed pages reaching page 1
   --position       7         Avg position for pages that rank
   --ctr            (auto)    Override CTR directly, e.g. 0.04
-  --ai-drag        0.85      Click retention where AI Overviews appear
+  --ai-drag        0.85      Blended click retention after AI Overviews (assumption)
   --conv           2.0       Visitor to conversion, %
   --value          200       Value per conversion, $
   --cost-per-page  8         Marginal cost per page, $
@@ -200,8 +206,11 @@ Options            Default   Meaning
 Why the funnel matters
   Most pSEO projections multiply pages by search volume and produce a
   fantasy. In practice a large share of template-generated pages are never
-  indexed, and most of those that are never reach page 1. Defaults here
-  imply ~18% of built pages produce any traffic. Adjust with your own data.
+  indexed, and most of those that are never reach page 1. The defaults
+  (60% indexed, 30% of those on page 1) mean 18% of built pages earn any
+  traffic. Both rates are AAJ assumptions, not measured industry rates.
+  CTR by position: Backlinko, 4M results (2019, updated 2025).
+  Replace all of them with your own data.
 
 The model cannot tell you whether your pages deserve to rank. That is what
 --unique-data is asking about, and it is the factor that decides most

@@ -27,16 +27,16 @@ The make-or-break layer. If crawlers and AI engines can't get rendered HTML, not
 Winning the direct answer / featured snippet.
 - `answer_first_passage` — a 40–60-word passage that directly answers the page's core question, near the top.
 - `question_first_h2s` — H2s phrased as the questions users actually ask.
-- `faqpage_schema` — FAQPage JSON-LD whose Q&A mirror visible on-page text.
+- `faqpage_schema` — FAQPage JSON-LD whose Q&A mirror visible on-page text. Google stopped showing FAQ rich results on 7 May 2026; the markup still describes the page to other engines, so score it only where a visible FAQ exists.
 - `scannable_lists_tables` — lists/tables that give answer engines clean extractable blocks.
 
 ## GEO (AI Citation Readiness) — weight 20
-Getting cited by generative engines. Anchored to the measured lifts from the Princeton GEO study.
-- `statistics_present` — concrete numbers and data points (lift ~+30% citation likelihood).
-- `inline_citations` — claims cite named, authoritative sources (~+30%).
-- `quotations` — attributed quotations included (~+40%).
-- `precise_terminology` — exact domain terms a buyer/model would use (~+25–30%).
-- `llms_txt` — `llms.txt` and/or `llms-full.txt` present and current.
+Getting cited by generative engines. The content checks follow the levers tested in the GEO study (Aggarwal et al., KDD 2024), which raised a source's share of an answer inside a fixed five-source context. End-to-end studies since (SAGEO Arena, KDD 2026; C-SEO Bench, NeurIPS 2025) found those gains don't transfer reliably, so these checks score whether claims are checkable, not a predicted lift.
+- `statistics_present` — concrete numbers and data points, each sourced.
+- `inline_citations` — claims cite named, primary sources.
+- `quotations` — attributed quotations included.
+- `precise_terminology` — exact domain terms a buyer/model would use.
+- `llms_txt` — `llms.txt` and/or `llms-full.txt` present and current. For other services only: Google says llms.txt isn't needed for Search and won't help or hurt rankings.
 - `freshness` — visible updated date and `dateModified` in schema.
 
 ## Authority & Trust — weight 15

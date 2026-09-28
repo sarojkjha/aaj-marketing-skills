@@ -18,7 +18,7 @@ metadata:
   card: >-
     Tiers a launch, scores readiness on a twelve-item gate, and builds the dated
     work-back plan.
-  version: 1.0.0
+  version: 1.0.1
   topic: gtm-growth-planning
   secondary_topics: [pr-partnerships-events, strategy-positioning]
   agents: [Claude Code, Cursor, OpenAI Codex, Windsurf, Cline]
@@ -67,7 +67,8 @@ attention, and spending it on small changes trains people to ignore the one that
 | 3 - release note | Everything else | A changelog entry, an in-app note where it is used, and one adoption metric. No date, no gate |
 
 **Then the gate.** Twelve items, two per dimension - positioning, product, audience, assets, team,
-measurement - each scored 0, 1 or 2. 85% or above is ready to set a date. 60% to 84% is close.
+measurement - each scored 0, 1 or 2. 85% or above is ready to set a date. 60% to 84% is close. (These are
+AAJ's thresholds, not an industry standard.)
 Below 60% is the building phase: this is not a launch-planning problem yet, and setting a date would
 move work that has not been done into a week that does not exist.
 

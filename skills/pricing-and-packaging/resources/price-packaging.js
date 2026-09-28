@@ -9,7 +9,8 @@
  *   revenue mix    = each tier's (price × customers) as a share of the total
  *   price ladder   = each tier's price relative to the tier below it
  *   anchor check   = top tier vs the SECOND-highest tier (a real anchor needs a
- *                    meaningful jump — flagged weak below ~1.5x)
+ *                    meaningful jump — flagged weak below ~1.5x; this
+ *                    engine's rule of thumb, not a published benchmark)
  *   concentration  = where revenue actually sits (entry vs middle/top)
  *
  * Usage:

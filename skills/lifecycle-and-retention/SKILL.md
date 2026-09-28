@@ -17,7 +17,7 @@ metadata:
   difficulty: Intermediate
   card: >-
     Computes churn, NRR, GRR and quick ratio, then diagnoses which one to fix.
-  version: 1.0.0
+  version: 1.0.1
   sprint: unit-economics-retention
   topic: retention-expansion
   agents: [Claude Code, Cursor, OpenAI Codex, Windsurf, Cline]
@@ -33,11 +33,11 @@ metadata:
 
 # Lifecycle & Retention
 
-Keep and grow the customers you already have — the highest-leverage, most overlooked part of early-stage growth. Because lifetime value is proportional to `1 / churn`, retention usually moves LTV more than pricing or acquisition. Measure **NRR**, **GRR**, churn and the **quick ratio**, diagnose where the base leaks, then design the onboarding, lifecycle, and expansion motions that make the base compound.
+Keep and grow the customers you already have. Because lifetime value is proportional to `1 / churn`, every cut in churn lengthens the life of every customer you already have. Measure **NRR**, **GRR**, churn and the **quick ratio**, diagnose where the base leaks, then design the onboarding, lifecycle, and expansion motions that make the base compound.
 
 ## When to use
 
-The user needs to cut churn, lift net revenue retention, design onboarding/activation, build an expansion (upsell) motion, or answer "why are customers leaving and how do we keep them?" Run this after `unit-economics` — retention is the biggest lever inside that LTV.
+The user needs to cut churn, lift net revenue retention, design onboarding/activation, build an expansion (upsell) motion, or answer "why are customers leaving and how do we keep them?" Run this after `unit-economics` — retention is the churn term inside that LTV.
 
 ## Before you start
 
@@ -76,16 +76,18 @@ It prints NRR, GRR, revenue & logo churn, quick ratio, average lifetime, and the
 
 ## Interpret the result
 
-Benchmarks are thresholds, not medians — read yours against your **own segment** (SMB retention runs lower; enterprise higher) and the latest published survey:
+Read every number against your **own segment** and your own trend. The reference points below are annual, and each names its source and the group it was set for:
 
-- **NRR** above **100%** grows the base without a single new logo; roughly **120%+** is best-in-class (Bessemer cloud benchmarks). Below 100%, new sales run just to stand still.
-- **GRR** of **90%+** is strong; below ~80% is a leaky base that no amount of acquisition fixes cheaply.
-- **Quick ratio ≥ 4** signals efficient growth (the SaaS Quick Ratio popularized by Social Capital / Mamoon Hamid).
-- **Retention is the biggest LTV lever.** Since `LTV ∝ 1/churn`, halving churn roughly doubles lifetime and LTV — usually a bigger move than a price or ARPA change.
+- **NRR** above **100%** grows the base without a single new logo; below 100%, new sales run just to stand still. Bessemer's State of the Cloud 2023 sets 100% good, 110% better and 120%+ best — for Series B/C enterprise software, so expect lower earlier and in SMB.
+- **GRR** can never exceed 100%. SaaS Capital's 2026 survey puts the median at **91%** for bootstrapped B2B SaaS companies between $3M and $20M ARR.
+- **Quick ratio** is dollars added per dollar lost. Above 1, adds outpace losses; the engine applies no threshold beyond that.
+- **Retention is a direct LTV lever.** Since `LTV ∝ 1/churn`, halving churn roughly doubles lifetime and LTV.
+
+The engine compares NRR and GRR with these reference points only when `period` is `"annual"`. For monthly inputs it annualizes GRR for you and leaves the comparison to the annual figure.
 
 Watch a trap: **high NRR can hide heavy logo churn** masked by a few big expansions. Always read GRR and logo churn alongside NRR.
 
-Sources for the thresholds above: Bessemer Venture Partners (State of the Cloud / cloud benchmarks), KeyBanc Capital Markets (KBCM SaaS Survey), SaaS Capital retention research, Social Capital (SaaS Quick Ratio), and ChartMogul/Recurly churn benchmarks for segment ranges. Cite the current year's figures when presenting to a client.
+Sources: Bessemer Venture Partners, [State of the Cloud 2023](https://www.bvp.com/atlas/state-of-the-cloud-2023); SaaS Capital, [Benchmarking Metrics for Bootstrapped SaaS Companies](https://www.saas-capital.com/blog-posts/benchmarking-metrics-for-bootstrapped-saas-companies/) (2026). Cite the current year's figures when presenting to a client.
 
 ## Design the fixes
 

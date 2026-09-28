@@ -45,10 +45,10 @@ This single element does more work than any other: it is what answer engines lif
 ```
 Query:  "what is a good NRR for SaaS"
 Answer: "For B2B SaaS, net revenue retention above 100% means the existing
-         base grows without new logos. Roughly 110% is strong and 120%+
-         is best-in-class. Below 100%, new sales are replacing churn
-         rather than adding to it. Read NRR alongside GRR — a high NRR
-         can mask a leaky base."
+         base grows without new logos. SaaS Capital's 2026 survey puts the
+         median at 103% for bootstrapped companies between $3M and $20M
+         ARR. Below 100%, new sales are replacing churn rather than adding
+         to it. Read NRR alongside GRR — a high NRR can mask a leaky base."
 ```
 
 ---
@@ -63,7 +63,7 @@ Completeness against the topic is the target. Length is a byproduct — briefing
 
 ## 5. Citability
 
-What makes this page worth *citing* rather than summarising. Research on generative-engine optimisation found citations, quotations and statistics produced the largest visibility gains — roughly 30–40% over baseline. Brief for these deliberately:
+What makes this page worth *citing* rather than summarising. The GEO study (Aggarwal et al., KDD 2024) found quotations, statistics and cited sources raised a page's share of an AI answer by roughly 27–41% — but inside a fixed five-source context, and end-to-end studies since found the gains don't transfer reliably. Brief for them because they make the page checkable and worth citing, not for a predicted lift. Brief for these deliberately:
 
 - **Named sources per claim** — specify which. "Include a statistic" produces a fabricated statistic.
 - **Precise statistics** — real numbers with attribution.
@@ -172,8 +172,9 @@ H2: FAQ
 - Decision: new page
 
 ## The answer block
-> Most Seed-to-Series-B startups spend 10-20% of revenue on marketing, but
-> the percentage is a poor guide on its own. Pre-revenue companies budget
+> Large companies spend about 7.8% of revenue on marketing (Gartner CMO
+> Spend Survey, 2026), and the median private B2B SaaS company spends 8% of
+> ARR (SaaS Capital, 2026). For a startup the percentage is a poor guide. Pre-revenue companies budget
 > from runway, not revenue. The defensible method is working backwards from
 > a customer target: CAC × customers needed, checked against payback period
 > and LTV:CAC.
@@ -210,9 +211,9 @@ H2: FAQ
 ## Technical
 - URL: /blog/how-much-should-a-startup-spend-on-marketing
 - Title tag: How Much Should a Startup Spend on Marketing? (2026 Benchmarks)
-- Meta description: Startup marketing budgets typically run 10-20% of
-  revenue — but the percentage is the wrong starting point. Here's the
-  method that holds up.
+- Meta description: The median private B2B SaaS company spends 8% of ARR
+  on marketing (SaaS Capital, 2026) — but for a startup the percentage is
+  the wrong starting point. Here's the method that holds up.
 - Schema: Article + FAQPage
 
 ## Do not

@@ -16,7 +16,7 @@ metadata:
   difficulty: Advanced
   card: >-
     Designs tiers with an anchor check and a willingness-to-pay read.
-  version: 1.1.0
+  version: 1.1.1
   sprint: unit-economics-retention
   topic: pricing-monetization
   agents: [Claude Code, Cursor, OpenAI Codex, Windsurf, Cline]
@@ -62,7 +62,8 @@ blended ARPU = Σ(tier price × tier customers) / Σ(tier customers)
 revenue mix  = each tier's (price × customers) as a share of the total
 price ladder = each tier's price relative to the tier below it
 anchor       = top tier ÷ the SECOND-highest tier (a real anchor needs a
-               meaningful jump — flagged weak below ~1.5x)
+               meaningful jump — flagged weak below ~1.5x, this engine's
+               rule of thumb, not a published benchmark)
 healthy: top tier anchors; most revenue from the middle/top, not the entry tier
 ```
 
@@ -74,7 +75,7 @@ healthy: top tier anchors; most revenue from the middle/top, not the entry tier
 node .agents/skills/pricing-and-packaging/resources/price-packaging.js --input=tiers.json
 node .agents/skills/pricing-and-packaging/resources/price-packaging.js  # built-in demo
 ```
-Input JSON: `{ "tiers": [ { "name": "Starter", "price": 29, "customers": 600 }, ... ] }`. It prints each tier's price, customers, revenue, revenue share, and price-ladder step, plus the blended ARPU, the **anchor check** (top tier vs the second-highest — flagged weak below ~1.5x), and where revenue concentrates. Use these exact numbers.
+Input JSON: `{ "tiers": [ { "name": "Starter", "price": 29, "customers": 600 }, ... ] }`. It prints each tier's price, customers, revenue, revenue share, and price-ladder step, plus the blended ARPU, the **anchor check** (top tier vs the second-highest — flagged weak below ~1.5x, this engine's rule of thumb), and where revenue concentrates. Use these exact numbers.
 
 Designing pricing for a product with **no customers yet**? Enter your estimated mix as counts per 100 (e.g. `60` / `30` / `10`) and mark it as an assumption — the mix percentages come out identical either way.
 

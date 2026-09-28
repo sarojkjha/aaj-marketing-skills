@@ -17,7 +17,7 @@ metadata:
   difficulty: Intermediate
   card: >-
     Weights pipeline by stage and says whether coverage is real.
-  version: 1.0.0
+  version: 1.0.1
   sprint: unit-economics-retention
   topic: sales-pipeline
   secondary_topics: [analytics-budget]
@@ -47,7 +47,7 @@ When forecasts are sandbagged or wishful and you want a grounded number, when yo
 
 ## Method
 
-Weight open pipeline by real stage probabilities to get an expected forecast, then compare open pipeline to the target as a coverage ratio against the ~1/win-rate benchmark. Separate commit (near-certain) from best case (everything open) so the number is honest, and name the lever: build pipeline if coverage is thin, or improve conversion if coverage is fine but the forecast is short.
+Weight open pipeline by real stage probabilities to get an expected forecast, then compare open pipeline to the target as a coverage ratio against what your own win rate requires (1 ÷ win rate — arithmetic, not a borrowed benchmark). Separate commit (near-certain) from best case (everything open) so the number is honest, and name the lever: build pipeline if coverage is thin, or improve conversion if coverage is fine but the forecast is short.
 
 ## Workflow
 
@@ -94,7 +94,7 @@ The forecast engine and its input shape live in `resources/forecast.js`. Stage p
 
 - **Probabilities must come from real conversion history.** Flag clearly when they're assumed — an optimistic forecast is just a wish.
 - **Keep commit and best case separate.** Reporting only the upside is how forecasts miss.
-- **Fit the benchmark to the win rate.** A 3× coverage rule is wrong at a 10% win rate.
+- **Fit the coverage to the win rate.** The common 3× rule of thumb assumes about a one-in-three win rate; at a 10% win rate you need about 10×.
 - **Mark assumed inputs as assumptions** so no one mistakes the model for a promise.
 
 ## Related AAJ resources

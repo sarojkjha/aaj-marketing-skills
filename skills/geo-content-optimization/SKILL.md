@@ -16,7 +16,7 @@ metadata:
   difficulty: Intermediate
   card: >-
     Rewrites a page to maximise the chance an AI engine cites it.
-  version: 1.0.0
+  version: 1.1.0
   sprint: ai-visibility
   topic: ai-search
   secondary_topics: [content-seo]
@@ -41,19 +41,26 @@ The user wants a page to be cited by LLMs / appear in AI Overviews / win feature
 
 ## Method
 
-Apply the moves the Princeton "GEO" study found to measurably raise citation likelihood, plus the answer-engine structure that wins snippets. Don't keyword-stuff — these are quality signals that make a passage the most useful, quotable unit on the topic.
+Retrieval comes first. A page an engine never retrieves is never cited, so crawlability, content in the raw HTML, indexation and a direct answer to a real question come before any rewrite. Then make each passage the most useful, checkable unit on the topic. Don't keyword-stuff — it lowered visibility in the study below.
 
-GEO levers (with approximate measured citation lifts):
-- **Statistics** — add concrete numbers and data points (~+30%).
-- **Inline citations** — attribute claims to named, authoritative sources (~+30%).
-- **Quotations** — include attributed quotations (~+40%).
-- **Precise terminology** — use the exact domain terms a buyer or model would use (~+25–30%).
+What the evidence says about content levers:
+- **The original GEO study** ([Aggarwal et al., KDD 2024](https://dl.acm.org/doi/10.1145/3637528.3671900)) placed five search results in a model's context, rewrote one, and measured its share of the answer. Against a baseline of 19.3 (position-adjusted word count): quotations 27.2 (about +41%), statistics 25.2 (about +31%), cited sources 24.6 (about +27%), technical terms 22.7 (about +18%). Keyword stuffing fell to 17.7.
+- **Those gains are within a fixed context, not across search.** SAGEO Arena (Kim et al., KDD 2026) ran the full pipeline — crawl, retrieval, reranking, generation — and found that optimising the body for citation alone lowered retrieval and final citation. C-SEO Bench (Puerto et al., NeurIPS 2025 Datasets & Benchmarks) found only 3 of 54 method–domain combinations significantly positive.
+- **So use the levers because they make the page better, not as a forecast.** Real statistics, named sources and attributed quotations make a claim checkable for a reader and an engine alike. Never promise a percentage lift.
+
+GEO levers (quality signals, each only if it's true and sourced):
+- **Statistics** — concrete numbers and data points, each with its source.
+- **Inline citations** — claims attributed to named, primary sources.
+- **Quotations** — attributed quotations from a named person.
+- **Precise terminology** — the exact domain terms a buyer or model would use.
 
 AEO structure:
 - **Answer-first passage** of 40–60 words directly answering the page's core question, near the top.
 - **Question-first H2s** matching how people actually ask.
-- **FAQPage schema** whose Q&A mirror visible text.
 - **Scannable lists/tables** that give answer engines clean extractable blocks.
+- **Structured data that mirrors visible text.** Google stopped showing FAQ rich results on 7 May 2026 ([Search Central updates](https://developers.google.com/search/updates)); FAQPage markup is optional description for other engines, not a snippet lever.
+
+Google's own guidance ([Optimizing for generative AI features, 15 May 2026](https://developers.google.com/search/docs/fundamentals/ai-optimization-guide)) says optimising for its generative AI features is still SEO, and that llms.txt files aren't needed for Google Search and won't help or hurt rankings there.
 
 ## Workflow
 
@@ -61,14 +68,14 @@ AEO structure:
 2. **Add an answer-first passage** (40–60 words) up top that fully answers the core question on its own.
 3. **Inject the GEO levers** through the body: add real statistics, attribute claims to named sources with inline citations, add at least one attributed quotation, and replace vague phrasing with precise terminology. Every added fact must be true and sourced — invented stats destroy trust and citability.
 4. **Restructure for AEO:** convert H2s to questions, ensure each section is self-contained and quotable, add a comparison table or list where it fits.
-5. **Specify the schema and llms.txt:** provide FAQPage (and Article) JSON-LD mirroring the visible FAQ, and an `llms.txt` entry for the page.
+5. **Specify the schema and llms.txt:** provide Article JSON-LD (and FAQPage only where it mirrors a visible FAQ), and an `llms.txt` entry if the site keeps one for other services. Neither is a Google ranking lever.
 6. **Verify rendering matters:** note that none of this is visible to AI engines if the page is an un-prerendered SPA — if so, flag SSR/prerender as the prerequisite (see the `seo-geo-aeo-audit` skill).
 
 See `resources/geo-checklist.md` for the full checklist and an example transformation.
 
 ## Present the result
 
-Deliver the optimized content (or a marked-up diff of what to change), the answer-first passage, the FAQ + schema to add, the llms.txt entry, and a short list of the specific GEO levers applied and why.
+Deliver the optimized content (or a marked-up diff of what to change), the answer-first passage, the FAQ + schema to add, the llms.txt entry, and a short list of the specific GEO levers applied and why. Don't attach a predicted lift to any lever.
 
 ## Guardrails & common mistakes
 

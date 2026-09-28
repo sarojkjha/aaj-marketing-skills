@@ -17,7 +17,7 @@ metadata:
   difficulty: Starter
   card: >-
     Produces a writer-ready brief: intent, answer block, entities, internal links.
-  version: 1.0.0
+  version: 1.0.1
   sprint: ai-visibility
   topic: content-seo
   secondary_topics: [ai-search]
@@ -58,7 +58,7 @@ Four decisions drive the brief, in order:
 
 **3. Coverage.** List the entities and subtopics the page must address to read as complete. Completeness against the topic beats word count — "aim for 2,000 words" is a proxy that produces padding.
 
-**4. Citability.** Specify what makes the page worth citing rather than summarising: original data, a named source per claim, precise statistics, a real example. Research on generative-engine optimisation found citations, quotations and statistics produced the largest visibility gains — roughly 30–40% — over baseline content. That is a structural property you brief for, not a style you edit in later.
+**4. Citability.** Specify what makes the page worth citing rather than summarising: original data, a named source per claim, precise statistics, a real example. The GEO study (Aggarwal et al., KDD 2024) found quotations, statistics and cited sources raised a page's share of an AI answer by roughly 27–41% — but inside a fixed five-source context, and end-to-end studies since found the gains don't transfer reliably. Brief for them because they make the page checkable and worth citing, not for a predicted lift. That is a structural property you brief for, not a style you edit in later.
 
 See `resources/brief-template.md` for the full template, the intent-to-format map, the entity checklist, the cannibalisation test, and a worked example.
 

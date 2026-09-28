@@ -21,8 +21,8 @@ process.argv = process.argv.map((a, i) =>
 // -----------------------------------------------------------------------------
 
 
-// Default shape of each sequence. Email counts and day windows are typical
-// starting points, not prescriptions — override with --emails if yours differ.
+// Default shape of each sequence. Email counts and day windows are AAJ's
+// starting points, not a benchmark — override with --emails if yours differ.
 const STAGES = [
   { id: "welcome",    name: "Welcome",              emails: 3, from: 0,  to: 7,
     job: "Confirm the decision, set expectations, drive first meaningful action",

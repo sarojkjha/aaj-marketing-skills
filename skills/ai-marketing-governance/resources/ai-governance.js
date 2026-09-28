@@ -279,11 +279,12 @@ if (require.main === module && process.argv.includes("--demo")) {
 
   P("\n=== CITATION CHECK (section 5) ===");
   const real = checkCitation({
-    claim: "42% of startups fail from no market need",
+    claim: "35% of failed startups cited no market need",
     organisation: "CB Insights", organisationDomain: "cbinsights.com",
-    title: "The Top 12 Reasons Startups Fail", date: "2021-08-03",
-    sample: { n: 483, of: "startup post-mortems", when: "2010–2021" },
-    url: "https://www.cbinsights.com/research/report/startup-failure-reasons-top/",
+    title: "The Top 12 Reasons Startups Fail", date: "2021",
+    isAnnual: true, edition: "2021",
+    sample: { n: "110+", of: "startup post-mortems", when: "2021" },
+    url: "https://www.cbinsights.com/reports/CB-Insights_Top-Reasons-Startups-Fail.pdf",
     openedByAHuman: true,
   });
   P(`"${real.claim}" — ${real.citeable ? "citeable" : "not citeable"}`);
@@ -301,11 +302,12 @@ if (require.main === module && process.argv.includes("--demo")) {
 
   P("\n=== DRAFT SWEEP ===");
   const sweep = checkDraft({
-    text: "Positioning is the cheapest lever you have. Companies with sharp positioning raise 30% faster, and 42% of startups fail from no market need.",
-    citations: [{ figure: "42%", claim: "42% fail from no market need", organisation: "CB Insights",
-                  organisationDomain: "cbinsights.com", title: "The Top 12 Reasons Startups Fail", date: "2021-08-03",
-                  sample: { n: 483, of: "startup post-mortems", when: "2010–2021" },
-                  url: "https://www.cbinsights.com/research/report/startup-failure-reasons-top/", openedByAHuman: true }],
+    text: "Positioning is the cheapest lever you have. Companies with sharp positioning raise 30% faster, and 35% of failed startups cited no market need.",
+    citations: [{ figure: "35%", claim: "35% of failed startups cited no market need", organisation: "CB Insights",
+                  organisationDomain: "cbinsights.com", title: "The Top 12 Reasons Startups Fail", date: "2021",
+                  isAnnual: true, edition: "2021",
+                  sample: { n: "110+", of: "startup post-mortems", when: "2021" },
+                  url: "https://www.cbinsights.com/reports/CB-Insights_Top-Reasons-Startups-Fail.pdf", openedByAHuman: true }],
     underNamedByline: true, namedPersonApproved: false,
     readerJudgementDependsOnAuthor: true, disclosed: false,
     reviewerName: null,
