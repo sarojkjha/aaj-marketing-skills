@@ -1,6 +1,6 @@
-# <!-- aaj:n skills -->57<!-- aaj:/n --> Marketing Skills for AI agents. <!-- aaj:n engines -->43<!-- aaj:/n --> run real engines.
+# <!-- aaj:n skills -->59<!-- aaj:/n --> Marketing Skills for AI agents. <!-- aaj:n engines -->45<!-- aaj:/n --> run real engines.
 
-Agent skills for marketing work — grounded in AAJ's tested tools and methodology, not generic advice. **<!-- aaj:n engines -->43<!-- aaj:/n --> of the <!-- aaj:n skills -->57<!-- aaj:/n --> ship a runnable engine**: a Node script you execute directly that takes your numbers and returns a verdict, not a template to fill in.
+Agent skills for marketing work — grounded in AAJ's tested tools and methodology, not generic advice. **<!-- aaj:n engines -->45<!-- aaj:/n --> of the <!-- aaj:n skills -->59<!-- aaj:/n --> ship a runnable engine**: a Node script you execute directly that takes your numbers and returns a verdict, not a template to fill in.
 
 Works with Claude Code, Cursor, OpenAI Codex, Windsurf, and any agent supporting the [Agent Skills spec](https://agentskills.io). Free, [MIT](LICENSE), no signup, nothing routed through a server.
 
@@ -15,12 +15,12 @@ Built by [Saroj Jha](https://github.com/sarojkjha) / [AAJ](https://aajconsult.co
 - [What a runnable engine means](#what-a-runnable-engine-means)
 - [The catalog](#the-catalog)
 <!-- aaj:begin catalog-contents -->
-  - [Strategy & Positioning](#strategy-positioning) — 9 skills, 4 engines
+  - [Strategy & Positioning](#strategy-positioning) — 10 skills, 5 engines
   - [Research & Personas](#research-personas) — 3 skills, 2 engines
   - [SEO, GEO & AEO](#seo-geo-aeo) — 6 skills, 4 engines
   - [Content & Copy](#content-copy) — 9 skills, 8 engines
   - [Conversion & Web](#conversion-web) — 4 skills, 3 engines
-  - [Paid Media & Budgeting](#paid-media-budgeting) — 3 skills, 3 engines
+  - [Paid Media & Budgeting](#paid-media-budgeting) — 4 skills, 4 engines
   - [Analytics & Experimentation](#analytics-experimentation) — 4 skills, 4 engines
   - [Sales & Pipeline](#sales-pipeline) — 9 skills, 6 engines
   - [Retention & Lifecycle](#retention-lifecycle) — 3 skills, 2 engines
@@ -136,6 +136,7 @@ Every engine accepts `--demo` (a worked example, no config), `--help` (the input
 |  | [`brand-product-context`](skills/brand-product-context) | Builds the shared brand brief every other skill reads first. | Diagnose |
 |  | [`campaign-orchestrator`](skills/campaign-orchestrator) | Diagnoses which play applies, then sequences the other skills in order. | Diagnose |
 | **E** | [`market-sizing`](skills/market-sizing) | Sizes TAM, SAM and SOM bottom-up, with SOM set by capacity rather than a share of the market. | Diagnose |
+| **E** | [`marketing-maturity-assessment`](skills/marketing-maturity-assessment) | Scores marketing as a system across six dimensions, and names the weak links to fix first for your stage. | Diagnose |
 | **E** | [`marketing-psychology`](skills/marketing-psychology) | Diagnoses which decision friction blocks the buyer, with a line between persuasion and manipulation. | Design |
 |  | [`messaging-framework`](skills/messaging-framework) | Structures the message hierarchy beneath the positioning. | Design |
 |  | [`positioning-statement`](skills/positioning-statement) | Produces a positioning statement pressure-tested against the competitive alternative. | Design |
@@ -192,6 +193,7 @@ Every engine accepts `--demo` (a worked example, no config), `--help` (the input
 | **E** | [`ad-creative-testing`](skills/ad-creative-testing) | Sizes a creative test before it runs, and refuses to name a winner the data cannot back. | Execute |
 | **E** | [`marketing-budget-planning`](skills/marketing-budget-planning) | Sizes a marketing budget by stage, shows where each figure comes from, and splits it by function. | Design |
 | **E** | [`paid-media-budget-allocation`](skills/paid-media-budget-allocation) | Splits spend across channels to hit a CAC target, with diminishing returns modelled. | Design |
+| **E** | [`paid-search-account-audit`](skills/paid-search-account-audit) | Audits a search account against its own target: tracking, waste, starved winners, pages. Fixes ranked by spend. | Diagnose |
 
 ### Analytics & Experimentation
 
@@ -270,10 +272,12 @@ Every runnable engine, and the command to try it:
 | `marketing-budget-planning` | `node .agents/skills/marketing-budget-planning/resources/budget-planner.js --demo` |
 | `marketing-leadership-model` | `node .agents/skills/marketing-leadership-model/resources/leadership-model.js --demo` |
 | `marketing-loops` | `node .agents/skills/marketing-loops/resources/loop-model.js --demo` |
+| `marketing-maturity-assessment` | `node .agents/skills/marketing-maturity-assessment/resources/maturity-assessment.js --demo` |
 | `marketing-psychology` | `node .agents/skills/marketing-psychology/resources/pattern-check.js --demo` |
 | `marketing-report` | `node .agents/skills/marketing-report/resources/marketing-report.js --demo` |
 | `objection-handling` | `node .agents/skills/objection-handling/resources/battlecard.js --demo` |
 | `paid-media-budget-allocation` | `node .agents/skills/paid-media-budget-allocation/resources/allocation-engine.js --demo` |
+| `paid-search-account-audit` | `node .agents/skills/paid-search-account-audit/resources/search-audit.js --demo` |
 | `partnerships-and-co-marketing` | `node .agents/skills/partnerships-and-co-marketing/resources/partner-fit.js --demo` |
 | `pipeline-and-forecast` | `node .agents/skills/pipeline-and-forecast/resources/forecast.js --demo` |
 | `pr-and-earned-media` | `node .agents/skills/pr-and-earned-media/resources/newsworthiness.js --demo` |
@@ -297,7 +301,7 @@ Every runnable engine, and the command to try it:
 
 Every skill is tagged to a phase, and the ordering is deliberate — the catalog refuses to let you execute before you have diagnosed.
 
-- **Diagnose** (<!-- aaj:n phase-diagnose -->13<!-- aaj:/n --> skills) — find out what is actually broken before choosing a fix.
+- **Diagnose** (<!-- aaj:n phase-diagnose -->15<!-- aaj:/n --> skills) — find out what is actually broken before choosing a fix.
 - **Design** (<!-- aaj:n phase-design -->18<!-- aaj:/n --> skills) — decide the approach, with the trade-offs stated.
 - **Execute** (<!-- aaj:n phase-execute -->26<!-- aaj:/n --> skills) — build and ship it.
 
