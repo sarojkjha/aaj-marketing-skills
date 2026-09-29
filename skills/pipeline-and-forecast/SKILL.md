@@ -47,7 +47,7 @@ When forecasts are sandbagged or wishful and you want a grounded number, when yo
 
 ## Method
 
-Weight open pipeline by real stage probabilities to get an expected forecast, then compare open pipeline to the target as a coverage ratio against what your own win rate requires (1 ÷ win rate — arithmetic, not a borrowed benchmark). Separate commit (near-certain) from best case (everything open) so the number is honest, and name the lever: build pipeline if coverage is thin, or improve conversion if coverage is fine but the forecast is short.
+Weight open pipeline by real stage probabilities to get an expected forecast, then compare open pipeline to the target as a coverage ratio against what your own win rate requires (1 ÷ win rate — arithmetic, not a borrowed benchmark). Separate commit (near-certain) from best case (everything open) so the number is honest, and name the lever. If half or more of the pipeline sits in early stages, advance existing deals first, because new pipeline enters at the first stage and mostly closes next quarter; build pipeline if coverage is thin and the pipeline isn't top-heavy; improve conversion if coverage is fine but the forecast is short. A weighted forecast that clears the target with little commit is on track only on average, not committed.
 
 ## Workflow
 
@@ -77,7 +77,7 @@ commit = Σ amount for deals at prob ≥ 0.75   ·   best case = Σ amount (all 
 node .agents/skills/pipeline-and-forecast/resources/forecast.js --input=pipeline.json
 node .agents/skills/pipeline-and-forecast/resources/forecast.js  # built-in demo
 ```
-Input JSON: `{ "target": 500000, "winRate": 0.25, "stageProbabilities": { "Proposal": 0.5, ... }, "deals": [ { "name": "Acme", "amount": 60000, "stage": "Proposal" } ] }`. It prints the weighted forecast, commit vs best case, coverage ratio with a healthy/thin flag, the gap, the new pipeline needed, and the recommended lever. Use these exact numbers — don't restate them from memory.
+Input JSON: `{ "target": 500000, "winRate": 0.25, "stageProbabilities": { "Proposal": 0.5, ... }, "deals": [ { "name": "Acme", "amount": 60000, "stage": "Proposal" } ] }`. It prints the weighted forecast, commit vs best case, the early-stage share, coverage ratio with a healthy/thin flag, the gap, the new pipeline needed, and the recommended lever. Use these exact numbers — don't restate them from memory.
 
 ## Reference
 

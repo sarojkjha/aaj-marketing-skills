@@ -21,6 +21,8 @@
  *   Subscription:
  *     { "model":"subscription", "arpaMonthly":500, "grossMargin":80,
  *       "churnMonthly":3, "cac":3000 }
+ *     (churnMonthly is a percentage: 3 = 3%, 0.9 = 0.9%. Values below 0.1 are
+ *      rejected as likely proportions; use "lifetimeMonths" for churn that low.)
  *     (alt: "lifetimeMonths":33 instead of churnMonthly; "cac" can be replaced
  *      by "adSpend"+"customers" to derive blended CAC)
  *   Ecommerce:
@@ -50,6 +52,16 @@ process.argv = process.argv.map((a, i) =>
 
 function money(n){ return '$' + Math.round(n).toLocaleString(); }
 function one(n){ return (Math.round(n*10)/10).toLocaleString(); }
+// Show two decimals when one-decimal rounding would land on or cross a verdict
+// threshold, so the printed number never contradicts the verdict beside it
+// (e.g. 2.98 must not print as "3:1 is below 3:1").
+function nearThreshold(n, thresholds){
+  const r1 = Math.round(n*10)/10;
+  return thresholds.some(t => (n < t && r1 >= t) || (n > t && r1 <= t));
+}
+function ratio(n){ return nearThreshold(n, [1, 3, 5]) ? n.toFixed(2) : one(n); }
+function months(n, bar){ return (bar != null && nearThreshold(n, [bar])) ? n.toFixed(2) : one(n); }
+function pct(p){ return p < 1 ? p.toFixed(2) : p.toFixed(1); }
 
 function deriveCAC(c){
   if (c.cac != null) return c.cac;
@@ -78,7 +90,7 @@ function compute(c){
     const lifeMonths = c.lifetimeMonths != null ? c.lifetimeMonths : (churn ? 1 / churn : null);
     monthlyGP = c.arpaMonthly * gm;
     ltv = churn ? monthlyGP / churn : monthlyGP * (lifeMonths || 0);
-    lifetimeLabel = churn ? `${(churn*100).toFixed(1)}% monthly churn (~${one(lifeMonths)} mo lifetime)` : `${one(lifeMonths)} mo lifetime`;
+    lifetimeLabel = churn ? `${pct(churn*100)}% monthly churn (~${one(lifeMonths)} mo lifetime)` : `${one(lifeMonths)} mo lifetime`;
   }
 
   const ltvCac = cac ? ltv / cac : null;
@@ -101,16 +113,16 @@ function verdict(r, c, model){
   const lines = [];
   if (r.ltvCac == null) { lines.push('• No CAC supplied — provide cac, or adSpend + customers, to assess efficiency.'); return lines; }
   const scope = model === 'subscription' ? '' : ` (SaaS guidance — a reference point for ${model}, not a benchmark for it)`;
-  if (r.ltvCac >= 3) lines.push(`✓ LTV:CAC ${one(r.ltvCac)}:1 is above 3:1, David Skok's reference point${scope}.`);
-  else if (r.ltvCac >= 1) lines.push(`▼ LTV:CAC ${one(r.ltvCac)}:1 is below 3:1, David Skok's reference point${scope} — lift LTV (retention, margin, ARPA) or cut CAC before scaling.`);
-  else lines.push(`✗ LTV:CAC ${one(r.ltvCac)}:1 is below 1:1 — you lose money on every customer (arithmetic, not a benchmark). Fix unit economics before any spend increase.`);
-  if (r.ltvCac >= 5) lines.push(`• At ${one(r.ltvCac)}:1, check whether you are under-investing: if demand exists, more spend may still pay back. (AAJ's read, not a benchmark.)`);
+  if (r.ltvCac >= 3) lines.push(`✓ LTV:CAC ${ratio(r.ltvCac)}:1 is at or above 3:1, David Skok's reference point${scope}.`);
+  else if (r.ltvCac >= 1) lines.push(`▼ LTV:CAC ${ratio(r.ltvCac)}:1 is below 3:1, David Skok's reference point${scope} — lift LTV (retention, margin, ARPA) or cut CAC before scaling.`);
+  else lines.push(`✗ LTV:CAC ${ratio(r.ltvCac)}:1 is below 1:1 — you lose money on every customer (arithmetic, not a benchmark). Fix unit economics before any spend increase.`);
+  if (r.ltvCac >= 5) lines.push(`• At ${ratio(r.ltvCac)}:1, check whether you are under-investing: if demand exists, more spend may still pay back. (AAJ's read, not a benchmark.)`);
 
   if (r.paybackMonths != null){
     const bar = paybackBar(c, model);
     if (!bar) lines.push(`• CAC payback ${one(r.paybackMonths)} mo. No sourced payback guideline for ${model} — set "paybackTargetMonths" from your cash runway to get a verdict.`);
-    else if (r.paybackMonths <= bar.months) lines.push(`✓ CAC payback ${one(r.paybackMonths)} mo is within ${bar.months} months (${bar.source}).`);
-    else lines.push(`▼ CAC payback ${one(r.paybackMonths)} mo exceeds ${bar.months} months (${bar.source}) — cash is tied up longer; watch burn.`);
+    else if (r.paybackMonths <= bar.months) lines.push(`✓ CAC payback ${months(r.paybackMonths, bar.months)} mo is within ${bar.months} months (${bar.source}).`);
+    else lines.push(`▼ CAC payback ${months(r.paybackMonths, bar.months)} mo exceeds ${bar.months} months (${bar.source}) — cash is tied up longer; watch burn.`);
   }
   return lines;
 }
@@ -129,8 +141,8 @@ function render(c){
   out.push(`Gross-margin LTV        ${money(r.ltv)}   (${r.lifetimeLabel})`);
   out.push(`Monthly gross profit    ${money(r.monthlyGP)}/customer`);
   out.push(`CAC                     ${r.cac != null ? money(r.cac) : '—'}`);
-  out.push(`LTV : CAC               ${r.ltvCac != null ? one(r.ltvCac)+':1' : '—'}`);
-  out.push(`CAC payback             ${r.paybackMonths != null ? one(r.paybackMonths)+' mo' : '—'}`);
+  out.push(`LTV : CAC               ${r.ltvCac != null ? ratio(r.ltvCac)+':1' : '—'}`);
+  out.push(`CAC payback             ${r.paybackMonths != null ? months(r.paybackMonths, (paybackBar(c, c.model || 'subscription') || {}).months)+' mo' : '—'}`);
   out.push('');
   verdict(r, c, c.model || 'subscription').forEach(l => out.push(l));
   out.push('');
@@ -215,11 +227,17 @@ function validate(c) {
   }
 
   // The silent-wrong-answer case: percentages passed as proportions.
-  for (const k of ['grossMargin', 'churnMonthly']) {
-    if (c[k] !== undefined && c[k] > 0 && c[k] < 1) {
-      udie(`"${k}" looks like a proportion (${c[k]}), but this engine expects a percentage.`,
-           `Pass ${Math.round(c[k] * 100)} for ${Math.round(c[k] * 100)}%, not ${c[k]}.`);
-    }
+  // grossMargin below 1% is not a real margin, so 0 < x < 1 is a proportion.
+  if (c.grossMargin !== undefined && c.grossMargin > 0 && c.grossMargin < 1) {
+    udie(`"grossMargin" looks like a proportion (${c.grossMargin}), but this engine expects a percentage.`,
+         `Pass ${Math.round(c.grossMargin * 100)} for ${Math.round(c.grossMargin * 100)}%, not ${c.grossMargin}.`);
+  }
+  // Monthly churn between 0.1% and 1% is common in B2B SaaS, so accept it as a
+  // percentage. Below 0.1% a month (a lifetime over 80 years) the value is far
+  // more likely a proportion typed by mistake (0.03 meaning 3%).
+  if (c.churnMonthly !== undefined && c.churnMonthly > 0 && c.churnMonthly < 0.1) {
+    udie(`"churnMonthly" ${c.churnMonthly} would mean ${c.churnMonthly}% a month (a lifetime of ~${Math.round(100 / c.churnMonthly / 12)} years), which looks like a proportion.`,
+         `Pass ${+(c.churnMonthly * 100).toFixed(2)} for ${+(c.churnMonthly * 100).toFixed(2)}%. If you really mean ${c.churnMonthly}% a month, pass "lifetimeMonths": ${Math.round(100 / c.churnMonthly)} instead.`);
   }
   if (c.grossMargin > 100) udie(`"grossMargin" cannot exceed 100 (got ${c.grossMargin}).`);
   if (c.churnMonthly !== undefined && c.churnMonthly > 100) {

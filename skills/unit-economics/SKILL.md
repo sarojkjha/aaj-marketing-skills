@@ -43,7 +43,7 @@ The user needs to compute or validate unit economics, set a CAC ceiling, or answ
 
 1. **Read the brand/product context first** (`.agents/product-marketing.md` / `.agents/aaj-brand.md`) for model and pricing, if present.
 2. **Gather inputs for the model:**
-   - **Subscription:** monthly revenue per account (ARPA), gross margin %, monthly churn % (or average lifetime in months), and CAC.
+   - **Subscription:** monthly revenue per account (ARPA), gross margin %, monthly churn % (or average lifetime in months), and CAC. Pass churn as a percentage: 3 for 3%, 0.9 for 0.9%. Values below 0.1 are rejected as likely proportions; for churn that low, pass lifetime in months.
    - **Ecommerce:** average order value, gross margin %, orders per year, retention in years, and CAC.
    - **Services / contract:** average contract value, gross margin %, retention in years, and CAC.
    - If CAC isn't known, supply ad spend and customers acquired to derive blended CAC.
