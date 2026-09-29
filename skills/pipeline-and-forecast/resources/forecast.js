@@ -9,6 +9,7 @@
  *   gap               = target − weighted forecast
  *   new pipeline need = gap ÷ winRate  (more pipeline required to close the gap)
  *   commit            = Σ amount for deals at prob ≥ 0.75 (near-certain)
+ *   early-stage share = share of open pipeline in stages below 0.25 probability
  *   best case         = Σ amount for all open deals (everything could close)
  *
  * Usage:
@@ -22,6 +23,16 @@
  *     "stageProbabilities": { "Discovery": 0.1, "Qualified": 0.25, "Proposal": 0.5, "Negotiation": 0.75, "Verbal": 0.9 },
  *     "deals": [ { "name": "Acme", "amount": 60000, "stage": "Proposal" }, ... ]
  *   }
+ *
+ * Recommended lever (first match wins):
+ *   weighted ≥ target, commit ≥ target  -> ON TRACK
+ *   weighted ≥ target, commit < target  -> ON TRACK ON AVERAGE, NOT COMMITTED
+ *   gap, early-stage share ≥ 50%        -> ADVANCE DEALS (new pipeline enters at
+ *                                          the first stage, so it mostly lands
+ *                                          next quarter; moving existing deals
+ *                                          raises this quarter's forecast faster)
+ *   gap, coverage below 1 / winRate     -> BUILD PIPELINE
+ *   gap, coverage healthy               -> IMPROVE CONVERSION
  *
  * Deterministic. No external dependencies.
  */
@@ -82,6 +93,7 @@ function main() {
   let openPipeline = 0;
   let weighted = 0;
   let commit = 0;
+  let early = 0;
   for (const d of deals) {
     const p = stageProbabilities[d.stage];
     if (p === undefined) {
@@ -91,7 +103,9 @@ function main() {
     openPipeline += d.amount;
     weighted += d.amount * prob;
     if (prob >= 0.75) commit += d.amount;
+    if (prob < 0.25) early += d.amount;
   }
+  const earlyShare = openPipeline > 0 ? early / openPipeline : 0;
 
   const bestCase = openPipeline;
   const coverage = target > 0 ? openPipeline / target : 0;
@@ -100,13 +114,21 @@ function main() {
   const newPipelineNeeded = gap > 0 && winRate > 0 ? gap / winRate : 0;
   const coverageHealthy = coverage >= requiredCoverage;
 
+  const pct = (x) => Math.round(x * 100) + "%";
   let lever;
-  if (!coverageHealthy) {
-    lever = "BUILD PIPELINE — coverage is below what your win rate requires; add qualified pipeline.";
-  } else if (weighted < target) {
-    lever = "IMPROVE CONVERSION — coverage is fine but the weighted forecast is short; push late-stage deals and lift win rate.";
+  if (weighted >= target && commit >= target) {
+    lever = "ON TRACK — commit and the weighted forecast both clear the target.";
+  } else if (weighted >= target) {
+    lever = "ON TRACK ON AVERAGE, NOT COMMITTED — the weighted forecast clears the target, but commit is " + money(commit) +
+      " (" + pct(target > 0 ? commit / target : 0) + " of target). Move late-stage deals to near-certain stages before relying on this quarter.";
+  } else if (earlyShare >= 0.5) {
+    lever = "ADVANCE DEALS — " + pct(earlyShare) + " of open pipeline sits in early stages (below 25% probability). " +
+      "Moving existing deals forward raises this quarter's forecast faster than new pipeline, which enters at the first stage." +
+      (coverageHealthy ? "" : " Coverage is also thin, so build pipeline in parallel; most of it will close next quarter.");
+  } else if (!coverageHealthy) {
+    lever = "BUILD PIPELINE — coverage is below what your win rate requires; add qualified pipeline. New pipeline closes on your full sales cycle, so most of it lands after this quarter.";
   } else {
-    lever = "ON TRACK — coverage and weighted forecast both clear the target.";
+    lever = "IMPROVE CONVERSION — coverage is fine but the weighted forecast is short; push late-stage deals and lift win rate.";
   }
 
   console.log("AAJ — Pipeline & Forecast");
@@ -119,6 +141,7 @@ function main() {
   console.log("Weighted forecast:     " + money(weighted) + "   <- expected (Σ amount × stage probability)");
   console.log("  Commit (>=75%):      " + money(commit));
   console.log("  Best case (all open):" + money(bestCase));
+  console.log("Early-stage share:     " + pct(earlyShare) + " of open pipeline below 25% probability");
   console.log("");
   console.log("Coverage:              " + coverage.toFixed(1) + "x   (need ~" + requiredCoverage.toFixed(1) + "x at a " + (winRate * 100).toFixed(0) + "% win rate)  ->  " + (coverageHealthy ? "HEALTHY" : "THIN"));
   if (gap > 0) {
