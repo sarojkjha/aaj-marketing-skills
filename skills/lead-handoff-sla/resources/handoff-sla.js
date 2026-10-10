@@ -310,7 +310,7 @@ function analyze(cfg) {
   const c = { accepted: 0, rejected: 0, converted: 0, open: 0 };
   mqls.forEach((l) => { c[l.outcome]++; });
   const decided = c.accepted + c.rejected + c.converted;
-  const reasons = {};
+  const reasons = Object.create(null); // keyed by user text: no prototype
   mqls.filter((l) => l.outcome === 'rejected').forEach((l) => {
     if (!l.reason) { flag('rejected-no-reason', l.id); return; }
     const k = l.reason.toLowerCase();
