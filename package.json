@@ -1,7 +1,7 @@
 {
   "name": "aaj-marketing-skills",
   "version": "1.0.0",
-  "description": "Agent skills for AI marketing tasks. 59 skills, 45 with runnable engines you can execute directly. MIT. Works with Claude Code, Cursor, Codex, Windsurf.",
+  "description": "Agent skills for AI marketing tasks. 68 skills, 57 with runnable engines you can execute directly. MIT. Works with Claude Code, Cursor, Codex, Windsurf.",
   "type": "commonjs",
   "license": "MIT",
   "author": "Saroj Jha",

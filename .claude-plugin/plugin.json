@@ -1,0 +1,9 @@
+{
+  "name": "aaj-marketing-skills",
+  "description": "AAJ marketing skills with runnable engines for Seed to Series B startups: diagnose, design and execute marketing work with numbers you can check.",
+  "author": { "name": "Saroj Jha, AAJ", "url": "https://aajconsult.com" },
+  "homepage": "https://skills.aajconsult.com",
+  "repository": "https://github.com/sarojkjha/aaj-marketing-skills",
+  "license": "MIT",
+  "keywords": ["marketing", "skills", "startups", "pricing", "seo", "geo", "pipeline"]
+}

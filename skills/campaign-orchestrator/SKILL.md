@@ -17,7 +17,7 @@ metadata:
   difficulty: Starter
   card: >-
     Diagnoses which play applies, then sequences the other skills in order.
-  version: 1.0.0
+  version: 1.1.0
   sprint: gtm-pipeline
   topic: gtm-growth-planning
   secondary_topics: [strategy-positioning]
@@ -100,6 +100,19 @@ Seven named sequences. Each is a full Diagnose → Design → Execute cycle for 
 6. **Check the exit criteria** before advancing. State plainly whether they're met.
 7. **Hand back at each phase boundary** with what was found, what it means, and what the next phase will do. Long autonomous runs across all three phases produce work nobody trusts.
 8. **Name the measurement date** at the end of Execute. Work that isn't scheduled for review isn't finished.
+
+## Run the tool
+
+```bash
+node resources/decision-guides.js --demo
+node resources/decision-guides.js '{"guide":"channel","answers":{"segment":"yes","selfserve":"no","search":"unsure","acv":"high","named":"yes","partner":"no","budget":"small","founder":"yes"}}'
+node resources/decision-guides.js '{"guide":"hire"}'
+node resources/decision-guides.js --help
+```
+
+Three guides for narrower decisions that come up inside a Play: `channel` (which channel to start with, and which to add second), `hire` (whether to make a marketing hire, and which kind) and `stack` (which marketing tools to set up now, and which can wait). Each returns a recommendation, the steps with the AAJ tools and playbooks that carry them out, what to leave alone for now, and why. Every answer is required; with any missing, the engine lists the questions and their values instead of guessing (the third command above does that on purpose). Add `--json` for the raw object.
+
+The engine is the AAJ Marketing Decision Guides page (https://aajconsult.com/tools/marketing-decision-guides) byte for byte; the site's guard fails if the two drift. Its rules are AAJ's judgement, not benchmarks, and should be presented that way. Use a guide only after the Play and starting phase are named: it answers one question inside the Play and does not replace the routing in `resources/plays.md`. When `stack` puts "Tracking you can trust" first, that is the guardrail above in another form: with no trustworthy numbers, instrumentation comes first.
 
 ## Present the result
 

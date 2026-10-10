@@ -17,7 +17,7 @@ metadata:
   difficulty: Starter
   card: >-
     Produces a writer-ready brief: intent, answer block, entities, internal links.
-  version: 1.0.1
+  version: 1.1.0
   sprint: ai-visibility
   topic: content-seo
   secondary_topics: [ai-search]
@@ -73,6 +73,18 @@ See `resources/brief-template.md` for the full template, the intent-to-format ma
 7. **Assign internal links** — which existing pages link in, and which page or offer this one routes to.
 8. **Name the schema type** (Article, FAQPage, HowTo, Product) and any required fields.
 9. **Set success criteria** — the ranking, citation, or conversion outcome that would make this page worth having written.
+
+## Run the tool
+
+```bash
+node resources/brief-check.js --demo
+node resources/brief-check.js '{"query":"...","action":"...","serp":["title that ranks today","..."],"intent":"commercial","format":"comparison","answer":"...","existing":["/blog/page - commercial"],"entities":["..."],"headings":["...?"],"sources":["named source - URL"],"linksIn":["/page"],"schema":"Article","success":"..."}'
+node resources/brief-check.js --help
+```
+
+`build(input)` reads the intent from the pasted titles (each title votes once, for its strongest format signal), lists the issues as blockers and smaller gaps, and gives the verdict: *Not ready for a writer*, *Ready, with gaps* or *Ready for a writer*. `briefText(input)` writes the brief in the same Markdown as the page. Add `--json` for both as one object.
+
+This is the code of the AAJ Content Brief Builder (https://aajconsult.com/tools/content-brief-builder), byte for byte; the site's guard fails if the two drift. Run it once the ranking titles, existing pages and draft answer block are in hand (workflow steps 1-3), and again before handing the brief over. List existing pages with the intent each serves after a dash, or the cannibalisation check cannot see them. Treat every blocker as a stop. The signal words are pattern rules, not a model of the search engine: when the tally is close, read the titles yourself. If no titles were pasted, the brief says the intent is inferred; keep that line in what you present.
 
 ## Present the result
 
