@@ -184,7 +184,7 @@ Sitemap: https://skills.aajconsult.com/sitemap.xml
 
 **Platform**
 - [ ] Routes live; connected to the Step 4 Supabase project (no tables recreated); reads use the anon key.
-- [ ] Catalog grid renders all 12 skills; search + category/phase/difficulty/has-engine filters work and reflect in the URL.
+- [ ] Catalog grid renders every skill; search + category/phase/difficulty/has-engine filters work and reflect in the URL.
 - [ ] Skill pages render summary, install (copy works), inputs/outputs, AAJ resource links, related skills, ratings average, GitHub source link, and the per-skill FAQ. Empty `skill_examples` hide gracefully.
 - [ ] Category pages render; `/paths` exists with an empty state.
 - [ ] `/submit` and the newsletter capture insert into `submissions` / `leads`; failures never lose input; honeypot present.

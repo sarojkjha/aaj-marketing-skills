@@ -155,7 +155,7 @@ const TOOLS = [
       type: "object",
       properties: {
         query: { type: "string", description: "The problem, in plain words." },
-        limit: { type: "integer", description: "Max results, default 8.", minimum: 1, maximum: 43 },
+        limit: { type: "integer", description: "Max results, default 8.", minimum: 1, maximum: Math.max(1, skills.length) },
       },
       required: ["query"],
       additionalProperties: false,
@@ -315,7 +315,7 @@ function toolSearchSkills({ query, limit }) {
   const q = String(query || "").toLowerCase().trim();
   if (!q) return fail("Give me a `query` — the problem in plain words.");
   const terms = q.split(/[^a-z0-9]+/).filter((t) => t.length > 2 && !STOPWORDS.has(t));
-  const n = Math.min(Math.max(limit || 8, 1), 43);
+  const n = Math.min(Math.max(limit || 8, 1), Math.max(1, skills.length));
 
   const scored = skills.map((s) => {
     const name = s.name.toLowerCase();
