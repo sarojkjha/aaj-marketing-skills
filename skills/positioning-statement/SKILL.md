@@ -17,7 +17,7 @@ metadata:
   card: >-
     Produces a positioning statement pressure-tested against the competitive
     alternative.
-  version: 1.0.0
+  version: 1.1.0
   sprint: positioning-message
   topic: strategy-positioning
   agents: [Claude Code, Cursor, OpenAI Codex, Windsurf, Cline]
@@ -54,6 +54,20 @@ Strong positioning answers four questions without hedging: **for whom, in what c
 3. **Derive supporting assets:** three proof points that substantiate the benefit and differentiator, and a one-line value proposition for a homepage hero.
 4. **Produce audience-lens variants.** The same positioning reads differently to an economic buyer (outcome, ROI), an end user (workflow, ease), and a technical evaluator (capability, integration). Tailor emphasis without changing the core.
 5. **Flag gaps.** Note any claim that lacks proof, any "for whom" that's still too broad, or any differentiator a competitor could equally claim.
+
+## Run the tool
+
+```bash
+node resources/positioning.js --demo
+node resources/positioning.js '{"product":"LedgerPilot","customer":"seed-stage SaaS founders","need":"who lose hours each month reconciling revenue","category":"revenue accounting platform","benefit":"cuts the monthly close to one afternoon","alt":"a part-time bookkeeper plus spreadsheets","diff":"connects directly to billing data","proof":"","aud":"customer"}'
+node resources/positioning.js --help
+```
+
+`generate(input)` returns the classic statement, the one-line value proposition, the 30-second pitch for the chosen audience (`customer`, `investor` or `internal`), the homepage hero, the positioning canvas, the full Markdown doc, and the linter's findings: every message, the fields it flagged, and the first six the page shows. Add `--json` for the raw object.
+
+It is the same logic as the AAJ Positioning Statement Generator (https://aajconsult.com/tools/positioning-statement-generator), checked case by case against the page, so a founder who used the tool and an agent running this skill get the same text. Run it after step 1 of the workflow, then do the pressure-test in step 2 yourself. The linter checks wording (buzzwords, a customer that is everyone, a claim with no number behind it, a feature in place of a benefit, a differentiator that repeats the alternative), not whether the positioning is true or differentiated. A clean lint is the floor, not the verdict.
+
+Two limits to handle before presenting: the template fills slots literally, so read the output aloud and fix grammar it cannot ("a" before a vowel, a need that doesn't start with "who"); and the engine's three pitch audiences are not the three audience lenses in step 4, which you still write yourself.
 
 ## Present the result
 

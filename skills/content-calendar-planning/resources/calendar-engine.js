@@ -301,7 +301,7 @@ function audit(c) {
   const median = sorted.length ? sorted[Math.floor(sorted.length / 2)] : 0;
   const longest = sorted.length ? sorted[sorted.length - 1] : 0;
 
-  const byCluster = {};
+  const byCluster = Object.create(null); // keyed by user text: no prototype
   items.forEach(p => {
     const k = p.cluster || '(none)';
     byCluster[k] = byCluster[k] || { count: 0, hasPillar: false };
