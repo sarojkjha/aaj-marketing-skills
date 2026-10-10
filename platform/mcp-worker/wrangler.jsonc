@@ -1,0 +1,13 @@
+{
+  // Hosted AAJ Engines MCP server (roadmap R6). Deploy from this folder:
+  //   node build.mjs && npx wrangler deploy
+  // It serves https://aaj-engines-mcp.<your-subdomain>.workers.dev/mcp.
+  // To serve it at mcp.aajconsult.com instead, uncomment "routes" (the zone
+  // aajconsult.com must be on this Cloudflare account) and deploy again.
+  "name": "aaj-engines-mcp",
+  "main": "worker.mjs",
+  "compatibility_date": "2026-09-01",
+  "workers_dev": true,
+  // "routes": [{ "pattern": "mcp.aajconsult.com", "custom_domain": true }],
+  "observability": { "enabled": true }
+}

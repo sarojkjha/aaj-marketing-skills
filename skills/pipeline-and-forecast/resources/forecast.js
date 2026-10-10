@@ -87,6 +87,16 @@ function main() {
     cfg = JSON.parse(fs.readFileSync(args.input, "utf8"));
     source = args.input;
   }
+  // A JSON argument works too (agents and the MCP server pass input this way; Oct 10).
+  const inline = process.argv.slice(2).find((a) => a.trim().startsWith("{"));
+  if (inline) {
+    try { cfg = JSON.parse(inline); } catch (e) { console.error("Invalid JSON: " + e.message); process.exit(1); }
+    source = "your input";
+  }
+  if (!cfg || !Array.isArray(cfg.deals) || !cfg.stageProbabilities || typeof cfg.target !== "number" || typeof cfg.winRate !== "number") {
+    console.error('Give "target" (number), "winRate" (0-1), "stageProbabilities" ({stage: 0-1}) and "deals" ([{name, amount, stage}]).');
+    process.exit(1);
+  }
 
   const { target, winRate, stageProbabilities, deals } = cfg;
 

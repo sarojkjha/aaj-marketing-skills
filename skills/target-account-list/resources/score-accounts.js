@@ -90,6 +90,16 @@ function main() {
     if (Array.isArray(data.accounts)) accounts = data.accounts;
     source = args.input;
   }
+  // A JSON argument works too (agents and the MCP server pass input this way; Oct 10).
+  const inline = process.argv.slice(2).find((a) => a.trim().startsWith("{"));
+  if (inline) {
+    let data;
+    try { data = JSON.parse(inline); } catch (e) { console.error("Invalid JSON: " + e.message); process.exit(1); }
+    if (!Array.isArray(data.accounts) || !data.accounts.length) { console.error('Give "accounts": [...] (and optionally "weights").'); process.exit(1); }
+    if (data.weights) weights = data.weights;
+    accounts = data.accounts;
+    source = "your input";
+  }
 
   const totalWeight = Object.values(weights).reduce((a, b) => a + b, 0);
   const scored = accounts
