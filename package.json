@@ -14,6 +14,8 @@
     "sync": "node platform/scripts/sync-skills.mjs",
     "counts": "node platform/scripts/generate-readme.mjs",
     "check:counts": "node platform/scripts/generate-readme.mjs --check",
+    "mcp:build": "node platform/mcp-worker/build.mjs",
+    "mcp:test": "node platform/mcp-worker/test.mjs",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
