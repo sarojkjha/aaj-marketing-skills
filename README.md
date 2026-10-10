@@ -74,8 +74,8 @@ Swap the demo values for your own and it works the same way.
 
 ## Use it from an MCP client
 
-Instead of installing the skills into a project, you can expose all 43 skills and
-all 28 engines to any MCP client — Claude Desktop, Claude Code, Cursor, Windsurf —
+Instead of installing the skills into a project, you can expose all <!-- aaj:n skills -->59<!-- aaj:/n --> skills and
+all <!-- aaj:n engines -->45<!-- aaj:/n --> engines to any MCP client — Claude Desktop, Claude Code, Cursor, Windsurf —
 as five tools:
 
 | Tool | What it does |
@@ -111,7 +111,7 @@ Setup for each client, troubleshooting, and the smoke test:
 
 ## What a runnable engine means
 
-Most agent skills are instructions. These are too — but 24 of them also ship a dependency-free Node script that does the arithmetic and returns a judgement.
+Most agent skills are instructions. These are too — but <!-- aaj:n engines -->45<!-- aaj:/n --> of them also ship a dependency-free Node script that does the arithmetic and returns a judgement.
 
 | | Instruction-only skill | Skill with an engine |
 |---|---|---|

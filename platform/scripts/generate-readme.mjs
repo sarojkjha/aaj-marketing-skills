@@ -7,8 +7,8 @@
  * per-category tables and the engine list are all derivable, so they are
  * derived. Everything outside the markers stays hand-written.
  *
- *   node platform/scripts/generate-readme.mjs          # rewrite README.md
- *   node platform/scripts/generate-readme.mjs --check  # fail if it would change
+ *   node platform/scripts/generate-readme.mjs          # rewrite README.md and package.json's description
+ *   node platform/scripts/generate-readme.mjs --check  # fail if either would change
  *   node platform/scripts/generate-readme.mjs --stdout # print, write nothing
  *
  * Two kinds of generated region:
@@ -133,6 +133,21 @@ function render(readme, { blocks, counts }) {
 const skills = listSkills(REPO_ROOT);
 if (!skills.length) fail(`no skills found under ${REPO_ROOT}/skills`);
 
+// package.json's description is what npm and `npx skills` show, and the
+// GitHub "About" text was copied from it. Both said "39 skills, 24 engines"
+// while the README said 59 and 45 (found Oct 10). The description is derived
+// here too, so the same --check catches it.
+const PACKAGE = join(REPO_ROOT, "package.json");
+const COUNT_PHRASE = /\d+ skills, \d+ with runnable engines/;
+const nSkills = skills.length;
+const nEngines = skills.filter((s) => s.hasEngine).length;
+const phrase = `${nSkills} skills, ${nEngines} with runnable engines`;
+const pkgText = readFileSync(PACKAGE, "utf8");
+const pkg = JSON.parse(pkgText);
+if (!COUNT_PHRASE.test(pkg.description || "")) fail(`package.json description has no "<n> skills, <n> with runnable engines" phrase to keep current`);
+const pkgNext = pkgText.replace(JSON.stringify(pkg.description), JSON.stringify(pkg.description.replace(COUNT_PHRASE, phrase)));
+const pkgStale = pkgNext !== pkgText;
+
 const current = readFileSync(README, "utf8");
 const eol = current.includes("\r\n") ? "\r\n" : "\n";
 const next = render(current.replace(/\r\n/g, "\n"), build(skills)).replace(/\n/g, eol);
@@ -140,15 +155,24 @@ const next = render(current.replace(/\r\n/g, "\n"), build(skills)).replace(/\n/g
 const mode = process.argv[2] || "";
 if (mode === "--stdout") { process.stdout.write(next); process.exit(0); }
 
-if (next === current) {
-  console.log(`README.md up to date — ${skills.length} skills, ${skills.filter((s) => s.hasEngine).length} engines`);
+const about = () => console.log(`GitHub "About" text (set by hand in the repo settings): ${JSON.parse(pkgNext).description}`);
+
+if (next === current && !pkgStale) {
+  console.log(`README.md and package.json up to date — ${nSkills} skills, ${nEngines} engines`);
+  if (mode !== "--check") about();
   process.exit(0);
+}
+
+if (mode === "--check" && pkgStale && next === current) {
+  console.error(`package.json description is out of date: it should say "${phrase}". Run: node platform/scripts/generate-readme.mjs`);
+  process.exit(1);
 }
 
 if (mode === "--check") {
   const a = current.replace(/\r\n/g, "\n").split("\n");
   const b = next.replace(/\r\n/g, "\n").split("\n");
   console.error("README.md is out of date. Run: node platform/scripts/generate-readme.mjs\n");
+  if (pkgStale) console.error(`package.json description is out of date too: it should say "${phrase}".\n`);
   let shown = 0;
   for (let i = 0; i < Math.max(a.length, b.length) && shown < 20; i++) {
     if (a[i] !== b[i]) {
@@ -160,5 +184,7 @@ if (mode === "--check") {
   process.exit(1);
 }
 
-writeFileSync(README, next);
-console.log(`README.md written — ${skills.length} skills, ${skills.filter((s) => s.hasEngine).length} engines`);
+if (next !== current) writeFileSync(README, next);
+if (pkgStale) writeFileSync(PACKAGE, pkgNext);
+console.log(`${[next !== current && "README.md", pkgStale && "package.json"].filter(Boolean).join(" and ")} written — ${nSkills} skills, ${nEngines} engines`);
+about();

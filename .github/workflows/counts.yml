@@ -1,0 +1,16 @@
+name: Catalog counts
+# Fails when README.md or package.json states a skill or engine count that no
+# longer matches skills/. Fix with: npm run counts
+on:
+  push:
+    branches: [main]
+  pull_request:
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: node platform/scripts/generate-readme.mjs --check

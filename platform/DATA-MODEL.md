@@ -11,7 +11,7 @@ The Supabase backend for `skills.aajconsult.com`. The **repo is the single sourc
 1. Create a Supabase project. In the SQL editor, run `schema.sql` then `seed-categories.sql`.
 2. From the repo root: `npm install @supabase/supabase-js gray-matter`.
 3. Export `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` (Project Settings → API). The service-role key is **server-side only** — never put it in the Lovable frontend; it's used only by this sync (and CI).
-4. `node platform/scripts/sync-skills.mjs` → upserts all 12 skills and their AAJ links.
+4. `node platform/scripts/sync-skills.mjs` → upserts every skill and their AAJ links.
 
 The Lovable app reads with the **anon** key, which only ever sees what the read policies allow.
 
