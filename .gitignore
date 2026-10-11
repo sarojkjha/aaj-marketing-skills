@@ -16,3 +16,6 @@ paths.ts
 
 aaj-marketing-skills/
 *.local
+
+# Wrangler local state (hosted MCP worker)
+.wrangler/

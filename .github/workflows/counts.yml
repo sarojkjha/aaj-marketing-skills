@@ -1,6 +1,7 @@
 name: Catalog counts
 # Fails when README.md or package.json states a skill or engine count that no
-# longer matches skills/. Fix with: npm run counts
+# longer matches skills/ (fix: npm run counts), or when the hosted MCP bundle is
+# stale (fix: node platform/mcp-worker/build.mjs).
 on:
   push:
     branches: [main]
@@ -14,3 +15,7 @@ jobs:
         with:
           node-version: 20
       - run: node platform/scripts/generate-readme.mjs --check
+      - name: Hosted MCP bundle is current and in parity with Node
+        run: |
+          node platform/mcp-worker/build.mjs --check
+          node platform/mcp-worker/test.mjs
