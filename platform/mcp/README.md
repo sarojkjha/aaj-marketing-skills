@@ -1,5 +1,8 @@
 # AAJ Engines — MCP server
 
+> **No install needed:** the same five tools are hosted at `https://aaj-engines-mcp.sarojkjha10.workers.dev/mcp`. Add it as a custom connector in Claude or ChatGPT. This page covers running the server locally.
+
+
 Gives any MCP client direct access to the AAJ marketing skills and their runnable
 engines. An agent can find the right method for a problem, read its input schema,
 and run it on real numbers — instead of estimating.

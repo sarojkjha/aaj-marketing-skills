@@ -1,5 +1,7 @@
 # Hosted AAJ Engines MCP server (Cloudflare Worker)
 
+**Live at `https://aaj-engines-mcp.sarojkjha10.workers.dev/mcp`** (deployed Oct 10, 2026; `/health` on the same host).
+
 This is the same five tools as the local server in `platform/mcp/`, served at one URL. Founders add that URL as a custom connector in Claude, ChatGPT or any MCP client instead of cloning the repo.
 
 | Tool | What it does |

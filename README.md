@@ -101,7 +101,15 @@ as five tools:
 | `search_skills` | Finds a skill by the problem, not the name |
 | `get_skill` | The full method for one skill |
 
-Clone the repo and point your client at one file. Node 18+, no dependencies,
+**Hosted, no install.** Add this URL as a custom connector (a remote MCP server) in Claude, ChatGPT or any MCP client:
+
+```
+https://aaj-engines-mcp.sarojkjha10.workers.dev/mcp
+```
+
+No sign-in. The engines run in memory and make no network calls; nothing you send is stored. In Claude: Settings → Connectors → Add custom connector. Then ask, for example, "Use the AAJ engines to check my unit economics: CAC $1,200, ARPA $300 a month, 80% gross margin, 3% monthly churn."
+
+**Local.** Clone the repo and point your client at one file. Node 18+, no dependencies,
 no build step:
 
 ```json
@@ -116,8 +124,8 @@ no build step:
 ```
 
 Your agent can then find the right method for a problem and run the math on your
-numbers, rather than estimating. Nothing leaves your machine — the engines are
-local, deterministic, and make no network calls.
+numbers, rather than estimating. Run locally, nothing leaves your machine — the
+engines are deterministic and make no network calls.
 
 Setup for each client, troubleshooting, and the smoke test:
 [`platform/mcp/README.md`](platform/mcp/README.md).
