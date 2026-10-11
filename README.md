@@ -1,6 +1,6 @@
-# <!-- aaj:n skills -->68<!-- aaj:/n --> Marketing Skills for AI agents. <!-- aaj:n engines -->57<!-- aaj:/n --> run real engines.
+# <!-- aaj:n skills -->73<!-- aaj:/n --> Marketing Skills for AI agents. <!-- aaj:n engines -->62<!-- aaj:/n --> run real engines.
 
-Agent skills for marketing work — grounded in AAJ's tested tools and methodology, not generic advice. **<!-- aaj:n engines -->57<!-- aaj:/n --> of the <!-- aaj:n skills -->68<!-- aaj:/n --> ship a runnable engine**: a Node script you execute directly that takes your numbers and returns a verdict, not a template to fill in.
+Agent skills for marketing work — grounded in AAJ's tested tools and methodology, not generic advice. **<!-- aaj:n engines -->62<!-- aaj:/n --> of the <!-- aaj:n skills -->73<!-- aaj:/n --> ship a runnable engine**: a Node script you execute directly that takes your numbers and returns a verdict, not a template to fill in.
 
 Works with Claude Code, Cursor, OpenAI Codex, Windsurf, and any agent supporting the [Agent Skills spec](https://agentskills.io). Free, [MIT](LICENSE), no signup, nothing routed through a server.
 
@@ -15,14 +15,14 @@ Built by [Saroj Jha](https://github.com/sarojkjha) / [AAJ](https://aajconsult.co
 - [What a runnable engine means](#what-a-runnable-engine-means)
 - [The catalog](#the-catalog)
 <!-- aaj:begin catalog-contents -->
-  - [Strategy & Positioning](#strategy-positioning) — 11 skills, 8 engines
-  - [Research & Personas](#research-personas) — 3 skills, 2 engines
-  - [SEO, GEO & AEO](#seo-geo-aeo) — 7 skills, 6 engines
+  - [Strategy & Positioning](#strategy-positioning) — 12 skills, 9 engines
+  - [Research & Personas](#research-personas) — 4 skills, 3 engines
+  - [SEO, GEO & AEO](#seo-geo-aeo) — 9 skills, 8 engines
   - [Content & Copy](#content-copy) — 11 skills, 10 engines
   - [Conversion & Web](#conversion-web) — 5 skills, 4 engines
   - [Paid Media & Budgeting](#paid-media-budgeting) — 4 skills, 4 engines
   - [Analytics & Experimentation](#analytics-experimentation) — 4 skills, 4 engines
-  - [Sales & Pipeline](#sales-pipeline) — 11 skills, 8 engines
+  - [Sales & Pipeline](#sales-pipeline) — 12 skills, 9 engines
   - [Retention & Lifecycle](#retention-lifecycle) — 3 skills, 2 engines
   - [Growth, Retention & RevOps](#growth-retention-revops) — 9 skills, 9 engines
 <!-- aaj:end catalog-contents -->
@@ -89,8 +89,8 @@ Swap the demo values for your own and it works the same way.
 
 ## Use it from an MCP client
 
-Instead of installing the skills into a project, you can expose all <!-- aaj:n skills -->68<!-- aaj:/n --> skills and
-all <!-- aaj:n engines -->57<!-- aaj:/n --> engines to any MCP client — Claude Desktop, Claude Code, Cursor, Windsurf —
+Instead of installing the skills into a project, you can expose all <!-- aaj:n skills -->73<!-- aaj:/n --> skills and
+all <!-- aaj:n engines -->62<!-- aaj:/n --> engines to any MCP client — Claude Desktop, Claude Code, Cursor, Windsurf —
 as five tools:
 
 | Tool | What it does |
@@ -126,7 +126,7 @@ Setup for each client, troubleshooting, and the smoke test:
 
 ## What a runnable engine means
 
-Most agent skills are instructions. These are too — but <!-- aaj:n engines -->57<!-- aaj:/n --> of them also ship a dependency-free Node script that does the arithmetic and returns a judgement.
+Most agent skills are instructions. These are too — but <!-- aaj:n engines -->62<!-- aaj:/n --> of them also ship a dependency-free Node script that does the arithmetic and returns a judgement.
 
 | | Instruction-only skill | Skill with an engine |
 |---|---|---|
@@ -151,6 +151,7 @@ Every engine accepts `--demo` (a worked example, no config), `--help` (the input
 | **E** | [`ai-inference-pricing`](skills/ai-inference-pricing) | Checks that an AI plan's price still covers inference when usage spikes. | Design |
 |  | [`brand-product-context`](skills/brand-product-context) | Builds the shared brand brief every other skill reads first. | Diagnose |
 | **E** | [`campaign-orchestrator`](skills/campaign-orchestrator) | Diagnoses which play applies, then sequences the other skills in order. | Diagnose |
+| **E** | [`competitor-messaging-matrix`](skills/competitor-messaging-matrix) | Reads rival homepages side by side and says which claims are crowded, which are open, and whether your headline blends in. | Diagnose |
 | **E** | [`market-sizing`](skills/market-sizing) | Sizes TAM, SAM and SOM bottom-up, with SOM set by capacity rather than a share of the market. | Diagnose |
 | **E** | [`marketing-maturity-assessment`](skills/marketing-maturity-assessment) | Scores marketing as a system across six dimensions, and names the weak links to fix first for your stage. | Diagnose |
 | **E** | [`marketing-psychology`](skills/marketing-psychology) | Diagnoses which decision friction blocks the buyer, with a line between persuasion and manipulation. | Design |
@@ -167,15 +168,18 @@ Every engine accepts `--demo` (a worked example, no config), `--help` (the input
 | **E** | [`customer-interview-synthesis`](skills/customer-interview-synthesis) | Turns coded interview notes into ranked patterns and anecdotes, and says whether you can stop interviewing. | Diagnose |
 | **E** | [`customer-survey-design`](skills/customer-survey-design) | Designs surveys that produce usable answers, with sample sizing and segments. | Diagnose |
 |  | [`persona-builder`](skills/persona-builder) | Builds personas from evidence rather than imagination. | Design |
+| **E** | [`review-mining`](skills/review-mining) | Codes pasted reviews of you and your rivals into themes, switching reasons, feature asks and buyer language. | Diagnose |
 
 ### SEO, GEO & AEO
 
 | | Skill | What it does | Phase |
 |---|---|---|---|
 | **E** | [`agent-readiness-audit`](skills/agent-readiness-audit) | Scores whether an AI agent buying for a customer can find, evaluate and transact with you. | Diagnose |
+| **E** | [`content-decay`](skills/content-decay) | Sorts a Search Console export into decaying, demand-drop, snippet-loss, rising and stable pages, and ranks what to refresh by clicks lost. | Diagnose |
 | **E** | [`geo-citation-tracker`](skills/geo-citation-tracker) | Measures whether AI engines name and cite you, and refuses to report noise as movement. | Execute |
 |  | [`geo-content-optimization`](skills/geo-content-optimization) | Rewrites a page to maximise the chance an AI engine cites it. | Execute |
 | **E** | [`programmatic-seo`](skills/programmatic-seo) | Models whether a template-page build pays back before anything gets written. | Design |
+| **E** | [`search-demand-reader`](skills/search-demand-reader) | Reads a Search Console Queries export by intent and topic, and names the demand you already appear for but do not yet win. | Diagnose |
 | **E** | [`seo-content-brief`](skills/seo-content-brief) | Produces a writer-ready brief: intent, answer block, entities, internal links. | Design |
 | **E** | [`seo-geo-aeo-audit`](skills/seo-geo-aeo-audit) | Scores a page 0-100 across SEO, GEO and AEO, with fixes in priority order. | Diagnose |
 | **E** | [`structured-data-for-ai-search`](skills/structured-data-for-ai-search) | Maps schema types to pages, then checks each page's JSON-LD against Google's docs and the visible text. | Execute |
@@ -229,6 +233,7 @@ Every engine accepts `--demo` (a worked example, no config), `--help` (the input
 | | Skill | What it does | Phase |
 |---|---|---|---|
 | **E** | [`abm-program-design`](skills/abm-program-design) | Checks whether the team can run the account list and whether the list hits the number. | Design |
+| **E** | [`buying-committee-map`](skills/buying-committee-map) | Maps who must say yes, what each must believe, and who you cannot reach, then orders the next conversations. | Design |
 |  | [`cold-email-sequence`](skills/cold-email-sequence) | Writes outbound sequences that survive a reply-rate audit. | Execute |
 |  | [`discovery-call-framework`](skills/discovery-call-framework) | Structures discovery so the call qualifies rather than pitches. | Execute |
 | **E** | [`lead-handoff-sla`](skills/lead-handoff-sla) | Checks whether MQLs get worked on time, whether sales takes them, and whether the threshold is in the right place. | Execute |
@@ -280,12 +285,15 @@ Every runnable engine, and the command to try it:
 | `ai-marketing-governance` | `node .agents/skills/ai-marketing-governance/resources/ai-governance.js --demo` |
 | `brand-voice-definition` | `node .agents/skills/brand-voice-definition/resources/voice-derive.js --demo` |
 | `brand-voice-governance` | `node .agents/skills/brand-voice-governance/resources/voice-check.js --demo` |
+| `buying-committee-map` | `node .agents/skills/buying-committee-map/resources/buying-committee.js --demo` |
 | `campaign-orchestrator` | `node .agents/skills/campaign-orchestrator/resources/decision-guides.js --demo` |
 | `case-study-and-proof` | `node .agents/skills/case-study-and-proof/resources/proof-check.js --demo` |
 | `claims-and-proof-check` | `node .agents/skills/claims-and-proof-check/resources/claims-check.js --demo` |
 | `community-and-dark-social` | `node .agents/skills/community-and-dark-social/resources/dark-social-read.js --demo` |
 | `comparison-pages` | `node .agents/skills/comparison-pages/resources/comparison-check.js --demo` |
+| `competitor-messaging-matrix` | `node .agents/skills/competitor-messaging-matrix/resources/messaging-matrix.js --demo` |
 | `content-calendar-planning` | `node .agents/skills/content-calendar-planning/resources/calendar-engine.js --demo` |
+| `content-decay` | `node .agents/skills/content-decay/resources/content-decay.js --demo` |
 | `copywriting` | `node .agents/skills/copywriting/resources/copy-scorer.js --demo` |
 | `creator-partnerships` | `node .agents/skills/creator-partnerships/resources/creator-fit.js --demo` |
 | `customer-interview-synthesis` | `node .agents/skills/customer-interview-synthesis/resources/interview-synthesis.js --demo` |
@@ -319,7 +327,9 @@ Every runnable engine, and the command to try it:
 | `product-launch` | `node .agents/skills/product-launch/resources/launch.js --demo` |
 | `programmatic-seo` | `node .agents/skills/programmatic-seo/resources/pseo-model.js --demo` |
 | `referral-program-design` | `node .agents/skills/referral-program-design/resources/referral-economics.js --demo` |
+| `review-mining` | `node .agents/skills/review-mining/resources/review-miner.js --demo` |
 | `sales-enablement` | `node .agents/skills/sales-enablement/resources/enablement-audit.js --demo` |
+| `search-demand-reader` | `node .agents/skills/search-demand-reader/resources/search-demand.js --demo` |
 | `seo-content-brief` | `node .agents/skills/seo-content-brief/resources/brief-check.js --demo` |
 | `seo-geo-aeo-audit` | `node .agents/skills/seo-geo-aeo-audit/resources/score.js --demo` |
 | `signup-flow-optimizer` | `node .agents/skills/signup-flow-optimizer/resources/friction-score.js --demo` |
@@ -337,8 +347,8 @@ Every runnable engine, and the command to try it:
 
 Every skill is tagged to a phase, and the ordering is deliberate — the catalog refuses to let you execute before you have diagnosed.
 
-- **Diagnose** (<!-- aaj:n phase-diagnose -->16<!-- aaj:/n --> skills) — find out what is actually broken before choosing a fix.
-- **Design** (<!-- aaj:n phase-design -->22<!-- aaj:/n --> skills) — decide the approach, with the trade-offs stated.
+- **Diagnose** (<!-- aaj:n phase-diagnose -->20<!-- aaj:/n --> skills) — find out what is actually broken before choosing a fix.
+- **Design** (<!-- aaj:n phase-design -->23<!-- aaj:/n --> skills) — decide the approach, with the trade-offs stated.
 - **Execute** (<!-- aaj:n phase-execute -->30<!-- aaj:/n --> skills) — build and ship it.
 
 If you do not know where to start, `campaign-orchestrator` diagnoses which play applies and sequences the rest for you.
