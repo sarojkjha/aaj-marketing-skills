@@ -71,12 +71,13 @@ export function engineHelp(file) {
   return src.slice(start + 2, end).replace(/^[ \t]*\*[ \t]?/gm, "").trim();
 }
 
-const ACRONYMS = new Set(["ab","seo","geo","aeo","mmm","pr","ai","abm","kpi","nrr","gtm","icp","roi","cac","ltv","b2b","b2c","crm"]);
+const ACRONYMS = new Set(["sla","mql","mcp","ai","ab","seo","geo","aeo","mmm","pr","ai","abm","kpi","nrr","gtm","icp","roi","cac","ltv","b2b","b2c","crm"]);
 
 /** "pr-and-earned-media" -> "PR & Earned Media". Frontmatter `name` is the slug. */
 export function titleize(slug) {
-  return slug.split("-").map((w) => {
+  return slug.split("-").map((w, i) => {
     if (w === "and") return "&";
+    if (i > 0 && ["for", "to", "of", "in", "vs", "with"].includes(w)) return w;
     if (ACRONYMS.has(w)) return w.toUpperCase();
     return w.charAt(0).toUpperCase() + w.slice(1);
   }).join(" ").replace(/\bCo (\w)/g, "Co-$1");
