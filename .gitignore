@@ -5,13 +5,15 @@
 demo-output/
 github-traffic-log.csv
 
-.agents/
+# npx skills add installs into .agents/skills/ when testing locally; the Codex
+# plugin marketplace in .agents/plugins/ is part of the repo.
+.agents/*
+!.agents/plugins/
 .claude/
 
 AAJ-Skills-Launch-Handoff-Brief*.md
 *.csv
 paths.ts
-.agents/
 .claude/
 
 aaj-marketing-skills/
