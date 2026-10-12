@@ -103,7 +103,7 @@ segment are flagged when others have one.
 **Step 3 - Merge** near-duplicate themes the engine shows you side by side, and re-run.
 
 **Step 4 - Stop when it says enough.** Take the top pattern, its quotes and workarounds into
-`positioning-statement` and the `Persona Builder`.
+`positioning-statement` and `persona-builder`.
 
 **Step 5 - Open the next segment** if a segment-specific theme is worth a persona of its own.
 
