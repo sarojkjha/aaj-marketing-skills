@@ -1,6 +1,6 @@
 # Conversion audit rubric
 
-23 checks across 6 weighted categories, mirroring the AAJ Website Grader. Record `pass`, `partial`, or `fail` for each, then run `score.js`. Grades: A ≥ 90, B 75–89, C 60–74, D 45–59, F < 45. Check IDs are exactly the keys `score.js` expects.
+23 checks across 6 weighted categories, mirroring the AAJ Website Conversion Audit. Record `pass`, `partial`, or `fail` for each, then run `score.js`. Grades: A ≥ 90, B 75–89, C 60–74, D 45–59, F < 45. Check IDs are exactly the keys `score.js` expects.
 
 ## Message & Clarity — weight 22
 - `clear_value_prop` — within 5 seconds it's obvious what this is and what you get.
