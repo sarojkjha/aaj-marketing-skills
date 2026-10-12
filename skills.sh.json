@@ -26,6 +26,7 @@
         "aaj-marketing-psychology",
         "brand-product-context",
         "campaign-orchestrator",
+        "competitor-messaging-matrix",
         "marketing-maturity-assessment",
         "messaging-framework",
         "positioning-statement",
@@ -39,7 +40,8 @@
       "skills": [
         "customer-interview-synthesis",
         "customer-survey-design",
-        "persona-builder"
+        "persona-builder",
+        "review-mining"
       ]
     },
     {
@@ -48,8 +50,10 @@
       "skills": [
         "aaj-programmatic-seo",
         "agent-readiness-audit",
+        "content-decay",
         "geo-citation-tracker",
         "geo-content-optimization",
+        "search-demand-reader",
         "seo-content-brief",
         "seo-geo-aeo-audit",
         "structured-data-for-ai-search"
@@ -106,6 +110,7 @@
       "skills": [
         "aaj-sales-enablement",
         "abm-program-design",
+        "buying-committee-map",
         "cold-email-sequence",
         "discovery-call-framework",
         "lead-handoff-sla",

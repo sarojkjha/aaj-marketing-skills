@@ -1,9 +1,9 @@
 {
   "$comment": "Generated from skills/ by platform/scripts/generate-readme.mjs (npm run counts). Do not edit by hand: CI fails when this file disagrees with skills/.",
-  "skills": 68,
-  "engines": 57,
+  "skills": 73,
+  "engines": 62,
   "skills_without_engine": 11,
-  "engine_scripts": 57,
+  "engine_scripts": 62,
   "categories": 10,
   "mcp_tools": 5,
   "agents": [
@@ -15,12 +15,12 @@
   ],
   "phases": {
     "Diagnose": {
-      "skills": 16,
-      "engines": 15
+      "skills": 20,
+      "engines": 19
     },
     "Design": {
-      "skills": 22,
-      "engines": 18
+      "skills": 23,
+      "engines": 19
     },
     "Execute": {
       "skills": 30,
@@ -49,33 +49,33 @@
       "engines": 4
     },
     "Research & Personas": {
-      "skills": 3,
-      "engines": 2
+      "skills": 4,
+      "engines": 3
     },
     "Retention & Lifecycle": {
       "skills": 3,
       "engines": 2
     },
     "SEO, GEO & AEO": {
-      "skills": 7,
-      "engines": 6
+      "skills": 9,
+      "engines": 8
     },
     "Sales & Pipeline": {
-      "skills": 11,
-      "engines": 8
+      "skills": 12,
+      "engines": 9
     },
     "Strategy & Positioning": {
-      "skills": 11,
-      "engines": 8
+      "skills": 12,
+      "engines": 9
     }
   },
   "phrases": {
-    "headline": "68 marketing skills for AI agents. 57 run real engines.",
-    "short": "68 marketing skills, 57 with runnable engines",
-    "github_about": "The math layer for marketing agents: 68 skills, 57 with deterministic engines that return numbers and a verdict. Keep your writing skills, add the arithmetic. MIT, no API key.",
+    "headline": "73 marketing skills for AI agents. 62 run real engines.",
+    "short": "73 marketing skills, 62 with runnable engines",
+    "github_about": "The math layer for marketing agents: 73 skills, 62 with deterministic engines that return numbers and a verdict. Keep your writing skills, add the arithmetic. MIT, no API key.",
     "product_hunt_tagline": "Marketing skills that do the math for your AI agent",
-    "product_hunt_description": "Open-source marketing skills for AI agents. 57 of the 68 run deterministic engines: LTV:CAC, pipeline coverage, A/B significance, budget splits. Same input, same answer, code you can read. MIT.",
-    "maker_bio": "Founder of AAJ. Marketing for Seed–Series B startups. I maintain 68 open-source marketing skills for AI agents; 57 of them do the math."
+    "product_hunt_description": "Open-source marketing skills for AI agents. 62 of the 73 run deterministic engines: LTV:CAC, pipeline coverage, A/B significance, budget splits. Same input, same answer, code you can read. MIT.",
+    "maker_bio": "Founder of AAJ. Marketing for Seed–Series B startups. I maintain 73 open-source marketing skills for AI agents; 62 of them do the math."
   },
   "catalog": [
     {
@@ -163,6 +163,12 @@
       "phase": "Execute"
     },
     {
+      "slug": "buying-committee-map",
+      "engine": true,
+      "category": "Sales & Pipeline",
+      "phase": "Design"
+    },
+    {
       "slug": "campaign-orchestrator",
       "engine": true,
       "category": "Strategy & Positioning",
@@ -199,10 +205,22 @@
       "phase": "Execute"
     },
     {
+      "slug": "competitor-messaging-matrix",
+      "engine": true,
+      "category": "Strategy & Positioning",
+      "phase": "Diagnose"
+    },
+    {
       "slug": "content-calendar-planning",
       "engine": true,
       "category": "Content & Copy",
       "phase": "Execute"
+    },
+    {
+      "slug": "content-decay",
+      "engine": true,
+      "category": "SEO, GEO & AEO",
+      "phase": "Diagnose"
     },
     {
       "slug": "content-repurposing",
@@ -421,10 +439,22 @@
       "phase": "Design"
     },
     {
+      "slug": "review-mining",
+      "engine": true,
+      "category": "Research & Personas",
+      "phase": "Diagnose"
+    },
+    {
       "slug": "sales-process-design",
       "engine": false,
       "category": "Sales & Pipeline",
       "phase": "Design"
+    },
+    {
+      "slug": "search-demand-reader",
+      "engine": true,
+      "category": "SEO, GEO & AEO",
+      "phase": "Diagnose"
     },
     {
       "slug": "seo-content-brief",
