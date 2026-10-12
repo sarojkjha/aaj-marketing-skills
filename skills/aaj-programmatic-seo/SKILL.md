@@ -1,5 +1,5 @@
 ---
-name: programmatic-seo
+name: aaj-programmatic-seo
 description: >-
   Use when the user wants to generate many search-targeted pages from a template
   and a dataset — location pages, comparison pages, integration pages, calculator
@@ -10,7 +10,7 @@ description: >-
 license: MIT
 metadata:
   publisher: AAJ
-  slug: programmatic-seo
+  slug: aaj-programmatic-seo
   category: SEO, GEO & AEO
   phase: Design
   difficulty: Intermediate
@@ -65,14 +65,14 @@ See `resources/pseo-playbook.md` for the page-type patterns that work, the templ
 
 Model viability before committing:
 
-> Paths assume you installed with `npx skills add`. From a clone of this repo, use `skills/programmatic-seo/resources/…` instead.
+> Paths assume you installed with `npx skills add`. From a clone of this repo, use `skills/aaj-programmatic-seo/resources/…` instead.
 
 ```bash
-node .agents/skills/programmatic-seo/resources/pseo-model.js  # demo
-node .agents/skills/programmatic-seo/resources/pseo-model.js --pages 500 --volume 40 --conv 2 --value 400
-node .agents/skills/programmatic-seo/resources/pseo-model.js --unique-data strong --fixed-cost 8000
-node .agents/skills/programmatic-seo/resources/pseo-model.js --json --pages 200
-node .agents/skills/programmatic-seo/resources/pseo-model.js --help
+node .agents/skills/aaj-programmatic-seo/resources/pseo-model.js  # demo
+node .agents/skills/aaj-programmatic-seo/resources/pseo-model.js --pages 500 --volume 40 --conv 2 --value 400
+node .agents/skills/aaj-programmatic-seo/resources/pseo-model.js --unique-data strong --fixed-cost 8000
+node .agents/skills/aaj-programmatic-seo/resources/pseo-model.js --json --pages 200
+node .agents/skills/aaj-programmatic-seo/resources/pseo-model.js --help
 ```
 
 It runs the funnel (pages → indexed → ranking), projects sessions, conversions and value, computes payback and cost per ranking page, and flags the failure patterns — thin query volume, missing per-page data, doorway-scale builds, optimistic indexation assumptions.

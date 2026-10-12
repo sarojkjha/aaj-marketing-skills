@@ -73,9 +73,13 @@ export function engineHelp(file) {
 
 const ACRONYMS = new Set(["sla","mql","mcp","ai","ab","seo","geo","aeo","mmm","pr","ai","abm","kpi","nrr","gtm","icp","roi","cac","ltv","b2b","b2c","crm"]);
 
-/** "pr-and-earned-media" -> "PR & Earned Media". Frontmatter `name` is the slug. */
+/**
+ * "pr-and-earned-media" -> "PR & Earned Media". Frontmatter `name` is the slug.
+ * The `aaj-` prefix (platform/lib/renamed.mjs) is an install-name detail, not
+ * part of the title: "aaj-copywriting" -> "Copywriting".
+ */
 export function titleize(slug) {
-  return slug.split("-").map((w, i) => {
+  return slug.replace(/^aaj-/, "").split("-").map((w, i) => {
     if (w === "and") return "&";
     if (i > 0 && ["for", "to", "of", "in", "vs", "with"].includes(w)) return w;
     if (ACRONYMS.has(w)) return w.toUpperCase();

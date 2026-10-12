@@ -1,0 +1,490 @@
+{
+  "$comment": "Generated from skills/ by platform/scripts/generate-readme.mjs (npm run counts). Do not edit by hand: CI fails when this file disagrees with skills/.",
+  "skills": 68,
+  "engines": 57,
+  "skills_without_engine": 11,
+  "engine_scripts": 57,
+  "categories": 10,
+  "mcp_tools": 5,
+  "agents": [
+    "Claude Code",
+    "OpenAI Codex",
+    "Cursor",
+    "Windsurf",
+    "Cline"
+  ],
+  "phases": {
+    "Diagnose": {
+      "skills": 16,
+      "engines": 15
+    },
+    "Design": {
+      "skills": 22,
+      "engines": 18
+    },
+    "Execute": {
+      "skills": 30,
+      "engines": 24
+    }
+  },
+  "by_category": {
+    "Analytics & Experimentation": {
+      "skills": 4,
+      "engines": 4
+    },
+    "Content & Copy": {
+      "skills": 11,
+      "engines": 10
+    },
+    "Conversion & Web": {
+      "skills": 5,
+      "engines": 4
+    },
+    "Growth, Retention & RevOps": {
+      "skills": 9,
+      "engines": 9
+    },
+    "Paid Media & Budgeting": {
+      "skills": 4,
+      "engines": 4
+    },
+    "Research & Personas": {
+      "skills": 3,
+      "engines": 2
+    },
+    "Retention & Lifecycle": {
+      "skills": 3,
+      "engines": 2
+    },
+    "SEO, GEO & AEO": {
+      "skills": 7,
+      "engines": 6
+    },
+    "Sales & Pipeline": {
+      "skills": 11,
+      "engines": 8
+    },
+    "Strategy & Positioning": {
+      "skills": 11,
+      "engines": 8
+    }
+  },
+  "phrases": {
+    "headline": "68 marketing skills for AI agents. 57 run real engines.",
+    "short": "68 marketing skills, 57 with runnable engines",
+    "github_about": "The math layer for marketing agents: 68 skills, 57 with deterministic engines that return numbers and a verdict. Keep your writing skills, add the arithmetic. MIT, no API key.",
+    "product_hunt_tagline": "Marketing skills that do the math for your AI agent",
+    "product_hunt_description": "Open-source marketing skills for AI agents. 57 of the 68 run deterministic engines: LTV:CAC, pipeline coverage, A/B significance, budget splits. Same input, same answer, code you can read. MIT.",
+    "maker_bio": "Founder of AAJ. Marketing for Seed–Series B startups. I maintain 68 open-source marketing skills for AI agents; 57 of them do the math."
+  },
+  "catalog": [
+    {
+      "slug": "aaj-copywriting",
+      "engine": true,
+      "category": "Content & Copy",
+      "phase": "Execute"
+    },
+    {
+      "slug": "aaj-marketing-loops",
+      "engine": true,
+      "category": "Growth, Retention & RevOps",
+      "phase": "Design"
+    },
+    {
+      "slug": "aaj-marketing-psychology",
+      "engine": true,
+      "category": "Strategy & Positioning",
+      "phase": "Design"
+    },
+    {
+      "slug": "aaj-programmatic-seo",
+      "engine": true,
+      "category": "SEO, GEO & AEO",
+      "phase": "Design"
+    },
+    {
+      "slug": "aaj-sales-enablement",
+      "engine": true,
+      "category": "Sales & Pipeline",
+      "phase": "Execute"
+    },
+    {
+      "slug": "ab-test-significance",
+      "engine": true,
+      "category": "Analytics & Experimentation",
+      "phase": "Execute"
+    },
+    {
+      "slug": "abm-program-design",
+      "engine": true,
+      "category": "Sales & Pipeline",
+      "phase": "Design"
+    },
+    {
+      "slug": "ad-creative-testing",
+      "engine": true,
+      "category": "Paid Media & Budgeting",
+      "phase": "Execute"
+    },
+    {
+      "slug": "agent-readiness-audit",
+      "engine": true,
+      "category": "SEO, GEO & AEO",
+      "phase": "Diagnose"
+    },
+    {
+      "slug": "ai-inference-pricing",
+      "engine": true,
+      "category": "Strategy & Positioning",
+      "phase": "Design"
+    },
+    {
+      "slug": "ai-marketing-governance",
+      "engine": true,
+      "category": "Content & Copy",
+      "phase": "Execute"
+    },
+    {
+      "slug": "brand-product-context",
+      "engine": false,
+      "category": "Strategy & Positioning",
+      "phase": "Diagnose"
+    },
+    {
+      "slug": "brand-voice-definition",
+      "engine": true,
+      "category": "Content & Copy",
+      "phase": "Design"
+    },
+    {
+      "slug": "brand-voice-governance",
+      "engine": true,
+      "category": "Content & Copy",
+      "phase": "Execute"
+    },
+    {
+      "slug": "campaign-orchestrator",
+      "engine": true,
+      "category": "Strategy & Positioning",
+      "phase": "Diagnose"
+    },
+    {
+      "slug": "case-study-and-proof",
+      "engine": true,
+      "category": "Content & Copy",
+      "phase": "Execute"
+    },
+    {
+      "slug": "claims-and-proof-check",
+      "engine": true,
+      "category": "Content & Copy",
+      "phase": "Execute"
+    },
+    {
+      "slug": "cold-email-sequence",
+      "engine": false,
+      "category": "Sales & Pipeline",
+      "phase": "Execute"
+    },
+    {
+      "slug": "community-and-dark-social",
+      "engine": true,
+      "category": "Growth, Retention & RevOps",
+      "phase": "Execute"
+    },
+    {
+      "slug": "comparison-pages",
+      "engine": true,
+      "category": "Content & Copy",
+      "phase": "Execute"
+    },
+    {
+      "slug": "content-calendar-planning",
+      "engine": true,
+      "category": "Content & Copy",
+      "phase": "Execute"
+    },
+    {
+      "slug": "content-repurposing",
+      "engine": false,
+      "category": "Content & Copy",
+      "phase": "Execute"
+    },
+    {
+      "slug": "creator-partnerships",
+      "engine": true,
+      "category": "Growth, Retention & RevOps",
+      "phase": "Execute"
+    },
+    {
+      "slug": "customer-interview-synthesis",
+      "engine": true,
+      "category": "Research & Personas",
+      "phase": "Diagnose"
+    },
+    {
+      "slug": "customer-survey-design",
+      "engine": true,
+      "category": "Research & Personas",
+      "phase": "Diagnose"
+    },
+    {
+      "slug": "discovery-call-framework",
+      "engine": false,
+      "category": "Sales & Pipeline",
+      "phase": "Execute"
+    },
+    {
+      "slug": "email-lifecycle-sequence",
+      "engine": true,
+      "category": "Retention & Lifecycle",
+      "phase": "Execute"
+    },
+    {
+      "slug": "first-marketing-hire",
+      "engine": true,
+      "category": "Growth, Retention & RevOps",
+      "phase": "Design"
+    },
+    {
+      "slug": "founder-led-content",
+      "engine": true,
+      "category": "Content & Copy",
+      "phase": "Execute"
+    },
+    {
+      "slug": "geo-citation-tracker",
+      "engine": true,
+      "category": "SEO, GEO & AEO",
+      "phase": "Execute"
+    },
+    {
+      "slug": "geo-content-optimization",
+      "engine": false,
+      "category": "SEO, GEO & AEO",
+      "phase": "Execute"
+    },
+    {
+      "slug": "incrementality-and-mmm",
+      "engine": true,
+      "category": "Analytics & Experimentation",
+      "phase": "Diagnose"
+    },
+    {
+      "slug": "landing-page-brief",
+      "engine": false,
+      "category": "Conversion & Web",
+      "phase": "Execute"
+    },
+    {
+      "slug": "lead-handoff-sla",
+      "engine": true,
+      "category": "Sales & Pipeline",
+      "phase": "Execute"
+    },
+    {
+      "slug": "lead-magnet-and-free-tool-design",
+      "engine": true,
+      "category": "Conversion & Web",
+      "phase": "Design"
+    },
+    {
+      "slug": "lifecycle-and-retention",
+      "engine": true,
+      "category": "Retention & Lifecycle",
+      "phase": "Design"
+    },
+    {
+      "slug": "market-sizing",
+      "engine": true,
+      "category": "Strategy & Positioning",
+      "phase": "Diagnose"
+    },
+    {
+      "slug": "marketing-budget-planning",
+      "engine": true,
+      "category": "Paid Media & Budgeting",
+      "phase": "Design"
+    },
+    {
+      "slug": "marketing-leadership-model",
+      "engine": true,
+      "category": "Growth, Retention & RevOps",
+      "phase": "Diagnose"
+    },
+    {
+      "slug": "marketing-maturity-assessment",
+      "engine": true,
+      "category": "Strategy & Positioning",
+      "phase": "Diagnose"
+    },
+    {
+      "slug": "marketing-report",
+      "engine": true,
+      "category": "Analytics & Experimentation",
+      "phase": "Execute"
+    },
+    {
+      "slug": "messaging-framework",
+      "engine": false,
+      "category": "Strategy & Positioning",
+      "phase": "Design"
+    },
+    {
+      "slug": "objection-handling",
+      "engine": true,
+      "category": "Sales & Pipeline",
+      "phase": "Design"
+    },
+    {
+      "slug": "onboarding-activation",
+      "engine": false,
+      "category": "Retention & Lifecycle",
+      "phase": "Execute"
+    },
+    {
+      "slug": "paid-media-budget-allocation",
+      "engine": true,
+      "category": "Paid Media & Budgeting",
+      "phase": "Design"
+    },
+    {
+      "slug": "paid-search-account-audit",
+      "engine": true,
+      "category": "Paid Media & Budgeting",
+      "phase": "Diagnose"
+    },
+    {
+      "slug": "partnerships-and-co-marketing",
+      "engine": true,
+      "category": "Growth, Retention & RevOps",
+      "phase": "Execute"
+    },
+    {
+      "slug": "persona-builder",
+      "engine": false,
+      "category": "Research & Personas",
+      "phase": "Design"
+    },
+    {
+      "slug": "pilot-to-contract",
+      "engine": true,
+      "category": "Sales & Pipeline",
+      "phase": "Design"
+    },
+    {
+      "slug": "pipeline-and-forecast",
+      "engine": true,
+      "category": "Sales & Pipeline",
+      "phase": "Execute"
+    },
+    {
+      "slug": "plg-upgrade-prompts",
+      "engine": true,
+      "category": "Conversion & Web",
+      "phase": "Diagnose"
+    },
+    {
+      "slug": "positioning-statement",
+      "engine": true,
+      "category": "Strategy & Positioning",
+      "phase": "Design"
+    },
+    {
+      "slug": "pr-and-earned-media",
+      "engine": true,
+      "category": "Content & Copy",
+      "phase": "Execute"
+    },
+    {
+      "slug": "pricing-and-packaging",
+      "engine": true,
+      "category": "Strategy & Positioning",
+      "phase": "Design"
+    },
+    {
+      "slug": "pricing-page-teardown",
+      "engine": true,
+      "category": "Strategy & Positioning",
+      "phase": "Diagnose"
+    },
+    {
+      "slug": "product-launch",
+      "engine": true,
+      "category": "Growth, Retention & RevOps",
+      "phase": "Execute"
+    },
+    {
+      "slug": "referral-program-design",
+      "engine": true,
+      "category": "Growth, Retention & RevOps",
+      "phase": "Design"
+    },
+    {
+      "slug": "sales-process-design",
+      "engine": false,
+      "category": "Sales & Pipeline",
+      "phase": "Design"
+    },
+    {
+      "slug": "seo-content-brief",
+      "engine": true,
+      "category": "SEO, GEO & AEO",
+      "phase": "Design"
+    },
+    {
+      "slug": "seo-geo-aeo-audit",
+      "engine": true,
+      "category": "SEO, GEO & AEO",
+      "phase": "Diagnose"
+    },
+    {
+      "slug": "signup-flow-optimizer",
+      "engine": true,
+      "category": "Conversion & Web",
+      "phase": "Execute"
+    },
+    {
+      "slug": "structured-data-for-ai-search",
+      "engine": true,
+      "category": "SEO, GEO & AEO",
+      "phase": "Execute"
+    },
+    {
+      "slug": "target-account-list",
+      "engine": true,
+      "category": "Sales & Pipeline",
+      "phase": "Design"
+    },
+    {
+      "slug": "unit-economics",
+      "engine": true,
+      "category": "Analytics & Experimentation",
+      "phase": "Diagnose"
+    },
+    {
+      "slug": "value-proposition",
+      "engine": false,
+      "category": "Strategy & Positioning",
+      "phase": "Design"
+    },
+    {
+      "slug": "webinar-and-event-programs",
+      "engine": true,
+      "category": "Growth, Retention & RevOps",
+      "phase": "Execute"
+    },
+    {
+      "slug": "website-conversion-audit",
+      "engine": true,
+      "category": "Conversion & Web",
+      "phase": "Diagnose"
+    },
+    {
+      "slug": "win-loss-analysis",
+      "engine": true,
+      "category": "Sales & Pipeline",
+      "phase": "Diagnose"
+    }
+  ]
+}

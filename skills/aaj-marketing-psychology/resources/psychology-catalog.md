@@ -1,6 +1,6 @@
 # Psychology catalog, evidence strength & the manipulation boundary
 
-Reference for the `marketing-psychology` skill. Organized by **the friction it solves**, because that's how the problem actually presents.
+Reference for the `aaj-marketing-psychology` skill. Organized by **the friction it solves**, because that's how the problem actually presents.
 
 **Evidence key:**
 - 🟢 **Robust** — replicated widely, survives scrutiny
@@ -36,7 +36,7 @@ This is the most under-diagnosed friction. **Test it by asking five people what 
 
 **Processing fluency** 🟢
 Information that's easier to process is judged as more true, more likable, and lower risk. Fluency effects are among the most reliable in the literature.
-→ *Apply:* shorter sentences, familiar words, high contrast, conventional layout. Ease of reading is itself persuasive — which is why the `copywriting` skill weights clarity.
+→ *Apply:* shorter sentences, familiar words, high contrast, conventional layout. Ease of reading is itself persuasive — which is why the `aaj-copywriting` skill weights clarity.
 → *Note:* this cuts both ways. Hard-to-read terms make claims *less* believed, regardless of merit.
 
 **Concreteness effect** 🟢

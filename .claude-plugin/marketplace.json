@@ -1,12 +1,12 @@
 {
   "name": "aaj",
-  "description": "AAJ marketing skills for Seed to Series B founders and marketers: diagnose, design and execute, with runnable engines.",
+  "description": "AAJ marketing skills: the math layer for marketing agents. Engines that return numbers and a verdict, for Seed to Series B founders and marketers.",
   "owner": { "name": "AAJ", "url": "https://aajconsult.com" },
   "plugins": [
     {
       "name": "aaj-marketing-skills",
-      "source": ".",
-      "description": "AAJ marketing skills with runnable engines: unit economics, pricing, pipeline, positioning, SEO/GEO and more."
+      "source": "./",
+      "description": "The math layer for marketing agents: unit economics, pipeline coverage, A/B significance, budget splits, pricing, retention and SEO/GEO scoring, computed by deterministic engines you can read."
     }
   ]
 }

@@ -26,8 +26,8 @@ Companion to the `brand-voice-governance` skill. Covers what the engine checks, 
 
 **Does not check — anything requiring judgment:**
 
-- Whether the copy is persuasive, clear, or well-argued → `copywriting`.
-- Whether a claim is true or defensible → `copywriting`.
+- Whether the copy is persuasive, clear, or well-argued → `aaj-copywriting`.
+- Whether a claim is true or defensible → `aaj-copywriting`.
 - Whether the *voice rules themselves* are right → `brand-product-context`.
 - Tone conveyed by paraphrase rather than banned words → a human read.
 

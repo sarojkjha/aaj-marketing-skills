@@ -10,8 +10,10 @@
  * engines — Map of id -> { id, slug, help, summary, skillName, category }
  * run     — async (engine, argv) => { code, out, err, capped?, timedOut?, spawnError? }
  */
+import { currentSlug } from "../lib/renamed.mjs";
+
 export const SERVER_NAME = "aaj-engines";
-export const SERVER_VERSION = "1.1.0";
+export const SERVER_VERSION = "1.2.0";
 export const SITE = "https://aajconsult.com";
 export const SKILLS_SITE = "https://skills.aajconsult.com";
 // Protocol versions this server knows how to speak, newest first.
@@ -147,8 +149,11 @@ function toolListEngines({ category }) {
   return text(out.join("\n"));
 }
 
+// Old names keep working: five skills took an `aaj-` prefix on Oct 11, 2026.
+const findEngine = (id) => engines.get(id) || engines.get(currentSlug(id));
+
 function toolDescribeEngine({ engine }) {
-  const e = engines.get(engine);
+  const e = findEngine(engine);
   if (!e) return fail(unknownEngine(engine));
   return text(
     [
@@ -173,7 +178,7 @@ function unknownEngine(id) {
 }
 
 async function toolRunEngine({ engine, input }) {
-  const e = engines.get(engine);
+  const e = findEngine(engine);
   if (!e) return fail(unknownEngine(engine));
 
   let argv;
@@ -273,8 +278,8 @@ function toolSearchSkills({ query, limit }) {
 }
 
 function toolGetSkill({ skill }) {
-  const slug = String(skill || "").trim();
-  const s = skills.find((x) => x.slug === slug) || skills.find((x) => x.slug === slug.toLowerCase());
+  const slug = currentSlug(String(skill || "").trim());
+  const s = skills.find((x) => x.slug === slug) || skills.find((x) => x.slug === currentSlug(slug.toLowerCase()));
   if (!s) {
     return fail(
       `Unknown skill "${skill}". Call search_skills to find it, or list_engines if you want the runnable ones.`

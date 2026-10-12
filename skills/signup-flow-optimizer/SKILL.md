@@ -115,7 +115,7 @@ Be explicit that the opportunity figures rank rather than forecast, and say whic
 
 ## Related skills
 
-`website-conversion-audit` (find where the funnel leaks before fixing this step) · `onboarding-activation` (what happens after the account exists) · `marketing-psychology` (the decision friction behind the mechanical friction) · `copywriting` (the microcopy in the flow) · `ab-test-significance` (prove the change worked).
+`website-conversion-audit` (find where the funnel leaks before fixing this step) · `onboarding-activation` (what happens after the account exists) · `aaj-marketing-psychology` (the decision friction behind the mechanical friction) · `aaj-copywriting` (the microcopy in the flow) · `ab-test-significance` (prove the change worked).
 
 ## Credits
 

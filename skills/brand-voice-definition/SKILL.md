@@ -30,7 +30,7 @@ metadata:
     - https://aajconsult.com/resources/brand-voice-guide
     - https://aajconsult.com/tools/brand-voice-checker
     - https://aajconsult.com/blog/why-ai-content-doesnt-sound-like-you
-  related: [brand-voice-governance, brand-product-context, copywriting, positioning-statement]
+  related: [brand-voice-governance, brand-product-context, aaj-copywriting, positioning-statement]
   tags: [brand-voice, tone-of-voice, voice-guide, style-guide, readability, ai-content, writing-rules]
 ---
 
@@ -147,7 +147,7 @@ off-brand medians, the spread and whether it is consistent, the person, the writ
 
 - `brand-voice-governance` - checks content against the profile this produces
 - `brand-product-context` - where the voice section of the brief lives
-- `copywriting` - writing inside the rules
+- `aaj-copywriting` - writing inside the rules
 - `positioning-statement` - what the voice is in service of
 
 ## Credits

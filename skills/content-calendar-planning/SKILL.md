@@ -113,7 +113,7 @@ Deliver the cluster map (pillar + supporting pieces per theme), the dated schedu
 
 ## Related skills
 
-`persona-builder` (who it's for) · `geo-content-optimization` (make it citable) · `copywriting` (write it) · `social` (the repurposed distribution).
+`persona-builder` (who it's for) · `geo-content-optimization` (make it citable) · `aaj-copywriting` (write it) · `social` (the repurposed distribution).
 
 ## Credits
 

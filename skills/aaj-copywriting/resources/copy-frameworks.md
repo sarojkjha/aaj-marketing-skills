@@ -1,6 +1,6 @@
 # Copy frameworks, structures & worked example
 
-Reference for the `copywriting` skill. Frameworks are tools, not scripts — pick the one that fits the asset and the reader's state.
+Reference for the `aaj-copywriting` skill. Frameworks are tools, not scripts — pick the one that fits the asset and the reader's state.
 
 ---
 

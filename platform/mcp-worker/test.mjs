@@ -10,7 +10,8 @@ import { spawnSync } from "node:child_process";
 import { join, dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import worker, { runInProcess } from "./worker.mjs";
-import { ENGINES } from "./engines.generated.mjs";
+import { ENGINES, SKILLS } from "./engines.generated.mjs";
+import { readFileSync } from "node:fs";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..", "..");
 let failed = 0, n = 0;
@@ -66,6 +67,23 @@ for (let i = 0; i < 61; i++) last = await post({ jsonrpc: "2.0", id: i, method: 
 ok(last.status === 429, "rate limit");
 const opt = await worker.fetch(new Request("https://mcp.example/mcp", { method: "OPTIONS" }));
 ok(opt.status === 204 && opt.headers.get("access-control-allow-origin") === "*", "CORS preflight");
+// The published counts: the same object as counts.json, readable from any page.
+{
+  const res = await worker.fetch(new Request("https://mcp.example/counts.json"));
+  const body = await res.json();
+  const file = JSON.parse(readFileSync(new URL("../../counts.json", import.meta.url), "utf8"));
+  ok(res.status === 200 && res.headers.get("access-control-allow-origin") === "*", "/counts.json is served with CORS");
+  ok(JSON.stringify(body) === JSON.stringify(file), "/counts.json matches counts.json in the repo");
+  ok(body.skills === SKILLS.length && body.engines === new Set(ENGINES.map((e) => e.slug)).size, "/counts.json agrees with the bundle");
+}
+
+// Renamed skills (Oct 11): the old ids still resolve, so agents and links in the wild keep working.
+{
+  const [st, bd] = await j(await post({ jsonrpc: "2.0", id: 98, method: "tools/call", params: { name: "describe_engine", arguments: { engine: "copywriting" } } }, { "cf-connecting-ip": "192.0.2.50" }));
+  ok(st === 200 && /^# aaj-copywriting/.test(bd.result.content[0].text), "an old engine id resolves to its aaj- name");
+  const [, sk] = await j(await post({ jsonrpc: "2.0", id: 97, method: "tools/call", params: { name: "get_skill", arguments: { skill: "marketing-loops" } } }, { "cf-connecting-ip": "192.0.2.51" }));
+  ok(!sk.result.isError, "an old skill slug resolves to its aaj- name");
+}
 
 // 3. Engines that once read input only from a file now take it inline (Oct 10).
 for (const [engine, input] of [

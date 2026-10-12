@@ -7,9 +7,14 @@
  * per-category tables and the engine list are all derivable, so they are
  * derived. Everything outside the markers stays hand-written.
  *
- *   node platform/scripts/generate-readme.mjs          # rewrite README.md and package.json's description
- *   node platform/scripts/generate-readme.mjs --check  # fail if either would change
- *   node platform/scripts/generate-readme.mjs --stdout # print, write nothing
+ *   node platform/scripts/generate-readme.mjs           # rewrite README.md, package.json's description and counts.json
+ *   node platform/scripts/generate-readme.mjs --check   # fail if any of them would change, or a count is typed by hand
+ *   node platform/scripts/generate-readme.mjs --stdout  # print the README, write nothing
+ *   node platform/scripts/generate-readme.mjs --phrases # print the wording to paste into Product Hunt, bios and the deck
+ *
+ * counts.json is the published copy of every count (platform/lib/counts.mjs).
+ * The hosted MCP server serves it at /counts.json and aajconsult.com copies it
+ * at build, so one `npm run counts` moves every surface together.
  *
  * Two kinds of generated region:
  *   block  <!-- aaj:begin <id> --> ... <!-- aaj:end <id> -->   whole sections
@@ -23,6 +28,8 @@ import { readFileSync, writeFileSync } from "node:fs";
 import { join, dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { listSkills } from "../lib/catalog.mjs";
+import { buildCounts, serializeCounts } from "../lib/counts.mjs";
+import { existsSync, readdirSync, statSync } from "node:fs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = resolve(process.env.AAJ_SKILLS_ROOT || join(HERE, "..", ".."));
@@ -44,6 +51,34 @@ const CATEGORY_ORDER = [
   "Growth, Retention & RevOps",
 ];
 const PHASE_ORDER = ["Diagnose", "Design", "Execute"];
+
+// skills.sh groups the repo page by these (skills.sh.json at the root). The
+// first group is the math layer: the engines founders reach for first. Every
+// other skill is grouped by its own category, so a new skill lands in the right
+// group without anyone editing this file.
+const SKILLS_SH_START = {
+  title: "Founder math: start here",
+  description:
+    "Engines that return the number and a verdict, not advice: unit economics, pipeline coverage, " +
+    "retention, pricing, market size, inference cost and test significance. Same input, same answer.",
+  skills: [
+    "unit-economics", "pipeline-and-forecast", "lifecycle-and-retention", "pricing-and-packaging",
+    "market-sizing", "ai-inference-pricing", "paid-media-budget-allocation", "ab-test-significance",
+    "win-loss-analysis", "pilot-to-contract", "marketing-leadership-model",
+  ],
+};
+const CATEGORY_BLURB = {
+  "Strategy & Positioning": "Who you are for, what you charge and why you win, checked against the alternative.",
+  "Research & Personas": "Interviews, surveys and reviews turned into evidence a decision can rest on.",
+  "SEO, GEO & AEO": "Whether search engines and AI answer engines can find, read and cite you.",
+  "Content & Copy": "Writing that is specific and provable, and checks for voice, claims and proof.",
+  "Conversion & Web": "Where visitors stall on the site, the signup and the upgrade, and what to fix first.",
+  "Paid Media & Budgeting": "How much to spend, where, and whether the creative and the account are working.",
+  "Analytics & Experimentation": "Whether a result is real: significance, incrementality and board-ready reporting.",
+  "Sales & Pipeline": "Accounts, buying committees, handoffs and the forecast, from first touch to contract.",
+  "Retention & Lifecycle": "Churn, NRR and the lifecycle email that keeps customers.",
+  "Growth, Retention & RevOps": "Loops, launches, partners, events and the marketing team itself.",
+};
 
 const fail = (msg) => { console.error(`generate-readme: ${msg}`); process.exit(2); };
 
@@ -152,33 +187,100 @@ const current = readFileSync(README, "utf8");
 const eol = current.includes("\r\n") ? "\r\n" : "\n";
 const next = render(current.replace(/\r\n/g, "\n"), build(skills)).replace(/\n/g, eol);
 
+// skills.sh.json: how skills.sh groups this repo's page. Derived, so it is never stale.
+const SKILLS_SH = join(REPO_ROOT, "skills.sh.json");
+const slugSet = new Set(skills.map((x) => x.slug));
+const startHere = SKILLS_SH_START.skills.filter((x) => slugSet.has(x));
+const skillsSh = {
+  $schema: "https://skills.sh/schemas/skills.sh.schema.json",
+  notGrouped: "bottom",
+  groupings: [
+    { title: SKILLS_SH_START.title, description: SKILLS_SH_START.description, skills: startHere },
+    ...CATEGORY_ORDER.map((c) => ({
+      title: c,
+      description: CATEGORY_BLURB[c] || "",
+      skills: skills.filter((x) => x.category === c && !startHere.includes(x.slug)).map((x) => x.slug),
+    })).filter((g) => g.skills.length),
+  ],
+};
+for (const g of skillsSh.groupings) {
+  if (!g.description) delete g.description;
+  if (g.title.length > 120 || (g.description || "").length > 500) fail(`skills.sh group "${g.title}" exceeds skills.sh's length limits`);
+}
+const skillsShNext = JSON.stringify(skillsSh, null, 2) + "\n";
+const skillsShCurrent = existsSync(SKILLS_SH) ? readFileSync(SKILLS_SH, "utf8").replace(/\r\n/g, "\n") : "";
+const skillsShStale = skillsShNext !== skillsShCurrent;
+
+// counts.json: the published copy of every count. Same --check as the README.
+const COUNTS = join(REPO_ROOT, "counts.json");
+const counts = buildCounts(skills);
+const countsNext = serializeCounts(counts);
+const countsCurrent = existsSync(COUNTS) ? readFileSync(COUNTS, "utf8").replace(/\r\n/g, "\n") : "";
+const countsStale = countsNext !== countsCurrent;
+
+// A count typed by hand anywhere a reader sees it is the bug this script exists
+// to prevent. Generated regions are stripped first; what remains must not state
+// "<n> skills" or "<n> engines". Allowed: numbers inside a skill's own method
+// (for example "21 checks"), which do not describe the size of the library.
+const TYPED_COUNT = /\b\d{2,3}\s+(?:(?:marketing|agent|runnable|real|deterministic|free|open-source)\s+){0,2}(?:skills|engines)\b/gi;
+const stripGenerated = (text) =>
+  text
+    .replace(/<!-- aaj:begin ([\w-]+) -->[\s\S]*?<!-- aaj:end \1 -->/g, "")
+    .replace(/<!-- aaj:n [\w-]+ -->[^<]*<!-- aaj:\/n -->/g, "");
+const authored = [
+  "README.md", "AUTHORING_GUIDE.md", "SKILL_TEMPLATE.md", "skills.sh.json",
+  ".claude-plugin/marketplace.json", ".claude-plugin/plugin.json", ".agents/plugins/marketplace.json",
+  "platform/mcp/README.md", "platform/mcp-worker/README.md",
+];
+const walkMd = (dir) => (existsSync(dir) ? readdirSync(dir).flatMap((f) => {
+  const p = join(dir, f);
+  return statSync(p).isDirectory() ? walkMd(p) : /\.(md|json)$/.test(f) ? [p] : [];
+}) : []);
+const typed = [];
+for (const rel of [...authored.map((f) => join(REPO_ROOT, f)), ...walkMd(join(REPO_ROOT, "recipes"))]) {
+  if (!existsSync(rel)) continue;
+  const text = rel.endsWith("README.md") && rel === README ? stripGenerated(next) : readFileSync(rel, "utf8");
+  for (const m of text.matchAll(TYPED_COUNT)) typed.push(`${rel.slice(REPO_ROOT.length + 1)}: "${m[0]}"`);
+}
+
 const mode = process.argv[2] || "";
 if (mode === "--stdout") { process.stdout.write(next); process.exit(0); }
 
-const about = () => console.log(`GitHub "About" text (set by hand in the repo settings): ${JSON.parse(pkgNext).description}`);
+const about = () => console.log(`GitHub "About" text (CI sets it on push to main when REPO_ADMIN_TOKEN is present): ${counts.phrases.github_about}`);
 
-if (next === current && !pkgStale) {
-  console.log(`README.md and package.json up to date — ${nSkills} skills, ${nEngines} engines`);
+if (mode === "--phrases") {
+  console.log(`Counts from skills/: ${nSkills} skills, ${nEngines} with engines, ${counts.skills_without_engine} without.\n`);
+  for (const [k, v] of Object.entries(counts.phrases)) console.log(`${k} (${v.length} chars):\n  ${v}\n`);
+  process.exit(0);
+}
+
+if (typed.length) {
+  console.error("A skill or engine count is typed by hand. Use a <!-- aaj:n skills --> marker, or leave the number out:");
+  for (const t of typed) console.error(`  ${t}`);
+  process.exit(1);
+}
+
+if (next === current && !pkgStale && !countsStale && !skillsShStale) {
+  console.log(`README.md, package.json, counts.json and skills.sh.json up to date — ${nSkills} skills, ${nEngines} engines`);
   if (mode !== "--check") about();
   process.exit(0);
 }
 
-if (mode === "--check" && pkgStale && next === current) {
-  console.error(`package.json description is out of date: it should say "${phrase}". Run: node platform/scripts/generate-readme.mjs`);
-  process.exit(1);
-}
-
 if (mode === "--check") {
-  const a = current.replace(/\r\n/g, "\n").split("\n");
-  const b = next.replace(/\r\n/g, "\n").split("\n");
-  console.error("README.md is out of date. Run: node platform/scripts/generate-readme.mjs\n");
-  if (pkgStale) console.error(`package.json description is out of date too: it should say "${phrase}".\n`);
-  let shown = 0;
-  for (let i = 0; i < Math.max(a.length, b.length) && shown < 20; i++) {
-    if (a[i] !== b[i]) {
-      if (a[i] !== undefined) console.error(`  ${i + 1}- ${a[i]}`);
-      if (b[i] !== undefined) console.error(`  ${i + 1}+ ${b[i]}`);
-      shown++;
+  if (countsStale) console.error(`counts.json is out of date: skills/ has ${nSkills} skills and ${nEngines} engines. Run: npm run counts\n`);
+  if (skillsShStale) console.error(`skills.sh.json is out of date with skills/. Run: npm run counts\n`);
+  if (pkgStale) console.error(`package.json description is out of date: it should say "${phrase}". Run: npm run counts\n`);
+  if (next !== current) {
+    const a = current.replace(/\r\n/g, "\n").split("\n");
+    const b = next.replace(/\r\n/g, "\n").split("\n");
+    console.error("README.md is out of date. Run: npm run counts\n");
+    let shown = 0;
+    for (let i = 0; i < Math.max(a.length, b.length) && shown < 20; i++) {
+      if (a[i] !== b[i]) {
+        if (a[i] !== undefined) console.error(`  ${i + 1}- ${a[i]}`);
+        if (b[i] !== undefined) console.error(`  ${i + 1}+ ${b[i]}`);
+        shown++;
+      }
     }
   }
   process.exit(1);
@@ -186,5 +288,7 @@ if (mode === "--check") {
 
 if (next !== current) writeFileSync(README, next);
 if (pkgStale) writeFileSync(PACKAGE, pkgNext);
-console.log(`${[next !== current && "README.md", pkgStale && "package.json"].filter(Boolean).join(" and ")} written — ${nSkills} skills, ${nEngines} engines`);
+if (countsStale) writeFileSync(COUNTS, countsNext);
+if (skillsShStale) writeFileSync(SKILLS_SH, skillsShNext);
+console.log(`${[next !== current && "README.md", pkgStale && "package.json", countsStale && "counts.json", skillsShStale && "skills.sh.json"].filter(Boolean).join(", ")} written — ${nSkills} skills, ${nEngines} engines`);
 about();

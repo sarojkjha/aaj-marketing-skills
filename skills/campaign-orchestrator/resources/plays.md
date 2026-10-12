@@ -48,7 +48,7 @@ When two Plays both look plausible, these separate them:
 
 **Diagnose**
 1. `website-conversion-audit` — where the funnel leaks, by step
-2. `marketing-psychology` — which of the six frictions is blocking the decision
+2. `aaj-marketing-psychology` — which of the six frictions is blocking the decision
 3. `unit-economics` — establish what a conversion is worth, so fixes can be ranked
 
 *Exit when:* the leaking step is named with a number attached.
@@ -56,7 +56,7 @@ When two Plays both look plausible, these separate them:
 **Design**
 4. `signup-flow-optimizer` — if the leak is at signup
 5. `landing-page-brief` — if the leak is before it
-6. `copywriting` — the actual words, laddered to the positioning
+6. `aaj-copywriting` — the actual words, laddered to the positioning
 
 *Exit when:* the rebuilt flow or page is specified concretely enough to build.
 
@@ -106,13 +106,13 @@ When two Plays both look plausible, these separate them:
 
 **Design**
 4. `seo-content-brief` — spec the content that should exist
-5. `programmatic-seo` — only if a template-and-data pattern genuinely pays back
+5. `aaj-programmatic-seo` — only if a template-and-data pattern genuinely pays back
 6. `geo-content-optimization` — make what exists citable
 
 *Exit when:* briefs exist for the content worth writing, and the technical blockers are specified.
 
 **Execute**
-7. `copywriting` — write it
+7. `aaj-copywriting` — write it
 8. `content-repurposing` — extend each piece across channels
 9. `marketing-report` — track rankings, citations, and traffic
 
@@ -165,7 +165,7 @@ When two Plays both look plausible, these separate them:
 *Exit when:* the plan has owners, dates, and a budget.
 
 **Execute**
-8. `copywriting` — the launch assets
+8. `aaj-copywriting` — the launch assets
 9. `content-repurposing` — the distribution
 10. `marketing-report` — instrumented before launch day, not after
 
@@ -217,12 +217,12 @@ The Play people resist and most often need. Run it when several other Plays all 
 **Design**
 4. `positioning-statement` — rebuild it, with the reasoning behind each clause
 5. `brand-product-context` — update the source of truth every other skill reads
-6. `marketing-psychology` — which friction the new message must remove
+6. `aaj-marketing-psychology` — which friction the new message must remove
 
 *Exit when:* the positioning statement and messaging hierarchy are written and the context file is updated.
 
 **Execute**
-7. `copywriting` — homepage, sales one-liner, deck
+7. `aaj-copywriting` — homepage, sales one-liner, deck
 8. `content-repurposing` — roll it through existing assets
 9. `geo-content-optimization` — make the new message citable
 
@@ -235,7 +235,7 @@ The Play people resist and most often need. Run it when several other Plays all 
 **"Can you write me some ad copy?"**
 > Two questions first. What happens to the traffic those ads would send — what percentage converts today? And where do people stop?
 >
-> If conversion is healthy, this is genuinely an Execute task: `copywriting`, and get on with it.
+> If conversion is healthy, this is genuinely an Execute task: `aaj-copywriting`, and get on with it.
 > If conversion is 1%, ads make it worse — more spend reaching a page that doesn't work. That's **Fix the funnel**, starting at Diagnose.
 
 **"Growth has stalled. We've tried everything."**

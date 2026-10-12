@@ -39,13 +39,13 @@ Check whether content conforms to a brand's **own stated voice**, block by block
 
 This is the enforcement layer over `brand-product-context`. That skill captures the voice — the defining adjectives, the do/don't list, the words to avoid, the reading level. This skill holds content to it. The two are a pair: one writes the rule, the other checks against it.
 
-**The distinction this skill exists to enforce is conformance versus quality.** `copywriting`'s scorer asks whether copy is clear, concrete, and defensible — a judgment that's the same for every brand. This asks a different, brand-specific question: does this sound like *this* brand? The same sentence passes for a playful brand and fails for a clinical one. A general quality score cannot answer that, because it has no opinion about which voice is correct — only the brand's own brief does.
+**The distinction this skill exists to enforce is conformance versus quality.** `aaj-copywriting`'s scorer asks whether copy is clear, concrete, and defensible — a judgment that's the same for every brand. This asks a different, brand-specific question: does this sound like *this* brand? The same sentence passes for a playful brand and fails for a clinical one. A general quality score cannot answer that, because it has no opinion about which voice is correct — only the brand's own brief does.
 
 **The problem it exists to solve is scale.** One marketer writing one page holds the voice in their head. Ten people and an AI assistant producing forty pages a week do not. Ahrefs' detector found AI-generated text in 74% of 900,000 new English-language pages published in April 2025, mostly mixed with human writing ([Ahrefs, May 2025](https://ahrefs.com/blog/what-percentage-of-new-content-is-ai-generated); detectors are imperfect, so read it as a scale, not a precise count). AI writes to a generic professional register that drifts toward exactly the words most brands ban. Governance by eyeball doesn't survive that volume; a check that quotes every violation with its location does, and its log of what was flagged and why is the record you want when someone asks how AI-assisted copy was reviewed.
 
 ## When to use
 
-The user is reviewing content for brand conformance, setting up a guardrail before AI-generated copy ships, or auditing a body of existing content for drift. For whether copy is *good* — clarity, claim-defensibility — use `copywriting`. For whether the voice rules themselves are right, use `brand-product-context` to define them first.
+The user is reviewing content for brand conformance, setting up a guardrail before AI-generated copy ships, or auditing a body of existing content for drift. For whether copy is *good* — clarity, claim-defensibility — use `aaj-copywriting`. For whether the voice rules themselves are right, use `brand-product-context` to define them first.
 
 ## Before you start
 
@@ -84,7 +84,7 @@ Two modes. **Profile** parses a checkable ruleset from a brand-context brief's V
 3. **Read the blocking findings first.** These are rule violations; fix them before publishing.
 4. **Triage the advisory notes** by how much the page matters — clear them on the homepage, leave them on an internal FAQ.
 5. **Keep the audit trail** if the content was AI-generated or the brand needs a governance record. The quoted findings are the log.
-6. **Route quality questions elsewhere.** A clean conformance check does not mean the copy is good — hand a passing draft to `copywriting`'s scorer for clarity and claim-defensibility.
+6. **Route quality questions elsewhere.** A clean conformance check does not mean the copy is good — hand a passing draft to `aaj-copywriting`'s scorer for clarity and claim-defensibility.
 
 ## Present the result
 
@@ -94,7 +94,7 @@ Never present a blocking finding as a suggestion or an advisory note as a failur
 
 ## Guardrails & common mistakes
 
-- **Conformance is not quality.** This measures whether content matches the brand's stated voice, not whether it's good. Say so every time; pair with `copywriting` for quality.
+- **Conformance is not quality.** This measures whether content matches the brand's stated voice, not whether it's good. Say so every time; pair with `aaj-copywriting` for quality.
 - **House defaults are a fallback, not a profile.** If no brand avoid-list is found, the check runs against AAJ generic defaults and flags that it did. Don't let a house-default pass read as a brand-conformance pass.
 - **Keep opinions out of the blocking tier.** Only rules the brand wrote for itself should fail content. Promoting a taste preference to a hard failure is how the tool loses editors' trust.
 - **Banned-word matching is literal and whole-word.** It catches "leverage" but not a paraphrase that means the same thing. It's a floor, not a substitute for a human read on tone.
@@ -109,7 +109,7 @@ Never present a blocking finding as a suggestion or an advisory note as a failur
 
 ## Related skills
 
-`brand-product-context` (defines the voice this enforces — the prerequisite) · `copywriting` (quality, where this checks conformance) · `content-repurposing` (governs the derivatives it produces) · `geo-content-optimization` (the other check content passes before publishing).
+`brand-product-context` (defines the voice this enforces — the prerequisite) · `aaj-copywriting` (quality, where this checks conformance) · `content-repurposing` (governs the derivatives it produces) · `geo-content-optimization` (the other check content passes before publishing).
 
 ## Credits
 

@@ -29,7 +29,7 @@ metadata:
     - https://aajconsult.com/resources/ai-tool-policy
     - https://aajconsult.com/blog/why-ai-content-doesnt-sound-like-you
     - https://aajconsult.com/resources/brand-voice-guide
-  related: [brand-voice-governance, seo-content-brief, copywriting]
+  related: [brand-voice-governance, seo-content-brief, aaj-copywriting]
   tags: [ai-policy, governance, fact-checking, citations, disclosure, marketing-ops, review-gate]
 ---
 
@@ -182,7 +182,7 @@ point.
 
 - `brand-voice-governance` — the "does it sound like us" half of the review gate, at scale
 - `seo-content-brief` — where citation targets get chosen before drafting starts
-- `copywriting` — the drafting this policy governs
+- `aaj-copywriting` — the drafting this policy governs
 
 ## Credits
 

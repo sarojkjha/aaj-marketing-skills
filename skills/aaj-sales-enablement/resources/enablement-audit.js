@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /*
  * AAJ Sales Enablement — engine
- * Part of the "sales-enablement" Agent Skill.
+ * Part of the "aaj-sales-enablement" Agent Skill.
  *
  * AAJ's position: enablement is not a content library, it is the set of
  * things a rep needs at each stage to move a deal, kept current and

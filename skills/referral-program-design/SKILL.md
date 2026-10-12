@@ -31,7 +31,7 @@ metadata:
     - https://aajconsult.com/tools/unit-economics-calculator
     - https://aajconsult.com/playbooks/customer-onboarding-retention-playbook
     - https://aajconsult.com/playbooks/partner-co-marketing-playbook
-  related: [marketing-loops, unit-economics, lifecycle-and-retention, case-study-and-proof, customer-survey-design]
+  related: [aaj-marketing-loops, unit-economics, lifecycle-and-retention, case-study-and-proof, customer-survey-design]
   tags: [referral, advocacy, refer-a-friend, rewards, k-factor, word-of-mouth, cac, retention]
 ---
 
@@ -41,7 +41,7 @@ Design a referral program that asks the right customers at the right moment, rew
 
 ## When to use
 
-The user wants to start a referral or advocacy program, size a reward, decide between one- and two-sided incentives, or check whether an existing program pays for itself. For the general loop math across referral, content and paid loops, use `marketing-loops`; this skill is the referral program itself.
+The user wants to start a referral or advocacy program, size a reward, decide between one- and two-sided incentives, or check whether an existing program pays for itself. For the general loop math across referral, content and paid loops, use `aaj-marketing-loops`; this skill is the referral program itself.
 
 ## Before you start
 
@@ -133,7 +133,7 @@ The engine returns the funnel, referral CAC split into rewards and fixed cost, b
 
 ## Related skills
 
-`marketing-loops` · `unit-economics` · `lifecycle-and-retention` · `case-study-and-proof` · `customer-survey-design` · `partnerships-and-co-marketing`
+`aaj-marketing-loops` · `unit-economics` · `lifecycle-and-retention` · `case-study-and-proof` · `customer-survey-design` · `partnerships-and-co-marketing`
 
 ## Credits
 

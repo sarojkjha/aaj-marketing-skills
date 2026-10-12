@@ -100,6 +100,23 @@ function main() {
 
   const { target, winRate, stageProbabilities, deals } = cfg;
 
+  // CRM APIs (HubSpot among them) return amounts as text: "60000" is accepted.
+  // A deal without a numeric amount would turn every total into NaN (CRM
+  // exports often have them). Stop and name them rather than print $NaN.
+  for (const d of deals) {
+    if (typeof d.amount === "string" && d.amount.trim() !== "" && Number.isFinite(Number(d.amount))) d.amount = Number(d.amount);
+  }
+  const noAmount = deals.filter((d) => typeof d.amount !== "number" || !Number.isFinite(d.amount));
+  if (noAmount.length) {
+    console.error(`${noAmount.length} deal(s) have no numeric amount: ${noAmount.slice(0, 10).map((d) => JSON.stringify(d.name || "(unnamed)")).join(", ")}${noAmount.length > 10 ? ", …" : ""}.`);
+    console.error("Give each one an amount, or leave them out and report them separately.");
+    process.exit(1);
+  }
+  if (!(winRate > 0 && winRate <= 1)) {
+    console.error('"winRate" is a fraction between 0 and 1 (for example 0.25, not 25).');
+    process.exit(1);
+  }
+
   let openPipeline = 0;
   let weighted = 0;
   let commit = 0;

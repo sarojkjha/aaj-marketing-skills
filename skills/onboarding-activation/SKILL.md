@@ -106,7 +106,7 @@ Then the stall map with the steepest drop named, then the redesigned first run, 
 
 ## Related skills
 
-`lifecycle-and-retention` (diagnose first; it owns the retention and LTV math) · `signup-flow-optimizer` (the flow before the account exists) · `email-lifecycle-sequence` (the email that supports activation) · `marketing-psychology` (the friction blocking the first action) · `customer-survey-design` (ask stalled users what stopped them).
+`lifecycle-and-retention` (diagnose first; it owns the retention and LTV math) · `signup-flow-optimizer` (the flow before the account exists) · `email-lifecycle-sequence` (the email that supports activation) · `aaj-marketing-psychology` (the friction blocking the first action) · `customer-survey-design` (ask stalled users what stopped them).
 
 ## Credits
 

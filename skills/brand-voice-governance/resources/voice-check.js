@@ -6,7 +6,7 @@
  * banned words, and reading-level ceiling captured in .agents/product-marketing.md
  * — block by block, and emits a pass/revise verdict plus an audit trail.
  *
- * This is NOT a general copy-quality scorer (that's copywriting/copy-scorer.js).
+ * This is NOT a general copy-quality scorer (that's aaj-copywriting/copy-scorer.js).
  * It answers one narrow question: does THIS content conform to THIS brand's
  * stated rules? A brand whose voice is "playful" and a brand whose voice is
  * "clinical" get opposite verdicts on the same sentence.
@@ -331,7 +331,7 @@ function renderCheck(r) {
     out.push('  page; leave them if the schedule is tight.');
   } else {
     out.push('  Conforms to the brand\'s stated voice. This checks conformance, not quality —');
-    out.push('  run copywriting/copy-scorer for clarity and claim-defensibility.');
+    out.push('  run aaj-copywriting/copy-scorer for clarity and claim-defensibility.');
   }
   if (r.profileUsed.startsWith('HOUSE')) {
     out.push('');
@@ -354,7 +354,7 @@ AAJ — brand-voice-governance engine
 
 This checks whether content conforms to a brand's OWN stated voice rules. It is
 not a general copy-quality scorer — for clarity and claim-defensibility use
-copywriting/copy-scorer.js. The two are complementary: one asks "is this good
+aaj-copywriting/copy-scorer.js. The two are complementary: one asks "is this good
 copy", this one asks "does this sound like THIS brand".
 
 CHECK — score content against a voice profile

@@ -29,7 +29,7 @@ metadata:
     - https://aajconsult.com/templates/case-study-kit
     - https://aajconsult.com/tools/brand-voice-checker
     - https://aajconsult.com/blog/marketing-privacy-and-advertising-rules
-  related: [case-study-and-proof, copywriting, brand-voice-governance, ai-marketing-governance]
+  related: [case-study-and-proof, aaj-copywriting, brand-voice-governance, ai-marketing-governance]
   tags: [claims, substantiation, proof, testimonials, compliance-claims, ftc, ai-claims, health-claims, copy-review]
 ---
 
@@ -122,7 +122,7 @@ Every source the engine links is the regulator's own page: FTC (advertising subs
 
 ## Related skills
 
-`case-study-and-proof` · `copywriting` · `brand-voice-governance` · `ai-marketing-governance` · `creator-partnerships` · `landing-page-brief`
+`case-study-and-proof` · `aaj-copywriting` · `brand-voice-governance` · `ai-marketing-governance` · `creator-partnerships` · `landing-page-brief`
 
 ## Credits
 

@@ -29,7 +29,7 @@ metadata:
     - https://aajconsult.com/tools/self-reported-attribution-coder
     - https://aajconsult.com/playbooks/founder-led-linkedin-playbook
     - https://aajconsult.com/blog/dark-social-b2b-demand-generation
-  related: [founder-led-content, creator-partnerships, marketing-loops, marketing-report]
+  related: [founder-led-content, creator-partnerships, aaj-marketing-loops, marketing-report]
   tags: [dark-social, community, word-of-mouth, self-reported-attribution, branded-search, community-led-growth]
 ---
 
@@ -173,7 +173,7 @@ verdict.
 
 - `founder-led-content` - the founder's public channel; this skill is the private one
 - `creator-partnerships` - when the trusted person is paid
-- `marketing-loops` - which loop the forwarded piece feeds
+- `aaj-marketing-loops` - which loop the forwarded piece feeds
 - `marketing-report` - putting the trend read in front of the board
 
 ## Credits

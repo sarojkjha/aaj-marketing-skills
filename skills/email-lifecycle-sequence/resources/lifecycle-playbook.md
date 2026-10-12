@@ -88,7 +88,7 @@ Lifecycle email is expected, so it doesn't need the cold-email tricks. Specific 
 | Genuine question | "What made you sign up?" |
 | Plain value | "The onboarding template we use with clients" |
 
-**Avoid:** false urgency, fake personalisation ("quick question" when it isn't), all-caps, and clickbait that the body doesn't pay off. See `marketing-psychology` for the boundary between urgency and manufactured urgency.
+**Avoid:** false urgency, fake personalisation ("quick question" when it isn't), all-caps, and clickbait that the body doesn't pay off. See `aaj-marketing-psychology` for the boundary between urgency and manufactured urgency.
 
 ---
 

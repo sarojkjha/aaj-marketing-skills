@@ -73,6 +73,48 @@ function evaluate(c){
     winner: pB > pA ? 'variant' : (pB < pA ? 'control' : 'tie') };
 }
 
+// Analytics APIs (GA4's Data API among them) return metric values as text, and
+// "168" + 37 is "16837" in JavaScript: a string count once produced z = 6.57
+// where the true value was 2.01. Numeric text is converted; anything else, a
+// rate passed as a count, or more conversions than visitors stops the run.
+function toNum(v){
+  if (typeof v === 'number') return v;
+  if (typeof v === 'string' && v.trim() !== '' && Number.isFinite(Number(v))) return Number(v);
+  return NaN;
+}
+function validate(cfg){
+  if (!cfg || typeof cfg !== 'object' || Array.isArray(cfg)) return ['The input must be a JSON object.'];
+  const errs = [];
+  if (cfg.confidence !== undefined){
+    cfg.confidence = toNum(cfg.confidence);
+    if (!(cfg.confidence > 50 && cfg.confidence < 100)) errs.push('"confidence" is a percentage such as 90, 95 or 99.');
+  }
+  if (cfg.tail !== undefined && cfg.tail !== 'one' && cfg.tail !== 'two') errs.push('"tail" is "one" or "two".');
+  if (cfg.plan){
+    for (const k of ['baselineRate', 'mde']){
+      cfg[k] = toNum(cfg[k]);
+      if (!(cfg[k] > 0)) errs.push('"' + k + '" is a positive number in percentage points (5 means 5%).');
+    }
+    if (cfg.power !== undefined){
+      cfg.power = toNum(cfg.power);
+      if (!(cfg.power > 0 && cfg.power < 100)) errs.push('"power" is a percentage such as 80.');
+    }
+    if (cfg.baselineRate + cfg.mde >= 100) errs.push('baselineRate + mde must stay under 100 percentage points.');
+    return errs;
+  }
+  for (const arm of ['control', 'variant']){
+    const g = cfg[arm];
+    if (!g || typeof g !== 'object'){ errs.push('"' + arm + '" needs {"visitors": n, "conversions": n}.'); continue; }
+    for (const k of ['visitors', 'conversions']){
+      g[k] = toNum(g[k]);
+      if (!Number.isInteger(g[k]) || g[k] < 0) errs.push(arm + '.' + k + ' must be a whole number: a count, not a rate.');
+    }
+    if (g.visitors === 0) errs.push(arm + '.visitors must be above 0.');
+    if (g.conversions > g.visitors) errs.push(arm + '.conversions cannot be more than ' + arm + '.visitors.');
+  }
+  return errs;
+}
+
 function plan(c){
   const conf = c.confidence || 95, power = c.power || 80;
   const p1 = c.baselineRate / 100, p2 = (c.baselineRate + c.mde) / 100;
@@ -118,4 +160,6 @@ if (arg === '--help' || arg === '-h'){ console.log(require('fs').readFileSync(__
 let cfg;
 if (arg){ try { cfg = JSON.parse(arg); } catch(e){ console.error('Invalid JSON. Run --help.\n'+e.message); process.exit(1);} }
 else { cfg = { control:{visitors:4000,conversions:200}, variant:{visitors:4050,conversions:250}, confidence:95 }; console.log('(no config — demo: 5.0% vs 6.2%, n≈4000 each, 95%)'); }
+const problems = validate(cfg);
+if (problems.length){ console.error(problems.join('\n') + '\nRun --help for the input shape.'); process.exit(1); }
 console.log(render(cfg));
