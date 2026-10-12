@@ -30,7 +30,7 @@ metadata:
     - https://aajconsult.com/tools/price-sensitivity-analyzer
     - https://aajconsult.com/tools/pricing-arpu-modeler
     - https://aajconsult.com/playbooks/pricing-packaging-playbook
-  related: [pricing-and-packaging, ab-test-significance, website-conversion-audit, marketing-psychology]
+  related: [pricing-and-packaging, ab-test-significance, website-conversion-audit, aaj-marketing-psychology]
   tags: [pricing-page, price-testing, revenue-per-visitor, rosca, teardown, competitor-pricing, a-b-test]
 ---
 
@@ -160,7 +160,7 @@ read-out with p-value, progress against plan, verdict and retention note.
 - `pricing-and-packaging` - the tiers and the value metric the page presents
 - `ab-test-significance` - the same test maths for conversion rather than revenue per visitor
 - `website-conversion-audit` - the rest of the page around the price table
-- `marketing-psychology` - anchoring and choice architecture, and where persuasion ends
+- `aaj-marketing-psychology` - anchoring and choice architecture, and where persuasion ends
 
 ## Credits
 

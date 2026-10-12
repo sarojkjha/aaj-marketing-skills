@@ -75,7 +75,7 @@ var DIMS = [
     evidence: 'a written ICP, and CAC by channel for the last quarter',
     weak: 'Spend is spread thin. Without a sharp ICP and proven channels, budget quietly leaks.',
     strong: 'A focused ICP and a channel mix you can point to with numbers.',
-    move: 'Concentrate spend on what pays back.', skills: ['target-account-list', 'paid-media-budget-allocation', 'marketing-loops'] },
+    move: 'Concentrate spend on what pays back.', skills: ['target-account-list', 'paid-media-budget-allocation', 'aaj-marketing-loops'] },
   { id: 'conversion', name: 'Website & Conversion', qs: [
       'A first-time visitor understands what we do, and what to do next, within about five seconds.',
       'We have clear conversion paths (demo, trial or call) with lead capture that works.',

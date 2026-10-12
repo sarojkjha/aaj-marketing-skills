@@ -30,7 +30,7 @@ metadata:
     - https://aajconsult.com/blog/free-trial-freemium-or-demo
     - https://aajconsult.com/playbooks/pricing-packaging-playbook
     - https://aajconsult.com/tools/ab-test-significance-calculator
-  related: [onboarding-activation, pricing-and-packaging, ab-test-significance, marketing-psychology, lifecycle-and-retention, signup-flow-optimizer]
+  related: [onboarding-activation, pricing-and-packaging, ab-test-significance, aaj-marketing-psychology, lifecycle-and-retention, signup-flow-optimizer]
   tags: [plg, product-led-growth, paywall, upgrade-prompt, freemium, free-to-paid, monetization, conversion]
 ---
 
@@ -64,7 +64,7 @@ The user runs a freemium or free-trial product and wants more free users to pay:
 - **Price:** the plan and price, or where to see them, on the prompt.
 - **One action:** upgrade, or, when the user is not the buyer (a teacher on a school plan, an employee on a company account), "ask your admin" or "talk to us".
 - **A way to continue:** finish the current work or keep the free plan without losing data. A dead end teaches users to avoid the feature.
-- **No pressure tactics:** no fake countdowns, no guilt-trip decline buttons. See `marketing-psychology` for where persuasion ends.
+- **No pressure tactics:** no fake countdowns, no guilt-trip decline buttons. See `aaj-marketing-psychology` for where persuasion ends.
 
 AI products: usage limits often track cost to serve (credits, generations). Show the meter before the limit, so the prompt is never a surprise. EdTech and B2B: the user who hits the limit is often not the payer; route the prompt to the buyer.
 
@@ -134,7 +134,7 @@ The engine returns each prompt's stages and conversion with intervals, its share
 
 ## Related skills
 
-`onboarding-activation` · `pricing-and-packaging` · `ab-test-significance` · `marketing-psychology` · `lifecycle-and-retention` · `signup-flow-optimizer`
+`onboarding-activation` · `pricing-and-packaging` · `ab-test-significance` · `aaj-marketing-psychology` · `lifecycle-and-retention` · `signup-flow-optimizer`
 
 ## Credits
 

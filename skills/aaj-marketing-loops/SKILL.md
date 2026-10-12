@@ -1,5 +1,5 @@
 ---
-name: marketing-loops
+name: aaj-marketing-loops
 description: >-
   Use when the user wants to build or diagnose a compounding growth loop —
   referral, viral, content, or paid-recycling — rather than optimize a linear
@@ -12,7 +12,7 @@ description: >-
 license: MIT
 metadata:
   publisher: AAJ
-  slug: marketing-loops
+  slug: aaj-marketing-loops
   category: Growth, Retention & RevOps
   phase: Design
   difficulty: Intermediate
@@ -64,13 +64,13 @@ Two things the engine computes that change decisions:
 
 ## Run the engine
 
-> Paths assume you installed with `npx skills add`. From a clone of this repo, use `skills/marketing-loops/resources/…` instead.
+> Paths assume you installed with `npx skills add`. From a clone of this repo, use `skills/aaj-marketing-loops/resources/…` instead.
 
 ```bash
-node .agents/skills/marketing-loops/resources/loop-model.js --demo            # worked example, no args
-node .agents/skills/marketing-loops/resources/loop-model.js score '<json>'    # compute k for one loop
-node .agents/skills/marketing-loops/resources/loop-model.js project '<json>'  # compound it over time
-node .agents/skills/marketing-loops/resources/loop-model.js --help
+node .agents/skills/aaj-marketing-loops/resources/loop-model.js --demo            # worked example, no args
+node .agents/skills/aaj-marketing-loops/resources/loop-model.js score '<json>'    # compute k for one loop
+node .agents/skills/aaj-marketing-loops/resources/loop-model.js project '<json>'  # compound it over time
+node .agents/skills/aaj-marketing-loops/resources/loop-model.js --help
 ```
 
 **Score** takes the loop's stages and branching factor, returns k, the verdict band, amplification, effective CAC (if a paid CAC is given), and the throttling stage. **Project** takes a k and a paid feed and shows users period by period, decomposing loop-driven from paid-driven growth so the compounding is visible rather than assumed.

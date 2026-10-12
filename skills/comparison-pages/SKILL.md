@@ -31,7 +31,7 @@ metadata:
     - https://aajconsult.com/blog/competitive-analysis-for-startups
     - https://aajconsult.com/templates/competitor-research-grid
     - https://aajconsult.com/playbooks/geo-aeo-playbook
-  related: [objection-handling, positioning-statement, programmatic-seo, geo-content-optimization, structured-data-for-ai-search, win-loss-analysis]
+  related: [objection-handling, positioning-statement, aaj-programmatic-seo, geo-content-optimization, structured-data-for-ai-search, win-loss-analysis]
   tags: [comparison-pages, vs-pages, alternatives, competitive, content-seo, bofu, fairness]
 ---
 
@@ -41,7 +41,7 @@ Write "X vs Y" and "alternatives to X" pages that a buyer who knows the rival st
 
 ## When to use
 
-The user wants a page for buyers searching "[us] vs [them]" or "[them] alternatives", or wants to fix one that reads like an ad. For the sales-side version of the same facts (battlecards and objection responses), use `objection-handling`; for generating many comparison pages from a dataset, use `programmatic-seo` and apply this skill's check to the template.
+The user wants a page for buyers searching "[us] vs [them]" or "[them] alternatives", or wants to fix one that reads like an ad. For the sales-side version of the same facts (battlecards and objection responses), use `objection-handling`; for generating many comparison pages from a dataset, use `aaj-programmatic-seo` and apply this skill's check to the template.
 
 ## Before you start
 
@@ -125,7 +125,7 @@ Input the table (rows: criterion, us, them, source, checked date, winner; `rival
 
 ## Related skills
 
-`objection-handling` · `positioning-statement` · `win-loss-analysis` · `programmatic-seo` · `geo-content-optimization` · `structured-data-for-ai-search`
+`objection-handling` · `positioning-statement` · `win-loss-analysis` · `aaj-programmatic-seo` · `geo-content-optimization` · `structured-data-for-ai-search`
 
 ## Credits
 

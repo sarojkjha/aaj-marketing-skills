@@ -143,7 +143,7 @@ reading as readiness.
 ## Related skills
 
 - `positioning-statement` — the story every launch asset inherits
-- `copywriting` — the launch page and emails
+- `aaj-copywriting` — the launch page and emails
 - `pr-and-earned-media` — the external half of a Tier 1 launch
 
 ## Credits

@@ -1,7 +1,8 @@
 name: Catalog counts
-# Fails when README.md or package.json states a skill or engine count that no
-# longer matches skills/ (fix: npm run counts), or when the hosted MCP bundle is
-# stale (fix: node platform/mcp-worker/build.mjs).
+# Fails when README.md, package.json or counts.json states a skill or engine
+# count that no longer matches skills/, or when a count is typed by hand in an
+# authored file (fix: npm run counts), or when the hosted MCP bundle is stale
+# (fix: node platform/mcp-worker/build.mjs).
 on:
   push:
     branches: [main]

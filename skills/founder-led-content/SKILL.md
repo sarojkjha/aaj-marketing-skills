@@ -30,7 +30,7 @@ metadata:
     - https://aajconsult.com/playbooks/founder-led-linkedin-playbook
     - https://aajconsult.com/tools/social-studio
     - https://aajconsult.com/resources/content-calendar-repurposing-tracker
-  related: [brand-voice-governance, content-repurposing, copywriting]
+  related: [brand-voice-governance, content-repurposing, aaj-copywriting]
   tags: [founder-led, linkedin, social, personal-brand, content-cadence, thought-leadership, distribution]
 ---
 
@@ -170,7 +170,7 @@ which is the point.
 
 - `brand-voice-governance` — keep a second voice or a ghostwriter sounding like the founder
 - `content-repurposing` — turn one pillar asset into the bank
-- `copywriting` — sharpen the first line
+- `aaj-copywriting` — sharpen the first line
 
 ## Credits
 

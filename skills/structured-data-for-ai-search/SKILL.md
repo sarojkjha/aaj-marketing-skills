@@ -31,7 +31,7 @@ metadata:
     - https://aajconsult.com/playbooks/geo-aeo-playbook
     - https://aajconsult.com/templates/ai-visibility-starter-kit
     - https://aajconsult.com/blog/what-is-geo-ai-citations
-  related: [seo-geo-aeo-audit, geo-content-optimization, agent-readiness-audit, programmatic-seo, comparison-pages]
+  related: [seo-geo-aeo-audit, geo-content-optimization, agent-readiness-audit, aaj-programmatic-seo, comparison-pages]
   tags: [structured-data, schema, json-ld, rich-results, ai-search, geo, technical-seo, validation]
 ---
 
@@ -129,7 +129,7 @@ Sources opened on 2026-10-10 (re-check them; Google edits these pages):
 
 ## Related skills
 
-`seo-geo-aeo-audit` · `geo-content-optimization` · `agent-readiness-audit` · `programmatic-seo` · `comparison-pages`
+`seo-geo-aeo-audit` · `geo-content-optimization` · `agent-readiness-audit` · `aaj-programmatic-seo` · `comparison-pages`
 
 ## Credits
 

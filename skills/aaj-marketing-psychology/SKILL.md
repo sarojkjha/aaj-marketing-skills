@@ -1,5 +1,5 @@
 ---
-name: marketing-psychology
+name: aaj-marketing-psychology
 description: >-
   Use when the user wants to apply behavioral science or persuasion principles
   to marketing — pricing pages, landing pages, onboarding, emails, offers, or
@@ -11,7 +11,7 @@ description: >-
 license: MIT
 metadata:
   publisher: AAJ
-  slug: marketing-psychology
+  slug: aaj-marketing-psychology
   category: Strategy & Positioning
   phase: Design
   difficulty: Starter
@@ -71,14 +71,14 @@ See `resources/psychology-catalog.md` for the full principle catalog organized b
 
 Check any draft for manipulative patterns before it ships:
 
-> Paths assume you installed with `npx skills add`. From a clone of this repo, use `skills/marketing-psychology/resources/…` instead.
+> Paths assume you installed with `npx skills add`. From a clone of this repo, use `skills/aaj-marketing-psychology/resources/…` instead.
 
 ```bash
-node .agents/skills/marketing-psychology/resources/pattern-check.js  # demo
-node .agents/skills/marketing-psychology/resources/pattern-check.js "your copy here"
-node .agents/skills/marketing-psychology/resources/pattern-check.js --file pricing.md
-node .agents/skills/marketing-psychology/resources/pattern-check.js --json "copy"
-node .agents/skills/marketing-psychology/resources/pattern-check.js --help
+node .agents/skills/aaj-marketing-psychology/resources/pattern-check.js  # demo
+node .agents/skills/aaj-marketing-psychology/resources/pattern-check.js "your copy here"
+node .agents/skills/aaj-marketing-psychology/resources/pattern-check.js --file pricing.md
+node .agents/skills/aaj-marketing-psychology/resources/pattern-check.js --json "copy"
+node .agents/skills/aaj-marketing-psychology/resources/pattern-check.js --help
 ```
 
 It flags three tiers: **dark patterns** (no honest version exists — confirmshaming, fabricated viewer counts), **verify-required** claims (legitimate only if literally true — scarcity, urgency, social-proof numbers), and **pressure language** (worth a second look).
@@ -119,7 +119,7 @@ Where you're uncertain which friction dominates, say so and give the diagnostic 
 
 ## Related skills
 
-`copywriting` (turns these principles into actual words) · `positioning-statement` (fixes comprehension at the source) · `website-conversion-audit` (finds where the friction is) · `pricing-and-packaging` (anchoring and framing applied to price) · `ab-test-significance` (proves whether any of this worked).
+`aaj-copywriting` (turns these principles into actual words) · `positioning-statement` (fixes comprehension at the source) · `website-conversion-audit` (finds where the friction is) · `pricing-and-packaging` (anchoring and framing applied to price) · `ab-test-significance` (proves whether any of this worked).
 
 ## Credits
 

@@ -134,6 +134,7 @@ async function main() {
   const pending = [];
 
   const slugs = readdirSync(SKILLS_DIR).filter(d => existsSync(join(SKILLS_DIR, d, 'SKILL.md')));
+  const published = new Set(); // row slugs (frontmatter `name`) this run publishes
   let ok = 0;
 
   for (const slug of slugs) {
@@ -143,6 +144,7 @@ async function main() {
     const resDir = join(dir, 'resources');
     const hasEngine = existsSync(resDir) && readdirSync(resDir).some(f => f.endsWith('.js') || f.endsWith('.mjs') || f.endsWith('.py'));
 
+    published.add(data.name);
     const row = {
       slug: data.name,
       // Display name: the body's H1 is the human title the author already wrote
@@ -232,6 +234,28 @@ async function main() {
   }
   for (let i = 0; i < pending.length; i += BATCH) ok += await postBatch(pending.slice(i, i + BATCH));
   console.log(`\nSynced ${ok}/${slugs.length} skills${VIA_FUNCTION ? ' via catalog-sync' : ''}.`);
+
+  // --prune: a skill that was renamed or removed in the repo is unpublished on the
+  // site, so the catalog (and every count read from it) matches skills/ exactly.
+  // Rows are never deleted: the old page can still redirect to its new name.
+  if (process.argv.includes('--prune')) {
+    if (VIA_FUNCTION) {
+      console.warn('  ! --prune needs SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY; skipped.');
+    } else if (ok === slugs.length) {
+      const { data: live, error: lErr } = await db.from('skills').select('slug').eq('published', true);
+      if (lErr) throw lErr;
+      const stale = (live || []).map(r => r.slug).filter(s => !published.has(s));
+      if (stale.length) {
+        const { error: pErr } = await db.from('skills').update({ published: false }).in('slug', stale);
+        if (pErr) throw pErr;
+        console.log(`Unpublished ${stale.length} skill(s) no longer in skills/: ${stale.join(', ')}`);
+      } else {
+        console.log('Nothing to unpublish: the site lists exactly the skills in skills/.');
+      }
+    } else {
+      console.warn('  ! Some skills failed to sync, so nothing was unpublished.');
+    }
+  }
   if (ok < slugs.length) process.exitCode = 1;
 }
 

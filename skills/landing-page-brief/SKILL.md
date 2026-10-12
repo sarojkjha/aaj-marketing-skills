@@ -68,7 +68,7 @@ Deliver the section-by-section brief (section, purpose, message/copy direction, 
 
 ## Related skills
 
-`positioning-statement` (the through-line) · `copywriting` (final copy) · `website-conversion-audit` (grade it once built) · `ab-test-significance` (test variants).
+`positioning-statement` (the through-line) · `aaj-copywriting` (final copy) · `website-conversion-audit` (grade it once built) · `ab-test-significance` (test variants).
 
 ## Credits
 

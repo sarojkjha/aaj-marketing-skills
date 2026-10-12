@@ -27,7 +27,7 @@ metadata:
     - https://aajconsult.com/playbooks/earned-media-playbook
     - https://aajconsult.com/blog/how-to-pitch-a-journalist
     - https://aajconsult.com/playbooks/partner-co-marketing-playbook
-  related: [content-repurposing, brand-voice-governance, copywriting]
+  related: [content-repurposing, brand-voice-governance, aaj-copywriting]
   tags: [pr, earned-media, press, journalist-pitch, media-relations, newsworthiness, outreach]
 ---
 
@@ -153,7 +153,7 @@ Keep the verdict plain. "Do not pitch yet" is more useful than an encouraging sc
 
 - `content-repurposing` — make one piece of coverage work across channels
 - `brand-voice-governance` — keep the pitch and the commentary sounding like the company
-- `copywriting` — sharpen the subject line and the first two lines
+- `aaj-copywriting` — sharpen the subject line and the first two lines
 
 ## Credits
 

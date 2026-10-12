@@ -28,7 +28,7 @@ metadata:
     - https://aajconsult.com/case-studies
     - https://aajconsult.com/tools/website-grader
     - https://aajconsult.com/playbooks/website-cro-playbook
-  related: [copywriting, win-loss-analysis, brand-voice-governance]
+  related: [aaj-copywriting, win-loss-analysis, brand-voice-governance]
   tags: [case-study, proof, social-proof, testimonials, permission, references, credibility]
 ---
 
@@ -160,7 +160,7 @@ relationship reading as strong evidence.
 
 ## Related skills
 
-- `copywriting` — the page the proof sits on
+- `aaj-copywriting` — the page the proof sits on
 - `win-loss-analysis` — where the outcomes worth writing up get spotted
 - `brand-voice-governance` — keeping the write-up in your own voice
 

@@ -110,7 +110,7 @@ Flag explicitly where you're inferring intent rather than reading it from a live
 
 ## Related skills
 
-`seo-geo-aeo-audit` (audit pages that already exist) · `geo-content-optimization` (the citation pass once it's drafted) · `copywriting` (the prose itself) · `programmatic-seo` (when the brief should become a template, not one page) · `content-repurposing` (extend the finished piece across channels).
+`seo-geo-aeo-audit` (audit pages that already exist) · `geo-content-optimization` (the citation pass once it's drafted) · `aaj-copywriting` (the prose itself) · `aaj-programmatic-seo` (when the brief should become a template, not one page) · `content-repurposing` (extend the finished piece across channels).
 
 ## Credits
 

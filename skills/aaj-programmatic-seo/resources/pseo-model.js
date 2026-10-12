@@ -8,6 +8,10 @@
  *   node resources/pseo-model.js                          # demo
  *   node resources/pseo-model.js --pages 500 --volume 40 --conv 2 --value 400
  *   node resources/pseo-model.js --help
+ *   node resources/pseo-model.js '{"pages":500,"volume":40,"conv":2,"value":400}'
+ *       the same options as one JSON object (camelCase: indexRate, rankRate,
+ *       aiDrag, costPerPage, fixedCost, uniqueData); this is what MCP clients send.
+ *       An unknown option stops the run instead of falling back to the demo.
  */
 
 // --- AAJ arg normalisation ---------------------------------------------------
@@ -217,23 +221,47 @@ The model cannot tell you whether your pages deserve to rank. That is what
 programmatic builds.
 `;
 
+const FLAG_TO_KEY = {
+  "--pages": "pages", "--volume": "volume", "--index-rate": "indexRate",
+  "--rank-rate": "rankRate", "--position": "position", "--ctr": "ctr",
+  "--ai-drag": "aiDrag", "--conv": "conv", "--value": "value",
+  "--cost-per-page": "costPerPage", "--fixed-cost": "fixedCost",
+  "--unique-data": "uniqueData"
+};
+const KEYS = Object.values(FLAG_TO_KEY);
+
+// Options come as flags (--pages 500) or as one JSON object
+// ({"pages": 500, "volume": 40}), which is how an MCP client passes them.
+// Anything unrecognised stops the run: silently falling back to the demo
+// values would print a confident answer to a question nobody asked.
 function parseArgs(argv) {
   const o = { ...DEFAULTS };
-  const map = {
-    "--pages": "pages", "--volume": "volume", "--index-rate": "indexRate",
-    "--rank-rate": "rankRate", "--position": "position", "--ctr": "ctr",
-    "--ai-drag": "aiDrag", "--conv": "conv", "--value": "value",
-    "--cost-per-page": "costPerPage", "--fixed-cost": "fixedCost",
-    "--unique-data": "uniqueData"
-  };
+  const first = (argv[0] || "").trim();
+  if (first.startsWith("{")) {
+    let cfg;
+    try { cfg = JSON.parse(first); } catch (e) { fail(`The JSON input does not parse: ${e.message}`); }
+    if (!cfg || typeof cfg !== "object" || Array.isArray(cfg)) fail("The JSON input must be an object of options.");
+    const unknown = Object.keys(cfg).filter(k => !KEYS.includes(k) && k !== "json");
+    if (unknown.length) fail(`Unknown option(s): ${unknown.join(", ")}. Allowed: ${KEYS.join(", ")}.`);
+    for (const k of KEYS) if (cfg[k] !== undefined) o[k] = k === "uniqueData" ? String(cfg[k]) : num(cfg[k]);
+    o.__json = cfg.json === true;
+    return o;
+  }
   for (let i = 0; i < argv.length; i++) {
-    const k = map[argv[i]];
-    if (k && argv[i + 1] !== undefined) {
-      o[k] = k === "uniqueData" ? String(argv[i + 1]) : num(argv[i + 1]);
-      i++;
-    }
+    const a = argv[i];
+    if (a === "--json" || a === "--demo") continue;
+    const k = FLAG_TO_KEY[a];
+    if (!k) fail(`Unknown argument "${a}". Run --help for the options.`);
+    if (argv[i + 1] === undefined) fail(`${a} needs a value.`);
+    o[k] = k === "uniqueData" ? String(argv[i + 1]) : num(argv[i + 1]);
+    i++;
   }
   return o;
+}
+
+function fail(msg) {
+  console.error(msg);
+  process.exit(1);
 }
 
 function main() {
@@ -255,7 +283,7 @@ function main() {
 
   const r = model(o);
 
-  if (argv.includes("--json")) {
+  if (argv.includes("--json") || o.__json) {
     const rk = risks(o, r);
     const [v] = verdict(r, rk);
     console.log(JSON.stringify({
@@ -268,7 +296,7 @@ function main() {
     return;
   }
 
-  if (argv.length === 0) console.log("\n(demo — pass options or --help to model your own)");
+  if (argv.length === 0 || (argv.length === 1 && argv[0] === "--demo")) console.log("\n(demo — pass options or --help to model your own)");
   console.log(report(o, r));
 }
 

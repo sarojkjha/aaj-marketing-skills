@@ -15,7 +15,7 @@
  * Deploy: see platform/mcp-worker/README.md
  */
 import { createServer, firstSentence, MAX_OUTPUT_BYTES, SERVER_NAME, SERVER_VERSION, SKILLS_SITE } from "../mcp/core.mjs";
-import { SKILLS, ENGINES, RUNNERS } from "./engines.generated.mjs";
+import { SKILLS, ENGINES, RUNNERS, COUNTS } from "./engines.generated.mjs";
 
 const MAX_BODY_BYTES = 256 * 1024;
 const RATE_PER_MINUTE = 60; // messages per client IP per minute, per isolate: a guard against loops, not a quota
@@ -158,10 +158,17 @@ export default {
     if (url.pathname === "/" || url.pathname === "") {
       return new Response(infoPage(url.origin), { headers: { "content-type": "text/html; charset=utf-8", ...CORS } });
     }
+    // The published counts (platform/lib/counts.mjs), the same object as counts.json
+    // in the repo. Any page can read it instead of typing a number.
+    if (url.pathname === "/counts.json") {
+      return new Response(JSON.stringify(COUNTS, null, 2) + "\n", {
+        headers: { "content-type": "application/json; charset=utf-8", "cache-control": "public, max-age=300", ...CORS },
+      });
+    }
     if (url.pathname === "/health") {
       return json({ ok: true, server: SERVER_NAME, version: SERVER_VERSION, skills: SKILLS.length, engines: ENGINES.length });
     }
-    if (url.pathname !== "/mcp") return json({ error: "Not found. The MCP endpoint is /mcp." }, 404);
+    if (url.pathname !== "/mcp") return json({ error: "Not found. The MCP endpoint is /mcp; counts are at /counts.json." }, 404);
 
     if (request.method === "GET") {
       return new Response("This server does not open a server-to-client stream. POST JSON-RPC messages to /mcp.", { status: 405, headers: { allow: "POST, OPTIONS", ...CORS } });

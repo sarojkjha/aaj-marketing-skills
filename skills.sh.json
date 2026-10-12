@@ -1,0 +1,140 @@
+{
+  "$schema": "https://skills.sh/schemas/skills.sh.schema.json",
+  "notGrouped": "bottom",
+  "groupings": [
+    {
+      "title": "Founder math: start here",
+      "description": "Engines that return the number and a verdict, not advice: unit economics, pipeline coverage, retention, pricing, market size, inference cost and test significance. Same input, same answer.",
+      "skills": [
+        "unit-economics",
+        "pipeline-and-forecast",
+        "lifecycle-and-retention",
+        "pricing-and-packaging",
+        "market-sizing",
+        "ai-inference-pricing",
+        "paid-media-budget-allocation",
+        "ab-test-significance",
+        "win-loss-analysis",
+        "pilot-to-contract",
+        "marketing-leadership-model"
+      ]
+    },
+    {
+      "title": "Strategy & Positioning",
+      "description": "Who you are for, what you charge and why you win, checked against the alternative.",
+      "skills": [
+        "aaj-marketing-psychology",
+        "brand-product-context",
+        "campaign-orchestrator",
+        "marketing-maturity-assessment",
+        "messaging-framework",
+        "positioning-statement",
+        "pricing-page-teardown",
+        "value-proposition"
+      ]
+    },
+    {
+      "title": "Research & Personas",
+      "description": "Interviews, surveys and reviews turned into evidence a decision can rest on.",
+      "skills": [
+        "customer-interview-synthesis",
+        "customer-survey-design",
+        "persona-builder"
+      ]
+    },
+    {
+      "title": "SEO, GEO & AEO",
+      "description": "Whether search engines and AI answer engines can find, read and cite you.",
+      "skills": [
+        "aaj-programmatic-seo",
+        "agent-readiness-audit",
+        "geo-citation-tracker",
+        "geo-content-optimization",
+        "seo-content-brief",
+        "seo-geo-aeo-audit",
+        "structured-data-for-ai-search"
+      ]
+    },
+    {
+      "title": "Content & Copy",
+      "description": "Writing that is specific and provable, and checks for voice, claims and proof.",
+      "skills": [
+        "aaj-copywriting",
+        "ai-marketing-governance",
+        "brand-voice-definition",
+        "brand-voice-governance",
+        "case-study-and-proof",
+        "claims-and-proof-check",
+        "comparison-pages",
+        "content-calendar-planning",
+        "content-repurposing",
+        "founder-led-content",
+        "pr-and-earned-media"
+      ]
+    },
+    {
+      "title": "Conversion & Web",
+      "description": "Where visitors stall on the site, the signup and the upgrade, and what to fix first.",
+      "skills": [
+        "landing-page-brief",
+        "lead-magnet-and-free-tool-design",
+        "plg-upgrade-prompts",
+        "signup-flow-optimizer",
+        "website-conversion-audit"
+      ]
+    },
+    {
+      "title": "Paid Media & Budgeting",
+      "description": "How much to spend, where, and whether the creative and the account are working.",
+      "skills": [
+        "ad-creative-testing",
+        "marketing-budget-planning",
+        "paid-search-account-audit"
+      ]
+    },
+    {
+      "title": "Analytics & Experimentation",
+      "description": "Whether a result is real: significance, incrementality and board-ready reporting.",
+      "skills": [
+        "incrementality-and-mmm",
+        "marketing-report"
+      ]
+    },
+    {
+      "title": "Sales & Pipeline",
+      "description": "Accounts, buying committees, handoffs and the forecast, from first touch to contract.",
+      "skills": [
+        "aaj-sales-enablement",
+        "abm-program-design",
+        "cold-email-sequence",
+        "discovery-call-framework",
+        "lead-handoff-sla",
+        "objection-handling",
+        "sales-process-design",
+        "target-account-list"
+      ]
+    },
+    {
+      "title": "Retention & Lifecycle",
+      "description": "Churn, NRR and the lifecycle email that keeps customers.",
+      "skills": [
+        "email-lifecycle-sequence",
+        "onboarding-activation"
+      ]
+    },
+    {
+      "title": "Growth, Retention & RevOps",
+      "description": "Loops, launches, partners, events and the marketing team itself.",
+      "skills": [
+        "aaj-marketing-loops",
+        "community-and-dark-social",
+        "creator-partnerships",
+        "first-marketing-hire",
+        "partnerships-and-co-marketing",
+        "product-launch",
+        "referral-program-design",
+        "webinar-and-event-programs"
+      ]
+    }
+  ]
+}

@@ -29,7 +29,7 @@ metadata:
     - https://aajconsult.com/tools/ab-test-significance-calculator
     - https://aajconsult.com/tools/paid-media-budget-allocator
     - https://aajconsult.com/playbooks/digital-advertising-playbook
-  related: [ab-test-significance, paid-media-budget-allocation, copywriting, incrementality-and-mmm]
+  related: [ab-test-significance, paid-media-budget-allocation, aaj-copywriting, incrementality-and-mmm]
   tags: [ad-creative, creative-testing, split-test, paid-media, meta-ads, linkedin-ads, statistical-significance]
 ---
 
@@ -157,7 +157,7 @@ best number so far; they do not tell you whether the difference is real.
 
 - `ab-test-significance` - the same statistics for landing pages and emails
 - `paid-media-budget-allocation` - how much each channel gets before you test inside it
-- `copywriting` - writing the variants worth testing
+- `aaj-copywriting` - writing the variants worth testing
 - `incrementality-and-mmm` - whether the channel works at all, not just which ad
 
 ## Credits

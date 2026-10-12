@@ -73,7 +73,7 @@ It returns rates, relative and absolute lift, z and p, a significance verdict at
 
 ## Related skills
 
-`website-conversion-audit` (find what to test) · `marketing-psychology` (generate hypotheses) · `marketing-report` (measure correctly).
+`website-conversion-audit` (find what to test) · `aaj-marketing-psychology` (generate hypotheses) · `marketing-report` (measure correctly).
 
 ## Credits
 

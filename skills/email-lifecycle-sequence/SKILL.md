@@ -119,7 +119,7 @@ State the assumptions the breakeven rests on, and flag any claim in the copy tha
 
 ## Related skills
 
-`lifecycle-and-retention` (diagnose whether churn is the problem before building sequences) · `onboarding-activation` (the in-product half of activation) · `copywriting` (the emails themselves) · `marketing-psychology` (the friction blocking the action a sequence is asking for) · `cold-email-sequence` (outbound, a different job entirely).
+`lifecycle-and-retention` (diagnose whether churn is the problem before building sequences) · `onboarding-activation` (the in-product half of activation) · `aaj-copywriting` (the emails themselves) · `aaj-marketing-psychology` (the friction blocking the action a sequence is asking for) · `cold-email-sequence` (outbound, a different job entirely).
 
 ## Credits
 

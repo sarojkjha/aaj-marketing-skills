@@ -1,17 +1,23 @@
-# <!-- aaj:n skills -->68<!-- aaj:/n --> Marketing Skills for AI agents. <!-- aaj:n engines -->57<!-- aaj:/n --> run real engines.
+# The math layer for marketing agents
 
-Agent skills for marketing work — grounded in AAJ's tested tools and methodology, not generic advice. **<!-- aaj:n engines -->57<!-- aaj:/n --> of the <!-- aaj:n skills -->68<!-- aaj:/n --> ship a runnable engine**: a Node script you execute directly that takes your numbers and returns a verdict, not a template to fill in.
+<!-- aaj:n skills -->68<!-- aaj:/n --> marketing skills for AI agents, and **<!-- aaj:n engines -->57<!-- aaj:/n --> of them run real engines**. Each engine is a dependency-free Node script. It takes your numbers and returns a number and a verdict: LTV:CAC and payback, pipeline coverage, A/B significance, budget splits, price ladders, NRR, market size, inference cost.
 
-Works with Claude Code, Cursor, OpenAI Codex, Windsurf, and any agent supporting the [Agent Skills spec](https://agentskills.io). Free, [MIT](LICENSE), no signup, nothing routed through a server.
+Most marketing skills are writing instructions. They help an agent draft a page, an email or a plan, so keep them. These add the arithmetic underneath. The agent that drafts your pricing page can check whether the price still covers inference cost. The agent that writes the board update can compute the forecast instead of estimating it. Same input, same output, and code you can read.
+
+Works with Claude Code, OpenAI Codex, Cursor, Windsurf, Cline and any agent that supports the [Agent Skills spec](https://agentskills.io). Free, [MIT](LICENSE), no API key, and the engines make no network calls.
 
 Built by [Saroj Jha](https://github.com/sarojkjha) / [AAJ](https://aajconsult.com). Browsable library at [skills.aajconsult.com](https://skills.aajconsult.com).
+
+> **Renamed on Oct 11, 2026.** `copywriting`, `marketing-psychology`, `programmatic-seo`, `marketing-loops` and `sales-enablement` are now `aaj-copywriting`, `aaj-marketing-psychology`, `aaj-programmatic-seo`, `aaj-marketing-loops` and `aaj-sales-enablement`. Another popular library publishes skills under the same five names, so with the prefix both install side by side. The hosted MCP server still answers to the old names.
 
 ---
 
 ## Contents
 
 - [Quick start](#quick-start)
+- [Install as a Claude Code or Codex plugin](#install-as-a-claude-code-or-codex-plugin)
 - [Use it from an MCP client](#use-it-from-an-mcp-client)
+- [Recipes: vendor data in, a verdict out](#recipes-vendor-data-in-a-verdict-out)
 - [What a runnable engine means](#what-a-runnable-engine-means)
 - [The catalog](#the-catalog)
 <!-- aaj:begin catalog-contents -->
@@ -48,21 +54,6 @@ npx skills add sarojkjha/aaj-marketing-skills --list
 
 Installs to `.agents/skills/`, and symlinks into `.claude/skills/` for Claude Code.
 
-**As a Claude Code plugin.** In Claude Code 2.1.275 or later, one line adds the marketplace and opens the plugin:
-
-```
-/plugin install aaj-marketing-skills --marketplace sarojkjha/aaj-marketing-skills
-```
-
-On earlier versions, run two commands:
-
-```
-/plugin marketplace add sarojkjha/aaj-marketing-skills
-/plugin install aaj-marketing-skills@aaj
-```
-
-The skills then appear as `/aaj-marketing-skills:<skill>`. Updates arrive when you run `/plugin marketplace update aaj`.
-
 Then run any engine with no configuration at all:
 
 ```bash
@@ -84,6 +75,34 @@ CAC payback             7.5 mo
 Swap the demo values for your own and it works the same way.
 
 > From a clone of this repo, paths are `skills/<slug>/resources/…` instead of `.agents/skills/<slug>/resources/…`.
+
+---
+
+## Install as a Claude Code or Codex plugin
+
+**Claude Code.** In Claude Code 2.1.275 or later, one line adds the marketplace and opens the plugin:
+
+```
+/plugin install aaj-marketing-skills --marketplace sarojkjha/aaj-marketing-skills
+```
+
+On earlier versions, run two commands:
+
+```
+/plugin marketplace add sarojkjha/aaj-marketing-skills
+/plugin install aaj-marketing-skills@aaj
+```
+
+The skills then appear as `/aaj-marketing-skills:<skill>`. Updates arrive when you run `/plugin marketplace update aaj`.
+
+**OpenAI Codex.** Add the marketplace, then install the plugin (or browse it with `/plugins` inside Codex):
+
+```
+codex plugin marketplace add sarojkjha/aaj-marketing-skills
+codex plugin add aaj-marketing-skills@aaj
+```
+
+`codex plugin marketplace upgrade aaj` picks up new skills. Codex reads `.agents/plugins/marketplace.json`, and both clients load every skill in `skills/`.
 
 ---
 
@@ -132,6 +151,16 @@ Setup for each client, troubleshooting, and the smoke test:
 
 ---
 
+## Recipes: vendor data in, a verdict out
+
+Vendor MCP servers bring the data; the engines turn it into a verdict. Each recipe is a prompt to paste, a field-by-field mapping and the checks to make before you trust the result:
+
+- [HubSpot deals into `pipeline-and-forecast`](recipes/hubspot-to-pipeline-forecast.md): weighted forecast, coverage against your win rate, and the lever to pull.
+- [GA4 results into `ab-test-significance`](recipes/ga4-to-ab-test-significance.md): sample size before the test, a verdict after it.
+- [Ahrefs or Semrush keyword data into `aaj-programmatic-seo`](recipes/keyword-data-to-programmatic-seo.md): whether a template-page build pays back.
+
+---
+
 ## What a runnable engine means
 
 Most agent skills are instructions. These are too — but <!-- aaj:n engines -->57<!-- aaj:/n --> of them also ship a dependency-free Node script that does the arithmetic and returns a judgement.
@@ -156,12 +185,12 @@ Every engine accepts `--demo` (a worked example, no config), `--help` (the input
 
 | | Skill | What it does | Phase |
 |---|---|---|---|
+| **E** | [`aaj-marketing-psychology`](skills/aaj-marketing-psychology) | Diagnoses which decision friction blocks the buyer, with a line between persuasion and manipulation. | Design |
 | **E** | [`ai-inference-pricing`](skills/ai-inference-pricing) | Checks that an AI plan's price still covers inference when usage spikes. | Design |
 |  | [`brand-product-context`](skills/brand-product-context) | Builds the shared brand brief every other skill reads first. | Diagnose |
 | **E** | [`campaign-orchestrator`](skills/campaign-orchestrator) | Diagnoses which play applies, then sequences the other skills in order. | Diagnose |
 | **E** | [`market-sizing`](skills/market-sizing) | Sizes TAM, SAM and SOM bottom-up, with SOM set by capacity rather than a share of the market. | Diagnose |
 | **E** | [`marketing-maturity-assessment`](skills/marketing-maturity-assessment) | Scores marketing as a system across six dimensions, and names the weak links to fix first for your stage. | Diagnose |
-| **E** | [`marketing-psychology`](skills/marketing-psychology) | Diagnoses which decision friction blocks the buyer, with a line between persuasion and manipulation. | Design |
 |  | [`messaging-framework`](skills/messaging-framework) | Structures the message hierarchy beneath the positioning. | Design |
 | **E** | [`positioning-statement`](skills/positioning-statement) | Produces a positioning statement pressure-tested against the competitive alternative. | Design |
 | **E** | [`pricing-and-packaging`](skills/pricing-and-packaging) | Designs tiers with an anchor check and a willingness-to-pay read. | Design |
@@ -180,10 +209,10 @@ Every engine accepts `--demo` (a worked example, no config), `--help` (the input
 
 | | Skill | What it does | Phase |
 |---|---|---|---|
+| **E** | [`aaj-programmatic-seo`](skills/aaj-programmatic-seo) | Models whether a template-page build pays back before anything gets written. | Design |
 | **E** | [`agent-readiness-audit`](skills/agent-readiness-audit) | Scores whether an AI agent buying for a customer can find, evaluate and transact with you. | Diagnose |
 | **E** | [`geo-citation-tracker`](skills/geo-citation-tracker) | Measures whether AI engines name and cite you, and refuses to report noise as movement. | Execute |
 |  | [`geo-content-optimization`](skills/geo-content-optimization) | Rewrites a page to maximise the chance an AI engine cites it. | Execute |
-| **E** | [`programmatic-seo`](skills/programmatic-seo) | Models whether a template-page build pays back before anything gets written. | Design |
 | **E** | [`seo-content-brief`](skills/seo-content-brief) | Produces a writer-ready brief: intent, answer block, entities, internal links. | Design |
 | **E** | [`seo-geo-aeo-audit`](skills/seo-geo-aeo-audit) | Scores a page 0-100 across SEO, GEO and AEO, with fixes in priority order. | Diagnose |
 | **E** | [`structured-data-for-ai-search`](skills/structured-data-for-ai-search) | Maps schema types to pages, then checks each page's JSON-LD against Google's docs and the visible text. | Execute |
@@ -192,6 +221,7 @@ Every engine accepts `--demo` (a worked example, no config), `--help` (the input
 
 | | Skill | What it does | Phase |
 |---|---|---|---|
+| **E** | [`aaj-copywriting`](skills/aaj-copywriting) | Rewrites page copy to ladder to the positioning, scored on claim-defensibility. | Execute |
 | **E** | [`ai-marketing-governance`](skills/ai-marketing-governance) | Scores whether a team's AI use is governed, and refuses citations that cannot be checked. | Execute |
 | **E** | [`brand-voice-definition`](skills/brand-voice-definition) | Derives the measurable half of a voice guide from writing you agree sounds right, as a checkable profile. | Design |
 | **E** | [`brand-voice-governance`](skills/brand-voice-governance) | Checks content block by block against your own voice rules, with a pass/revise verdict. | Execute |
@@ -200,7 +230,6 @@ Every engine accepts `--demo` (a worked example, no config), `--help` (the input
 | **E** | [`comparison-pages`](skills/comparison-pages) | Builds vs and alternatives pages with sourced, dated rival facts, and checks they admit where the rival wins. | Execute |
 | **E** | [`content-calendar-planning`](skills/content-calendar-planning) | Costs a content plan in hours against real capacity, and names what to cut. | Execute |
 |  | [`content-repurposing`](skills/content-repurposing) | Turns one pillar asset into channel-adapted derivatives, reusing only what it says. | Execute |
-| **E** | [`copywriting`](skills/copywriting) | Rewrites page copy to ladder to the positioning, scored on claim-defensibility. | Execute |
 | **E** | [`founder-led-content`](skills/founder-led-content) | Scores a founder's channel setup, and checks a post against the themes only they can write. | Execute |
 | **E** | [`pr-and-earned-media`](skills/pr-and-earned-media) | Scores a story before it is pitched, and aims it at twenty of the right people. | Execute |
 
@@ -236,6 +265,7 @@ Every engine accepts `--demo` (a worked example, no config), `--help` (the input
 
 | | Skill | What it does | Phase |
 |---|---|---|---|
+| **E** | [`aaj-sales-enablement`](skills/aaj-sales-enablement) | Audits sales assets against what each deal stage needs, and ranks what to build by the revenue being lost. | Execute |
 | **E** | [`abm-program-design`](skills/abm-program-design) | Checks whether the team can run the account list and whether the list hits the number. | Design |
 |  | [`cold-email-sequence`](skills/cold-email-sequence) | Writes outbound sequences that survive a reply-rate audit. | Execute |
 |  | [`discovery-call-framework`](skills/discovery-call-framework) | Structures discovery so the call qualifies rather than pitches. | Execute |
@@ -243,7 +273,6 @@ Every engine accepts `--demo` (a worked example, no config), `--help` (the input
 | **E** | [`objection-handling`](skills/objection-handling) | Builds responses to the objections that lose deals, and checks the battlecard before reps use it. | Design |
 | **E** | [`pilot-to-contract`](skills/pilot-to-contract) | Plans a pilot backwards from the buyer's budget date, so a pilot that works becomes a contract. | Design |
 | **E** | [`pipeline-and-forecast`](skills/pipeline-and-forecast) | Weights pipeline by stage and says whether coverage is real. | Execute |
-| **E** | [`sales-enablement`](skills/sales-enablement) | Audits sales assets against what each deal stage needs, and ranks what to build by the revenue being lost. | Execute |
 |  | [`sales-process-design`](skills/sales-process-design) | Designs the stages and exit criteria a forecast can rely on. | Design |
 | **E** | [`target-account-list`](skills/target-account-list) | Scores and tiers accounts by ICP fit, showing the signals each matched. | Design |
 | **E** | [`win-loss-analysis`](skills/win-loss-analysis) | Finds the Pareto of why deals are actually lost, by revenue. | Diagnose |
@@ -260,11 +289,11 @@ Every engine accepts `--demo` (a worked example, no config), `--help` (the input
 
 | | Skill | What it does | Phase |
 |---|---|---|---|
+| **E** | [`aaj-marketing-loops`](skills/aaj-marketing-loops) | Computes the loop factor, finds the throttling stage, projects users over time. | Design |
 | **E** | [`community-and-dark-social`](skills/community-and-dark-social) | Maps where buyers already talk, decides whether to open your own community, and measures dark social by asking. | Execute |
 | **E** | [`creator-partnerships`](skills/creator-partnerships) | Pays creators for the buyers they reach, not their follower count, and judges the result on what it sold. | Execute |
 | **E** | [`first-marketing-hire`](skills/first-marketing-hire) | Writes the first marketer's scorecard, then scores the panel's evidence and calls hire, no-hire or more evidence. | Design |
 | **E** | [`marketing-leadership-model`](skills/marketing-leadership-model) | Prices in-house, fractional and agency with ramp, search time and your own hours, and says which shape fits. | Diagnose |
-| **E** | [`marketing-loops`](skills/marketing-loops) | Computes the loop factor, finds the throttling stage, projects users over time. | Design |
 | **E** | [`partnerships-and-co-marketing`](skills/partnerships-and-co-marketing) | Scores partners on audience overlap rather than fame, and judges the result on pipeline. | Execute |
 | **E** | [`product-launch`](skills/product-launch) | Tiers a launch, scores readiness on a twelve-item gate, and builds the dated work-back plan. | Execute |
 | **E** | [`referral-program-design`](skills/referral-program-design) | Designs who to ask and what to reward, then prices referral against the CAC it replaces. | Design |
@@ -280,6 +309,11 @@ Every runnable engine, and the command to try it:
 <!-- aaj:begin engines -->
 | Skill | Command |
 |---|---|
+| `aaj-copywriting` | `node .agents/skills/aaj-copywriting/resources/copy-scorer.js --demo` |
+| `aaj-marketing-loops` | `node .agents/skills/aaj-marketing-loops/resources/loop-model.js --demo` |
+| `aaj-marketing-psychology` | `node .agents/skills/aaj-marketing-psychology/resources/pattern-check.js --demo` |
+| `aaj-programmatic-seo` | `node .agents/skills/aaj-programmatic-seo/resources/pseo-model.js --demo` |
+| `aaj-sales-enablement` | `node .agents/skills/aaj-sales-enablement/resources/enablement-audit.js --demo` |
 | `ab-test-significance` | `node .agents/skills/ab-test-significance/resources/significance.js --demo` |
 | `abm-program-design` | `node .agents/skills/abm-program-design/resources/abm-design.js --demo` |
 | `ad-creative-testing` | `node .agents/skills/ad-creative-testing/resources/creative-test.js --demo` |
@@ -294,7 +328,6 @@ Every runnable engine, and the command to try it:
 | `community-and-dark-social` | `node .agents/skills/community-and-dark-social/resources/dark-social-read.js --demo` |
 | `comparison-pages` | `node .agents/skills/comparison-pages/resources/comparison-check.js --demo` |
 | `content-calendar-planning` | `node .agents/skills/content-calendar-planning/resources/calendar-engine.js --demo` |
-| `copywriting` | `node .agents/skills/copywriting/resources/copy-scorer.js --demo` |
 | `creator-partnerships` | `node .agents/skills/creator-partnerships/resources/creator-fit.js --demo` |
 | `customer-interview-synthesis` | `node .agents/skills/customer-interview-synthesis/resources/interview-synthesis.js --demo` |
 | `customer-survey-design` | `node .agents/skills/customer-survey-design/resources/survey-design.js --demo` |
@@ -309,9 +342,7 @@ Every runnable engine, and the command to try it:
 | `market-sizing` | `node .agents/skills/market-sizing/resources/market-size.js --demo` |
 | `marketing-budget-planning` | `node .agents/skills/marketing-budget-planning/resources/budget-planner.js --demo` |
 | `marketing-leadership-model` | `node .agents/skills/marketing-leadership-model/resources/leadership-model.js --demo` |
-| `marketing-loops` | `node .agents/skills/marketing-loops/resources/loop-model.js --demo` |
 | `marketing-maturity-assessment` | `node .agents/skills/marketing-maturity-assessment/resources/maturity-assessment.js --demo` |
-| `marketing-psychology` | `node .agents/skills/marketing-psychology/resources/pattern-check.js --demo` |
 | `marketing-report` | `node .agents/skills/marketing-report/resources/marketing-report.js --demo` |
 | `objection-handling` | `node .agents/skills/objection-handling/resources/battlecard.js --demo` |
 | `paid-media-budget-allocation` | `node .agents/skills/paid-media-budget-allocation/resources/allocation-engine.js --demo` |
@@ -325,9 +356,7 @@ Every runnable engine, and the command to try it:
 | `pricing-and-packaging` | `node .agents/skills/pricing-and-packaging/resources/price-packaging.js --demo` |
 | `pricing-page-teardown` | `node .agents/skills/pricing-page-teardown/resources/pricing-teardown.js --demo` |
 | `product-launch` | `node .agents/skills/product-launch/resources/launch.js --demo` |
-| `programmatic-seo` | `node .agents/skills/programmatic-seo/resources/pseo-model.js --demo` |
 | `referral-program-design` | `node .agents/skills/referral-program-design/resources/referral-economics.js --demo` |
-| `sales-enablement` | `node .agents/skills/sales-enablement/resources/enablement-audit.js --demo` |
 | `seo-content-brief` | `node .agents/skills/seo-content-brief/resources/brief-check.js --demo` |
 | `seo-geo-aeo-audit` | `node .agents/skills/seo-geo-aeo-audit/resources/score.js --demo` |
 | `signup-flow-optimizer` | `node .agents/skills/signup-flow-optimizer/resources/friction-score.js --demo` |

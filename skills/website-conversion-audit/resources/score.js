@@ -4,7 +4,7 @@
  * Part of the "website-conversion-audit" Agent Skill.
  *
  * Takes pass/partial/fail results for conversion checks across 6 weighted
- * categories (mirrors the AAJ Website Grader) and returns category scores, a
+ * categories (mirrors the AAJ Website Conversion Audit) and returns category scores, a
  * 0–100 total, a grade, and the failing items. The AGENT performs the audit
  * (read the page, evaluate each check) and feeds results here.
  *

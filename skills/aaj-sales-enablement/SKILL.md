@@ -1,5 +1,5 @@
 ---
-name: sales-enablement
+name: aaj-sales-enablement
 description: >-
   Use when the user wants to give a sales team the material to move deals -
   battlecards, case studies, one-pagers, demo scripts, objection guides,
@@ -13,7 +13,7 @@ description: >-
 license: MIT
 metadata:
   publisher: AAJ
-  slug: sales-enablement
+  slug: aaj-sales-enablement
   category: Sales & Pipeline
   phase: Execute
   difficulty: Intermediate

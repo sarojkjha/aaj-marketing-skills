@@ -1,6 +1,6 @@
 # Marketing Loops — Reference Guide
 
-Companion to the `marketing-loops` skill. Covers the loop model, how to map a loop as stages, the math behind k and amplification, and how to read the projection honestly.
+Companion to the `aaj-marketing-loops` skill. Covers the loop model, how to map a loop as stages, the math behind k and amplification, and how to read the projection honestly.
 
 ## Contents
 

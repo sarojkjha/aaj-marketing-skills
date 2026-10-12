@@ -77,7 +77,7 @@ Lead with the score and grade, then the category bars, then the top fixes in pri
 
 ## Related skills
 
-`cro` and `signup` (deeper flow optimization) · `copywriting` (fix the message) · `ab-test-significance` (validate the fix) · `seo-geo-aeo-audit` (the visibility side).
+`cro` and `signup` (deeper flow optimization) · `aaj-copywriting` (fix the message) · `ab-test-significance` (validate the fix) · `seo-geo-aeo-audit` (the visibility side).
 
 ## Credits
 
