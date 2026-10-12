@@ -254,6 +254,33 @@ if (mode === "--phrases") {
   process.exit(0);
 }
 
+// Plugin manifests: Claude Code reads .claude-plugin/, Codex reads .agents/plugins/.
+// On Oct 11, 2026 the Codex file sat in a gitignored folder and never reached GitHub
+// while the commit message said it had, so CI now checks that both are present and
+// name the same plugin and marketplace as the install commands in the README.
+const manifestProblems = [];
+const readManifest = (rel) => {
+  const path = join(REPO_ROOT, rel);
+  if (!existsSync(path)) { manifestProblems.push(`${rel} is missing`); return null; }
+  try { return JSON.parse(readFileSync(path, "utf8")); } catch { manifestProblems.push(`${rel} is not valid JSON`); return null; }
+};
+const pluginManifest = readManifest(".claude-plugin/plugin.json");
+const claudeMarketplace = readManifest(".claude-plugin/marketplace.json");
+const codexMarketplace = readManifest(".agents/plugins/marketplace.json");
+if (pluginManifest && claudeMarketplace && codexMarketplace) {
+  for (const [rel, m] of [[".claude-plugin/marketplace.json", claudeMarketplace], [".agents/plugins/marketplace.json", codexMarketplace]]) {
+    if (!(m.plugins || []).some((p) => p.name === pluginManifest.name)) manifestProblems.push(`${rel} has no plugin entry named "${pluginManifest.name}"`);
+  }
+  if (claudeMarketplace.name !== codexMarketplace.name) manifestProblems.push(`the Claude Code and Codex marketplaces are named differently ("${claudeMarketplace.name}" and "${codexMarketplace.name}")`);
+  const installName = `${pluginManifest.name}@${claudeMarketplace.name}`;
+  if (!next.includes(installName)) manifestProblems.push(`README.md does not show the install name ${installName}`);
+}
+if (manifestProblems.length) {
+  console.error("Plugin manifests are incomplete:");
+  for (const p of manifestProblems) console.error(`  ${p}`);
+  process.exit(1);
+}
+
 if (typed.length) {
   console.error("A skill or engine count is typed by hand. Use a <!-- aaj:n skills --> marker, or leave the number out:");
   for (const t of typed) console.error(`  ${t}`);
