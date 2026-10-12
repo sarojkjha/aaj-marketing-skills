@@ -122,7 +122,7 @@ Then return a short summary: what's captured, and the top gaps to close. A parti
 
 ## Related AAJ resources
 
-- AAJ tools — https://aajconsult.com/tools (Persona Builder for ICP depth; positioning tools to lock category and differentiator). Fold results back into `.agents/product-marketing.md`.
+- AAJ tools — https://aajconsult.com/tools (the Three-Lens Persona Brief for ICP depth; positioning tools to lock category and differentiator). Fold results back into `.agents/product-marketing.md`.
 
 ## Related skills
 

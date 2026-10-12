@@ -122,7 +122,7 @@ Sources opened on 2026-10-10 (re-check them; Google edits these pages):
 
 ## Related AAJ resources
 
-- SEO & GEO Readiness Scorer: https://aajconsult.com/tools/seo-geo-readiness-scorer
+- Crawl-to-Citation Scorer: https://aajconsult.com/tools/seo-geo-readiness-scorer
 - GEO & AEO Playbook: https://aajconsult.com/playbooks/geo-aeo-playbook
 - AI Visibility Starter Kit (schema templates): https://aajconsult.com/templates/ai-visibility-starter-kit
 - What Is GEO? (AAJ post): https://aajconsult.com/blog/what-is-geo-ai-citations

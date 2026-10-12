@@ -1,6 +1,6 @@
 # SEO / GEO / AEO scoring rubric
 
-27 checks across 5 weighted categories, mirroring the AAJ SEO & GEO Readiness Scorer. For each check, record `pass`, `partial`, or `fail`, then run `score.js`. Score = Σ (category pass-rate × category weight). Grade bands: **A ≥ 90 · B 75–89 · C 60–74 · D 45–59 · F < 45.**
+27 checks across 5 weighted categories. This rubric began as a copy of the AAJ scorer on aajconsult.com, now the Crawl-to-Citation Scorer, which has since moved to 14 measured checks across three stages (reach, read, understand), so scores from the two are not comparable. For each check, record `pass`, `partial`, or `fail`, then run `score.js`. Score = Σ (category pass-rate × category weight). Grade bands: **A ≥ 90 · B 75–89 · C 60–74 · D 45–59 · F < 45.**
 
 Check IDs below are exactly the keys `score.js` expects.
 

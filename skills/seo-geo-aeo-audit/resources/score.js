@@ -4,7 +4,7 @@
  * Part of the "seo-geo-aeo-audit" Agent Skill.
  *
  * Takes pass/partial/fail results for 27 checks across 5 weighted categories
- * (mirrors the AAJ SEO & GEO Readiness Scorer) and returns category scores, a
+ * (the first version of AAJ's Crawl-to-Citation Scorer) and returns category scores, a
  * 0–100 total, a letter grade, and the failing checks. The AGENT performs the
  * audit (fetch/read the page, evaluate each check) and feeds the results here.
  *
