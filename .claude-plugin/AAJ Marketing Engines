@@ -1,0 +1,6 @@
+URL: https://aaj-engines-mcp.sarojkjha10.workers.dev/mcp (Streamable HTTP, no sign-in)
+Name: AAJ Marketing Engines
+Description: Five tools that find an AAJ marketing method and run its engine on your numbers: unit economics, pipeline forecast, A/B significance, budget allocation, pricing, retention, and SEO/GEO scoring.
+Data handling: The server receives the engine inputs over HTTPS, runs them in memory, and keeps no copy. Cloudflare keeps error logs for up to 7 days, with no inputs. Don't send personal data; the engine doesn't need it.
+
+The portal may ask for counts. Paste them from `counts.json` (`npm run counts: phrases`) rather than typing them.
