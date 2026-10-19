@@ -1,0 +1,10 @@
+{
+  "decision": "Which channel should we start with, do we need a marketing hire, and which marketing tools should we set up now?",
+  "limitations": [
+    "It does not pick the Play or the starting phase. Each guide answers one narrow question inside a Play; the routing comes from the diagnosis and resources/plays.md.",
+    "The rules are AAJ's judgement, not benchmarks. The dollar and volume bands are the answer options offered, not thresholds from a study.",
+    "It only knows the answers to its fixed questions. Nothing else about the business, including what has already been tried, changes the recommendation.",
+    "With any answer missing it lists the questions instead of recommending. Treat that as a prompt to answer them, not as a result."
+  ],
+  "review": "The founder confirms the Play and starting phase are named, with evidence, before using a guide, and checks each answer (budget, lead volume, tracking) against real numbers rather than plans."
+}

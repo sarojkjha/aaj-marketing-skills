@@ -1,0 +1,10 @@
+{
+  "decision": "How many responses do we need, and which segment cuts will our sample be able to read?",
+  "limitations": [
+    "It sizes the sample, not the questions. It cannot spot leading or double-barrelled wording; pilot the survey with a few people first.",
+    "Invites are completes divided by the response rate you enter. An optimistic rate makes an infeasible plan look feasible.",
+    "Segment margins are worst case per cell, and the READ, CAUTION and DON'T READ cut-offs (5 and 8 points) are working labels, not laws.",
+    "It sizes survey reads, not experiments. Whether variant B beat variant A belongs in ab-test-significance."
+  ],
+  "review": "The founder or researcher confirms the reachable audience size and a response rate from past sends, and drops or resizes any DON'T READ segment before the readout promises it."
+}

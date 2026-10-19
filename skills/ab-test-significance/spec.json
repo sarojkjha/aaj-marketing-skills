@@ -1,0 +1,10 @@
+{
+  "decision": "Is the difference between control and variant real or noise, and how many visitors do we need before we can call the test?",
+  "limitations": [
+    "Uses a pooled two-proportion z-test (a normal approximation) on two arms. It assumes each visitor is counted once, assigned at random and independent of the others, and that the sample size was fixed in advance.",
+    "It reads only the totals it is given. There is no correction for peeking or for testing several metrics or variants, so checking repeatedly and stopping at the first significant result inflates false positives.",
+    "One-tailed mode tests whichever direction the data moved, which halves the p-value after the fact. Use two-tailed unless the direction was fixed before the test. Plan mode always sizes for two-tailed.",
+    "Plan mode takes the minimum detectable effect in percentage points (5% to 6% is 1), not as a relative lift. At 90% confidence the printed interval is labelled 95% but is computed at 90%."
+  ],
+  "review": "Whoever owns the experiment confirms the sample size was set before launch, the test ran at least one full business cycle, and the metric was declared up front. The product owner judges whether the lift is big enough to ship."
+}

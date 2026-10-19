@@ -177,7 +177,7 @@ export function renderSpecMarkdown(spec) {
 - Install the skill: \`${spec.setup.install}\`
 - Or connect the hosted MCP server, no install: \`${spec.setup.hosted_mcp}\`
 - Or run the local MCP server: ${spec.setup.local_mcp}
-- Full input schema: \`node ${spec.engine} --help\`. Worked example: \`node ${spec.engine}\` with no input.
+- Input schema: the comment at the top of \`${spec.engine}\` (the MCP server's describe_engine shows it). Worked example: \`node ${spec.engine} --demo\`.
 - Agents listed: ${listed}. Tested and recorded: ${tested}.
 
 **Acts or analyzes:** ${acts}${reads}${agentWrites}

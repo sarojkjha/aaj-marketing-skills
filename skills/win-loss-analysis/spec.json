@@ -1,0 +1,10 @@
+{
+  "decision": "Which loss reasons, segments and competitors cost us the most revenue, and where should the fix start?",
+  "limitations": [
+    "Input it doesn't recognise returns the worked example rather than an error; check the result reflects your data. From the command line it prints the demo even for valid deals.",
+    "It computes rates and revenue concentration only. It does not read win reasons, interview notes or the stage a deal was lost at; that work stays with the skill.",
+    "The 'biggest fixable leak' is simply the segment and loss reason with the most lost revenue, even no decision or missing feature. Decide yourself whether it is fixable.",
+    "It does not flag thin samples. A reason with one or two deals can top the list; check the count beside each before calling it a pattern."
+  ],
+  "review": "The sales lead confirms loss reasons are coded from deal evidence into a consistent set and that each top pattern rests on enough deals, before a fix is assigned to product, marketing or sales."
+}

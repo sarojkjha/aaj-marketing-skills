@@ -1,0 +1,10 @@
+{
+  "decision": "Does this channel compound, how much does the loop lower our effective CAC, and which stage should we fix first?",
+  "limitations": [
+    "k is the product of every stage rate and the output per turn, so optimism compounds: rates padded at each stage multiply into a k the loop will not deliver. Use measured rates and label estimates as scenarios.",
+    "The projection holds k constant and imposes no saturation ceiling. With k at or above 1 the curve runs away; trust its shape, not its final number. Real loops tend to slow as the network fills.",
+    "Each projection period is one full turn of the loop. The engine does not know how long a turn takes, so map periods to your real cycle time before reading them as months.",
+    "It assumes the last stage's output really re-enters as the first stage's input. It cannot tell a loop from a funnel with the ends joined; if nothing feeds back, the k it reports means nothing."
+  ],
+  "review": "The growth lead confirms each stage rate comes from analytics, not estimates, before the effective CAC feeds a budget. Re-measure k as the network fills rather than assuming today's value holds at scale."
+}

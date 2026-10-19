@@ -1,0 +1,10 @@
+{
+  "decision": "Can our team actually run this account list, and would it hit the pipeline target if they did?",
+  "limitations": [
+    "Capacity is only as honest as the hours a week entered. Headcount or \"50 per cent on ABM\" inflates it; the skill says to halve the number if those people own a lot else.",
+    "Engagement, opportunity and win rates are inputs. Benchmark rates make coverage a forecast of someone else's business; label them as placeholders and re-run monthly with actuals.",
+    "It assumes every listed account gets its planned touches. An account nobody contacts still counts toward coverage, so a list the team cannot touch overstates expected pipeline.",
+    "It does not check that the accounts fit the ICP. Run it only on a fit-scored list, or it sizes the wrong work."
+  ],
+  "review": "The founder or sales lead confirms the ABM hours against what those people already own, and whether the rates are your history or placeholders, before the list size or team is set."
+}

@@ -1,0 +1,10 @@
+{
+  "decision": "What do rival homepages all claim, what does no one claim, and can a buyer tell our headline apart from theirs?",
+  "limitations": [
+    "Claim types are matched by word lists, so it counts words, not meaning. 'Simple pricing' and 'simple to use' both count as ease; read the matrix against the pages before quoting it.",
+    "It reads only the copy you paste. A paraphrased headline measures your paraphrase, and rival pages change; pages copied more than 90 days ago are flagged as stale.",
+    "An open claim is one no rival makes, not a recommendation. It can't say whether a claim is true or whether buyers care about it.",
+    "Distinct is not better. The distinctiveness read measures word overlap with rivals, not whether buyers want what your headline says."
+  ],
+  "review": "Whoever owns positioning checks the rival copy was pasted verbatim and dated, and checks the matrix against the pages. Before making an open claim, confirm you can prove it and that buyers care, using review-mining or interviews."
+}

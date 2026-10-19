@@ -1,0 +1,10 @@
+{
+  "decision": "How should we split our paid budget across channels to get the most customers under our CAC ceiling?",
+  "limitations": [
+    "Input it doesn't recognise runs on the default channels rather than an error, and a missing budget or mistyped channel key gives a runaway or NaN allocation; check the result reflects your numbers.",
+    "Any channel you don't supply in full uses AAJ's illustrative CPC, conversion and close rates, which are not benchmarks. Default channels you leave out stay in the plan on those placeholders.",
+    "It reports paid-media CAC only. Fully-loaded CAC is higher, so LTV:CAC and payback here show ad efficiency, not the whole business case.",
+    "The diminishing-returns curve and each channel's scale cap are modelled, not measured from your account, and it can't see attribution lag on deals that close weeks after the click."
+  ],
+  "review": "Whoever runs paid media replaces every placeholder channel with account data, and the founder or finance lead confirms the LTV and budget, before the split sets spend. Rebalance monthly and track ROAS to 90 days."
+}

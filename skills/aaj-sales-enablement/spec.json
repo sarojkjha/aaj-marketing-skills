@@ -1,0 +1,10 @@
+{
+  "decision": "Which sales assets should we build, fix or check first, given the deals we lost for want of them?",
+  "limitations": [
+    "Adoption is only as good as the rep counts you enter. Download or view counts from a content system are not the same as use in a deal; ask the reps.",
+    "The six-month staleness and one-third adoption cut-offs are this engine's rules, not standards. A battlecard or pricing answer can go stale sooner.",
+    "Lost value is counted under every asset type a reason maps to, so the list ranks what would have helped and is not a sum. With no loss reasons it cannot rank at all.",
+    "Asset types and loss reasons must use its fixed labels. An unlisted type such as \"battle card\" is flagged but not counted toward coverage."
+  ],
+  "review": "The sales lead confirms the rep-usage counts and that loss reasons are coded consistently, and each asset owner checks the fix findings before anything new is built."
+}

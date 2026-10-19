@@ -1,0 +1,10 @@
+{
+  "decision": "How did marketing perform this period against target and the prior period, and where is the funnel leaking?",
+  "limitations": [
+    "CAC is total spend over total wins, a blended figure that flatters paid channels. Use channel-level numbers for channel decisions and say which you used.",
+    "Every ratio uses same-period numbers. New revenue : spend is an efficiency read, not ROI; with a long sales cycle, this period's wins came from earlier spend and leads.",
+    "A field it doesn't recognise (\"MQLs\" for \"mqls\") is dropped without warning and the stage rate is computed across the gap. Input it doesn't recognise gives an empty report, not an error; check the result reflects your numbers.",
+    "Deltas assume the prior period used the same definitions and windows. The engine cannot check that."
+  ],
+  "review": "The marketing lead or RevOps owner confirms the stage definitions and spend basis match the prior period, and states whether CAC is blended or by channel, before the report goes to the board."
+}

@@ -1,0 +1,10 @@
+{
+  "decision": "Which creators reach our buyers at the lowest cost, what terms are still missing, and which sponsorships should we keep or drop?",
+  "limitations": [
+    "Cost per thousand matched people rests on the creator's median views and audience-match share. If those come from a media kit, not platform analytics, the ranking is the creator's claim.",
+    "Creators are ranked only against each other on your shortlist. No outside benchmark is used, so the cheapest creator on the list can still be poor value.",
+    "Tracked conversions undercount and survey mentions can overlap them, so the true cost sits between the two figures. Under five conversions in total the call is too early.",
+    "The contract check confirms the eight terms are marked agreed. It does not review their wording and is not a legal check of FTC or local disclosure rules."
+  ],
+  "review": "The marketing owner checks each creator's views and audience share against a platform analytics screenshot or export, and reviews disclosure wording and placement in every post before it goes live."
+}

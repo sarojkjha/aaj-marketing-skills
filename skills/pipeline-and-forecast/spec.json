@@ -1,0 +1,10 @@
+{
+  "decision": "Is there enough pipeline to hit the target, and should we build pipeline, advance deals or improve conversion?",
+  "limitations": [
+    "The forecast is only as good as the stage probabilities. Optimistic ones give a wish, not a forecast; take them from real conversion history and mark them as assumed if not.",
+    "A deal whose stage name doesn't exactly match the probability map (case matters) counts at 0% with only a warning, which lowers the forecast and raises the early-stage share.",
+    "Required coverage is 1 divided by your win rate, and commit is deals at 75% or more. A wrong win rate moves the coverage verdict and the new-pipeline figure together.",
+    "It has no close dates, so it treats every open deal as closable this period. Best case and coverage overstate what can land if deals are slipping."
+  ],
+  "review": "The sales lead checks each deal's stage, the stage probabilities against historical conversion, and the win rate before the forecast goes to the board. Report commit and best case separately."
+}
