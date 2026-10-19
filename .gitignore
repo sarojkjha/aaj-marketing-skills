@@ -21,3 +21,6 @@ aaj-marketing-skills/
 
 # Wrangler local state (hosted MCP worker)
 .wrangler/
+
+# Built by `npm run mcp:build` from skills/; never committed (it changed on every skill edit and blocked pulls)
+platform/mcp-worker/engines.generated.mjs
