@@ -32,7 +32,7 @@ You need Node 18+ and a Cloudflare login on your computer.
 
 ```bash
 git clone https://github.com/sarojkjha/aaj-marketing-skills && cd aaj-marketing-skills
-node platform/mcp-worker/build.mjs       # regenerate engines.generated.mjs (also checked in CI)
+node platform/mcp-worker/build.mjs       # build engines.generated.mjs (not committed; CI builds it too)
 node platform/mcp-worker/test.mjs        # 193 checks
 cd platform/mcp-worker
 npx wrangler login                       # once
@@ -55,4 +55,4 @@ Cloudflare creates the DNS record and certificate, as long as aajconsult.com is 
 ### Redeploy when skills change
 After skills are added or edited, run `node platform/mcp-worker/build.mjs`, then `npx wrangler deploy` again.
 
-The `Catalog counts` workflow fails if `engines.generated.mjs` is stale, so a merged skill change will remind you.
+`engines.generated.mjs` is built from `skills/` and is not committed, so pulls never conflict with it. Always run the build before `wrangler deploy`; the `Catalog counts` workflow builds it and runs the tests on every change.

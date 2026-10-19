@@ -30,7 +30,7 @@ jobs:
         with:
           node-version: 24
       - run: node platform/scripts/generate-readme.mjs --check
-      - run: node platform/mcp-worker/build.mjs --check
+      - run: node platform/mcp-worker/build.mjs
       - run: node platform/scripts/generate-engine-specs.mjs --check
 
   about-line:
@@ -64,7 +64,7 @@ jobs:
         if: env.CLOUDFLARE_API_TOKEN != '' && env.CLOUDFLARE_ACCOUNT_ID != ''
         working-directory: platform/mcp-worker
         run: |
-          node build.mjs --check
+          node build.mjs
           npx --yes wrangler@4 deploy
           echo "Hosted MCP server deployed from ${GITHUB_SHA::7}" >> "$GITHUB_STEP_SUMMARY"
       - if: env.CLOUDFLARE_API_TOKEN == '' || env.CLOUDFLARE_ACCOUNT_ID == ''

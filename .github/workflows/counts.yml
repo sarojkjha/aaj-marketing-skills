@@ -1,8 +1,8 @@
 name: Catalog counts
 # Fails when README.md, package.json or counts.json states a skill or engine
 # count that no longer matches skills/, or when a count is typed by hand in an
-# authored file (fix: npm run counts), or when the hosted MCP bundle is stale
-# (fix: node platform/mcp-worker/build.mjs).
+# authored file (fix: npm run counts), or when the hosted MCP bundle fails to build or its tests fail.
+# The bundle (engines.generated.mjs) is built here and is not committed.
 on:
   push:
     branches: [main]
@@ -16,9 +16,9 @@ jobs:
         with:
           node-version: 20
       - run: node platform/scripts/generate-readme.mjs --check
-      - name: Hosted MCP bundle is current and in parity with Node
+      - name: Hosted MCP bundle builds and is in parity with Node
         run: |
-          node platform/mcp-worker/build.mjs --check
+          node platform/mcp-worker/build.mjs
           node platform/mcp-worker/test.mjs
       - name: Engine specs are complete, current, and every engine only analyzes
         run: node platform/scripts/generate-engine-specs.mjs --check
