@@ -1,0 +1,10 @@
+{
+  "decision": "Which accounts fit our ICP best, and which should the team work first?",
+  "limitations": [
+    "If you omit weights, the demo weights (industryMatch, sizeBand and three others) are used. Signals whose names do not match a weight are ignored, so an account can score 0 with no warning.",
+    "Signals are true or false only. An unknown attribute counts as not matched, which pushes accounts with missing data down the list.",
+    "The score reflects the weights, not evidence. Weights not calibrated against known-good customers produce a confident but wrong list.",
+    "Input it doesn't recognise (an --input file with no \"accounts\", or a misspelled flag) returns the demo accounts, not an error, labelled with your file name. Check the result reflects your numbers."
+  ],
+  "review": "The sales or RevOps lead justifies the weights from win-loss evidence and checks that the best existing customers land in tier A before the list routes outbound work."
+}

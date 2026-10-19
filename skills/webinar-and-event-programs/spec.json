@@ -1,0 +1,10 @@
+{
+  "decision": "How many registrations does this event need to hit its pipeline target, and was the last one worth running again?",
+  "limitations": [
+    "The plan uses only your conversion rates and has no defaults. Borrowed rates make the room size a guess; label them as assumptions.",
+    "Without a win rate the verdict uses pipeline against cost, which reads higher than expected revenue and makes a repeat easier. A misspelled winRate falls back to this, with only a note.",
+    "The 0.5 and 1.0 reach bands, the 3x target, the five-meeting floor and the 24-hour follow-up rule are engine rules, not benchmarks.",
+    "Read too soon, the result undercounts: meetings take three to six weeks to become opportunities. Cost is only complete if people time is in it."
+  ],
+  "review": "The marketing owner confirms the rates come from past events and that cost includes people time. The sales lead confirms meeting, opportunity and pipeline counts from the CRM before the repeat, change or stop call."
+}

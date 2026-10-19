@@ -21,6 +21,7 @@ import { spawn } from "node:child_process";
 import { join, dirname, resolve, basename } from "node:path";
 import { fileURLToPath } from "node:url";
 import { listSkills, engineHelp } from "../lib/catalog.mjs";
+import { buildSpec, specForAgent, loadEnvironments } from "../lib/specs.mjs";
 // The protocol and the five tools live in core.mjs, shared with the hosted
 // Cloudflare Worker (platform/mcp-worker/). This file adds discovery from disk,
 // the child-process engine runner and the stdio transport.
@@ -48,6 +49,7 @@ function discover() {
   }
   const skills = [];
   const engines = new Map();
+  const env = loadEnvironments(REPO_ROOT);
 
   for (const s of found) {
     const skill = { ...s, url: `${SKILLS_SITE}/skills/${s.slug}`, path: s.skillMd };
@@ -64,6 +66,7 @@ function discover() {
         summary: engineSummary(help, s.description),
         skillName: s.title,
         category: s.category,
+        specText: specForAgent(buildSpec(s, file, id, env)),
       });
     }
   }

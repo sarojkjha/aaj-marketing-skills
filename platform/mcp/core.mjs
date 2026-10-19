@@ -7,7 +7,7 @@
  *   const response = await server.handle(jsonRpcMessage);   // undefined for notifications
  *
  * skills  — catalog entries (slug, title, description, category, body, hasEngine, url)
- * engines — Map of id -> { id, slug, help, summary, skillName, category }
+ * engines — Map of id -> { id, slug, help, summary, skillName, category, specText? }
  * run     — async (engine, argv) => { code, out, err, capped?, timedOut?, spawnError? }
  */
 import { currentSlug } from "../lib/renamed.mjs";
@@ -160,6 +160,7 @@ function toolDescribeEngine({ engine }) {
       `# ${e.id}`,
       `Skill: ${e.skillName}  ·  ${SKILLS_SITE}/skills/${e.slug}`,
       "",
+      ...(e.specText ? [e.specText, `Full spec: https://github.com/sarojkjha/aaj-marketing-skills/blob/main/docs/engines/${e.slug}.md`, ""] : []),
       e.help || "(this engine ships no header schema; run it with no input to see its demo)",
       "",
       "Run it with run_engine. Omit `input` for the worked example above.",

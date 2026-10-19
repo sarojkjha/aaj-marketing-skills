@@ -1,0 +1,10 @@
+{
+  "decision": "Will this pilot end in time for the buyer's budget decision, and are its criteria and deal terms ready to propose?",
+  "limitations": [
+    "Every date is the founder's input. The engine needs a budget decision date to run, so a guessed date gives a precise timeline built on a guess.",
+    "The 1-week readout, 2-week decision and 3-criteria limit are engine defaults, not benchmarks, and procurement weeks are your estimate.",
+    "Criteria checks are mechanical: a target with a number and a stated measure counts as measurable. It cannot tell whether the metric matters to the economic buyer.",
+    "It does not say which evidence tier a pilot supports, and gives no legal or compliance verdict on student data, patient data or procurement rules."
+  ],
+  "review": "The champion confirms the budget decision date and fiscal year start from the buyer's own calendar, and the economic buyer agrees the criteria in writing, before kickoff. Counsel checks data and procurement obligations."
+}

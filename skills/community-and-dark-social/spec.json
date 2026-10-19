@@ -1,0 +1,10 @@
+{
+  "decision": "Where do our buyers already talk, should we open a community of our own, and is word of mouth growing?",
+  "limitations": [
+    "The map holds only the places your customers named. It cannot find rooms nobody mentioned, and its ranking is only as good as the number of customers you asked.",
+    "The trend compares the latest period with the average of the earlier ones and treats a move within 10% as flat. With only two periods, one unusual month sets the verdict.",
+    "It reads coded self-reported answers and counts a person, community, podcast, newsletter or your brand name as dark. Fewer than ten dark answers in a period, or more than 30% uncoded, is too thin to read.",
+    "\"Wrong people\" (dark signals up, pipeline flat) can be sales-cycle lag. Check the cycle length before concluding the wrong people are talking."
+  ],
+  "review": "The marketing lead checks that \"How did you hear about us?\" answers were coded the same way in every period, and allows for the sales cycle, before the trend changes spend. The named host confirms their weekly hours before a community opens."
+}

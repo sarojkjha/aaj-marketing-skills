@@ -1,0 +1,10 @@
+{
+  "decision": "Are AI answer engines actually naming and citing our brand, and is the change since the last run real or noise?",
+  "limitations": [
+    "It does not query any engine. It scores the results you log by hand, so it is only as good as those logs; a partial log means a smaller n and a wider noise floor.",
+    "Small prompt sets detect only large swings. In the demo, 40 prompts could only reliably detect a 29-point change; movement inside that floor is not a result.",
+    "Answers vary by day and model version, so a jump can come from an engine update rather than your work. Comparisons break if the prompt set changes between runs.",
+    "It measures presence and citation in answers, not clicks or revenue. Pair it with analytics before claiming impact."
+  ],
+  "review": "Whoever ran the prompts confirms every row was actually observed on the same frozen prompt set, with run date and model version logged. The marketing lead reports presence and citation separately, with the noise floor stated."
+}

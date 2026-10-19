@@ -1,0 +1,10 @@
+{
+  "decision": "Does this content follow our brand's own written voice rules, and which blocks must be revised before it ships?",
+  "limitations": [
+    "It applies literal, whole-word matching and a reading-grade rule to the text you paste. It misses paraphrases of banned words and cannot judge tone or how readers react.",
+    "Without a brand avoid-list it falls back to AAJ house defaults. A pass on defaults is not a pass on your brand; check which ruleset the run used.",
+    "Conformance is not quality. Copy can pass every rule and still be unclear or make unproven claims; run the aaj-copywriting scorer as well.",
+    "The grade-10 ceiling is AAJ's working default, not a published standard. Set it from your brief, or dense technical copy will be flagged."
+  ],
+  "review": "The brand or content lead confirms the parsed avoid-list and grade ceiling are the brand's real rules, and an editor reads flagship pages for tone, since the check only catches mechanical violations."
+}

@@ -1,0 +1,10 @@
+{
+  "decision": "Will a template-page build pay back, and how many of the pages we build will actually earn traffic?",
+  "limitations": [
+    "The default 60% indexation and 30% page-one rates are AAJ assumptions chosen to be sobering, not measured rates. Replace them with your 50-page pilot or Search Console numbers.",
+    "The CTR curve predates AI Overviews and the AI Overview drag is an AAJ assumption, so click projections for informational queries are uncertain.",
+    "It takes query volume as given. Keyword tools round up long-tail volume, so treat estimates under 50 as directional and pull real volume for a sample of pages.",
+    "A good payback does not make the pages safe to build. It takes your unique-data rating on trust and can't see whether pages are linked, crawlable or doorway pages."
+  ],
+  "review": "The SEO or content lead checks the volume sample and the unique-data rating, and the founder confirms conversion rate, value per conversion and build cost. Re-run with observed rates after a 50-page pilot before building the full set."
+}

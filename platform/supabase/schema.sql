@@ -47,6 +47,12 @@ create table if not exists public.skills (
 create index if not exists skills_category_idx on public.skills(category_id);
 create index if not exists skills_phase_idx on public.skills(phase);
 
+-- Engine specification (Oct 19, 2026): decision, inputs, output, setup, whether it
+-- acts, data flow, limitations and review. Built by
+-- platform/scripts/generate-engine-specs.mjs into docs/engines/specs.json and synced
+-- here by sync-skills.mjs. Null for skills without an engine.
+alter table public.skills add column if not exists spec jsonb;
+
 -- Full-text search column, maintained by a trigger (see FIX 1).
 alter table public.skills add column if not exists search tsvector;
 

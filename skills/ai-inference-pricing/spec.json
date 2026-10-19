@@ -1,0 +1,10 @@
+{
+  "decision": "Does our AI plan's price cover inference at normal and spike usage, and what included usage and overage keep us at our target margin?",
+  "limitations": [
+    "It holds no model prices. Every result rests on the prices you enter and their dates; a price checked more than 90 days ago, or undated, is flagged but still used.",
+    "It models one typical paid account from averages (users, active share, tasks per user). Spread between accounts shows up only through the single spike multiplier, so also run your heaviest account's real usage.",
+    "The spike and the usage break-even scale paid usage only; the free tier stays at its normal level. Model a free-tier surge by raising its inputs.",
+    "Levers are fixed what-if moves (price, routing, tokens, included tasks, free usage), not an optimisation. The routing lever assumes the cheaper model does the task as well, which has to be tested first."
+  ],
+  "review": "The founder or finance lead re-checks every model price on the provider's own page, records the date, and confirms tokens per task come from product logs before the price or usage limits go on the pricing page. The target margin is theirs, not a benchmark."
+}

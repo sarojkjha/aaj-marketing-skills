@@ -26,7 +26,7 @@ const KINDS = new Set(["tool", "playbook", "guide", "other"]);
 const ROW_KEYS = [
   "slug", "name", "summary", "phase", "difficulty", "version", "agents", "inputs", "outputs",
   "tags", "has_engine", "repo_path", "install_cmd", "body_md", "demo_output", "published",
-  "topic_slug", "secondary_topics", "sprint_slug",
+  "topic_slug", "secondary_topics", "sprint_slug", "spec",
 ];
 
 const json = (body: unknown, status = 200) =>

@@ -1,0 +1,10 @@
+{
+  "decision": "Which pages are losing search clicks, why, and which should we refresh first?",
+  "limitations": [
+    "It compares two periods only and cannot see seasonality or a site migration, so a demand drop or a decline may be the calendar, not the page. Compare equal periods and check the same period last year.",
+    "Position is an average across all of a page's queries. A new low-ranking query can worsen the average while the main query held; check the Queries tab before refreshing.",
+    "The CTR median is your own site's, from the rows you pass in. A filtered export skews it, and it is not a benchmark.",
+    "Refresh order is by clicks lost alone. It does not know which pages matter commercially, and pages under 20 previous-period clicks are marked too small rather than judged."
+  ],
+  "review": "Whoever owns the content checks the live SERP and the Queries tab for each top refresh candidate, and the same period last year for any demand drop, before scheduling the work."
+}

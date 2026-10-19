@@ -1,0 +1,10 @@
+{
+  "decision": "What are the measurable rules of our brand voice, taken from writing we already agree sounds like us?",
+  "limitations": [
+    "It applies rules to the text you paste: reading grade, sentence length, person, contractions, hedges and buzzwords. It can't capture character or tone, and can't see how readers respond.",
+    "The rules are only as good as the samples. One writer's favourites, or off-brand pieces marked on-brand, give rules for the wrong voice. Samples under 100 words are not counted.",
+    "The agreement limits (three grades, eight words of sentence length), the grade-plus-one ceiling and the house buzzword list are AAJ engine rules, not standards.",
+    "A word the on-brand samples use is flagged, not banned, and someone has to decide. The passive-voice figure is an estimate."
+  ],
+  "review": "Whoever owns the brand confirms the team agrees the on-brand samples sound right and decides on every flagged word before the profile goes to brand-voice-governance. The adjectives, do/don't list and examples are still written by hand."
+}

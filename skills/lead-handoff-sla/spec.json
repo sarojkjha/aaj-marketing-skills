@@ -1,0 +1,10 @@
+{
+  "decision": "Is sales working our MQLs within the SLA, accepting what marketing sends, and is the MQL threshold in the right place?",
+  "limitations": [
+    "Times are calendar hours. With businessHours on it only counts late leads that became MQLs outside Mon-Fri 09:00-17:00; it does not recompute the times.",
+    "Rates on fewer than 30 leads are directional (AAJ's rule of thumb), and a band difference is clear only when the 90% ranges do not overlap. Do not move the threshold on a small band.",
+    "fitMatches and signals are scored at full points with no decay. If you decay behavior points, pass the decayed number or the score bands will be wrong.",
+    "It is only as good as the CRM timestamps. Mixed time zones or missing touch times change the rates; read the data notes before the rates."
+  ],
+  "review": "The marketing and sales leads agree the SLA terms and which clock they use, and RevOps checks the export's time zones and outcome fields, before anyone moves the threshold or calls a lead late."
+}
