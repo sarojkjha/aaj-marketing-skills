@@ -76,6 +76,53 @@ run_engine { "engine": "unit-economics",
 Omit `input` to run the engine's demo. A few engines take a named mode as a
 plain string (`"design"`, `"readout"`); `describe_engine` says which.
 
+### Windows PowerShell
+
+In Windows PowerShell, quotes in command-line arguments can get stripped when passed to `node.exe`. To run an engine directly with custom JSON input:
+
+**1. A here-string assigned to a variable:**
+
+Assign standard JSON to a here-string, then pass it to `node` with `($inputJson -replace '"', '\"')` so inner quotes survive PowerShell's argument parsing:
+
+```powershell
+$inputJson = @'
+{
+  "model": "subscription",
+  "arpaMonthly": 800,
+  "grossMargin": 75,
+  "churnMonthly": 2,
+  "cac": 6000
+}
+'@
+node skills/unit-economics/resources/unit-economics.js ($inputJson -replace '"', '\"')
+```
+
+**2. A JSON file:**
+
+If an engine takes a JSON string argument (like `unit-economics`), load the file with `Get-Content`:
+
+```powershell
+node skills/unit-economics/resources/unit-economics.js ((Get-Content .\input.json -Raw) -replace '"', '\"')
+```
+
+If an engine accepts a file path directly (check the engine's `--help`, e.g. `pipeline-and-forecast`), pass the flag directly without quote escaping:
+
+```powershell
+node skills/pipeline-and-forecast/resources/forecast.js --input=pipeline.json
+```
+
+**Expected output (first lines):**
+
+```
+AAJ Unit Economics — subscription
+------------------------------------------------------
+Gross-margin LTV        $30,000   (2.0% monthly churn (~50 mo lifetime))
+Monthly gross profit    $600/customer
+CAC                     $6,000
+LTV : CAC               5:1
+CAC payback             10 mo
+```
+
 ## Adding an engine
 
 Nothing to register. The server reads `skills/` at startup: any skill directory
