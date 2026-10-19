@@ -14,7 +14,7 @@
 - Or connect the hosted MCP server, no install: `https://aaj-engines-mcp.sarojkjha10.workers.dev/mcp`
 - Or run the local MCP server: node platform/mcp/server.mjs (Node 18 or newer)
 - Input schema: the comment at the top of `skills/partnerships-and-co-marketing/resources/partner-fit.js` (the MCP server's describe_engine shows it). Worked example: `node skills/partnerships-and-co-marketing/resources/partner-fit.js --demo`.
-- Agents listed: Claude Code, Cursor, OpenAI Codex, Windsurf, Cline. Tested and recorded: not recorded yet.
+- Agents listed: Claude Code, Cursor, OpenAI Codex, Windsurf, Cline. Tested and recorded: Claude Code.
 
 **Acts or analyzes:** Analyzes only. The engine makes no network calls, writes no files and changes nothing in your tools; it returns text and JSON.
 
@@ -28,7 +28,7 @@
 No engine needs customer names, emails or other personal data; leave them out.
 
 **Limitations:**
-- Input it doesn't recognise produces no output rather than an error; check the result reflects your numbers. From the command line only --demo prints; your own data goes through scorePartner, checkTerms and reviewPartnership.
+- Pass {check, input} for scorePartner, checkTerms or reviewPartnership; with no input you get a labelled demo. Unknown checks and top-level fields stop the run, but unknown fields inside input are ignored.
 - The score is a rubric of your own 0-3 ratings, not a prediction. It cannot know whether the partner will promote as promised, and inputs you list as unknowns are noted but do not lower the score.
 - checkTerms checks that each of the five terms is present, not what it says; any entry passes.
 - The review says "Do it again" whenever there is any qualified lead and any pipeline, even before a full sales cycle or with a low qualified rate. Read pipeline per hour and the effort split before repeating.

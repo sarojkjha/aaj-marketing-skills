@@ -53,6 +53,24 @@ function pct(n){ return (Math.round(n*10)/10).toLocaleString() + '%'; }
 function one(n){ return (Math.round(n*10)/10).toLocaleString(); }
 function money(n){ return '$' + Math.round(n).toLocaleString(); }
 
+// Misspelled or miscased fields used to count as zero (churnMRR instead of
+// churnedMRR showed 100% GRR). Unknown fields and non-numbers now stop the run.
+const KNOWN = ['period','startMRR','newMRR','expansionMRR','contractionMRR','churnedMRR','startCustomers','churnedCustomers','targetChurnPct'];
+function validate(c){
+  if (!c || typeof c !== 'object' || Array.isArray(c)) return ['The input must be a JSON object.'];
+  const errs = [];
+  const unknown = Object.keys(c).filter(k => !KNOWN.includes(k));
+  if (unknown.length) errs.push('Unrecognised field' + (unknown.length > 1 ? 's' : '') + ': ' + unknown.map(k => '"' + k + '"').join(', ') + '. Expected: ' + KNOWN.join(', ') + '.');
+  if (c.period !== undefined && c.period !== 'monthly' && c.period !== 'annual') errs.push('"period" is "monthly" or "annual".');
+  if (typeof c.startMRR !== 'number' || !(c.startMRR > 0)) errs.push('"startMRR" is required: recurring revenue at the start of the period, a number above 0.');
+  for (const k of KNOWN.slice(2)){
+    if (c[k] === undefined || c[k] === null) continue;
+    if (typeof c[k] !== 'number' || !Number.isFinite(c[k]) || c[k] < 0) errs.push('"' + k + '" must be a number, 0 or more.');
+  }
+  if (typeof c.churnedCustomers === 'number' && typeof c.startCustomers === 'number' && c.churnedCustomers > c.startCustomers) errs.push('"churnedCustomers" cannot be more than "startCustomers".');
+  return errs;
+}
+
 function compute(c){
   const start = c.startMRR;
   const exp = c.expansionMRR || 0;
@@ -175,6 +193,8 @@ let cfg;
 if (arg){ try { cfg = JSON.parse(arg); } catch(e){ console.error('Invalid JSON. Run --help for the schema.\n'+e.message); process.exit(1); } }
 else { cfg = { period:'monthly', startMRR:100000, newMRR:12000, expansionMRR:8000, contractionMRR:3000, churnedMRR:6000, startCustomers:200, churnedCustomers:9 };
   console.log('(no config \u2014 demo: $100k start MRR; +$12k new, +$8k expansion, \u2212$3k contraction, \u2212$6k churned; 200 customers, 9 lost)'); }
+const problems = validate(cfg);
+if (problems.length){ console.error(problems.join('\n') + '\nRun --help for the input shape.'); process.exit(1); }
 console.log(render(cfg));
 
 module.exports = { compute, verdict };

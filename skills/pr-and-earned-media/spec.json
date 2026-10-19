@@ -4,7 +4,7 @@
     "It is a rubric, not a prediction. No score makes coverage likely, and it cannot know an editor's calendar.",
     "The company-removed and forward tests and the evidence checks are yes/no answers you give. The score is only as honest as those answers.",
     "It counts named outlets but cannot check they exist or cover the beat. Non-customer stories pass the permission check automatically.",
-    "Input it doesn't recognise produces no output rather than an error; check the result reflects your numbers."
+    "Pass {check, input}; with no input you get a labelled demo. An unknown check or top-level field stops the run, but fields inside input that it doesn't know are ignored, so use the names in the header."
   ],
   "review": "The founder checks every figure in the story against its written method and confirms written customer permission before the first pitch. Whoever sends it checks each outlet and reporter is real and covers this beat."
 }

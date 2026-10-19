@@ -14,7 +14,7 @@
 - Or connect the hosted MCP server, no install: `https://aaj-engines-mcp.sarojkjha10.workers.dev/mcp`
 - Or run the local MCP server: node platform/mcp/server.mjs (Node 18 or newer)
 - Input schema: the comment at the top of `skills/ab-test-significance/resources/significance.js` (the MCP server's describe_engine shows it). Worked example: `node skills/ab-test-significance/resources/significance.js --demo`.
-- Agents listed: Claude Code, Cursor, OpenAI Codex, Windsurf, Cline. Tested and recorded: not recorded yet.
+- Agents listed: Claude Code, Cursor, OpenAI Codex, Windsurf, Cline. Tested and recorded: Claude Code.
 
 **Acts or analyzes:** Analyzes only. The engine makes no network calls, writes no files and changes nothing in your tools; it returns text and JSON.
 
@@ -30,8 +30,8 @@ No engine needs customer names, emails or other personal data; leave them out.
 **Limitations:**
 - Uses a pooled two-proportion z-test (a normal approximation) on two arms. It assumes each visitor is counted once, assigned at random and independent of the others, and that the sample size was fixed in advance.
 - It reads only the totals it is given. There is no correction for peeking or for testing several metrics or variants, so checking repeatedly and stopping at the first significant result inflates false positives.
-- One-tailed mode tests whichever direction the data moved, which halves the p-value after the fact. Use two-tailed unless the direction was fixed before the test. Plan mode always sizes for two-tailed.
-- Plan mode takes the minimum detectable effect in percentage points (5% to 6% is 1), not as a relative lift. At 90% confidence the printed interval is labelled 95% but is computed at 90%.
+- One-tailed mode only asks whether the variant beat control, which halves the p-value; use two-tailed unless the direction was fixed before the test. Plan mode always sizes for two-tailed.
+- Plan mode takes the minimum detectable effect in percentage points (5% to 6% is 1), not as a relative lift. An unrecognised field stops the run with an error.
 
 **Review before acting:** Whoever owns the experiment confirms the sample size was set before launch, the test ran at least one full business cycle, and the metric was declared up front. The product owner judges whether the lift is big enough to ship.
 

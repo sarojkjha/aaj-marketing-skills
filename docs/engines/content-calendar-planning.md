@@ -14,7 +14,7 @@
 - Or connect the hosted MCP server, no install: `https://aaj-engines-mcp.sarojkjha10.workers.dev/mcp`
 - Or run the local MCP server: node platform/mcp/server.mjs (Node 18 or newer)
 - Input schema: the comment at the top of `skills/content-calendar-planning/resources/calendar-engine.js` (the MCP server's describe_engine shows it). Worked example: `node skills/content-calendar-planning/resources/calendar-engine.js --demo`.
-- Agents listed: Claude Code, Cursor, OpenAI Codex, Windsurf, Cline. Tested and recorded: not recorded yet.
+- Agents listed: Claude Code, Cursor, OpenAI Codex, Windsurf, Cline. Tested and recorded: Claude Code.
 
 **Acts or analyzes:** Analyzes only. The engine makes no network calls, writes no files and changes nothing in your tools; it returns text and JSON.
 

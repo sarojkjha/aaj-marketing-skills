@@ -14,7 +14,7 @@
 - Or connect the hosted MCP server, no install: `https://aaj-engines-mcp.sarojkjha10.workers.dev/mcp`
 - Or run the local MCP server: node platform/mcp/server.mjs (Node 18 or newer)
 - Input schema: the comment at the top of `skills/pricing-and-packaging/resources/price-packaging.js` (the MCP server's describe_engine shows it). Worked example: `node skills/pricing-and-packaging/resources/price-packaging.js --demo`.
-- Agents listed: Claude Code, Cursor, OpenAI Codex, Windsurf, Cline. Tested and recorded: not recorded yet.
+- Agents listed: Claude Code, Cursor, OpenAI Codex, Windsurf, Cline. Tested and recorded: Claude Code.
 
 **Acts or analyzes:** Analyzes only. The engine makes no network calls, writes no files and changes nothing in your tools; it returns text and JSON. It can read an input file you name on the command line; it reads nothing else.
 
@@ -30,8 +30,8 @@ No engine needs customer names, emails or other personal data; leave them out.
 **Limitations:**
 - It does the arithmetic on the tiers you enter: ARPU, revenue mix, price steps and the anchor. It can't tell you what buyers will pay or which value metric fits.
 - For a product with no customers, the mix is your estimate, so the ARPU and revenue mix are assumptions, not a forecast.
-- The 1.5x weak-anchor line is this engine's rule of thumb, not a published benchmark, and its remark that most SaaS converts best with three or four tiers has no source.
-- A tier field it doesn't recognise (such as 'users' for 'customers') is read as zero rather than an error, and the read-out still sounds confident; check the result reflects your numbers.
+- The 1.5x weak-anchor line is this engine's rule of thumb, not a published benchmark.
+- An unrecognised tier field, or a price or customer count that isn't a number, stops the run with an error naming the tier. It can't tell whether the numbers themselves are right.
 
 **Review before acting:** Whoever owns pricing checks the tier prices and the customer mix, marked as an estimate if projected. The finance lead cross-checks the blended ARPU against CAC and payback in unit-economics before any price goes live.
 

@@ -24,7 +24,9 @@
           "Windsurf",
           "Cline"
         ],
-        "agents_tested": []
+        "agents_tested": [
+          "Claude Code"
+        ]
       },
       "acts": {
         "analyzes_only": true,
@@ -75,7 +77,9 @@
           "Windsurf",
           "Cline"
         ],
-        "agents_tested": []
+        "agents_tested": [
+          "Claude Code"
+        ]
       },
       "acts": {
         "analyzes_only": true,
@@ -126,7 +130,9 @@
           "Windsurf",
           "Cline"
         ],
-        "agents_tested": []
+        "agents_tested": [
+          "Claude Code"
+        ]
       },
       "acts": {
         "analyzes_only": true,
@@ -177,7 +183,9 @@
           "Windsurf",
           "Cline"
         ],
-        "agents_tested": []
+        "agents_tested": [
+          "Claude Code"
+        ]
       },
       "acts": {
         "analyzes_only": true,
@@ -228,7 +236,9 @@
           "Windsurf",
           "Cline"
         ],
-        "agents_tested": []
+        "agents_tested": [
+          "Claude Code"
+        ]
       },
       "acts": {
         "analyzes_only": true,
@@ -279,7 +289,9 @@
           "Windsurf",
           "Cline"
         ],
-        "agents_tested": []
+        "agents_tested": [
+          "Claude Code"
+        ]
       },
       "acts": {
         "analyzes_only": true,
@@ -302,8 +314,8 @@
       "limitations": [
         "Uses a pooled two-proportion z-test (a normal approximation) on two arms. It assumes each visitor is counted once, assigned at random and independent of the others, and that the sample size was fixed in advance.",
         "It reads only the totals it is given. There is no correction for peeking or for testing several metrics or variants, so checking repeatedly and stopping at the first significant result inflates false positives.",
-        "One-tailed mode tests whichever direction the data moved, which halves the p-value after the fact. Use two-tailed unless the direction was fixed before the test. Plan mode always sizes for two-tailed.",
-        "Plan mode takes the minimum detectable effect in percentage points (5% to 6% is 1), not as a relative lift. At 90% confidence the printed interval is labelled 95% but is computed at 90%."
+        "One-tailed mode only asks whether the variant beat control, which halves the p-value; use two-tailed unless the direction was fixed before the test. Plan mode always sizes for two-tailed.",
+        "Plan mode takes the minimum detectable effect in percentage points (5% to 6% is 1), not as a relative lift. An unrecognised field stops the run with an error."
       ],
       "review": "Whoever owns the experiment confirms the sample size was set before launch, the test ran at least one full business cycle, and the metric was declared up front. The product owner judges whether the lift is big enough to ship."
     },
@@ -330,7 +342,9 @@
           "Windsurf",
           "Cline"
         ],
-        "agents_tested": []
+        "agents_tested": [
+          "Claude Code"
+        ]
       },
       "acts": {
         "analyzes_only": true,
@@ -381,7 +395,9 @@
           "Windsurf",
           "Cline"
         ],
-        "agents_tested": []
+        "agents_tested": [
+          "Claude Code"
+        ]
       },
       "acts": {
         "analyzes_only": true,
@@ -432,7 +448,9 @@
           "Windsurf",
           "Cline"
         ],
-        "agents_tested": []
+        "agents_tested": [
+          "Claude Code"
+        ]
       },
       "acts": {
         "analyzes_only": true,
@@ -483,7 +501,9 @@
           "Windsurf",
           "Cline"
         ],
-        "agents_tested": []
+        "agents_tested": [
+          "Claude Code"
+        ]
       },
       "acts": {
         "analyzes_only": true,
@@ -534,7 +554,9 @@
           "Windsurf",
           "Cline"
         ],
-        "agents_tested": []
+        "agents_tested": [
+          "Claude Code"
+        ]
       },
       "acts": {
         "analyzes_only": true,
@@ -558,7 +580,7 @@
         "It is a rule check, not a fact checker. A citeable verdict means the citation has the right parts; it cannot tell whether the study exists. It does not replace legal or compliance review.",
         "The draft sweep only spots figures written with %, \"percent\", \"x\" or $. Plain counts such as \"110 startups\" go unflagged, so read the draft for every number.",
         "Readiness credits tools only against the engine's six task labels, matched exactly, and scores what you say was verified. It cannot see your plan's real training setting.",
-        "Input it doesn't recognise produces no output rather than an error; check the result reflects your numbers."
+        "Pass {check, input}; with no input you get a labelled demo. An unknown check or top-level field stops the run, but fields inside input that it doesn't know are ignored, so use the names in the header."
       ],
       "review": "The named reviewer opens every cited document before publish, and the policy owner checks the training-on-inputs setting on the plan itself. Legal or compliance reviews disclosure, data and claims rules for your markets."
     },
@@ -585,7 +607,9 @@
           "Windsurf",
           "Cline"
         ],
-        "agents_tested": []
+        "agents_tested": [
+          "Claude Code"
+        ]
       },
       "acts": {
         "analyzes_only": true,
@@ -636,7 +660,9 @@
           "Windsurf",
           "Cline"
         ],
-        "agents_tested": []
+        "agents_tested": [
+          "Claude Code"
+        ]
       },
       "acts": {
         "analyzes_only": true,
@@ -687,7 +713,9 @@
           "Windsurf",
           "Cline"
         ],
-        "agents_tested": []
+        "agents_tested": [
+          "Claude Code"
+        ]
       },
       "acts": {
         "analyzes_only": true,
@@ -738,7 +766,9 @@
           "Windsurf",
           "Cline"
         ],
-        "agents_tested": []
+        "agents_tested": [
+          "Claude Code"
+        ]
       },
       "acts": {
         "analyzes_only": true,
@@ -789,7 +819,9 @@
           "Windsurf",
           "Cline"
         ],
-        "agents_tested": []
+        "agents_tested": [
+          "Claude Code"
+        ]
       },
       "acts": {
         "analyzes_only": true,
@@ -840,7 +872,9 @@
           "Windsurf",
           "Cline"
         ],
-        "agents_tested": []
+        "agents_tested": [
+          "Claude Code"
+        ]
       },
       "acts": {
         "analyzes_only": true,
@@ -891,7 +925,9 @@
           "Windsurf",
           "Cline"
         ],
-        "agents_tested": []
+        "agents_tested": [
+          "Claude Code"
+        ]
       },
       "acts": {
         "analyzes_only": true,
@@ -942,7 +978,9 @@
           "Windsurf",
           "Cline"
         ],
-        "agents_tested": []
+        "agents_tested": [
+          "Claude Code"
+        ]
       },
       "acts": {
         "analyzes_only": true,
@@ -993,7 +1031,9 @@
           "Windsurf",
           "Cline"
         ],
-        "agents_tested": []
+        "agents_tested": [
+          "Claude Code"
+        ]
       },
       "acts": {
         "analyzes_only": true,
@@ -1044,7 +1084,9 @@
           "Windsurf",
           "Cline"
         ],
-        "agents_tested": []
+        "agents_tested": [
+          "Claude Code"
+        ]
       },
       "acts": {
         "analyzes_only": true,
@@ -1095,7 +1137,9 @@
           "Windsurf",
           "Cline"
         ],
-        "agents_tested": []
+        "agents_tested": [
+          "Claude Code"
+        ]
       },
       "acts": {
         "analyzes_only": true,
@@ -1146,7 +1190,9 @@
           "Windsurf",
           "Cline"
         ],
-        "agents_tested": []
+        "agents_tested": [
+          "Claude Code"
+        ]
       },
       "acts": {
         "analyzes_only": true,
@@ -1197,7 +1243,9 @@
           "Windsurf",
           "Cline"
         ],
-        "agents_tested": []
+        "agents_tested": [
+          "Claude Code"
+        ]
       },
       "acts": {
         "analyzes_only": true,
@@ -1248,7 +1296,9 @@
           "Windsurf",
           "Cline"
         ],
-        "agents_tested": []
+        "agents_tested": [
+          "Claude Code"
+        ]
       },
       "acts": {
         "analyzes_only": true,
@@ -1299,7 +1349,9 @@
           "Windsurf",
           "Cline"
         ],
-        "agents_tested": []
+        "agents_tested": [
+          "Claude Code"
+        ]
       },
       "acts": {
         "analyzes_only": true,
@@ -1350,7 +1402,9 @@
           "Windsurf",
           "Cline"
         ],
-        "agents_tested": []
+        "agents_tested": [
+          "Claude Code"
+        ]
       },
       "acts": {
         "analyzes_only": true,
@@ -1401,7 +1455,9 @@
           "Windsurf",
           "Cline"
         ],
-        "agents_tested": []
+        "agents_tested": [
+          "Claude Code"
+        ]
       },
       "acts": {
         "analyzes_only": true,
@@ -1422,7 +1478,7 @@
         }
       ],
       "limitations": [
-        "Input it doesn't recognise produces no output rather than an error; check the result reflects your numbers.",
+        "Pass {check, input}; with no input you get a labelled demo. An unknown check or top-level field stops the run, but fields inside input that it doesn't know are ignored, so use the names in the header.",
         "It is a rubric, not a prediction. It can't know whether a post will travel or bring buyers; judge the channel at ninety days on conversations, not impressions.",
         "Most checks take your answers on trust: whether a competitor could post a theme, whether the first line carries the point, whether proof is invented or permission is written.",
         "The post check spots engagement bait from a short phrase list and flags only the figures you list. It can't tell whether a draft sounds like the founder."
@@ -1452,7 +1508,9 @@
           "Windsurf",
           "Cline"
         ],
-        "agents_tested": []
+        "agents_tested": [
+          "Claude Code"
+        ]
       },
       "acts": {
         "analyzes_only": true,
@@ -1503,7 +1561,9 @@
           "Windsurf",
           "Cline"
         ],
-        "agents_tested": []
+        "agents_tested": [
+          "Claude Code"
+        ]
       },
       "acts": {
         "analyzes_only": true,
@@ -1554,7 +1614,9 @@
           "Windsurf",
           "Cline"
         ],
-        "agents_tested": []
+        "agents_tested": [
+          "Claude Code"
+        ]
       },
       "acts": {
         "analyzes_only": true,
@@ -1605,7 +1667,9 @@
           "Windsurf",
           "Cline"
         ],
-        "agents_tested": []
+        "agents_tested": [
+          "Claude Code"
+        ]
       },
       "acts": {
         "analyzes_only": true,
@@ -1656,7 +1720,9 @@
           "Windsurf",
           "Cline"
         ],
-        "agents_tested": []
+        "agents_tested": [
+          "Claude Code"
+        ]
       },
       "acts": {
         "analyzes_only": true,
@@ -1680,7 +1746,7 @@
         "It reads one period at a time. A single month is not a trend; read the numbers against your own segment and your own history.",
         "NRR and GRR are compared with reference points only for annual input. Those points were set for Series B/C enterprise software and bootstrapped $3M-$20M ARR SaaS.",
         "High NRR can hide heavy logo churn behind a few large expansions. Read GRR and logo churn alongside it; logo churn needs customer counts.",
-        "Misnamed or missing fields count as zero, not errors: no recognised fields returns blanks, and a typo such as churnMRR shows 100% GRR. Check the result reflects your data."
+        "An unrecognised field, or an amount that isn't a number, stops the run with an error naming it. It can't tell whether the amounts match the period you chose, so confirm monthly or annual."
       ],
       "review": "The finance lead confirms the period's movement reconciles to billing, that new business is kept out of expansion, and which period was used, before NRR or GRR goes to the board."
     },
@@ -1707,7 +1773,9 @@
           "Windsurf",
           "Cline"
         ],
-        "agents_tested": []
+        "agents_tested": [
+          "Claude Code"
+        ]
       },
       "acts": {
         "analyzes_only": true,
@@ -1758,7 +1826,9 @@
           "Windsurf",
           "Cline"
         ],
-        "agents_tested": []
+        "agents_tested": [
+          "Claude Code"
+        ]
       },
       "acts": {
         "analyzes_only": true,
@@ -1809,7 +1879,9 @@
           "Windsurf",
           "Cline"
         ],
-        "agents_tested": []
+        "agents_tested": [
+          "Claude Code"
+        ]
       },
       "acts": {
         "analyzes_only": true,
@@ -1860,7 +1932,9 @@
           "Windsurf",
           "Cline"
         ],
-        "agents_tested": []
+        "agents_tested": [
+          "Claude Code"
+        ]
       },
       "acts": {
         "analyzes_only": true,
@@ -1911,7 +1985,9 @@
           "Windsurf",
           "Cline"
         ],
-        "agents_tested": []
+        "agents_tested": [
+          "Claude Code"
+        ]
       },
       "acts": {
         "analyzes_only": true,
@@ -1962,7 +2038,9 @@
           "Windsurf",
           "Cline"
         ],
-        "agents_tested": []
+        "agents_tested": [
+          "Claude Code"
+        ]
       },
       "acts": {
         "analyzes_only": true,
@@ -2013,7 +2091,9 @@
           "Windsurf",
           "Cline"
         ],
-        "agents_tested": []
+        "agents_tested": [
+          "Claude Code"
+        ]
       },
       "acts": {
         "analyzes_only": true,
@@ -2034,7 +2114,7 @@
         }
       ],
       "limitations": [
-        "Input it doesn't recognise runs on the default channels rather than an error, and a missing budget or mistyped channel key gives a runaway or NaN allocation; check the result reflects your numbers.",
+        "It stops with an error on unrecognised fields, a missing budget, CAC target or customer goal for the chosen mode, and unknown channel keys. It can't check your CPC and conversion rates against your account.",
         "Any channel you don't supply in full uses AAJ's illustrative CPC, conversion and close rates, which are not benchmarks. Default channels you leave out stay in the plan on those placeholders.",
         "It reports paid-media CAC only. Fully-loaded CAC is higher, so LTV:CAC and payback here show ad efficiency, not the whole business case.",
         "The diminishing-returns curve and each channel's scale cap are modelled, not measured from your account, and it can't see attribution lag on deals that close weeks after the click."
@@ -2064,7 +2144,9 @@
           "Windsurf",
           "Cline"
         ],
-        "agents_tested": []
+        "agents_tested": [
+          "Claude Code"
+        ]
       },
       "acts": {
         "analyzes_only": true,
@@ -2115,7 +2197,9 @@
           "Windsurf",
           "Cline"
         ],
-        "agents_tested": []
+        "agents_tested": [
+          "Claude Code"
+        ]
       },
       "acts": {
         "analyzes_only": true,
@@ -2136,7 +2220,7 @@
         }
       ],
       "limitations": [
-        "Input it doesn't recognise produces no output rather than an error; check the result reflects your numbers. From the command line only --demo prints; your own data goes through scorePartner, checkTerms and reviewPartnership.",
+        "Pass {check, input} for scorePartner, checkTerms or reviewPartnership; with no input you get a labelled demo. Unknown checks and top-level fields stop the run, but unknown fields inside input are ignored.",
         "The score is a rubric of your own 0-3 ratings, not a prediction. It cannot know whether the partner will promote as promised, and inputs you list as unknowns are noted but do not lower the score.",
         "checkTerms checks that each of the five terms is present, not what it says; any entry passes.",
         "The review says \"Do it again\" whenever there is any qualified lead and any pipeline, even before a full sales cycle or with a low qualified rate. Read pipeline per hour and the effort split before repeating."
@@ -2166,7 +2250,9 @@
           "Windsurf",
           "Cline"
         ],
-        "agents_tested": []
+        "agents_tested": [
+          "Claude Code"
+        ]
       },
       "acts": {
         "analyzes_only": true,
@@ -2217,7 +2303,9 @@
           "Windsurf",
           "Cline"
         ],
-        "agents_tested": []
+        "agents_tested": [
+          "Claude Code"
+        ]
       },
       "acts": {
         "analyzes_only": true,
@@ -2239,7 +2327,7 @@
       ],
       "limitations": [
         "The forecast is only as good as the stage probabilities. Optimistic ones give a wish, not a forecast; take them from real conversion history and mark them as assumed if not.",
-        "A deal whose stage name doesn't exactly match the probability map (case matters) counts at 0% with only a warning, which lowers the forecast and raises the early-stage share.",
+        "Deal stages are matched to the probability map ignoring case. A stage still missing from the map stops the run and lists it, so every stage needs a probability you can defend.",
         "Required coverage is 1 divided by your win rate, and commit is deals at 75% or more. A wrong win rate moves the coverage verdict and the new-pipeline figure together.",
         "It has no close dates, so it treats every open deal as closable this period. Best case and coverage overstate what can land if deals are slipping."
       ],
@@ -2268,7 +2356,9 @@
           "Windsurf",
           "Cline"
         ],
-        "agents_tested": []
+        "agents_tested": [
+          "Claude Code"
+        ]
       },
       "acts": {
         "analyzes_only": true,
@@ -2319,7 +2409,9 @@
           "Windsurf",
           "Cline"
         ],
-        "agents_tested": []
+        "agents_tested": [
+          "Claude Code"
+        ]
       },
       "acts": {
         "analyzes_only": true,
@@ -2370,7 +2462,9 @@
           "Windsurf",
           "Cline"
         ],
-        "agents_tested": []
+        "agents_tested": [
+          "Claude Code"
+        ]
       },
       "acts": {
         "analyzes_only": true,
@@ -2394,7 +2488,7 @@
         "It is a rubric, not a prediction. No score makes coverage likely, and it cannot know an editor's calendar.",
         "The company-removed and forward tests and the evidence checks are yes/no answers you give. The score is only as honest as those answers.",
         "It counts named outlets but cannot check they exist or cover the beat. Non-customer stories pass the permission check automatically.",
-        "Input it doesn't recognise produces no output rather than an error; check the result reflects your numbers."
+        "Pass {check, input}; with no input you get a labelled demo. An unknown check or top-level field stops the run, but fields inside input that it doesn't know are ignored, so use the names in the header."
       ],
       "review": "The founder checks every figure in the story against its written method and confirms written customer permission before the first pitch. Whoever sends it checks each outlet and reporter is real and covers this beat."
     },
@@ -2421,7 +2515,9 @@
           "Windsurf",
           "Cline"
         ],
-        "agents_tested": []
+        "agents_tested": [
+          "Claude Code"
+        ]
       },
       "acts": {
         "analyzes_only": true,
@@ -2444,8 +2540,8 @@
       "limitations": [
         "It does the arithmetic on the tiers you enter: ARPU, revenue mix, price steps and the anchor. It can't tell you what buyers will pay or which value metric fits.",
         "For a product with no customers, the mix is your estimate, so the ARPU and revenue mix are assumptions, not a forecast.",
-        "The 1.5x weak-anchor line is this engine's rule of thumb, not a published benchmark, and its remark that most SaaS converts best with three or four tiers has no source.",
-        "A tier field it doesn't recognise (such as 'users' for 'customers') is read as zero rather than an error, and the read-out still sounds confident; check the result reflects your numbers."
+        "The 1.5x weak-anchor line is this engine's rule of thumb, not a published benchmark.",
+        "An unrecognised tier field, or a price or customer count that isn't a number, stops the run with an error naming the tier. It can't tell whether the numbers themselves are right."
       ],
       "review": "Whoever owns pricing checks the tier prices and the customer mix, marked as an estimate if projected. The finance lead cross-checks the blended ARPU against CAC and payback in unit-economics before any price goes live."
     },
@@ -2472,7 +2568,9 @@
           "Windsurf",
           "Cline"
         ],
-        "agents_tested": []
+        "agents_tested": [
+          "Claude Code"
+        ]
       },
       "acts": {
         "analyzes_only": true,
@@ -2523,7 +2621,9 @@
           "Windsurf",
           "Cline"
         ],
-        "agents_tested": []
+        "agents_tested": [
+          "Claude Code"
+        ]
       },
       "acts": {
         "analyzes_only": true,
@@ -2574,7 +2674,9 @@
           "Windsurf",
           "Cline"
         ],
-        "agents_tested": []
+        "agents_tested": [
+          "Claude Code"
+        ]
       },
       "acts": {
         "analyzes_only": true,
@@ -2625,7 +2727,9 @@
           "Windsurf",
           "Cline"
         ],
-        "agents_tested": []
+        "agents_tested": [
+          "Claude Code"
+        ]
       },
       "acts": {
         "analyzes_only": true,
@@ -2676,7 +2780,9 @@
           "Windsurf",
           "Cline"
         ],
-        "agents_tested": []
+        "agents_tested": [
+          "Claude Code"
+        ]
       },
       "acts": {
         "analyzes_only": true,
@@ -2727,7 +2833,9 @@
           "Windsurf",
           "Cline"
         ],
-        "agents_tested": []
+        "agents_tested": [
+          "Claude Code"
+        ]
       },
       "acts": {
         "analyzes_only": true,
@@ -2777,7 +2885,9 @@
           "Windsurf",
           "Cline"
         ],
-        "agents_tested": []
+        "agents_tested": [
+          "Claude Code"
+        ]
       },
       "acts": {
         "analyzes_only": true,
@@ -2828,7 +2938,9 @@
           "Windsurf",
           "Cline"
         ],
-        "agents_tested": []
+        "agents_tested": [
+          "Claude Code"
+        ]
       },
       "acts": {
         "analyzes_only": true,
@@ -2879,7 +2991,9 @@
           "Windsurf",
           "Cline"
         ],
-        "agents_tested": []
+        "agents_tested": [
+          "Claude Code"
+        ]
       },
       "acts": {
         "analyzes_only": true,
@@ -2930,7 +3044,9 @@
           "Windsurf",
           "Cline"
         ],
-        "agents_tested": []
+        "agents_tested": [
+          "Claude Code"
+        ]
       },
       "acts": {
         "analyzes_only": true,
@@ -2981,7 +3097,9 @@
           "Windsurf",
           "Cline"
         ],
-        "agents_tested": []
+        "agents_tested": [
+          "Claude Code"
+        ]
       },
       "acts": {
         "analyzes_only": true,
@@ -3032,7 +3150,9 @@
           "Windsurf",
           "Cline"
         ],
-        "agents_tested": []
+        "agents_tested": [
+          "Claude Code"
+        ]
       },
       "acts": {
         "analyzes_only": true,
@@ -3083,7 +3203,9 @@
           "Windsurf",
           "Cline"
         ],
-        "agents_tested": []
+        "agents_tested": [
+          "Claude Code"
+        ]
       },
       "acts": {
         "analyzes_only": true,
@@ -3134,7 +3256,9 @@
           "Windsurf",
           "Cline"
         ],
-        "agents_tested": []
+        "agents_tested": [
+          "Claude Code"
+        ]
       },
       "acts": {
         "analyzes_only": true,

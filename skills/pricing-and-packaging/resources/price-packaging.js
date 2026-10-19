@@ -119,7 +119,7 @@ function analyzePricing(tiersInput) {
     }
   }
   if (summary.tierCount > 0 && summary.tierCount < 3) {
-    insights.push(`You have ${summary.tierCount} tier${summary.tierCount !== 1 ? "s" : ""}; most SaaS converts best with 3-4 — a clear Good/Better/Best.`);
+    insights.push(`You have ${summary.tierCount} tier${summary.tierCount !== 1 ? "s" : ""}; with fewer than three there is no ladder to compare, so there is no middle tier to compare against.`);
   } else if (summary.tierCount > 5) {
     insights.push(`You have ${summary.tierCount} tiers; more than four or five can create decision paralysis and lower conversion.`);
   }
@@ -193,6 +193,25 @@ function printResults(r, source) {
   console.log("estimated mix (counts per 100) and treat the modeled revenue as an assumption.");
 }
 
+// A misnamed tier field used to read as zero. Unknown fields and non-numbers now
+// stop the run and name the tier.
+function validateTiers(cfg) {
+  const errs = [];
+  const unknown = Object.keys(cfg).filter((k) => k !== "tiers");
+  if (unknown.length) errs.push("Unrecognised field" + (unknown.length > 1 ? "s" : "") + ": " + unknown.map((k) => '"' + k + '"').join(", ") + '. Expected: tiers.');
+  cfg.tiers.forEach((t, i) => {
+    const label = t && typeof t.name === "string" && t.name ? '"' + t.name + '"' : "tier " + (i + 1);
+    if (!t || typeof t !== "object" || Array.isArray(t)) { errs.push(label + ' must be {"name", "price", "customers"}.'); return; }
+    const bad = Object.keys(t).filter((k) => !["name", "price", "customers"].includes(k));
+    if (bad.length) errs.push(label + ": unrecognised field " + bad.map((k) => '"' + k + '"').join(", ") + '. Expected: name, price, customers.');
+    if (typeof t.name !== "string" || !t.name) errs.push(label + ': "name" is required.');
+    for (const k of ["price", "customers"]) {
+      if (typeof t[k] !== "number" || !Number.isFinite(t[k]) || t[k] < 0) errs.push(label + ": \"" + k + "\" must be a number, 0 or more.");
+    }
+  });
+  return errs;
+}
+
 function main() {
   const args = parseArgs(process.argv);
   let cfg = DEMO;
@@ -212,6 +231,8 @@ function main() {
     console.error('Give "tiers": [{ "name": "Starter", "price": 29, "customers": 600 }, ...].');
     process.exit(1);
   }
+  const problems = validateTiers(cfg);
+  if (problems.length) { console.error(problems.join("\n")); process.exit(1); }
   printResults(analyzePricing(cfg.tiers || []), source);
 }
 
