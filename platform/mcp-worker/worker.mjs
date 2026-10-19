@@ -8,8 +8,10 @@
  *
  * Transport: MCP "Streamable HTTP", stateless. POST /mcp with a JSON-RPC message
  * (or a batch) returns application/json; notifications return 202. GET /mcp
- * returns 405 (no server-initiated stream). No accounts, no storage: engines are
- * deterministic and make no network calls, and nothing a client sends is kept.
+ * returns 405 (no server-initiated stream).  No accounts, no storage: engines are
+ * deterministic and make no network calls, and the server keeps no copy of what a
+ * client sends. Cloudflare's per-request logs are off (wrangler.jsonc); only error
+ * lines, which carry no inputs, reach Workers Logs.
  *
  * Build: node platform/mcp-worker/build.mjs   (regenerates engines.generated.mjs)
  * Deploy: see platform/mcp-worker/README.md
@@ -145,7 +147,7 @@ function infoPage(origin) {
 <h1>AAJ Engines</h1>
 <p>An MCP server with ${ENGINES.length} runnable marketing engines and ${SKILLS.length} skills from <a href="${SKILLS_SITE}">AAJ's open-source skills</a>. Your AI assistant can find the right method for a problem and run the maths on your numbers instead of estimating.</p>
 <p><strong>Connect:</strong> add a custom connector (remote MCP server) with the URL <code>${url}</code>. No sign-in.</p>
-<p><strong>Privacy:</strong> the engines run in memory and make no network calls. Nothing you send is stored by this server.</p>
+<p><strong>Your data:</strong> the engines run in memory and make no network calls, and this server keeps no copy of what you send. Cloudflare keeps error logs (no inputs) for up to 7 days. Your AI assistant's provider still sees what you give the assistant, under your own account's terms. Don't send customer names or emails; no engine needs them.</p>
 <p>Prefer to run it locally? Clone <a href="https://github.com/sarojkjha/aaj-marketing-skills">the repo</a> and see platform/mcp/README.md.</p>
 <p>${SERVER_NAME} ${SERVER_VERSION}</p></body></html>`;
 }

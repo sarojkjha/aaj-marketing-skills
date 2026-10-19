@@ -8,6 +8,6 @@ Vendor MCP servers give your agent data: deals, sessions, search volumes. They d
 | [GA4 results into significance](ga4-to-ab-test-significance.md) | Google Analytics MCP server: sessions and key events by variant | `ab-test-significance` | Sample size before the test; lift, p-value, confidence interval and a verdict after it |
 | [Keyword data into a pSEO decision](keyword-data-to-programmatic-seo.md) | Ahrefs or Semrush MCP server: volume and difficulty for your target queries | `aaj-programmatic-seo` | Whether a template-page build pays back, through an indexation and ranking funnel |
 
-All three run with the engines either installed (`npx skills add sarojkjha/aaj-marketing-skills`) or hosted (`https://aaj-engines-mcp.sarojkjha10.workers.dev/mcp`, no install). The engines make no network calls, and the hosted server stores nothing you send it.
+All three run with the engines either installed (`npx skills add sarojkjha/aaj-marketing-skills`) or hosted (`https://aaj-engines-mcp.sarojkjha10.workers.dev/mcp`, no install). The engines make no network calls, and the hosted server keeps no copy of what you send it; your agent's model provider still sees the numbers you give the agent ([details](../README.md#what-happens-to-your-data)).
 
 Nothing here ranks or endorses a vendor. If you use another CRM, analytics or keyword tool, the same mapping tables apply. Only the connection steps change.

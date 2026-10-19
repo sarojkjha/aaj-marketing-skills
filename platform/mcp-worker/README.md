@@ -12,7 +12,7 @@ This is the same five tools as the local server in `platform/mcp/`, served at on
 | `search_skills` | Finds skills that match a search |
 | `get_skill` | Returns one skill's full method |
 
-- **No sign-in, no storage.** The engines run in memory and make no network calls. Nothing a client sends is kept.
+- **No sign-in, no storage.** The engines run in memory and make no network calls, and the server keeps no copy of what a client sends. Cloudflare's per-request logs are off (`invocation_logs: false`); error logs, which carry no inputs, are kept for up to 7 days. Your agent's model provider still sees what you give the agent.
 - **Transport.** MCP Streamable HTTP, stateless:
   - `POST /mcp` returns JSON.
   - Notifications return 202.

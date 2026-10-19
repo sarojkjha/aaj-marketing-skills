@@ -17,8 +17,10 @@ Five tools:
 | `search_skills` | Finds a skill by the problem, not the name |
 | `get_skill` | The full method for one skill |
 
-No dependencies. No build step. No network calls — every engine is a local,
-deterministic Node script, so nothing you pass it leaves your machine.
+No dependencies. No build step. Every engine is a local, deterministic Node script
+that makes no network calls, so AAJ receives nothing when you run this server. Your
+AI agent still sends what you give it to its model provider, under your own account's
+terms. See [what happens to your data](../../README.md#what-happens-to-your-data).
 
 ## Install
 
