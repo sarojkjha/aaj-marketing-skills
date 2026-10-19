@@ -8,6 +8,8 @@ Works with Claude Code, OpenAI Codex, Cursor, Windsurf, Cline and any agent that
 
 Built by [Saroj Jha](https://github.com/sarojkjha) / [AAJ](https://aajconsult.com). Browsable library at [skills.aajconsult.com](https://skills.aajconsult.com).
 
+**If an engine saves you a spreadsheet, [star the repo](https://github.com/sarojkjha/aaj-marketing-skills/stargazers).** Stars are how other founders, and the directories agents search, find it. Questions and engine requests go in [Discussions](https://github.com/sarojkjha/aaj-marketing-skills/discussions).
+
 > **Renamed on Oct 11, 2026.** `copywriting`, `marketing-psychology`, `programmatic-seo`, `marketing-loops` and `sales-enablement` are now `aaj-copywriting`, `aaj-marketing-psychology`, `aaj-programmatic-seo`, `aaj-marketing-loops` and `aaj-sales-enablement`. Another popular library publishes skills under the same five names, so with the prefix both install side by side. The hosted MCP server still answers to the old names.
 
 ---
@@ -93,7 +95,7 @@ On earlier versions, run two commands:
 /plugin install aaj-marketing-skills@aaj
 ```
 
-The skills then appear as `/aaj-marketing-skills:<skill>`. Updates arrive when you run `/plugin marketplace update aaj`.
+The skills then appear as `/aaj-marketing-skills:<skill>`. The plugin also starts the local AAJ engines MCP server (`platform/mcp/server.mjs`, Node 18+), so Claude can call `run_engine` directly. It runs on your machine and AAJ receives nothing. Updates arrive when you run `/plugin marketplace update aaj`.
 
 **OpenAI Codex.** Add the marketplace, then install the plugin (or browse it with `/plugins` inside Codex):
 
@@ -169,6 +171,7 @@ Vendor MCP servers bring the data; the engines turn it into a verdict. Each reci
 - [HubSpot deals into `pipeline-and-forecast`](recipes/hubspot-to-pipeline-forecast.md): weighted forecast, coverage against your win rate, and the lever to pull.
 - [GA4 results into `ab-test-significance`](recipes/ga4-to-ab-test-significance.md): sample size before the test, a verdict after it.
 - [Ahrefs or Semrush keyword data into `aaj-programmatic-seo`](recipes/keyword-data-to-programmatic-seo.md): whether a template-page build pays back.
+- [Stripe export into `unit-economics`](recipes/stripe-to-unit-economics.md): gross-margin LTV, CAC payback, and whether your economics support growth.
 
 ---
 

@@ -16,6 +16,8 @@ jobs:
         with:
           node-version: 20
       - run: node platform/scripts/generate-readme.mjs --check
+      - name: Versions agree (package, Claude plugin, MCP registry entry, MCP server)
+        run: node platform/scripts/check-versions.mjs
       - name: Hosted MCP bundle builds and is in parity with Node
         run: |
           node platform/mcp-worker/build.mjs
