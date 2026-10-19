@@ -8,6 +8,8 @@ Works with Claude Code, OpenAI Codex, Cursor, Windsurf, Cline and any agent that
 
 Built by [Saroj Jha](https://github.com/sarojkjha) / [AAJ](https://aajconsult.com). Browsable library at [skills.aajconsult.com](https://skills.aajconsult.com).
 
+**If an engine saves you a spreadsheet, [star the repo](https://github.com/sarojkjha/aaj-marketing-skills/stargazers).** Stars are how other founders, and the directories agents search, find it. Questions and engine requests go in [Discussions](https://github.com/sarojkjha/aaj-marketing-skills/discussions).
+
 > **Renamed on Oct 11, 2026.** `copywriting`, `marketing-psychology`, `programmatic-seo`, `marketing-loops` and `sales-enablement` are now `aaj-copywriting`, `aaj-marketing-psychology`, `aaj-programmatic-seo`, `aaj-marketing-loops` and `aaj-sales-enablement`. Another popular library publishes skills under the same five names, so with the prefix both install side by side. The hosted MCP server still answers to the old names.
 
 ---
@@ -93,7 +95,7 @@ On earlier versions, run two commands:
 /plugin install aaj-marketing-skills@aaj
 ```
 
-The skills then appear as `/aaj-marketing-skills:<skill>`. Updates arrive when you run `/plugin marketplace update aaj`.
+The skills then appear as `/aaj-marketing-skills:<skill>`. The plugin also starts the local AAJ engines MCP server (`platform/mcp/server.mjs`, Node 18+), so Claude can call `run_engine` directly. It runs on your machine and AAJ receives nothing. Updates arrive when you run `/plugin marketplace update aaj`.
 
 **OpenAI Codex.** Add the marketplace, then install the plugin (or browse it with `/plugins` inside Codex):
 
