@@ -185,6 +185,11 @@ Usage
   node resources/agent-readiness.js [flags]
   node resources/agent-readiness.js --all            Everything passing
   node resources/agent-readiness.js --json [flags]
+  node resources/agent-readiness.js '{"checks": {"ssr": true, "schema": true, "pricingPublic": false}}'
+      The same checks as JSON, by id (ssr, schema, llmsTxt, cleanHeadings, pricingPublic,
+      specsStructured, comparisonData, selfServe, api, noCaptcha, orgSchema, claimsSourced,
+      consistentFacts, allowsAiCrawlers, noAgentBlocking). Values are true or false; a check
+      you leave out counts as not passing. Unknown ids and other values stop the run.
 
 Flags — add one for each check you pass
   Machine-readable content
@@ -230,6 +235,31 @@ function main() {
   const flags = {};
   if (argv.includes("--all")) CHECKS.forEach(c => { flags[c.id] = true; });
 
+  // JSON input (agents and the MCP server pass input this way). Before this, any JSON was
+  // ignored and the "nothing passing" demo was returned as if it were the answer.
+  const jsonArg = argv.find(a => a.trim().startsWith("{"));
+  let fromJson = false;
+  if (jsonArg) {
+    let data;
+    try { data = JSON.parse(jsonArg); } catch (e) { console.error("Invalid JSON: " + e.message); process.exit(1); }
+    const errs = [];
+    const extra = Object.keys(data || {}).filter(k => k !== "checks");
+    if (extra.length) errs.push("Unrecognised field" + (extra.length > 1 ? "s" : "") + ": " + extra.map(k => '"' + k + '"').join(", ") + '. Expected: "checks".');
+    const ids = CHECKS.map(c => c.id);
+    if (!data || typeof data.checks !== "object" || data.checks === null || Array.isArray(data.checks) || !Object.keys(data.checks).length) errs.push('"checks" is required: an object of check id to true or false.');
+    else {
+      const unknownIds = Object.keys(data.checks).filter(k => !ids.includes(k));
+      if (unknownIds.length) errs.push("Unknown check" + (unknownIds.length > 1 ? "s" : "") + ": " + unknownIds.join(", ") + ". Known checks: " + ids.join(", ") + ".");
+      const nonBool = Object.entries(data.checks).filter(([k, v]) => ids.includes(k) && typeof v !== "boolean").map(([k]) => k);
+      if (nonBool.length) errs.push("Values must be true or false: " + nonBool.join(", ") + ".");
+    }
+    if (errs.length) { console.error(errs.join("\n") + "\nRun --help for the input shape."); process.exit(1); }
+    Object.entries(data.checks).forEach(([k, v]) => { if (v) flags[k] = true; });
+    fromJson = true;
+  }
+  const stray = argv.filter(a => !a.startsWith("--") && a !== "-h" && a !== jsonArg);
+  if (stray.length) { console.error("Unrecognised argument(s): " + stray.join(", ") + ". Use flags such as --ssr, or a JSON object. Run --help."); process.exit(1); }
+
   const unknown = argv.filter(a => a.startsWith("--") && !FLAGMAP[a] && !["--help","-h","--json","--all","--demo"].includes(a));
   if (unknown.length) {
     console.error(`Unknown flag(s): ${unknown.join(", ")}\nRun --help for the list.`);
@@ -249,7 +279,7 @@ function main() {
     return;
   }
 
-  if (!argv.filter(a => FLAGMAP[a] || a === "--all").length) {
+  if (!fromJson && !argv.filter(a => FLAGMAP[a] || a === "--all").length) {
     console.log("\n(demo: nothing passing — add flags for what you do have, or --all)");
   }
   console.log(report(flags, r));

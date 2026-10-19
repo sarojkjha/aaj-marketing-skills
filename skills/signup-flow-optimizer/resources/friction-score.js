@@ -150,6 +150,11 @@ function report(o, r) {
     L.push("");
   }
 
+  if (r.fieldPenalty + r.stepPenalty > 0) {
+    L.push("  Fields and steps lower the score above but get no dollar value here: only the");
+    L.push("  yes/no friction items are valued. Test removing fields and steps, then use your results.");
+    L.push("");
+  }
   L.push("─".repeat(62));
   L.push("CURRENT STATE");
   L.push(`  Visitors            ${Math.round(num(o.visitors)).toLocaleString("en-US")}/mo`);
@@ -186,6 +191,10 @@ Usage
   node resources/friction-score.js                      Demo
   node resources/friction-score.js [options]
   node resources/friction-score.js --json [options]
+  node resources/friction-score.js '{"fields": 7, "steps": 3, "cardUpfront": true}'
+      The same options as JSON, by name (fields, optional, steps, visitors, convRate, value,
+      addressable; flags cardUpfront, emailVerify, noSso, passwordRules, noProgress, demoGate,
+      reentry, noGuest as true/false). Unknown names and wrong types stop the run.
 
 Numbers            Default   Meaning
   --fields         6         Form fields the user must complete
@@ -224,9 +233,25 @@ function parseArgs(argv) {
     "--reentry": "reentry", "--no-guest": "noGuest",
     "--password-rules": "passwordRules", "--no-progress": "noProgress"
   };
+  // JSON input used to be ignored and the demo defaults scored instead; unknown flags and stray
+  // arguments were ignored too. They now stop the run.
+  const fail = (m) => { console.error(m + "\nRun --help for the options."); process.exit(1); };
+  const numNames = Object.values(nums), flagNames = Object.values(flags);
+  const json = argv.find(a => a.trim().startsWith("{"));
+  if (json) {
+    let data;
+    try { data = JSON.parse(json); } catch (e) { fail("Invalid JSON: " + e.message); }
+    if (!data || typeof data !== "object" || Array.isArray(data)) fail("The input must be a JSON object.");
+    const unknown = Object.keys(data).filter(k => !numNames.includes(k) && !flagNames.includes(k));
+    if (unknown.length) fail("Unrecognised field" + (unknown.length > 1 ? "s" : "") + ": " + unknown.map(k => '"' + k + '"').join(", ") + ". Expected: " + numNames.concat(flagNames).join(", ") + ".");
+    for (const k of numNames) if (k in data) { if (typeof data[k] !== "number" || !Number.isFinite(data[k])) fail('"' + k + '" must be a number.'); o[k] = data[k]; }
+    for (const k of flagNames) if (k in data) { if (typeof data[k] !== "boolean") fail('"' + k + '" must be true or false.'); o[k] = data[k]; }
+  }
   for (let i = 0; i < argv.length; i++) {
-    if (nums[argv[i]] && argv[i + 1] !== undefined) { o[nums[argv[i]]] = num(argv[i + 1]); i++; }
+    if (argv[i] === json) continue;
+    if (nums[argv[i]]) { if (argv[i + 1] === undefined) fail(argv[i] + " needs a number."); o[nums[argv[i]]] = num(argv[i + 1]); i++; }
     else if (flags[argv[i]]) o[flags[argv[i]]] = true;
+    else if (argv[i] !== "--json" && argv[i] !== "--demo") fail("Unrecognised argument: " + argv[i] + ".");
   }
   return o;
 }
@@ -257,7 +282,7 @@ function main() {
     return;
   }
 
-  if (argv.length === 0) console.log("\n(demo — pass options or --help to score your own flow)");
+  if (argv.length === 0 || (argv.length === 1 && argv[0] === "--demo")) console.log("\n(demo — pass options or --help to score your own flow)");
   console.log(report(o, r));
 }
 

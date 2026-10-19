@@ -28,7 +28,7 @@
 No engine needs customer names, emails or other personal data; leave them out.
 
 **Limitations:**
-- Input it doesn't recognise produces the default demo flow rather than an error. It reads command-line options only, so a JSON object or an unknown flag is ignored; check the result reflects your numbers.
+- It reads command-line options or one JSON object. Unknown names, stray arguments and flags missing a value stop the run; options you leave out take the defaults shown in --help.
 - Opportunity figures are capped at the friction-blocked share of non-converters (15% by default) and split by directional B2B SaaS priors. They rank fixes; they don't forecast conversion.
 - Only the yes/no blocking flags get a monthly value. Extra fields and steps lower the score but don't appear as valued fixes, so a field-heavy flow can show no opportunity.
 - It scores the form, not the offer or lead quality. Dropping qualifying fields can lift signups while flooding sales with poor leads or lowering activation.

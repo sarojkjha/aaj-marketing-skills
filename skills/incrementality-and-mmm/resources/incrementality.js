@@ -72,9 +72,13 @@ function design(o) {
   const limitingDaily = Math.min(controlDaily, treatDaily);
   const days = limitingDaily > 0 ? Math.ceil(nPerGroup / limitingDaily) : Infinity;
 
-  const holdoutCost = controlDaily * days * p1 * num(o.value);
+  // Only the lift held back is lost. The control group still converts at the
+  // baseline rate through other routes; what the holdout forgoes is the extra
+  // conversions the treatment would have added.
+  const withheld = controlDaily * days * (p2 - p1);
+  const holdoutCost = withheld * num(o.value);
 
-  return { p1, p2, nPerGroup, totalN: nPerGroup * 2, controlDaily, treatDaily, days, holdoutCost };
+  return { p1, p2, nPerGroup, totalN: nPerGroup * 2, controlDaily, treatDaily, days, holdoutCost, withheld };
 }
 
 // ── READOUT ─────────────────────────────────────────────────────────────
@@ -112,8 +116,10 @@ function readout(o) {
   const zb = Z_POWER[num(o.power)];
   const detectableAbs = (za + zb) * Math.sqrt(2 * p1 * (1 - p1) / Math.min(n1, n2));
   const detectableRel = p1 > 0 ? detectableAbs / p1 : Infinity;
-  const careAbout = num(o.mde) / 100;
-  const underpowered = detectableRel > careAbout && pValue >= num(o.alpha);
+  // No --mde given: there is no target to compare against, so no inconclusive
+  // verdict is made. The smallest detectable lift is still reported.
+  const careAbout = o.mde == null ? null : num(o.mde) / 100;
+  const underpowered = careAbout != null && detectableRel > careAbout && pValue >= num(o.alpha);
 
   return {
     p1, p2, lift, z, pValue, ciLow, ciHigh,
@@ -133,6 +139,7 @@ function reportDesign(o, r) {
   L.push("─".repeat(64));
   L.push(`  Baseline rate           ${pct(r.p1)}`);
   L.push(`  Detecting a lift of     ${o.mde}% relative  (${pct(r.p1)} → ${pct(r.p2)})`);
+  for (const k of (o._assumed || [])) L.push(`  NOTE: ${k} was not given; the default of ${DEFAULTS[k]} is assumed. Pass --${k} to use your own.`);
   L.push(`  Confidence / power      ${(1 - num(o.alpha)) * 100}% / ${num(o.power) * 100}%`);
   L.push("");
   L.push("REQUIRED");
@@ -142,8 +149,8 @@ function reportDesign(o, r) {
   L.push(`  Test duration           ${r.days === Infinity ? "never — no traffic in one group" : r.days + " days"}`);
   L.push("");
   L.push("COST OF THE HOLDOUT");
-  L.push(`  Conversions withheld    ~${int(r.controlDaily * r.days * r.p1)}`);
-  L.push(`  Value withheld          ~${money(r.holdoutCost)}`);
+  L.push(`  Lift withheld           ~${int(r.withheld)} conversions (the extra ones the treatment would add)`);
+  L.push(`  Value forgone          ~${money(r.holdoutCost)}`);
   L.push("");
   if (r.days > 42) {
     L.push(`  ${r.days} days is long. Seasonality and competing changes will contaminate it.`);
@@ -211,6 +218,9 @@ function reportReadout(o, r) {
     L.push(`  ${(r.detectableRel * 100).toFixed(1)}% or more, but you said you'd care about ${(r.careAbout * 100).toFixed(0)}% (--mde).`);
     L.push(`  "Not significant" here means the test was too small — not that the`);
     L.push("  channel doesn't work. Rerun at the sample size the design mode gives you.");
+  } else if (r.careAbout == null) {
+    L.push("  No --mde was given, so no verdict is made on whether the test was big enough.");
+    L.push(`  It could reliably detect a lift of ${(r.detectableRel * 100).toFixed(1)}% or more; pass --mde with the lift you would act on.`);
   } else if (!sig) {
     L.push(`  The test could detect a ${(r.detectableRel * 100).toFixed(1)}% lift and found nothing at that`);
     L.push("  level. That is a real result, not a failed test: treat this channel's");
@@ -238,6 +248,11 @@ const HELP = `
 AAJ incrementality — design a holdout test, then read it honestly.
 
 Two modes. Supply --treat-conv and it reads out; otherwise it designs.
+
+This engine designs and reads out holdout tests. It does not build a
+marketing mix model (MMM); that method is guidance in the skill only.
+Unknown or misspelled options stop the run with an error. A single JSON
+object with the same names (camelCase: controlN, treatConv) also works.
 
 Design
   --baseline    2.5     Baseline conversion rate, %
@@ -268,18 +283,44 @@ The most valuable output here is the underpowered warning. A test that finds
 not evidence of no effect, and it is routinely reported as though it were.
 `;
 
+const NAMES = {
+  "--baseline": "baseline", "--mde": "mde", "--alpha": "alpha", "--power": "power",
+  "--daily": "daily", "--split": "split", "--value": "value", "--spend": "spend",
+  "--control-n": "controlN", "--control-conv": "controlConv",
+  "--treat-n": "treatN", "--treat-conv": "treatConv"
+};
+const KEYS = Object.values(NAMES);
+
+function fail(msg) { console.error(msg + "\nRun --help for the options."); process.exit(1); }
+
 function parseArgs(argv) {
   const o = { ...DEFAULTS };
-  const map = {
-    "--baseline": "baseline", "--mde": "mde", "--alpha": "alpha", "--power": "power",
-    "--daily": "daily", "--split": "split", "--value": "value", "--spend": "spend",
-    "--control-n": "controlN", "--control-conv": "controlConv",
-    "--treat-n": "treatN", "--treat-conv": "treatConv"
+  const given = new Set();
+  const set = (k, v) => {
+    const n = typeof v === "number" ? v : (typeof v === "string" && v.trim() !== "" ? Number(v) : NaN);
+    if (!Number.isFinite(n)) fail(`"${k}" must be a number (got ${JSON.stringify(v)}).`);
+    o[k] = n; given.add(k);
   };
-  for (let i = 0; i < argv.length; i++) {
-    const k = map[argv[i]];
-    if (k && argv[i + 1] !== undefined) { o[k] = num(argv[i + 1]); i++; }
+  const first = argv.find(a => a.trim().startsWith("{"));
+  if (first) {
+    if (argv.length > 1) fail("Give either one JSON object or --flags, not both.");
+    let j;
+    try { j = JSON.parse(first); } catch (e) { fail("Invalid JSON: " + e.message); }
+    if (!j || typeof j !== "object" || Array.isArray(j)) fail("The input must be a JSON object.");
+    const bad = Object.keys(j).filter(k => !KEYS.includes(k));
+    if (bad.length) fail(`Unrecognised field${bad.length > 1 ? "s" : ""}: ${bad.map(k => '"' + k + '"').join(", ")}. Expected: ${KEYS.join(", ")}.`);
+    for (const k of Object.keys(j)) set(k, j[k]);
+  } else {
+    for (let i = 0; i < argv.length; i++) {
+      const a = argv[i];
+      if (a === "--json") continue;
+      const k = NAMES[a];
+      if (!k) fail(`Unrecognised argument "${a}".`);
+      if (argv[i + 1] === undefined || (argv[i + 1].startsWith("--") && !/^-?\d/.test(argv[i + 1]))) fail(`${a} needs a value.`);
+      set(k, argv[++i]); 
+    }
   }
+  o._given = given;
   return o;
 }
 
@@ -287,20 +328,25 @@ function main() {
   const argv = process.argv.slice(2);
   if (argv.includes("--help") || argv.includes("-h")) { console.log(HELP); return; }
 
-  const o = parseArgs(argv);
-  const isReadout = o.treatConv != null && !Number.isNaN(num(o.treatConv));
+  const demo = argv.length === 0 || (argv.length === 1 && argv[0] === "--demo");
+  const o = demo ? { ...DEFAULTS, _given: new Set() } : parseArgs(argv);
+  const g = o._given;
+  const has = k => g.has(k);
+  const isReadout = ["controlN", "controlConv", "treatN", "treatConv"].some(has);
 
-  if (!Z_ALPHA[num(o.alpha)]) { console.error(`--alpha must be one of: ${Object.keys(Z_ALPHA).join(", ")}`); process.exit(1); }
-  if (!Z_POWER[num(o.power)]) { console.error(`--power must be one of: ${Object.keys(Z_POWER).join(", ")}`); process.exit(1); }
+  if (!Z_ALPHA[num(o.alpha)]) fail(`--alpha must be one of: ${Object.keys(Z_ALPHA).join(", ")}`);
+  if (!Z_POWER[num(o.power)]) fail(`--power must be one of: ${Object.keys(Z_POWER).join(", ")}`);
+  if (num(o.value) < 0) fail("--value cannot be negative.");
 
   if (isReadout) {
-    const need = ["controlN", "controlConv", "treatN", "treatConv"];
-    const missing = need.filter(k => o[k] == null || Number.isNaN(num(o[k])));
-    if (missing.length) { console.error(`Readout needs all of: --control-n --control-conv --treat-n --treat-conv`); process.exit(1); }
-    if (num(o.controlConv) > num(o.controlN) || num(o.treatConv) > num(o.treatN)) {
-      console.error("Conversions cannot exceed group size."); process.exit(1);
-    }
-    if (num(o.controlN) <= 0 || num(o.treatN) <= 0) { console.error("Group sizes must be greater than zero."); process.exit(1); }
+    const missing = ["controlN", "controlConv", "treatN", "treatConv"].filter(k => !has(k));
+    if (missing.length) fail("Readout needs all of: --control-n --control-conv --treat-n --treat-conv");
+    for (const k of ["baseline", "daily", "split"]) if (has(k)) fail(`--${k} is a design option and cannot be combined with a readout.`);
+    for (const k of ["controlN", "controlConv", "treatN", "treatConv"]) if (!Number.isInteger(num(o[k])) || num(o[k]) < 0) fail(`--${k.replace(/[A-Z]/g, c => "-" + c.toLowerCase())} must be a whole number.`);
+    if (num(o.controlConv) > num(o.controlN) || num(o.treatConv) > num(o.treatN)) fail("Conversions cannot exceed group size.");
+    if (num(o.controlN) <= 0 || num(o.treatN) <= 0) fail("Group sizes must be greater than zero.");
+    if (!has("mde")) o.mde = null;
+    if (has("spend") && num(o.spend) < 0) fail("--spend cannot be negative.");
     const r = readout(o);
     if (argv.includes("--json")) {
       const sig = r.pValue < num(o.alpha);
@@ -311,16 +357,20 @@ function main() {
     return;
   }
 
-  if (num(o.baseline) <= 0 || num(o.baseline) >= 100) { console.error("--baseline is a percentage between 0 and 100."); process.exit(1); }
-  if (num(o.mde) <= 0) { console.error("--mde must be greater than zero."); process.exit(1); }
-  if (num(o.split) <= 0 || num(o.split) >= 100) { console.error("--split is a percentage between 0 and 100."); process.exit(1); }
+  if (has("spend")) fail("--spend is a readout option; give the four group counts as well.");
+  if (num(o.baseline) <= 0 || num(o.baseline) >= 100) fail("--baseline is a percentage between 0 and 100.");
+  if (num(o.mde) <= 0) fail("--mde must be greater than zero.");
+  if (num(o.split) <= 0 || num(o.split) >= 100) fail("--split is a percentage between 0 and 100.");
+  if (num(o.daily) <= 0) fail("--daily must be greater than zero.");
+  if (num(o.baseline) * (1 + num(o.mde) / 100) >= 100) fail("baseline x (1 + mde) must stay under 100%.");
+  o._assumed = demo ? [] : ["mde", "alpha", "power", "daily", "split", "value", "baseline"].filter(k => !has(k) && k !== "alpha" && k !== "power");
 
   const r = design(o);
   if (argv.includes("--json")) {
     console.log(JSON.stringify({ mode: "design", samplePerGroup: r.nPerGroup, totalSample: r.totalN, durationDays: r.days === Infinity ? null : r.days, holdoutValueForgone: Math.round(r.holdoutCost) }, null, 2));
     return;
   }
-  if (argv.length === 0) console.log("\n(demo — pass options or --help)");
+  if (demo) console.log("\n(demo with built-in numbers — pass options or --help)");
   console.log(reportDesign(o, r));
 }
 

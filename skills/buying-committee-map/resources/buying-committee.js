@@ -59,9 +59,15 @@ function str(s) { return String(s || '').replace(/\s+/g, ' ').trim(); }
 
 function map(cfg) {
   cfg = cfg || {};
+  if (typeof cfg !== 'object' || Array.isArray(cfg)) throw inputError('The input must be a JSON object.');
+  var topBad = Object.keys(cfg).filter(function (k) { return k !== 'deal' && k !== 'roles'; });
+  if (topBad.length) throw inputError('Unrecognised field' + (topBad.length > 1 ? 's' : '') + ': ' + topBad.map(function (k) { return '"' + k + '"'; }).join(', ') + '. Expected: deal, roles.');
   var raw = Array.isArray(cfg.roles) ? cfg.roles : [];
   if (!raw.length) throw inputError('"roles" needs at least one person with a "role".');
   var roles = raw.map(function (r, i) {
+    if (!r || typeof r !== 'object' || Array.isArray(r)) throw inputError('Row ' + (i + 1) + ' must be an object.');
+    var rowBad = Object.keys(r).filter(function (k) { return ['role', 'title', 'name', 'access', 'stance', 'mustBelieve', 'asset', 'plan'].indexOf(k) < 0; });
+    if (rowBad.length) throw inputError('Row ' + (i + 1) + ': unrecognised field' + (rowBad.length > 1 ? 's' : '') + ' ' + rowBad.map(function (k) { return '"' + k + '"'; }).join(', ') + '. Expected: role, title, name, access, stance, mustBelieve, asset, plan.');
     var role = norm(r && r.role);
     if (ROLES.indexOf(role) < 0) throw inputError('Row ' + (i + 1) + ': "role" must be one of ' + ROLES.join(', ') + '.');
     var access = norm(r.access) || 'none', stance = norm(r.stance) || 'unknown';
@@ -92,7 +98,10 @@ function map(cfg) {
   });
 
   var covered = roles.filter(function (r) { return r.identified && r.access !== 'none' && r.mustBelieve && r.asset; }).length;
-  var coverage = covered / roles.length;
+  // A core role nobody has put on the map counts as uncovered, so one well-documented champion is not 100%.
+  var missingCore = CORE.filter(function (c) { return !roles.some(function (r) { return r.role === c; }); }).length;
+  var total = roles.length + missingCore;
+  var coverage = covered / total;
   var ebRows = roles.filter(function (r) { return r.role === 'economic-buyer'; });
   var ebReached = ebRows.some(function (r) { return r.identified && r.access !== 'none'; });
   var blockers = roles.filter(function (r) { return r.stance === 'against' && !r.plan; }).length;
@@ -104,7 +113,7 @@ function map(cfg) {
   else if (coverage < 1) verdict = { level: 'gaps', text: Math.round(coverage * 100) + '% of roles are identified, reachable and answered. ' + (build.length ? build.length + ' belief' + (build.length > 1 ? 's have' : ' has') + ' no asset; ' : '') + (next.length ? 'next: ' + next[0].who + ' - ' + next[0].action : 'close the remaining gaps in the findings') + '.' };
   else verdict = { level: 'covered', text: 'Every role is identified, reachable and has an asset for what they must believe. Confirm the stances are current, then ask for the decision date.' };
 
-  return { deal: str(cfg.deal) || null, roles: roles, coverage: coverage, covered: covered, economicBuyerReached: ebReached, blockers: blockers, nextConversations: next.slice(0, 8), assetsToBuild: build, findings: findings, verdict: verdict, rules: { CORE: CORE } };
+  return { deal: str(cfg.deal) || null, roles: roles, coverage: coverage, covered: covered, total: total, missingCore: missingCore, economicBuyerReached: ebReached, blockers: blockers, nextConversations: next.slice(0, 8), assetsToBuild: build, findings: findings, verdict: verdict, rules: { CORE: CORE } };
 }
 
 function suggestAsset(role) {
@@ -121,7 +130,7 @@ function render(r) {
   L.push('AAJ - BUYING COMMITTEE MAP' + (r.deal ? ': ' + r.deal : ''));
   L.push('-'.repeat(66));
   L.push('  ' + r.verdict.level.toUpperCase() + ': ' + r.verdict.text);
-  L.push('  Coverage ' + r.covered + ' of ' + r.roles.length + ' roles identified, reachable and answered (' + Math.round(r.coverage * 100) + '%)');
+  L.push('  Coverage ' + r.covered + ' of ' + r.total + ' roles identified, reachable and answered (' + Math.round(r.coverage * 100) + '%)' + (r.missingCore ? '; ' + r.missingCore + ' core role' + (r.missingCore > 1 ? 's' : '') + ' (champion, economic buyer, end user) not on the map counted as uncovered' : ''));
   L.push('');
   L.push('THE MAP');
   r.roles.forEach(function (x) {

@@ -14,7 +14,16 @@
  * Deal shape:
  *   { name, outcome: "won" | "lost", amount: Number, segment: String,
  *     lossReason?: String,   // lost deals only
- *     competitor?: String }  // optional, won or lost
+ *     competitor?: String,   // optional, won or lost
+ *     winReason?: String,    // won deals only: why they chose you
+ *     lostAtStage?: String } // lost deals only: the stage the deal died in
+ *
+ * Command line:
+ *   node win-loss.js                         # demo, labelled as a demo
+ *   node win-loss.js --help
+ *   node win-loss.js '{"deals":[{...}, ...]}'  # your closed deals
+ *     Prints the report. Unknown fields, an outcome that is not "won" or "lost", or an
+ *     amount that is not a number stop the run with an error that names the deal.
  */
 
 // --- AAJ arg normalisation ---------------------------------------------------
@@ -39,7 +48,9 @@ function analyzeWinLoss(deals) {
     amount: Number(d.amount) || 0,
     segment: (d.segment && String(d.segment).trim()) || "Unspecified",
     lossReason: (d.lossReason && String(d.lossReason).trim()) || null,
-    competitor: (d.competitor && String(d.competitor).trim()) || null
+    competitor: (d.competitor && String(d.competitor).trim()) || null,
+    winReason: (d.winReason && String(d.winReason).trim()) || null,
+    lostAtStage: (d.lostAtStage && String(d.lostAtStage).trim()) || null
   }));
 
   const won = clean.filter(d => d.outcome === "won");
@@ -114,7 +125,24 @@ function analyzeWinLoss(deals) {
     const e = (cellMap[key] ||= { segment: d.segment, reason: d.lossReason || "Unspecified", lostRevenue: 0, count: 0 });
     e.lostRevenue += d.amount; e.count++;
   });
-  const biggestLeak = Object.values(cellMap).sort((a, b) => b.lostRevenue - a.lostRevenue)[0] || null;
+  // "No decision" and a missing reason say nothing about what to fix, so they can't be the
+  // "fixable" leak; they are reported separately below.
+  const NOT_A_REASON = new Set(["no decision", "unspecified", "unknown", "other"]);
+  const cells = Object.values(cellMap).sort((a, b) => b.lostRevenue - a.lostRevenue);
+  const biggestLeak = cells.find(c => !NOT_A_REASON.has(c.reason.toLowerCase())) || null;
+  const noReasonRevenue = sum(lost.filter(d => NOT_A_REASON.has((d.lossReason || "Unspecified").toLowerCase())), d => d.amount);
+
+  // --- why you win, and where deals die (optional fields) ---
+  const tally = (list, key) => {
+    const m = {};
+    list.forEach(d => { if (d[key]) { const e = (m[d[key]] ||= { label: d[key], count: 0, revenue: 0 }); e.count++; e.revenue += d.amount; } });
+    return Object.values(m).sort((a, b) => b.revenue - a.revenue);
+  };
+  const winReasons = tally(won, "winReason");
+  const lostAtStage = tally(lost, "lostAtStage");
+
+  // Thin sample: this engine's rule of thumb, not a published threshold.
+  const thinSample = total < 20 || lost.length < 8;
 
   // --- plain-language insights ---
   const insights = [];
@@ -132,14 +160,95 @@ function analyzeWinLoss(deals) {
   if (biggestLeak) {
     insights.push(`Single biggest fixable leak: ${biggestLeak.segment} deals lost to "${biggestLeak.reason}" — ${money(biggestLeak.lostRevenue)}. Start here.`);
   }
+  if (noReasonRevenue > 0 && lostRevenue > 0) {
+    insights.push(`${pct(noReasonRevenue, lostRevenue)}% of lost revenue (${money(noReasonRevenue)}) has no usable reason ("No decision" or blank). That is a qualification or urgency question, not a fix list; interview these buyers before acting on the reasons above.`);
+  }
+  if (lostAtStage[0]) {
+    insights.push(`Most lost revenue dies at "${lostAtStage[0].label}" (${money(lostAtStage[0].revenue)} across ${lostAtStage[0].count} deal${lostAtStage[0].count !== 1 ? "s" : ""}).`);
+  }
+  if (winReasons[0]) {
+    insights.push(`Your most valuable stated win reason is "${winReasons[0].label}" (${money(winReasons[0].revenue)} across ${winReasons[0].count} win${winReasons[0].count !== 1 ? "s" : ""}). Say it in your positioning if the buyers' own words match.`);
+  }
+  if (thinSample) {
+    insights.push(`Thin sample: ${total} closed deals (${lost.length} lost). One deal moves every rate here; treat these as questions to check with interviews, not findings. (Rule of thumb in this engine: under 20 closed deals or under 8 losses.)`);
+  }
 
-  return { summary, bySegment, lossReasons, topReasonByCount, topReasonByRevenue, competitors, biggestLeak, insights };
+  return { summary, bySegment, lossReasons, topReasonByCount, topReasonByRevenue, competitors, biggestLeak, winReasons, lostAtStage, thinSample, insights };
 }
 
 function money(n) { return "$" + Math.round(n).toLocaleString("en-US"); }
 
+/* ------------------------- validation ------------------------- */
+const DEAL_FIELDS = ["name", "outcome", "amount", "segment", "lossReason", "competitor", "winReason", "lostAtStage"];
+function validateDeals(input) {
+  const errs = [];
+  if (!input || typeof input !== "object" || Array.isArray(input)) return ['The input must be a JSON object: {"deals": [...]}.'];
+  const extra = Object.keys(input).filter(k => k !== "deals");
+  if (extra.length) errs.push("Unrecognised field" + (extra.length > 1 ? "s" : "") + ": " + extra.map(k => '"' + k + '"').join(", ") + '. Expected: "deals".');
+  if (!Array.isArray(input.deals) || !input.deals.length) { errs.push('"deals" is required: a list of closed deals {name, outcome, amount, segment, ...}.'); return errs; }
+  input.deals.forEach((d, i) => {
+    const label = d && typeof d.name === "string" && d.name ? '"' + d.name + '"' : "deal " + (i + 1);
+    if (!d || typeof d !== "object" || Array.isArray(d)) { errs.push(label + " must be an object."); return; }
+    const bad = Object.keys(d).filter(k => !DEAL_FIELDS.includes(k));
+    if (bad.length) errs.push(label + ": unrecognised field " + bad.map(k => '"' + k + '"').join(", ") + ". Expected: " + DEAL_FIELDS.join(", ") + ".");
+    if (d.outcome !== "won" && d.outcome !== "lost") errs.push(label + ': "outcome" must be "won" or "lost" (got ' + JSON.stringify(d.outcome) + ").");
+    if (typeof d.amount !== "number" || !Number.isFinite(d.amount) || d.amount < 0) errs.push(label + ': "amount" must be a number, 0 or more.');
+    if (d.outcome === "won" && d.lossReason) errs.push(label + ': a won deal has a "lossReason"; fix the outcome or remove it.');
+    if (d.outcome === "lost" && d.winReason) errs.push(label + ': a lost deal has a "winReason"; fix the outcome or remove it.');
+  });
+  return errs;
+}
+
+function printReport(r) {
+  const P = (...a) => console.log(...a);
+  P("=== SUMMARY ===");
+  P(`deals ${r.summary.totalDeals} | won ${r.summary.won} | lost ${r.summary.lost}`);
+  P(`win rate (count)   ${r.summary.winRateCount}%`);
+  P(`win rate (revenue) ${r.summary.winRateRevenue}%`);
+  P(`won ${money(r.summary.wonRevenue)} | lost ${money(r.summary.lostRevenue)} | total ${money(r.summary.totalRevenue)}`);
+
+  P("\n=== BY SEGMENT (count WR / revenue WR) ===");
+  r.bySegment.forEach(s => P(`${s.segment.padEnd(12)} ${s.won}-${s.lost}  ${String(s.winRateCount + "%").padStart(5)} / ${String(s.winRateRevenue + "%").padStart(5)}   (rev at stake ${money(s.totalRevenue)})`));
+
+  P("\n=== LOSS REASONS (Pareto by lost revenue) ===");
+  r.lossReasons.forEach(x => P(`${x.reason.padEnd(20)} ${money(x.lostRevenue).padStart(9)}  ${String(x.pctOfLostRevenue + "%").padStart(6)}  cum ${x.cumulativePct}%  (n=${x.count})`));
+  P(`top by revenue: ${r.topReasonByRevenue} | top by count: ${r.topReasonByCount}`);
+
+  if (r.winReasons.length) {
+    P("\n=== WIN REASONS (by won revenue) ===");
+    r.winReasons.forEach(x => P(`${x.label.padEnd(20)} ${money(x.revenue).padStart(9)}  (n=${x.count})`));
+  }
+  if (r.lostAtStage.length) {
+    P("\n=== WHERE LOST DEALS DIED (by lost revenue) ===");
+    r.lostAtStage.forEach(x => P(`${x.label.padEnd(20)} ${money(x.revenue).padStart(9)}  (n=${x.count})`));
+  }
+
+  P("\n=== COMPETITIVE HEAD-TO-HEAD ===");
+  r.competitors.forEach(c => P(`${c.competitor.padEnd(14)} ${c.won}-${c.lost}  ${c.winRate}% win   (lost ${money(c.lostRevenue)})`));
+
+  P("\n=== BIGGEST FIXABLE LEAK ===");
+  P(r.biggestLeak ? `${r.biggestLeak.segment} × "${r.biggestLeak.reason}" — ${money(r.biggestLeak.lostRevenue)}` : "None: no lost deal has a usable reason.");
+
+  P("\n=== INSIGHTS ===");
+  r.insights.forEach(i => P("• " + i));
+}
+
 /* ----------------------------- demo ----------------------------- */
+if (require.main === module && process.argv[2] === "--help") {
+  console.log(require("fs").readFileSync(__filename, "utf8").split("*/")[0].replace(/^[\s\S]*?\/\*+/, ""));
+  process.exit(0);
+}
+if (require.main === module && process.argv.length > 2 && process.argv[2] !== "--demo") {
+  let input;
+  try { input = JSON.parse(process.argv[2]); } catch (e) { console.error("Invalid JSON: " + e.message + "\nRun --help for the input shape."); process.exit(1); }
+  const problems = validateDeals(input);
+  if (problems.length) { console.error(problems.join("\n") + "\nRun --help for the input shape."); process.exit(1); }
+  console.log("AAJ — Win/Loss analysis\nSource: your input\n");
+  printReport(analyzeWinLoss(input.deals));
+  process.exit(0);
+}
 if (require.main === module) {
+  console.log("(no input, so this is the built-in demo. Run --help to see how to pass your own deals.)\n");
   const demo = [
     { name: "Acme",        outcome: "won",  amount: 10000,  segment: "SMB" },
     { name: "Bravo",       outcome: "won",  amount: 12000,  segment: "SMB" },
@@ -157,30 +266,7 @@ if (require.main === module) {
     { name: "November",    outcome: "lost", amount: 100000, segment: "Enterprise", lossReason: "No decision" }
   ];
 
-  const r = analyzeWinLoss(demo);
-  const P = (...a) => console.log(...a);
-
-  P("=== SUMMARY ===");
-  P(`deals ${r.summary.totalDeals} | won ${r.summary.won} | lost ${r.summary.lost}`);
-  P(`win rate (count)   ${r.summary.winRateCount}%`);
-  P(`win rate (revenue) ${r.summary.winRateRevenue}%`);
-  P(`won ${money(r.summary.wonRevenue)} | lost ${money(r.summary.lostRevenue)} | total ${money(r.summary.totalRevenue)}`);
-
-  P("\n=== BY SEGMENT (count WR / revenue WR) ===");
-  r.bySegment.forEach(s => P(`${s.segment.padEnd(12)} ${s.won}-${s.lost}  ${String(s.winRateCount + "%").padStart(5)} / ${String(s.winRateRevenue + "%").padStart(5)}   (rev at stake ${money(s.totalRevenue)})`));
-
-  P("\n=== LOSS REASONS (Pareto by lost revenue) ===");
-  r.lossReasons.forEach(x => P(`${x.reason.padEnd(20)} ${money(x.lostRevenue).padStart(9)}  ${String(x.pctOfLostRevenue + "%").padStart(6)}  cum ${x.cumulativePct}%  (n=${x.count})`));
-  P(`top by revenue: ${r.topReasonByRevenue} | top by count: ${r.topReasonByCount}`);
-
-  P("\n=== COMPETITIVE HEAD-TO-HEAD ===");
-  r.competitors.forEach(c => P(`${c.competitor.padEnd(14)} ${c.won}-${c.lost}  ${c.winRate}% win   (lost ${money(c.lostRevenue)})`));
-
-  P("\n=== BIGGEST FIXABLE LEAK ===");
-  P(`${r.biggestLeak.segment} × "${r.biggestLeak.reason}" — ${money(r.biggestLeak.lostRevenue)}`);
-
-  P("\n=== INSIGHTS ===");
-  r.insights.forEach(i => P("• " + i));
+  printReport(analyzeWinLoss(demo));
 }
 
 module.exports = { analyzeWinLoss };

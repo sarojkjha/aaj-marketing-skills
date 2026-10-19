@@ -350,7 +350,9 @@ const CHECKS = {
 };
 
 function check(cfg) {
-  if (!cfg || typeof cfg !== 'object') die('Config must be a JSON object.');
+  if (!cfg || typeof cfg !== 'object' || Array.isArray(cfg)) die('Config must be a JSON object.');
+  const unknownKeys = Object.keys(cfg).filter((k) => !['pageType', 'jsonld', 'html', 'visibleText', 'today'].includes(k));
+  if (unknownKeys.length) die(`Unrecognised field${unknownKeys.length > 1 ? 's' : ''}: ${unknownKeys.map((k) => '"' + k + '"').join(', ')}.`, 'Expected: pageType, jsonld, html, visibleText, today.');
   let kind = null;
   if (cfg.pageType !== undefined && cfg.pageType !== null && cfg.pageType !== '') {
     kind = ALIASES[String(cfg.pageType).toLowerCase().replace(/\s+/g, '')];
@@ -407,7 +409,8 @@ function check(cfg) {
   let verdict;
   if (fixes) verdict = { level: 'fix', headline: 'Fix before publishing', body: `${fixes} issue${fixes > 1 ? 's' : ''} break the markup or describe something the page does not show.` };
   else if (elig) verdict = { level: 'valid', headline: 'Valid, not rich-result eligible', body: `The markup is sound, but ${elig} Google requirement${elig > 1 ? 's are' : ' is'} missing for ${label} rich results.` };
-  else verdict = { level: 'ready', headline: 'Ready to publish', body: `No broken or unsupported markup found for ${label}.` };
+  else if (textNorm === null) verdict = { level: 'valid-unchecked', headline: 'Valid markup, not checked against the page', body: `No broken or unsupported markup found for ${label}, but no page text was supplied, so ratings, prices and names were not compared with what readers see. Pass "html" or "visibleText" for a publish verdict.` };
+  else verdict = { level: 'ready', headline: 'Ready to publish', body: `No broken or unsupported markup found for ${label}, and what it marks up appears in the page text.` };
 
   const fixList = findings.filter((f) => f.level === 'fix' || f.level === 'eligibility' || f.level === 'improve')
     .map((f) => ({ level: f.level, path: f.path, do: f.text, source: f.source }));

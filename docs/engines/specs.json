@@ -50,7 +50,7 @@
         "It applies fixed word lists and readability rules to the text you paste. It cannot see how buyers respond, so a high score is not a conversion forecast.",
         "It cannot tell whether the message is right. Copy can score well and still miss the positioning or break the brand voice; judge that yourself.",
         "Concreteness counts numbers and names, not whether they are true. A made-up figure raises the score, so every number still needs proof on file.",
-        "Short copy gets an indicative score only (it wants about 25 words or more); a two-word input scored 100. Score a full section, not a headline on its own."
+        "Text under about 25 words gets no score (\"NOT SCORED\", overall null in JSON), because short ratios are noise. Score a full section, not a headline on its own."
       ],
       "review": "Whoever owns the page checks the draft against the positioning and the brand voice, and the founder confirms the proof behind every number and named customer before it ships."
     },
@@ -156,7 +156,7 @@
         "It matches wording patterns. It cannot tell whether a scarcity, urgency or social-proof claim is true; a VERIFY flag means someone must confirm the fact, not that the claim is fine.",
         "A PASS means no listed pattern matched, not that the copy is honest or will convert. Manipulative copy worded outside its patterns passes.",
         "It checks copy only. It does not diagnose which friction (attention, comprehension, belief, value, risk, inertia) is blocking the buyer; that diagnosis comes first.",
-        "Anything passed is read as copy, so JSON or a mistyped flag such as --fiel is checked as text and returns PASS rather than an error; check the result quotes your draft."
+        "Unknown flags, JSON with other keys, more than one text argument and empty text stop the run. JSON input is {\"copy\": \"...\"}; a PASS now means copy was read and nothing matched."
       ],
       "review": "Whoever owns the page confirms every VERIFY claim (seat counts, deadlines, customer numbers) is literally true before it ships. Legal checks any auto-renewal or trial-to-paid wording the engine flags."
     },
@@ -474,7 +474,7 @@
         "It is a self-assessment, not a crawl. It scores the flags you pass and cannot check the live site; verify each answer with view-source or curl.",
         "Each check is pass or fail, so a half-done item scores nothing. Rendering is a hard gate: without --ssr the verdict is BLOCKED whatever else passes.",
         "It measures whether an agent can evaluate and act, not whether AI engines cite you. Use seo-geo-aeo-audit for that.",
-        "Input it doesn't recognise returns the worked example rather than an error; check the result reflects your data. It reads flags only, so JSON input shows the nothing-passing demo."
+        "It reads --flags or {\"checks\": {id: true/false}}. Unknown flags or ids, non-true/false values and stray arguments stop the run with an error that names them."
       ],
       "review": "Whoever owns the website verifies each flag against the live site (raw HTML, robots.txt, a no-login purchase path), and the founder makes the published-pricing and AI-crawler decisions explicitly before fixes are scheduled."
     },
@@ -736,7 +736,7 @@
         }
       ],
       "limitations": [
-        "Coverage counts only the roles you enter. A map with one well-documented champion reads 100%; missing core roles show up as findings, not in the coverage figure.",
+        "Core roles (champion, economic buyer, end user) missing from the map count as uncovered, so one champion alone reads 33%, not 100%. Other roles you leave off do not lower the figure.",
         "A role counts as identified only when a person is named. Run for a segment with titles and no names, coverage reads 0% and every role asks to be identified; use the asset list, not coverage, for segment planning.",
         "Stance, access and beliefs are what you enter, often relayed by the champion. The engine cannot check them; treat what the champion says about others as a hypothesis.",
         "It does not score the deal or predict the close. Coverage is a checklist measure, not a win probability."
@@ -1375,7 +1375,7 @@
         "Send load uses default email counts and day windows per sequence unless you pass --emails, and assumes every sequence reaches every new user. It counts no transactional or product email, so the real inbox load is higher.",
         "Breakeven uses one build cost for every sequence and is judged against monthly signups. Win-back and sunset run on lapsed users, a smaller base, so judge those against that base.",
         "It does not estimate lift. It gives the extra conversions a month a sequence needs to pay back; whether that is plausible for your audience is your call.",
-        "Input it doesn't recognise (JSON, or a misspelled flag) is ignored without an error and the audit runs on defaults (500 signups, $400 a conversion, nothing built). Check the result reflects your numbers."
+        "Unknown names or arguments, or an --emails list that is not six whole numbers, stop the run. Fields you leave out take defaults (500 signups, $400 a conversion, nothing built); check them."
       ],
       "review": "The lifecycle or CRM owner lists every email that already fires, transactional included, with the real email count per sequence, before trusting the send-load verdict. They confirm the value per conversion before the breakeven decides what gets built."
     },
@@ -1585,9 +1585,9 @@
       ],
       "limitations": [
         "Uses a two-tailed two-proportion z-test that treats every user as independent and reads only the final counts. No correction for peeking, no geo-level analysis, and no media mix model: MMM is guidance in the skill, not computed.",
-        "In readout mode the inconclusive verdict compares the test with --mde, which defaults to a 15% lift if you leave it out. Pass the lift you said you would act on, or the verdict answers a different question.",
-        "The holdout cost counts every conversion the control group would make at the baseline rate, not only the lift held back, so it reads well above the conversions the holdout actually forgoes.",
-        "Input it doesn't recognise (JSON, or a misspelled flag) is ignored without an error and the engine designs a test from its defaults. Check the result reflects your numbers."
+        "In a readout, --mde is the lift you would act on. Without it no inconclusive verdict is made and the smallest detectable lift is shown instead; in design mode a missing --mde assumes 15% and says so.",
+        "Holdout cost counts only the lift withheld from control (the extra conversions treatment would add), not the baseline conversions control still makes by other routes.",
+        "Unknown flags or fields, non-numeric values and options that belong to the other mode stop the run. Design options you leave out take defaults and are listed in the output."
       ],
       "review": "The growth or finance lead confirms the conversion definition, the real baseline rate and the lift they would act on before the test runs, and that nothing else changed in the window before iROAS moves budget. An inconclusive test is reported as inconclusive, not negative."
     },
@@ -1850,7 +1850,7 @@
       ],
       "limitations": [
         "The B2B SaaS stage bands are AAJ's estimates from client work, not third-party research. Gartner's 7.8% average is mostly companies above $1B revenue.",
-        "Runway does not cap the share, though the skill says it does. Aggressive takes the band's high end whatever the runway; runwayMonths only spreads a seed budget per month.",
+        "Runway does not cap the share: the engine does not apply it, and the skill now says to check it yourself. runwayMonths is accepted only for a b2b_saas seed budget, where it spreads the round per month.",
         "Ecommerce, services and marketplaces have no stage band. Without your own pctOfRevenue it uses Gartner's large-company average, which is not a target.",
         "The function split is an AAJ default, and the total covers all marketing, not just paid. It does not check the spend is affordable against LTV:CAC."
       ],
@@ -2010,7 +2010,7 @@
       "limitations": [
         "CAC is total spend over total wins, a blended figure that flatters paid channels. Use channel-level numbers for channel decisions and say which you used.",
         "Every ratio uses same-period numbers. New revenue : spend is an efficiency read, not ROI; with a long sales cycle, this period's wins came from earlier spend and leads.",
-        "A field it doesn't recognise (\"MQLs\" for \"mqls\") is dropped without warning and the stage rate is computed across the gap. Input it doesn't recognise gives an empty report, not an error; check the result reflects your numbers.",
+        "Unknown fields (\"MQLs\" for \"mqls\"), non-numbers and a stage larger than the one before it stop the run. A stage you leave out is skipped and the stage rate is computed across the gap.",
         "Deltas assume the prior period used the same definitions and windows. The engine cannot check that."
       ],
       "review": "The marketing lead or RevOps owner confirms the stage definitions and spend basis match the prior period, and states whether CAC is blended or by channel, before the report goes to the board."
@@ -2220,10 +2220,10 @@
         }
       ],
       "limitations": [
-        "Pass {check, input} for scorePartner, checkTerms or reviewPartnership; with no input you get a labelled demo. Unknown checks and top-level fields stop the run, but unknown fields inside input are ignored.",
+        "Pass {check, input} for scorePartner, checkTerms or reviewPartnership; with no input you get a labelled demo. Unknown checks, top-level fields and fields inside input stop the run.",
         "The score is a rubric of your own 0-3 ratings, not a prediction. It cannot know whether the partner will promote as promised, and inputs you list as unknowns are noted but do not lower the score.",
         "checkTerms checks that each of the five terms is present, not what it says; any entry passes.",
-        "The review says \"Do it again\" whenever there is any qualified lead and any pipeline, even before a full sales cycle or with a low qualified rate. Read pipeline per hour and the effort split before repeating."
+        "\"Do it again\" needs a qualified lead, pipeline, a full sales cycle elapsed and at least 20% of sign-ups qualified. Pipeline before a full cycle reads \"Too early to decide\"; a thin audience reads \"Change the format\"."
       ],
       "review": "The partnership owner checks the overlap and reach ratings against the partner's own data, and both sides sign the lead-sharing and consent terms, before work starts. The review is judged on pipeline after a full sales cycle."
     },
@@ -2591,7 +2591,7 @@
         }
       ],
       "limitations": [
-        "A page's score is a share of points on the checks answered, so unanswered checks drop out: a page with two of 21 checks answered scored 100%. Answer all 21.",
+        "Every page needs all 21 checks answered (use \"unsure\" if you have not looked; it scores zero). Missing or unknown check ids stop the run, so a half-answered page cannot score 100%.",
         "The 21 checks and weights are AAJ's judgement applied to your yes, partly or no answers. They are not a benchmark and cannot see real buyer behaviour.",
         "The honesty checks point at US rules (ROSCA, California auto-renewal, FTC pricing guides). They do not replace legal review and do not cover rules outside the US.",
         "The test plan rests on your guess at conversion at the new price. Before-after and sales-quote reads are not randomised and give direction only."
@@ -2646,7 +2646,7 @@
       "limitations": [
         "Readiness is the team's own 0-2 scores on twelve items, and a missing item scores 0. The engine cannot verify them. The 85% and 60% thresholds are AAJ's, not an industry standard.",
         "The tier comes from the launch fields you choose. It flags a mismatch with what the team intends only if you give plannedScale.",
-        "The work-back plan marks every task due before today as overdue, whether or not it is done; it is not linked to the gate scores.",
+        "Past-due tasks are marked \"due date passed, not marked done\" unless you list them in \"done\". The plan is not linked to the readiness gate scores.",
         "The four launch-day go/no-go gates are listed, not checked. Someone has to confirm each one on the morning."
       ],
       "review": "The launch owner checks each readiness score with the person responsible for that item before a date is set, and confirms the four go/no-go gates on the morning before the launch goes out."
@@ -2909,7 +2909,7 @@
       ],
       "limitations": [
         "It only scores the pass, partial or fail results it is given. It does not fetch or inspect the page, so the score is as good as the audit against the rubric.",
-        "Omitted or misspelled check names count as fail with no warning, and unrecognised JSON returns 0/100, grade F, rather than an error. Check every check name was read.",
+        "Unknown check names, values other than pass, partial or fail, and empty input stop the run. A check you omit counts as fail and is listed as \"Not assessed\"; read that line.",
         "It measures readiness, not traffic or citations. The GEO checks score whether claims are checkable and do not predict a lift.",
         "FAQPage schema and llms.txt still earn points though the skill calls them hygiene, not Google levers, so the score can rise with no change in search visibility."
       ],
@@ -2961,7 +2961,7 @@
         }
       ],
       "limitations": [
-        "Input it doesn't recognise produces the default demo flow rather than an error. It reads command-line options only, so a JSON object or an unknown flag is ignored; check the result reflects your numbers.",
+        "It reads command-line options or one JSON object. Unknown names, stray arguments and flags missing a value stop the run; options you leave out take the defaults shown in --help.",
         "Opportunity figures are capped at the friction-blocked share of non-converters (15% by default) and split by directional B2B SaaS priors. They rank fixes; they don't forecast conversion.",
         "Only the yes/no blocking flags get a monthly value. Extra fields and steps lower the score but don't appear as valued fixes, so a field-heavy flow can show no opportunity.",
         "It scores the form, not the offer or lead quality. Dropping qualifying fields can lift signups while flooding sales with poor leads or lowering activation."
@@ -3014,7 +3014,7 @@
         }
       ],
       "limitations": [
-        "It only compares markup with what readers see when you pass html or visibleText. Without them, a rating or price the page doesn't show can still pass as Ready to publish.",
+        "It compares markup with what readers see only when you pass html or visibleText. Without them the verdict is \"Valid markup, not checked against the page\", never \"Ready to publish\".",
         "It checks the markup you paste, not what a crawler receives. JSON-LD added by client-side JavaScript may never reach a crawler.",
         "A clean check does not promise a rich result or any effect on AI answers. Google says no special schema is needed for its AI features.",
         "Its rules follow Google and schema.org pages opened on 2026-10-10. Google edits those pages; re-check the source each finding cites."
@@ -3067,10 +3067,10 @@
         }
       ],
       "limitations": [
-        "If you omit weights, the demo weights (industryMatch, sizeBand and three others) are used. Signals whose names do not match a weight are ignored, so an account can score 0 with no warning.",
+        "If you omit weights, the demo weights are used. A signal whose name is not in the weights stops the run, as does any account field other than name and signals.",
         "Signals are true or false only. An unknown attribute counts as not matched, which pushes accounts with missing data down the list.",
         "The score reflects the weights, not evidence. Weights not calibrated against known-good customers produce a confident but wrong list.",
-        "Input it doesn't recognise (an --input file with no \"accounts\", or a misspelled flag) returns the demo accounts, not an error, labelled with your file name. Check the result reflects your numbers."
+        "An --input file without \"accounts\", or a misspelled flag, stops the run instead of showing the demo accounts. Weights must be numbers above zero and signals true or false."
       ],
       "review": "The sales or RevOps lead justifies the weights from win-loss evidence and checks that the best existing customers land in tier A before the list routes outbound work."
     },
@@ -3174,7 +3174,7 @@
       ],
       "limitations": [
         "The plan uses only your conversion rates and has no defaults. Borrowed rates make the room size a guess; label them as assumptions.",
-        "Without a win rate the verdict uses pipeline against cost, which reads higher than expected revenue and makes a repeat easier. A misspelled winRate falls back to this, with only a note.",
+        "Without a win rate the verdict uses pipeline against cost, which reads higher than expected revenue and makes a repeat easier. A misspelled field now stops the run, and an invalid winRate (such as 25) is rejected.",
         "The 0.5 and 1.0 reach bands, the 3x target, the five-meeting floor and the 24-hour follow-up rule are engine rules, not benchmarks.",
         "Read too soon, the result undercounts: meetings take three to six weeks to become opportunities. Cost is only complete if people time is in it."
       ],
@@ -3227,7 +3227,7 @@
       ],
       "limitations": [
         "It scores the pass, partial or fail judgements made against the rubric. It doesn't read the page or see real visitor behaviour, so the score is only as good as those judgements.",
-        "Input it doesn't recognise counts as a fail rather than an error: an omitted or misspelled check, or a value other than pass, partial or fail, scores zero; check the result reflects your input.",
+        "Unknown check names and values other than pass, partial or fail stop the run. A check you omit counts as fail and is listed as \"Not assessed\"; read that line.",
         "Category weights and grade bands are fixed. The skill says to judge against the page's one goal, but the engine weighs a pricing page and a blog post the same way.",
         "The fix list follows rubric order, not measured impact. The expected effect of each fix is a judgement, not a forecast."
       ],
@@ -3279,10 +3279,10 @@
         }
       ],
       "limitations": [
-        "Input it doesn't recognise returns the worked example rather than an error; check the result reflects your data. From the command line it prints the demo even for valid deals.",
-        "It computes rates and revenue concentration only. It does not read win reasons, interview notes or the stage a deal was lost at; that work stays with the skill.",
-        "The 'biggest fixable leak' is simply the segment and loss reason with the most lost revenue, even no decision or missing feature. Decide yourself whether it is fixable.",
-        "It does not flag thin samples. A reason with one or two deals can top the list; check the count beside each before calling it a pattern."
+        "Reasons, stages and amounts are what you enter. It cannot check them, and win or loss reasons logged by reps often differ from what buyers say; confirm with buyer interviews.",
+        "It tallies the win reasons and lost-at stages you give it but does not read interview notes or call recordings; that work stays with the skill.",
+        "The biggest fixable leak is the segment and loss reason with the most lost revenue, leaving out no decision and unspecified, which are reported separately. Decide yourself whether it is fixable.",
+        "A thin sample (under 20 closed deals or 8 losses) is flagged using this engine's own rule of thumb. With fewer, read any ranking as a hint, not a pattern."
       ],
       "review": "The sales lead confirms loss reasons are coded from deal evidence into a consistent set and that each top pattern rests on enough deals, before a fix is assigned to product, marketing or sales."
     }

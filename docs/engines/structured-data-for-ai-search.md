@@ -28,7 +28,7 @@
 No engine needs customer names, emails or other personal data; leave them out.
 
 **Limitations:**
-- It only compares markup with what readers see when you pass html or visibleText. Without them, a rating or price the page doesn't show can still pass as Ready to publish.
+- It compares markup with what readers see only when you pass html or visibleText. Without them the verdict is "Valid markup, not checked against the page", never "Ready to publish".
 - It checks the markup you paste, not what a crawler receives. JSON-LD added by client-side JavaScript may never reach a crawler.
 - A clean check does not promise a rich result or any effect on AI answers. Google says no special schema is needed for its AI features.
 - Its rules follow Google and schema.org pages opened on 2026-10-10. Google edits those pages; re-check the source each finding cites.

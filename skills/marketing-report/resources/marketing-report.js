@@ -49,6 +49,37 @@ var STAGES = [
   ['sqls','SQLs'], ['opps','Opportunities'], ['wins','Wins']
 ];
 
+// A miscased field such as "MQLs" used to be dropped without a word and the report came out
+// empty. Unknown fields, non-numbers and a funnel that grows downstream now stop the run.
+var FIELDS = ['period','spend','sessions','leads','mqls','sqls','opps','wins','newRevenue','pipelineCreated','target'];
+function validateBlock(c, where, allowPrior){
+  var errs = [];
+  var known = FIELDS.concat(allowPrior ? ['prior'] : []);
+  var unknown = Object.keys(c).filter(function(k){ return known.indexOf(k) < 0; });
+  if (unknown.length) errs.push(where + 'Unrecognised field' + (unknown.length > 1 ? 's' : '') + ': ' + unknown.map(function(k){ return '"' + k + '"'; }).join(', ') + '. Expected: ' + known.join(', ') + '.');
+  FIELDS.slice(1).forEach(function(k){
+    if (c[k] != null && (typeof c[k] !== 'number' || !isFinite(c[k]) || c[k] < 0)) errs.push(where + '"' + k + '" must be a number, 0 or more.');
+  });
+  if (!FIELDS.slice(1).some(function(k){ return typeof c[k] === 'number'; })) errs.push(where + 'Give at least one number, such as spend, leads or newRevenue.');
+  var prev = null;
+  STAGES.forEach(function(s){
+    var v = c[s[0]];
+    if (typeof v !== 'number') return;
+    if (prev && v > prev.v) errs.push(where + s[1] + ' (' + v + ') is more than ' + prev.label + ' (' + prev.v + '); each funnel stage should be no larger than the one before it.');
+    prev = { v: v, label: s[1] };
+  });
+  return errs;
+}
+function validate(c){
+  if (!c || typeof c !== 'object' || Array.isArray(c)) return ['The input must be a JSON object.'];
+  var errs = validateBlock(c, '', true);
+  if (c.prior != null){
+    if (typeof c.prior !== 'object' || Array.isArray(c.prior)) errs.push('"prior" is an object with the same fields for the previous period.');
+    else errs = errs.concat(validateBlock(c.prior, 'prior: ', false));
+  }
+  return errs;
+}
+
 function money(n){ return '$' + Math.round(n).toLocaleString(); }
 function one(n){ return (Math.round(n*10)/10).toLocaleString(); }
 function pct(n){ return (Math.round(n*10)/10).toLocaleString() + '%'; }
@@ -172,6 +203,8 @@ else {
           prior:{ spend:110000, sessions:85000, leads:2400, mqls:820, sqls:300, opps:120, wins:28, newRevenue:420000 } };
   console.log('(no config \u2014 demo: Q2 2026 with a prior-period comparison)');
 }
+var problems = validate(cfg);
+if (problems.length){ console.error(problems.join('\n') + '\nRun --help for the input shape.'); process.exit(1); }
 console.log(render(cfg));
 
 module.exports = { compute, deltas, verdict };

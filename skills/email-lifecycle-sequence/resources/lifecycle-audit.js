@@ -194,6 +194,9 @@ Usage
   node resources/lifecycle-audit.js                       Demo
   node resources/lifecycle-audit.js [options]
   node resources/lifecycle-audit.js --json [options]
+  node resources/lifecycle-audit.js '{"have": ["welcome","onboarding"], "signups": 500}'
+      The same options as JSON, by name (have as a list, signups, value, buildHours, rate,
+      payback, emails as a list of six counts). Unknown names and wrong types stop the run.
 
 Options          Default   Meaning
   --have         (none)    Comma list of sequences you already run:
@@ -220,14 +223,31 @@ function parseArgs(argv) {
     "--build-hours": "buildHours", "--rate": "rate", "--payback": "payback",
     "--emails": "emails"
   };
+  // JSON input used to be ignored and the defaults ran instead; unknown flags and stray
+  // arguments were ignored too. They now stop the run.
+  const fail = (m) => { console.error(m + "\nRun --help for the options."); process.exit(1); };
+  const json = argv.find(a => a.trim().startsWith("{"));
+  if (json) {
+    let data;
+    try { data = JSON.parse(json); } catch (e) { fail("Invalid JSON: " + e.message); }
+    if (!data || typeof data !== "object" || Array.isArray(data)) fail("The input must be a JSON object.");
+    const names = Object.values(map);
+    const unknown = Object.keys(data).filter(k => !names.includes(k));
+    if (unknown.length) fail("Unrecognised field" + (unknown.length > 1 ? "s" : "") + ": " + unknown.map(k => '"' + k + '"').join(", ") + ". Expected: " + names.join(", ") + ".");
+    if ("have" in data) { if (!Array.isArray(data.have) || data.have.some(h => typeof h !== "string")) fail('"have" is a list of sequence ids.'); o.have = data.have; }
+    if ("emails" in data) { if (!Array.isArray(data.emails) || data.emails.length !== STAGES.length || data.emails.some(n => !Number.isInteger(n) || n < 0)) fail('"emails" is a list of ' + STAGES.length + " whole numbers, in stage order."); o.emails = data.emails.join(","); }
+    for (const k of ["signups", "value", "buildHours", "rate", "payback"]) if (k in data) { if (typeof data[k] !== "number" || !Number.isFinite(data[k])) fail('"' + k + '" must be a number.'); o[k] = data[k]; }
+  }
   for (let i = 0; i < argv.length; i++) {
+    if (argv[i] === json) continue;
     const k = map[argv[i]];
-    if (k && argv[i + 1] !== undefined) {
+    if (k) {
+      if (argv[i + 1] === undefined) fail(argv[i] + " needs a value.");
       if (k === "have") o.have = String(argv[i + 1]).split(",").map(s => s.trim()).filter(Boolean);
       else if (k === "emails") o.emails = String(argv[i + 1]);
       else o[k] = num(argv[i + 1]);
       i++;
-    }
+    } else if (argv[i] !== "--json" && argv[i] !== "--demo") fail("Unrecognised argument: " + argv[i] + ".");
   }
   return o;
 }
@@ -243,6 +263,10 @@ function main() {
   if (unknown.length) {
     console.error(`Unknown sequence(s): ${unknown.join(", ")}\nValid: ${known.join(", ")}`);
     process.exit(1);
+  }
+  if (o.emails) {
+    const parts = String(o.emails).split(",");
+    if (parts.length !== STAGES.length || parts.some(n => !/^\d+$/.test(n.trim()))) { console.error(`--emails is ${STAGES.length} whole numbers, in stage order (${STAGES.map(s => s.id).join(", ")}).`); process.exit(1); }
   }
   const bad = ["signups", "value", "buildHours", "rate", "payback"].filter(k => Number.isNaN(num(o[k])));
   if (bad.length) { console.error(`Invalid numeric values for: ${bad.join(", ")}`); process.exit(1); }
@@ -262,7 +286,7 @@ function main() {
     return;
   }
 
-  if (argv.length === 0) console.log("\n(demo: no sequences built — pass --have or --help)");
+  if (argv.length === 0 || (argv.length === 1 && argv[0] === "--demo")) console.log("\n(demo: no sequences built — pass --have or --help)");
   console.log(report(o, r));
 }
 

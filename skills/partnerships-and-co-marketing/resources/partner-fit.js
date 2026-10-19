@@ -182,9 +182,15 @@ function reviewPartnership(result) {
   if (!fullCycle && pipeline === 0) {
     verdict = "Too early to decide";
     reason = "Nothing has had time to close. Set a date to review again rather than judging it now.";
+  } else if (qualified > 0 && pipeline > 0 && !fullCycle) {
+    verdict = "Too early to decide";
+    reason = "There is pipeline, but a full sales cycle has not elapsed, so it may not close. Set a date to review again before repeating.";
+  } else if (qualified > 0 && pipeline > 0 && !audienceHeld) {
+    verdict = "Change the format";
+    reason = "Pipeline came, but from a small share of a poorly matched crowd. Repeat only with a tighter audience, not the same list.";
   } else if (qualified > 0 && pipeline > 0) {
     verdict = "Do it again";
-    reason = "Modest volume with real pipeline is the pattern worth repeating — consider a rhythm, such as one joint asset a quarter.";
+    reason = "Real pipeline from the right audience after a full sales cycle is the pattern worth repeating — consider a rhythm, such as one joint asset a quarter.";
   } else if (audienceHeld) {
     verdict = "Change the format";
     reason = "The right people came and nothing progressed. The audience was fine; the asset or the follow-up was not.";
@@ -292,6 +298,13 @@ if (require.main === module && process.argv.length > 2 && !process.argv.includes
   if (extra.length) fail("Unrecognised field" + (extra.length > 1 ? "s" : "") + ": " + extra.map((k) => '"' + k + '"').join(", ") + '. Expected: "check" and "input".');
   if (!Object.prototype.hasOwnProperty.call(CHECKS, req.check)) fail('"check" must be one of: ' + Object.keys(CHECKS).join(", ") + ".");
   if (!req.input || typeof req.input !== "object" || Array.isArray(req.input)) fail('"input" is required: the object that ' + req.check + " takes.");
+  const FIELDS = {
+    scorePartner: ["name", "goal", "overlap", "complementary", "reach", "ease", "namedContact", "wellKnown", "unknowns"],
+    checkTerms: TERMS.map(([k]) => k),
+    reviewPartnership: ["name", "goal", "signups", "qualifiedLeads", "pipelineValue", "ourHours", "theirHours", "fullSalesCycleElapsed"],
+  };
+  const badIn = Object.keys(req.input).filter((k) => !FIELDS[req.check].includes(k));
+  if (badIn.length) fail("Unrecognised field" + (badIn.length > 1 ? "s" : "") + " in input: " + badIn.map((k) => '"' + k + '"').join(", ") + ". Expected: " + FIELDS[req.check].join(", ") + ".");
   let result;
   try { result = CHECKS[req.check](req.input); } catch (e) { fail(req.check + " could not run on that input: " + e.message); }
   console.log(JSON.stringify(result, null, 2));

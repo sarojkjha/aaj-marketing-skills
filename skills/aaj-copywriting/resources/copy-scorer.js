@@ -210,7 +210,7 @@ function score(text) {
     overall,
     tooShort,
     verdict: tooShort
-      ? `INDICATIVE ONLY — ${read.words} words is too short to score reliably (need ~25+)`
+      ? `NOT SCORED — ${read.words} words is too short to score reliably (need ~25+)`
       : verdictFor(overall),
     dimensions: {
       clarity: Math.round(clarity),
@@ -241,7 +241,7 @@ function verdictFor(n) {
 // ── fixes ───────────────────────────────────────────────────────────────────
 function fixes(r) {
   const out = [];
-  if (r.tooShort) out.push(`Sample is only ${r.readability.words} words — scores below are indicative. Paste the full asset for a reliable read.`);
+  if (r.tooShort) out.push(`Sample is only ${r.readability.words} words — no score was given. Paste the full asset for a reliable read.`);
   const u = totalHits(r.flags.unsubstantiated);
   if (u) out.push(`Replace ${u} unsubstantiated claim${u > 1 ? "s" : ""} (${r.flags.unsubstantiated.slice(0, 3).map(h => `"${h.term}"`).join(", ")}) with a fact you can prove on request.`);
   const h = totalHits(r.flags.hedges);
@@ -269,6 +269,12 @@ function report(text, r) {
   L.push("");
   L.push("AAJ · COPY SCORE");
   L.push("─".repeat(58));
+  if (r.tooShort) {
+    L.push(`  Overall            NOT SCORED`);
+    L.push(`  ${r.verdict}`);
+    L.push("  Under 25 words the ratios are too noisy for a score. Counts and flags below still apply.");
+    L.push("");
+  } else {
   L.push(`  Overall            ${bar(r.overall)}  ${r.overall}/100`);
   L.push(`  ${r.verdict}`);
   L.push("");
@@ -276,6 +282,7 @@ function report(text, r) {
   L.push(`  Claim defensibility${bar(r.dimensions.claimDefensibility)}  ${r.dimensions.claimDefensibility}`);
   L.push(`  Concreteness       ${bar(r.dimensions.concreteness)}  ${r.dimensions.concreteness}`);
   L.push("");
+  }
   L.push("─".repeat(58));
   L.push(`  ${r.readability.words} words · ${r.readability.sentences} sentences · avg ${r.readability.avgSentenceLength} words/sentence`);
   L.push(`  Reading level grade ${r.readability.gradeLevel} · Flesch ${r.readability.fleschReadingEase}`);
@@ -354,27 +361,38 @@ function main() {
   if (argv.includes("--help") || argv.includes("-h")) { console.log(HELP); return; }
 
   const jsonOnly = argv.includes("--json");
+  const rest = argv.filter(a => a !== "--json");
+  const die = m => { console.error(m + "\nRun --help for usage."); process.exit(1); };
   let text = null;
-  const fileIdx = argv.indexOf("--file");
-  if (fileIdx !== -1 && argv[fileIdx + 1]) {
-    try {
-      text = require("fs").readFileSync(argv[fileIdx + 1], "utf8");
-    } catch (e) {
-      console.error(`Could not read file: ${argv[fileIdx + 1]}`);
-      process.exit(1);
-    }
-  } else {
-    text = argv.filter(a => !a.startsWith("--"))[0] || null;
-  }
-
   let demo = false;
-  if (!text) { text = DEMO; demo = true; }
+  const fileIdx = rest.indexOf("--file");
+  if (fileIdx !== -1) {
+    if (!rest[fileIdx + 1] || rest[fileIdx + 1].startsWith("--")) die("--file needs a path.");
+    if (rest.length > 2) die("Give either --file <path> or the copy as text, not both.");
+    try { text = require("fs").readFileSync(rest[fileIdx + 1], "utf8"); }
+    catch (e) { die(`Could not read file: ${rest[fileIdx + 1]}`); }
+  } else if (rest.length === 0 || (rest.length === 1 && rest[0] === "--demo")) {
+    text = DEMO; demo = true;
+  } else {
+    const bad = rest.filter(a => a.startsWith("--"));
+    if (bad.length) die(`Unrecognised option "${bad[0]}".`);
+    if (rest.length > 1) die("Give the copy as one quoted string.");
+    text = rest[0];
+    if (text.trim().startsWith("{")) {
+      let j;
+      try { j = JSON.parse(text); } catch (e) { die("Invalid JSON: " + e.message); }
+      const keys = j && typeof j === "object" && !Array.isArray(j) ? Object.keys(j) : null;
+      if (!keys || keys.some(k => k !== "copy") || typeof j.copy !== "string") die('JSON input is {"copy": "<the text to score>"}.');
+      text = j.copy;
+    }
+  }
+  if (!text || !text.trim()) die("No copy to score: the text is empty.");
 
   const r = score(text);
   if (!r) { console.error("No scoreable text found."); process.exit(1); }
 
   if (jsonOnly) {
-    console.log(JSON.stringify({ overall: r.overall, verdict: r.verdict, dimensions: r.dimensions, flags: r.flags, fixes: fixes(r) }, null, 2));
+    console.log(JSON.stringify({ overall: r.tooShort ? null : r.overall, verdict: r.verdict, dimensions: r.tooShort ? null : r.dimensions, flags: r.flags, fixes: fixes(r) }, null, 2));
     return;
   }
   if (demo) console.log("\n(demo copy — pass a string or --file to score your own)");

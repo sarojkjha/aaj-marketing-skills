@@ -29,7 +29,7 @@ No engine needs customer names, emails or other personal data; leave them out.
 
 **Limitations:**
 - It scores the pass, partial or fail judgements made against the rubric. It doesn't read the page or see real visitor behaviour, so the score is only as good as those judgements.
-- Input it doesn't recognise counts as a fail rather than an error: an omitted or misspelled check, or a value other than pass, partial or fail, scores zero; check the result reflects your input.
+- Unknown check names and values other than pass, partial or fail stop the run. A check you omit counts as fail and is listed as "Not assessed"; read that line.
 - Category weights and grade bands are fixed. The skill says to judge against the page's one goal, but the engine weighs a pricing page and a blog post the same way.
 - The fix list follows rubric order, not measured impact. The expected effect of each fix is a judgement, not a forecast.
 

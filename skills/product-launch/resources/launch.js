@@ -34,7 +34,8 @@
  *     "gate": { "positioning-story": 2, "positioning-hook": 1, ... },   // 0 no, 1 partly, 2 yes
  *                                      // or an array of 12 scores in the order below
  *     "launchDate": "2026-11-03",      // optional: builds the work-back plan
- *     "today":      "2026-09-25"       // optional: defaults to today
+ *     "today":      "2026-09-25",      // optional: defaults to today
+ *     "done":       ["Lock positioning"]  // optional: tasks already finished, by their wording (or a unique part of it)
  *   }
  *
  * Gate item ids: positioning-story, positioning-hook, product-stable,
@@ -222,18 +223,30 @@ function parseDate(v, field) {
 const iso = (d) => d.toISOString().slice(0, 10);
 const addDays = (d, n) => new Date(d.getTime() + n * 86400000);
 
-function plan(launchDate, today, t) {
+function plan(launchDate, today, t, done) {
   const pr = TIERS[t].priorities;
-  return TASKS.filter((x) => pr.includes(x[3])).map(([off, phase, task, priority]) => {
+  const rows = TASKS.filter((x) => pr.includes(x[3]));
+  const doneSet = new Set();
+  (done || []).forEach((d) => {
+    const q = String(d).toLowerCase().trim();
+    const hits = rows.filter((r) => r[2].toLowerCase().includes(q));
+    if (!q || !hits.length) die(`"done" entry ${JSON.stringify(d)} matches no task in this plan.`, 'Use the wording of a task from the plan, or a unique part of it.');
+    hits.forEach((h) => doneSet.add(h[2]));
+  });
+  return rows.map(([off, phase, task, priority]) => {
     const due = addDays(launchDate, off);
-    return { offset: off, due: iso(due), phase, task, priority, overdue: due < today };
+    const isDone = doneSet.has(task);
+    return { offset: off, due: iso(due), phase, task, priority, done: isDone, overdue: !isDone && due < today };
   });
 }
 
 /* ─────────────────────────── run ─────────────────────────── */
 
 function run(cfg) {
-  if (!cfg || typeof cfg !== 'object') die('Config must be a JSON object.');
+  if (!cfg || typeof cfg !== 'object' || Array.isArray(cfg)) die('Config must be a JSON object.');
+  const extra = Object.keys(cfg).filter((k) => !['launch', 'gate', 'launchDate', 'today', 'done'].includes(k));
+  if (extra.length) die(`Unrecognised field${extra.length > 1 ? 's' : ''}: ${extra.map((k) => '"' + k + '"').join(', ')}.`, 'Expected: launch, gate, launchDate, today, done.');
+  if (cfg.done !== undefined && !Array.isArray(cfg.done)) die('"done" must be a list of task names.');
   const tr = tier(cfg.launch);
   const out = { tier: tr, readiness: null, plan: null, days: null, gates: null, findings: [] };
 
@@ -254,11 +267,11 @@ function run(cfg) {
     const now = new Date();
     const today = cfg.today !== undefined ? parseDate(cfg.today, 'today') : new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()));
     out.days = Math.round((launchDate - today) / 86400000);
-    out.plan = plan(launchDate, today, tr.tier);
+    out.plan = plan(launchDate, today, tr.tier, cfg.done);
     out.gates = GATES.map(([k, v]) => ({ gate: k, check: v }));
     const overdueMust = out.plan.filter((p) => p.overdue && p.priority === 'Must');
     if (out.days < 0) out.findings.push('The launch date has passed.');
-    else if (overdueMust.length) out.findings.push(`${overdueMust.length} Must task${overdueMust.length > 1 ? 's are' : ' is'} already past due for this date. Either do them this week or move the date - a launch date with overdue foundations is the Building phase with a deadline attached.`);
+    else if (overdueMust.length) out.findings.push(`${overdueMust.length} Must task${overdueMust.length > 1 ? 's are' : ' is'} past due for this date and not marked done (pass "done" for finished tasks). Either do them this week or move the date - a launch date with overdue foundations is the Building phase with a deadline attached.`);
     if (out.readiness && out.readiness.pct < CLOSE) out.findings.push('A date is set while readiness is in the Building phase. Most launches that slip were dated before the gate was clear.');
   }
   return out;
@@ -297,7 +310,7 @@ function render(r) {
     L.push(`WORK-BACK PLAN  (${r.days} days to launch)`);
     r.plan.forEach((p) => {
       const off = p.offset === 0 ? 'T-0' : p.offset < 0 ? 'T' + p.offset : 'T+' + p.offset;
-      L.push(`  ${off.padEnd(5)} ${p.due}  ${p.priority.padEnd(6)} ${p.task}${p.overdue ? '  [overdue]' : ''}`);
+      L.push(`  ${off.padEnd(5)} ${p.due}  ${p.priority.padEnd(6)} ${p.task}${p.done ? '  [done]' : p.overdue ? '  [due date passed, not marked done]' : ''}`);
     });
     L.push('');
     L.push('GO / NO-GO ON THE DAY');

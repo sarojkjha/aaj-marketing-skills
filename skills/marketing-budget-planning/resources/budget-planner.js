@@ -118,6 +118,10 @@ function validate(c){
     if (Math.abs(sum - 100) > 0.5) die(`"split" must sum to 100 (got ${r1(sum)}).`);
   }
   // Which base does this run need?
+  if (c.runwayMonths !== undefined) {
+    const usesRunway = model === 'b2b_saas' && stage === 'seed' && c.pctOfRevenue === undefined;
+    if (!usesRunway) die('"runwayMonths" is only used for a b2b_saas seed budget (it spreads the round per month).', 'Remove it, or run the seed case. The engine does not cap spend by runway; check that yourself.');
+  }
   const saasBand = model === 'b2b_saas' && c.pctOfRevenue === undefined ? SAAS_BANDS[stage] : null;
   const base = saasBand ? saasBand.base : 'annualRevenue';
   if (c[base] === undefined) {
@@ -126,6 +130,8 @@ function validate(c){
               : 'This run sizes the budget as a share of revenue.';
     die(`missing "${base}".`, why);
   }
+  const unused = ['annualRevenue','quarterlyBurn','fundingRaised'].filter(k => c[k] !== undefined && k !== base);
+  if (unused.length) die(`"${unused.join('", "')}" is not used for this run, which sizes the budget from "${base}".`, 'Remove it so the plan is not read as using it.');
 }
 
 function run(c){
@@ -183,7 +189,7 @@ function run(c){
     out.push(`• Early-stage bands read high against those averages because a startup is buying growth and learning, not maintaining share (AAJ's read).`);
   out.push('');
   out.push('Notes:');
-  out.push('• Runway caps any band. Pair with the unit-economics skill to confirm you can afford the implied CAC.');
+  out.push('• This plan does not check runway: the figure is not capped by cash left. Confirm the spend leaves the runway you need, and run unit-economics to confirm you can afford the implied CAC.');
   out.push('• The demand-gen / paid slice feeds the paid-media-budget-allocation skill for the channel split.');
   out.push('\n--- JSON ---');
   out.push(JSON.stringify({

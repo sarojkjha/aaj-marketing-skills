@@ -4,7 +4,7 @@
     "It applies fixed word lists and readability rules to the text you paste. It cannot see how buyers respond, so a high score is not a conversion forecast.",
     "It cannot tell whether the message is right. Copy can score well and still miss the positioning or break the brand voice; judge that yourself.",
     "Concreteness counts numbers and names, not whether they are true. A made-up figure raises the score, so every number still needs proof on file.",
-    "Short copy gets an indicative score only (it wants about 25 words or more); a two-word input scored 100. Score a full section, not a headline on its own."
+    "Text under about 25 words gets no score (\"NOT SCORED\", overall null in JSON), because short ratios are noise. Score a full section, not a headline on its own."
   ],
   "review": "Whoever owns the page checks the draft against the positioning and the brand voice, and the founder confirms the proof behind every number and named customer before it ships."
 }

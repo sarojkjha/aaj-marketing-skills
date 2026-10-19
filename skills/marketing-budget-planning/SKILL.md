@@ -60,7 +60,7 @@ For **B2B SaaS**, the engine uses AAJ's stage bands — AAJ's own estimates from
 | Growth (post-Series B) | 15–25% | revenue |
 | Mature | 5–7% | revenue, marketing only |
 
-Growth ambition picks the low end, midpoint or high end of the band; runway caps it. Every run also prints the published reference points: Gartner's 2026 CMO Spend Survey (budgets averaged **7.8% of company revenue**, mostly companies above $1B revenue), SaaS Capital's 2026 survey (median private B2B SaaS marketing spend **8% of ARR**), and Gartner's 2026 category shares (paid media **31.4%**, martech **19.4%** of the average budget).
+Growth ambition picks the low end, midpoint or high end of the band. Runway is not applied by the engine: check yourself that the figure leaves the runway you need. Every run also prints the published reference points: Gartner's 2026 CMO Spend Survey (budgets averaged **7.8% of company revenue**, mostly companies above $1B revenue), SaaS Capital's 2026 survey (median private B2B SaaS marketing spend **8% of ARR**), and Gartner's 2026 category shares (paid media **31.4%**, martech **19.4%** of the average budget).
 
 For **ecommerce, services and marketplaces** there is no sourced stage band. Pass your own `pctOfRevenue`; without it, the engine sizes the budget at Gartner's 7.8% and labels it as a large-company average, not a target.
 
@@ -93,7 +93,7 @@ Lead with the headline budget (share of the base, per period, per month) and its
 
 - **Bands and averages aren't targets.** AAJ's bands are estimates and the published figures are averages across very different companies — demand and economics decide.
 - **Never present an AAJ band as third-party research.** Name it as AAJ's estimate, and cite the published figures by organisation and year.
-- **Runway caps ambition.** Aggressive % with thin runway is a fast way to run out of money.
+- **Runway limits ambition (check it yourself; the engine does not).** Aggressive % with thin runway is a fast way to run out of money.
 - **Spend follows ability to absorb it.** Doubling budget overnight wastes money if the funnel and team can't scale with it.
 - **Total budget ≠ paid budget.** This sizes all marketing; only the demand-gen slice is paid media.
 

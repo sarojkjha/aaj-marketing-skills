@@ -28,7 +28,7 @@
 No engine needs customer names, emails or other personal data; leave them out.
 
 **Limitations:**
-- Coverage counts only the roles you enter. A map with one well-documented champion reads 100%; missing core roles show up as findings, not in the coverage figure.
+- Core roles (champion, economic buyer, end user) missing from the map count as uncovered, so one champion alone reads 33%, not 100%. Other roles you leave off do not lower the figure.
 - A role counts as identified only when a person is named. Run for a segment with titles and no names, coverage reads 0% and every role asks to be identified; use the asset list, not coverage, for segment planning.
 - Stance, access and beliefs are what you enter, often relayed by the champion. The engine cannot check them; treat what the champion says about others as a hypothesis.
 - It does not score the deal or predict the close. Coverage is a checklist measure, not a win probability.

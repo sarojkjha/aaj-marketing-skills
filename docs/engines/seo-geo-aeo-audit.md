@@ -29,7 +29,7 @@ No engine needs customer names, emails or other personal data; leave them out.
 
 **Limitations:**
 - It only scores the pass, partial or fail results it is given. It does not fetch or inspect the page, so the score is as good as the audit against the rubric.
-- Omitted or misspelled check names count as fail with no warning, and unrecognised JSON returns 0/100, grade F, rather than an error. Check every check name was read.
+- Unknown check names, values other than pass, partial or fail, and empty input stop the run. A check you omit counts as fail and is listed as "Not assessed"; read that line.
 - It measures readiness, not traffic or citations. The GEO checks score whether claims are checkable and do not predict a lift.
 - FAQPage schema and llms.txt still earn points though the skill calls them hygiene, not Google levers, so the score can rise with no change in search visibility.
 
