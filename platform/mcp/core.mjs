@@ -343,7 +343,9 @@ async function handle(msg) {
       try {
         return ok(id, await fn(params?.arguments || {}));
       } catch (e) {
-        log(`tool ${name} threw: ${e.stack || e.message}`);
+        // Log the error type and stack frames, never the message: an error message can
+        // quote the input (JSON.parse does), and the hosted server keeps no inputs.
+        log(`tool ${name} threw ${e?.name || "Error"}${String(e?.stack || "").split("\n").slice(1, 6).join("\n")}`);
         return ok(id, fail(`${name} failed: ${e.message}`));
       }
     }

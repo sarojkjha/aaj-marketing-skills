@@ -9,5 +9,7 @@
   "compatibility_date": "2026-09-01",
   "workers_dev": true,
   // "routes": [{ "pattern": "mcp.aajconsult.com", "custom_domain": true }],
-  "observability": { "enabled": true }
+  // Error lines only (no inputs). Per-request invocation logs are off so that
+  // Cloudflare keeps no request metadata (headers, IP) for this server.
+  "observability": { "enabled": true, "logs": { "enabled": true, "invocation_logs": false } }
 }

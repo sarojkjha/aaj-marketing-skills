@@ -126,7 +126,7 @@ as five tools:
 https://aaj-engines-mcp.sarojkjha10.workers.dev/mcp
 ```
 
-No sign-in. The engines run in memory and make no network calls; nothing you send is stored. In Claude: Settings → Connectors → Add custom connector. Then ask, for example, "Use the AAJ engines to check my unit economics: CAC $1,200, ARPA $300 a month, 80% gross margin, 3% monthly churn."
+No sign-in. The server runs the engines in memory and keeps no copy of what you send ([what happens to your data](#what-happens-to-your-data)). In Claude: Settings → Connectors → Add custom connector. Then ask, for example, "Use the AAJ engines to check my unit economics: CAC $1,200, ARPA $300 a month, 80% gross margin, 3% monthly churn."
 
 **Local.** Clone the repo and point your client at one file. Node 18+, no dependencies,
 no build step:
@@ -143,8 +143,19 @@ no build step:
 ```
 
 Your agent can then find the right method for a problem and run the math on your
-numbers, rather than estimating. Run locally, nothing leaves your machine — the
-engines are deterministic and make no network calls.
+numbers, rather than estimating. Run locally, AAJ receives nothing; your agent's
+model provider still sees what you give the agent.
+
+### What happens to your data
+
+The engines are deterministic scripts. They make no network calls, write no files and take no actions in your tools; they compute and return text and JSON. Where your numbers travel depends on how you run them:
+
+| How you run it | Where your inputs go |
+|---|---|
+| Skill installed in your agent, or the local MCP server | The engine runs on your machine and AAJ receives nothing. Your AI agent still sends what you give it to its model provider (Anthropic, OpenAI and so on), under your own account's terms. |
+| Hosted MCP server | Your agent's model provider, as above, plus AAJ's server on Cloudflare, which receives the engine inputs over HTTPS, runs them in memory and keeps no copy. Cloudflare keeps error logs (no inputs) for up to 7 days. |
+
+Don't pass customer names, emails or other personal data to an engine; none of them needs it.
 
 Setup for each client, troubleshooting, and the smoke test:
 [`platform/mcp/README.md`](platform/mcp/README.md).
