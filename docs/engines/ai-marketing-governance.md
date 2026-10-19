@@ -14,7 +14,7 @@
 - Or connect the hosted MCP server, no install: `https://aaj-engines-mcp.sarojkjha10.workers.dev/mcp`
 - Or run the local MCP server: node platform/mcp/server.mjs (Node 18 or newer)
 - Input schema: the comment at the top of `skills/ai-marketing-governance/resources/ai-governance.js` (the MCP server's describe_engine shows it). Worked example: `node skills/ai-marketing-governance/resources/ai-governance.js --demo`.
-- Agents listed: Claude Code, Cursor, OpenAI Codex, Windsurf, Cline. Tested and recorded: not recorded yet.
+- Agents listed: Claude Code, Cursor, OpenAI Codex, Windsurf, Cline. Tested and recorded: Claude Code.
 
 **Acts or analyzes:** Analyzes only. The engine makes no network calls, writes no files and changes nothing in your tools; it returns text and JSON.
 
@@ -31,7 +31,7 @@ No engine needs customer names, emails or other personal data; leave them out.
 - It is a rule check, not a fact checker. A citeable verdict means the citation has the right parts; it cannot tell whether the study exists. It does not replace legal or compliance review.
 - The draft sweep only spots figures written with %, "percent", "x" or $. Plain counts such as "110 startups" go unflagged, so read the draft for every number.
 - Readiness credits tools only against the engine's six task labels, matched exactly, and scores what you say was verified. It cannot see your plan's real training setting.
-- Input it doesn't recognise produces no output rather than an error; check the result reflects your numbers.
+- Pass {check, input}; with no input you get a labelled demo. An unknown check or top-level field stops the run, but fields inside input that it doesn't know are ignored, so use the names in the header.
 
 **Review before acting:** The named reviewer opens every cited document before publish, and the policy owner checks the training-on-inputs setting on the plan itself. Legal or compliance reviews disclosure, data and claims rules for your markets.
 

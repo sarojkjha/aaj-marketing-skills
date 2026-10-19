@@ -115,6 +115,42 @@ for (const [engine, input] of [
   ok(inh.result?.isError === true && /Unknown tool/.test(inh.result.content[0].text), "inherited names are not tools");
 }
 
+// 5. Bad input stops the run with an error that names the problem (Oct 19).
+// Each of these once printed nothing, ran on defaults, or counted a typo as zero.
+for (const [engine, input, expect] of [
+  ["ab-test-significance", { zzz: 1 }, /Unrecognised field.*zzz/],
+  ["lifecycle-and-retention", { startMRR: 1000, churnMRR: 200 }, /Unrecognised field.*churnMRR/],
+  ["paid-media-budget-allocation", { zzz: 1 }, /Unrecognised field.*zzz/],
+  ["paid-media-budget-allocation", { budget: 1000, channels: [{ key: "gogle", cpc: 1 }] }, /not a known channel/],
+  ["pipeline-and-forecast", { target: 1, winRate: 0.2, stageProbabilities: { Proposal: 0.5 }, deals: [{ amount: 5, stage: "Closing" }] }, /not in stageProbabilities/],
+  ["pricing-and-packaging", { tiers: [{ name: "A", prce: 5, customers: 3 }] }, /unrecognised field.*prce/],
+  ["founder-led-content", { check: "nope", input: {} }, /"check" must be one of/],
+  ["ai-marketing-governance", { check: "nope", input: {} }, /"check" must be one of/],
+  ["partnerships-and-co-marketing", { zzz: 1 }, /Unrecognised field.*zzz/],
+  ["pr-and-earned-media", { check: "scoreStory" }, /"input" is required/],
+]) {
+  const e = ENGINES.find((x) => x.id === engine || x.slug === engine);
+  const argv = [JSON.stringify(input)];
+  const node = spawnSync(process.execPath, [join(ROOT, e.file), ...argv], { encoding: "utf8", cwd: join(ROOT, dirname(e.file)) });
+  const w = runInProcess(e, argv);
+  ok(node.status === 1 && expect.test(node.stderr), `${engine}: bad input is an error under Node (exit ${node.status}: ${node.stderr.slice(0, 100)})`);
+  ok(w.code === 1 && expect.test(w.err), `${engine}: bad input is an error in the Worker (exit ${w.code})`);
+}
+for (const id of ["founder-led-content", "ai-marketing-governance", "partnerships-and-co-marketing", "pr-and-earned-media"]) {
+  const e = ENGINES.find((x) => x.id === id || x.slug === id);
+  const w = runInProcess(e, []);
+  ok(w.code === 0 && /built-in demo/.test(w.out) && w.out.length > 200, `${id}: no input prints a labelled demo`);
+  ok(runInProcess(e, ["--help"]).out.length > 200, `${id}: --help prints the header`);
+}
+// A one-tailed test no longer calls a worse variant a winner, and the CI label follows the confidence level.
+{
+  const e = ENGINES.find((x) => x.id === "ab-test-significance" || x.slug === "ab-test-significance");
+  const worse = runInProcess(e, [JSON.stringify({ control: { visitors: 4000, conversions: 250 }, variant: { visitors: 4050, conversions: 200 }, tail: "one" })]);
+  ok(/NOT significant/.test(worse.out), "one-tailed: a worse variant is not significant");
+  const ninety = runInProcess(e, [JSON.stringify({ control: { visitors: 4000, conversions: 200 }, variant: { visitors: 4050, conversions: 250 }, confidence: 90 })]);
+  ok(/90% CI/.test(ninety.out) && !/95% CI/.test(ninety.out), "the interval label follows the confidence level");
+}
+
 if (slow.length) console.log(`Demos over 50 ms of wall time (check CPU limits): ${slow.join(", ")}`);
 console.log(failed ? `\n${failed} of ${n} checks failed.` : `\nAll ${n} checks passed (${ENGINES.length} engines x demo/help/bad input in parity with Node, plus HTTP transport).`);
 process.exit(failed ? 1 : 0);

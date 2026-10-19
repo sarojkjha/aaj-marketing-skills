@@ -14,7 +14,7 @@
 - Or connect the hosted MCP server, no install: `https://aaj-engines-mcp.sarojkjha10.workers.dev/mcp`
 - Or run the local MCP server: node platform/mcp/server.mjs (Node 18 or newer)
 - Input schema: the comment at the top of `skills/lifecycle-and-retention/resources/retention.js` (the MCP server's describe_engine shows it). Worked example: `node skills/lifecycle-and-retention/resources/retention.js --demo`.
-- Agents listed: Claude Code, Cursor, OpenAI Codex, Windsurf, Cline. Tested and recorded: not recorded yet.
+- Agents listed: Claude Code, Cursor, OpenAI Codex, Windsurf, Cline. Tested and recorded: Claude Code.
 
 **Acts or analyzes:** Analyzes only. The engine makes no network calls, writes no files and changes nothing in your tools; it returns text and JSON.
 
@@ -31,7 +31,7 @@ No engine needs customer names, emails or other personal data; leave them out.
 - It reads one period at a time. A single month is not a trend; read the numbers against your own segment and your own history.
 - NRR and GRR are compared with reference points only for annual input. Those points were set for Series B/C enterprise software and bootstrapped $3M-$20M ARR SaaS.
 - High NRR can hide heavy logo churn behind a few large expansions. Read GRR and logo churn alongside it; logo churn needs customer counts.
-- Misnamed or missing fields count as zero, not errors: no recognised fields returns blanks, and a typo such as churnMRR shows 100% GRR. Check the result reflects your data.
+- An unrecognised field, or an amount that isn't a number, stops the run with an error naming it. It can't tell whether the amounts match the period you chose, so confirm monthly or annual.
 
 **Review before acting:** The finance lead confirms the period's movement reconciles to billing, that new business is kept out of expansion, and which period was used, before NRR or GRR goes to the board.
 

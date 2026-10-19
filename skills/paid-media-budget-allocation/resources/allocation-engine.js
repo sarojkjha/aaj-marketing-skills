@@ -176,6 +176,33 @@ function buildChannels(cfg) {
   return Object.keys(map).map(k => econ(map[k]));
 }
 
+// Unknown fields, a missing budget and mistyped channel keys used to run on
+// placeholder channels (or add a NaN row). They now stop the run and say why.
+function validate(c) {
+  if (!c || typeof c !== 'object' || Array.isArray(c)) return ['The input must be a JSON object.'];
+  const errs = [];
+  const known = ['model', 'mode', 'budget', 'cacTarget', 'customerGoal', 'diminishingReturns', 'ltv', 'acv', 'margin', 'channels'];
+  const unknown = Object.keys(c).filter(k => !known.includes(k));
+  if (unknown.length) errs.push('Unrecognised field' + (unknown.length > 1 ? 's' : '') + ': ' + unknown.map(k => '"' + k + '"').join(', ') + '. Expected: ' + known.join(', ') + '.');
+  if (c.model !== undefined && !PRESETS[c.model]) errs.push('"model" is one of: ' + Object.keys(PRESETS).join(', ') + '.');
+  if (c.mode !== undefined && !['budget', 'cac', 'goal'].includes(c.mode)) errs.push('"mode" is "budget", "cac" or "goal".');
+  if (c.diminishingReturns !== undefined && !(c.diminishingReturns in DR_MAP)) errs.push('"diminishingReturns" is one of: ' + Object.keys(DR_MAP).join(', ') + '.');
+  const need = { budget: 'budget', cac: 'cacTarget', goal: 'customerGoal' }[c.mode || 'budget'];
+  if (need && !(typeof c[need] === 'number' && c[need] > 0)) errs.push('Mode "' + (c.mode || 'budget') + '" needs "' + need + '" as a number above 0.');
+  for (const k of ['ltv', 'acv', 'margin']) if (c[k] !== undefined && !(typeof c[k] === 'number' && c[k] > 0)) errs.push('"' + k + '" must be a number above 0.');
+  if (c.channels !== undefined) {
+    if (!Array.isArray(c.channels)) errs.push('"channels" is a list of {key, cpc, cvr, l2c, cap}.');
+    else c.channels.forEach((o, i) => {
+      if (!o || typeof o !== 'object' || !LABEL[o.key]) { errs.push('channels[' + i + '].key "' + (o && o.key) + '" is not a known channel. Known: ' + Object.keys(LABEL).join(', ') + '.'); return; }
+      const fields = ['model', 'key', 'cpc', 'cvr', 'l2c', 'cap', 'cpl'];
+      const bad = Object.keys(o).filter(k => !fields.includes(k));
+      if (bad.length) errs.push(o.key + ': unrecognised field ' + bad.map(k => '"' + k + '"').join(', ') + '. Expected: ' + fields.join(', ') + '.');
+      for (const k of ['cpc', 'cvr', 'l2c', 'cap', 'cpl']) if (o[k] !== undefined && !(typeof o[k] === 'number' && o[k] > 0)) errs.push(o.key + '.' + k + ' must be a number above 0.');
+    });
+  }
+  return errs;
+}
+
 function money(n) { return '$' + Math.round(n).toLocaleString(); }
 function one(n) { return (Math.round(n * 10) / 10).toLocaleString(); }
 
@@ -279,4 +306,6 @@ if (arg) {
   cfg = { model: 'saas', mode: 'budget', budget: 30000, diminishingReturns: 'moderate' };
   console.log('(no config supplied — running demo: B2B SaaS, $30,000 budget)');
 }
+const problems = validate(cfg);
+if (problems.length) { console.error(problems.join('\n') + '\nRun --help for the input shape.'); process.exit(1); }
 console.log(run(cfg));

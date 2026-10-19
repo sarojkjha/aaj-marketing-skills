@@ -1,7 +1,7 @@
 {
   "decision": "How should we split our paid budget across channels to get the most customers under our CAC ceiling?",
   "limitations": [
-    "Input it doesn't recognise runs on the default channels rather than an error, and a missing budget or mistyped channel key gives a runaway or NaN allocation; check the result reflects your numbers.",
+    "It stops with an error on unrecognised fields, a missing budget, CAC target or customer goal for the chosen mode, and unknown channel keys. It can't check your CPC and conversion rates against your account.",
     "Any channel you don't supply in full uses AAJ's illustrative CPC, conversion and close rates, which are not benchmarks. Default channels you leave out stay in the plan on those placeholders.",
     "It reports paid-media CAC only. Fully-loaded CAC is higher, so LTV:CAC and payback here show ad efficiency, not the whole business case.",
     "The diminishing-returns curve and each channel's scale cap are modelled, not measured from your account, and it can't see attribution lag on deals that close weeks after the click."

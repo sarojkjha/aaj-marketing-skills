@@ -14,7 +14,7 @@
 - Or connect the hosted MCP server, no install: `https://aaj-engines-mcp.sarojkjha10.workers.dev/mcp`
 - Or run the local MCP server: node platform/mcp/server.mjs (Node 18 or newer)
 - Input schema: the comment at the top of `skills/paid-media-budget-allocation/resources/allocation-engine.js` (the MCP server's describe_engine shows it). Worked example: `node skills/paid-media-budget-allocation/resources/allocation-engine.js --demo`.
-- Agents listed: Claude Code, Cursor, OpenAI Codex, Windsurf, Cline. Tested and recorded: not recorded yet.
+- Agents listed: Claude Code, Cursor, OpenAI Codex, Windsurf, Cline. Tested and recorded: Claude Code.
 
 **Acts or analyzes:** Analyzes only. The engine makes no network calls, writes no files and changes nothing in your tools; it returns text and JSON.
 
@@ -28,7 +28,7 @@
 No engine needs customer names, emails or other personal data; leave them out.
 
 **Limitations:**
-- Input it doesn't recognise runs on the default channels rather than an error, and a missing budget or mistyped channel key gives a runaway or NaN allocation; check the result reflects your numbers.
+- It stops with an error on unrecognised fields, a missing budget, CAC target or customer goal for the chosen mode, and unknown channel keys. It can't check your CPC and conversion rates against your account.
 - Any channel you don't supply in full uses AAJ's illustrative CPC, conversion and close rates, which are not benchmarks. Default channels you leave out stay in the plan on those placeholders.
 - It reports paid-media CAC only. Fully-loaded CAC is higher, so LTV:CAC and payback here show ad efficiency, not the whole business case.
 - The diminishing-returns curve and each channel's scale cap are modelled, not measured from your account, and it can't see attribution lag on deals that close weeks after the click.

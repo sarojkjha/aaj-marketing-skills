@@ -98,7 +98,27 @@ function main() {
     process.exit(1);
   }
 
+  const known = ["target", "winRate", "stageProbabilities", "deals"];
+  const unknownKeys = Object.keys(cfg).filter((k) => !known.includes(k));
+  if (unknownKeys.length) {
+    console.error("Unrecognised field" + (unknownKeys.length > 1 ? "s" : "") + ": " + unknownKeys.map((k) => '"' + k + '"').join(", ") + ". Expected: " + known.join(", ") + ".");
+    process.exit(1);
+  }
   const { target, winRate, stageProbabilities, deals } = cfg;
+  // Match stage names ignoring case and surrounding spaces; stop on any that still
+  // don't match rather than counting those deals at 0%.
+  const stageKey = {};
+  for (const k of Object.keys(stageProbabilities)) stageKey[String(k).trim().toLowerCase()] = k;
+  const unmatched = new Set();
+  for (const d of deals) {
+    const k = stageKey[String(d.stage).trim().toLowerCase()];
+    if (k === undefined) unmatched.add(String(d.stage)); else d.stage = k;
+  }
+  if (unmatched.size) {
+    console.error("These deal stages are not in stageProbabilities: " + [...unmatched].map((s) => JSON.stringify(s)).join(", ") + ".");
+    console.error("Known stages: " + Object.keys(stageProbabilities).map((s) => JSON.stringify(s)).join(", ") + ". Add a probability for each stage, or fix the spelling.");
+    process.exit(1);
+  }
 
   // CRM APIs (HubSpot among them) return amounts as text: "60000" is accepted.
   // A deal without a numeric amount would turn every total into NaN (CRM

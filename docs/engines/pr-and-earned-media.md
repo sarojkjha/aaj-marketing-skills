@@ -14,7 +14,7 @@
 - Or connect the hosted MCP server, no install: `https://aaj-engines-mcp.sarojkjha10.workers.dev/mcp`
 - Or run the local MCP server: node platform/mcp/server.mjs (Node 18 or newer)
 - Input schema: the comment at the top of `skills/pr-and-earned-media/resources/newsworthiness.js` (the MCP server's describe_engine shows it). Worked example: `node skills/pr-and-earned-media/resources/newsworthiness.js --demo`.
-- Agents listed: Claude Code, Cursor, OpenAI Codex, Windsurf, Cline. Tested and recorded: not recorded yet.
+- Agents listed: Claude Code, Cursor, OpenAI Codex, Windsurf, Cline. Tested and recorded: Claude Code.
 
 **Acts or analyzes:** Analyzes only. The engine makes no network calls, writes no files and changes nothing in your tools; it returns text and JSON.
 
@@ -31,7 +31,7 @@ No engine needs customer names, emails or other personal data; leave them out.
 - It is a rubric, not a prediction. No score makes coverage likely, and it cannot know an editor's calendar.
 - The company-removed and forward tests and the evidence checks are yes/no answers you give. The score is only as honest as those answers.
 - It counts named outlets but cannot check they exist or cover the beat. Non-customer stories pass the permission check automatically.
-- Input it doesn't recognise produces no output rather than an error; check the result reflects your numbers.
+- Pass {check, input}; with no input you get a labelled demo. An unknown check or top-level field stops the run, but fields inside input that it doesn't know are ignored, so use the names in the header.
 
 **Review before acting:** The founder checks every figure in the story against its written method and confirms written customer permission before the first pitch. Whoever sends it checks each outlet and reporter is real and covers this beat.
 

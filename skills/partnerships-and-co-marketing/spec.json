@@ -1,7 +1,7 @@
 {
   "decision": "Is this company worth partnering with, is the agreement written before work starts, and should we run it again?",
   "limitations": [
-    "Input it doesn't recognise produces no output rather than an error; check the result reflects your numbers. From the command line only --demo prints; your own data goes through scorePartner, checkTerms and reviewPartnership.",
+    "Pass {check, input} for scorePartner, checkTerms or reviewPartnership; with no input you get a labelled demo. Unknown checks and top-level fields stop the run, but unknown fields inside input are ignored.",
     "The score is a rubric of your own 0-3 ratings, not a prediction. It cannot know whether the partner will promote as promised, and inputs you list as unknowns are noted but do not lower the score.",
     "checkTerms checks that each of the five terms is present, not what it says; any entry passes.",
     "The review says \"Do it again\" whenever there is any qualified lead and any pipeline, even before a full sales cycle or with a low qualified rate. Read pipeline per hour and the effort split before repeating."

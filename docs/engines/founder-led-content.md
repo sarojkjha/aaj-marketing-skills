@@ -14,7 +14,7 @@
 - Or connect the hosted MCP server, no install: `https://aaj-engines-mcp.sarojkjha10.workers.dev/mcp`
 - Or run the local MCP server: node platform/mcp/server.mjs (Node 18 or newer)
 - Input schema: the comment at the top of `skills/founder-led-content/resources/founder-channel.js` (the MCP server's describe_engine shows it). Worked example: `node skills/founder-led-content/resources/founder-channel.js --demo`.
-- Agents listed: Claude Code, Cursor, OpenAI Codex, Windsurf, Cline. Tested and recorded: not recorded yet.
+- Agents listed: Claude Code, Cursor, OpenAI Codex, Windsurf, Cline. Tested and recorded: Claude Code.
 
 **Acts or analyzes:** Analyzes only. The engine makes no network calls, writes no files and changes nothing in your tools; it returns text and JSON.
 
@@ -28,7 +28,7 @@
 No engine needs customer names, emails or other personal data; leave them out.
 
 **Limitations:**
-- Input it doesn't recognise produces no output rather than an error; check the result reflects your numbers.
+- Pass {check, input}; with no input you get a labelled demo. An unknown check or top-level field stops the run, but fields inside input that it doesn't know are ignored, so use the names in the header.
 - It is a rubric, not a prediction. It can't know whether a post will travel or bring buyers; judge the channel at ninety days on conversations, not impressions.
 - Most checks take your answers on trust: whether a competitor could post a theme, whether the first line carries the point, whether proof is invented or permission is written.
 - The post check spots engagement bait from a short phrase list and flags only the figures you list. It can't tell whether a draft sounds like the founder.

@@ -1,5 +1,7 @@
 # Engine issues found while writing the specs (Oct 19, 2026)
 
+**Fixed in the Oct 19 engine-fix PR:** the five founder-math engines (ab-test-significance, lifecycle-and-retention, paid-media-budget-allocation, pipeline-and-forecast, pricing-and-packaging), the "95% CI" label, the one-tailed direction, the unsourced tier-count remark, and the four engines that printed nothing (now `{check, input}` plus a labelled demo and `--help`). Their limitations are updated in each `spec.json`. Everything else below is still open. **aajconsult.com vendors these engines for Ask AAJ, so re-run `scripts/ask-aaj/export-engines.mjs` there to pick the fixes up.**
+
 Writing a spec for each of the 62 engines meant running each one, including on input it doesn't recognise (`'{"zzz":1}'`). These are the problems found. Each affected spec already states the problem as a limitation, so the specs are accurate today; fixing an engine means removing that limitation from its `spec.json` in the same PR.
 
 "Verified" means re-run by hand after the drafting pass. The rest were reported by the drafting pass and are written into the specs, but not yet re-run independently.

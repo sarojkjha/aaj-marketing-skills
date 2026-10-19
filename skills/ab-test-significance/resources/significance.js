@@ -61,7 +61,9 @@ function evaluate(c){
   const pPool = (a.conversions + b.conversions) / (a.visitors + b.visitors);
   const se = Math.sqrt(pPool * (1 - pPool) * (1 / a.visitors + 1 / b.visitors));
   const z = se > 0 ? (pB - pA) / se : 0;
-  const pValue = tail === 'one' ? 1 - normCdf(Math.abs(z)) : 2 * (1 - normCdf(Math.abs(z)));
+  // One-tailed asks one question: is the variant better than control? A variant that
+  // did worse gets a p-value above 0.5, never a win.
+  const pValue = tail === 'one' ? 1 - normCdf(z) : 2 * (1 - normCdf(Math.abs(z)));
   const alpha = (100 - conf) / 100;
   const significant = pValue < alpha;
   const relLift = pA > 0 ? (pB - pA) / pA : 0;
@@ -85,6 +87,11 @@ function toNum(v){
 function validate(cfg){
   if (!cfg || typeof cfg !== 'object' || Array.isArray(cfg)) return ['The input must be a JSON object.'];
   const errs = [];
+  const known = cfg.plan
+    ? ['plan', 'baselineRate', 'mde', 'confidence', 'power']
+    : ['control', 'variant', 'confidence', 'tail', 'plan'];
+  const unknown = Object.keys(cfg).filter((k) => !known.includes(k));
+  if (unknown.length) errs.push('Unrecognised field' + (unknown.length > 1 ? 's' : '') + ': ' + unknown.map((k) => '"' + k + '"').join(', ') + '. Expected: ' + known.join(', ') + '.');
   if (cfg.confidence !== undefined){
     cfg.confidence = toNum(cfg.confidence);
     if (!(cfg.confidence > 50 && cfg.confidence < 100)) errs.push('"confidence" is a percentage such as 90, 95 or 99.');
@@ -144,10 +151,10 @@ function render(c){
   out.push(`Control   ${pct(r.pA)}   (${c.control.conversions}/${c.control.visitors})`);
   out.push(`Variant   ${pct(r.pB)}   (${c.variant.conversions}/${c.variant.visitors})`);
   out.push(`Relative lift  ${(r.relLift>=0?'+':'')}${pct(r.relLift)}   (abs ${(r.absLift>=0?'+':'')}${pct(r.absLift)})`);
-  out.push(`z = ${r.z.toFixed(2)}   p = ${r.pValue.toFixed(4)}   (${r.tail}-tailed, ${r.conf}% threshold)`);
+  out.push(`z = ${r.z.toFixed(2)}   p = ${r.pValue.toFixed(4)}   (${r.tail}-tailed${r.tail === 'one' ? ', variant better than control' : ''}, ${r.conf}% threshold)`);
   out.push('');
   out.push(r.significant
-    ? `✓ SIGNIFICANT at ${r.conf}% — ${r.winner} wins. ${pct(r.conf<99?0.95:0.99)} CI on the difference: ${pct(r.ciLow)} to ${pct(r.ciHigh)}.`
+    ? `✓ SIGNIFICANT at ${r.conf}% — ${r.winner} wins. ${r.conf}% CI on the difference: ${pct(r.ciLow)} to ${pct(r.ciHigh)}.`
     : `✗ NOT significant at ${r.conf}% (p ${r.pValue.toFixed(3)} ≥ ${(100-r.conf)/100}). Keep running or treat as no detected difference.`);
   out.push('\n--- JSON ---');
   out.push(JSON.stringify({ controlRate: +r.pA.toFixed(4), variantRate: +r.pB.toFixed(4), relativeLift: +r.relLift.toFixed(4),

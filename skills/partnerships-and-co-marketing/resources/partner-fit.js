@@ -24,6 +24,15 @@
  *     wellKnown:   Boolean,  // only used to catch scoring on fame
  *     unknowns:    [String]  // anything you are guessing rather than know
  *   }
+ *
+ * Command line:
+ *   node partner-fit.js                 # demo, labelled as a demo
+ *   node partner-fit.js --help
+ *   node partner-fit.js '{"check":"scorePartner","input":{ ... }}'
+ *     check is one of: scorePartner, checkTerms, reviewPartnership.
+ *     input is the object that function takes, as described above.
+ *     Prints the result as JSON. An unknown check, an unknown top-level
+ *     field or a missing input stops the run with an error that says why.
  */
 
 // --- AAJ arg normalisation ---------------------------------------------------
@@ -201,7 +210,8 @@ function reviewPartnership(result) {
 module.exports = { scorePartner, checkTerms, reviewPartnership, FACTORS, TERMS };
 
 // --- demo --------------------------------------------------------------------
-if (require.main === module && process.argv.includes("--demo")) {
+if (require.main === module && (process.argv.includes("--demo") || process.argv.length <= 2)) {
+  if (!process.argv.includes("--demo")) console.log("(no input, so this is the built-in demo. Run --help to see how to pass your own.)");
   const P = (...a) => console.log(...a);
   const show = (r) => {
     P(`\n${r.name} — ${r.score}/${r.max} · ${r.tier}`);
@@ -262,4 +272,27 @@ if (require.main === module && process.argv.includes("--demo")) {
   });
 
   P("\nThis is a rubric, not a prediction. Use your own numbers, not an industry benchmark.");
+}
+
+// --- command line ------------------------------------------------------------
+// Anything other than the demo: --help prints the header, a JSON argument runs
+// one check. Nothing is silently ignored.
+if (require.main === module && process.argv.length > 2 && !process.argv.includes("--demo")) {
+  const arg = process.argv[2];
+  if (arg === "--help" || arg === "-h") {
+    console.log(require("fs").readFileSync(__filename, "utf8").split("*/")[0].replace(/^[\s\S]*?\/\*+/, ""));
+    process.exit(0);
+  }
+  const CHECKS = { scorePartner, checkTerms, reviewPartnership };
+  const fail = (m) => { console.error(m + "\nRun --help for the input shape."); process.exit(1); };
+  let req;
+  try { req = JSON.parse(arg); } catch (e) { fail("Invalid JSON: " + e.message); }
+  if (!req || typeof req !== "object" || Array.isArray(req)) fail('The input must be a JSON object: {"check": "...", "input": {...}}.');
+  const extra = Object.keys(req).filter((k) => k !== "check" && k !== "input");
+  if (extra.length) fail("Unrecognised field" + (extra.length > 1 ? "s" : "") + ": " + extra.map((k) => '"' + k + '"').join(", ") + '. Expected: "check" and "input".');
+  if (!Object.prototype.hasOwnProperty.call(CHECKS, req.check)) fail('"check" must be one of: ' + Object.keys(CHECKS).join(", ") + ".");
+  if (!req.input || typeof req.input !== "object" || Array.isArray(req.input)) fail('"input" is required: the object that ' + req.check + " takes.");
+  let result;
+  try { result = CHECKS[req.check](req.input); } catch (e) { fail(req.check + " could not run on that input: " + e.message); }
+  console.log(JSON.stringify(result, null, 2));
 }

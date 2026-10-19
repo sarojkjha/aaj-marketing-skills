@@ -14,7 +14,7 @@
 - Or connect the hosted MCP server, no install: `https://aaj-engines-mcp.sarojkjha10.workers.dev/mcp`
 - Or run the local MCP server: node platform/mcp/server.mjs (Node 18 or newer)
 - Input schema: the comment at the top of `skills/pipeline-and-forecast/resources/forecast.js` (the MCP server's describe_engine shows it). Worked example: `node skills/pipeline-and-forecast/resources/forecast.js --demo`.
-- Agents listed: Claude Code, Cursor, OpenAI Codex, Windsurf, Cline. Tested and recorded: not recorded yet.
+- Agents listed: Claude Code, Cursor, OpenAI Codex, Windsurf, Cline. Tested and recorded: Claude Code.
 
 **Acts or analyzes:** Analyzes only. The engine makes no network calls, writes no files and changes nothing in your tools; it returns text and JSON. It can read an input file you name on the command line; it reads nothing else.
 
@@ -29,7 +29,7 @@ No engine needs customer names, emails or other personal data; leave them out.
 
 **Limitations:**
 - The forecast is only as good as the stage probabilities. Optimistic ones give a wish, not a forecast; take them from real conversion history and mark them as assumed if not.
-- A deal whose stage name doesn't exactly match the probability map (case matters) counts at 0% with only a warning, which lowers the forecast and raises the early-stage share.
+- Deal stages are matched to the probability map ignoring case. A stage still missing from the map stops the run and lists it, so every stage needs a probability you can defend.
 - Required coverage is 1 divided by your win rate, and commit is deals at 75% or more. A wrong win rate moves the coverage verdict and the new-pipeline figure together.
 - It has no close dates, so it treats every open deal as closable this period. Best case and coverage overstate what can land if deals are slipping.
 
