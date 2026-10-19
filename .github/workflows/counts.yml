@@ -20,3 +20,5 @@ jobs:
         run: |
           node platform/mcp-worker/build.mjs --check
           node platform/mcp-worker/test.mjs
+      - name: Engine specs are complete, current, and every engine only analyzes
+        run: node platform/scripts/generate-engine-specs.mjs --check

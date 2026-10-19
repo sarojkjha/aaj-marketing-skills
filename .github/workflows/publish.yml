@@ -31,6 +31,7 @@ jobs:
           node-version: 24
       - run: node platform/scripts/generate-readme.mjs --check
       - run: node platform/mcp-worker/build.mjs --check
+      - run: node platform/scripts/generate-engine-specs.mjs --check
 
   about-line:
     needs: check

@@ -137,6 +137,14 @@ async function main() {
   const published = new Set(); // row slugs (frontmatter `name`) this run publishes
   let ok = 0;
 
+  // Engine specs, built by platform/scripts/generate-engine-specs.mjs. Synced as
+  // skills.spec so each skill page can show them; a database without the column
+  // syncs without it (see the retry below).
+  const specsPath = join(SKILLS_DIR, '..', 'docs', 'engines', 'specs.json');
+  const specBySlug = existsSync(specsPath)
+    ? Object.fromEntries(JSON.parse(readFileSync(specsPath, 'utf8')).engines.map((e) => [e.slug, e]))
+    : {};
+
   for (const slug of slugs) {
     const dir = join(SKILLS_DIR, slug);
     const { data, content } = matter(readFileSync(join(dir, 'SKILL.md'), 'utf8'));
@@ -165,6 +173,7 @@ async function main() {
       install_cmd: `npx skills add sarojkjha/aaj-marketing-skills --skill ${data.name}`,
       body_md: (content || '').trim() || null,
       demo_output: hasEngine ? captureDemo(resDir, slug) : null,
+      spec: specBySlug[data.name] || null,
       published: true
     };
 

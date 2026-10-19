@@ -1,0 +1,10 @@
+{
+  "decision": "Can we afford to spend more on acquisition, and what CAC can we not exceed?",
+  "limitations": [
+    "Uses gross-margin LTV, so it reads lower than a revenue LTV; compare it only with other gross-margin figures.",
+    "LTV is only as good as the churn estimate, and early-stage churn estimates tend to be optimistic. Run a range, not one number.",
+    "Blended CAC (all new customers over all sales and marketing spend) flatters paid channels. Use paid CAC for channel decisions and say which one you used.",
+    "A healthy LTV:CAC with a long payback can still strain a cash-tight business; the ratio is not a cash plan."
+  ],
+  "review": "The founder or finance lead confirms the churn and CAC inputs, and which CAC was used, before the result sets a budget or a CAC ceiling. Run the optimistic and the conservative churn case."
+}

@@ -18,6 +18,7 @@ import { fileURLToPath } from "node:url";
 import { listSkills, engineHelp } from "../lib/catalog.mjs";
 import { engineSummary } from "../mcp/core.mjs";
 import { buildCounts } from "../lib/counts.mjs";
+import { buildSpec, specForAgent, loadEnvironments } from "../lib/specs.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(HERE, "..", "..");
@@ -25,6 +26,7 @@ const OUT = join(HERE, "engines.generated.mjs");
 const SKILLS_SITE = "https://skills.aajconsult.com";
 
 const skills = listSkills(ROOT);
+const env = loadEnvironments(ROOT);
 const skillRows = [];
 const engineRows = [];
 const fns = [];
@@ -47,7 +49,7 @@ for (const s of skills) {
     // What the engine reads back from its own file for --help: the original text up to the header's end.
     const end = original.indexOf("*/");
     const head = end >= 0 ? original.slice(0, end + 2) : "";
-    engineRows.push({ id, slug: s.slug, help, summary: engineSummary(help, s.description), skillName: s.title, category: s.category, file: `skills/${s.slug}/resources/${f}`, head });
+    engineRows.push({ id, slug: s.slug, help, summary: engineSummary(help, s.description), skillName: s.title, category: s.category, file: `skills/${s.slug}/resources/${f}`, head, specText: specForAgent(buildSpec(s, file, id, env)) });
     fns.push(`  ${JSON.stringify(id)}: function (console, process, require, module, exports, __filename, __dirname) {\n// ---- begin ${s.slug}/resources/${f} ----\n${src}\n// ---- end ${s.slug}/resources/${f} ----\n  }`);
   }
 }
