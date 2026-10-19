@@ -326,6 +326,7 @@ Usage
   node resources/pattern-check.js                    Run the built-in demo
   node resources/pattern-check.js "your copy here"   Check a string
   node resources/pattern-check.js --file page.md     Check a file
+  node resources/pattern-check.js '{"copy":"..."}'   Same, as JSON
   node resources/pattern-check.js --json "copy"      JSON only
   node resources/pattern-check.js --help             This message
 
@@ -351,17 +352,32 @@ function main() {
   if (argv.includes("--help") || argv.includes("-h")) { console.log(HELP); return; }
 
   const jsonOnly = argv.includes("--json");
+  const rest = argv.filter(a => a !== "--json");
+  const die = m => { console.error(m + "\nRun --help for usage."); process.exit(1); };
   let text = null;
-  const fi = argv.indexOf("--file");
-  if (fi !== -1 && argv[fi + 1]) {
-    try { text = require("fs").readFileSync(argv[fi + 1], "utf8"); }
-    catch { console.error(`Could not read file: ${argv[fi + 1]}`); process.exit(1); }
-  } else {
-    text = argv.filter(a => !a.startsWith("--"))[0] || null;
-  }
-
   let demo = false;
-  if (!text) { text = DEMO; demo = true; }
+  const fi = rest.indexOf("--file");
+  if (fi !== -1) {
+    if (!rest[fi + 1] || rest[fi + 1].startsWith("--")) die("--file needs a path.");
+    if (rest.length > 2) die("Give either --file <path> or the copy as text, not both.");
+    try { text = require("fs").readFileSync(rest[fi + 1], "utf8"); }
+    catch { die(`Could not read file: ${rest[fi + 1]}`); }
+  } else if (rest.length === 0 || (rest.length === 1 && rest[0] === "--demo")) {
+    text = DEMO; demo = true;
+  } else {
+    const bad = rest.filter(a => a.startsWith("--"));
+    if (bad.length) die(`Unrecognised option "${bad[0]}".`);
+    if (rest.length > 1) die("Give the copy as one quoted string.");
+    text = rest[0];
+    if (text.trim().startsWith("{")) {
+      let j;
+      try { j = JSON.parse(text); } catch (e) { die("Invalid JSON: " + e.message); }
+      const keys = j && typeof j === "object" && !Array.isArray(j) ? Object.keys(j) : null;
+      if (!keys || keys.some(k => k !== "copy") || typeof j.copy !== "string") die('JSON input is {"copy": "<the text to check>"}.');
+      text = j.copy;
+    }
+  }
+  if (!text || !text.trim()) die("No copy to check: the text is empty.");
 
   const flags = scan(text);
 

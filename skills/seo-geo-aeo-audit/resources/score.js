@@ -60,6 +60,23 @@ function grade(score){
   return ['F', 'failing — largely invisible to search and AI'];
 }
 
+// A misspelled check name or value used to score as a fail without a word, and an
+// empty object scored 0/100 as if the page had been audited. Both now stop the run.
+function validate(results){
+  if (!results || typeof results !== 'object' || Array.isArray(results)) return ['The input must be a JSON object: {"checks": {...}}.'];
+  const errs = [];
+  const extra = Object.keys(results).filter(k => k !== 'checks');
+  if (extra.length) errs.push('Unrecognised field' + (extra.length > 1 ? 's' : '') + ': ' + extra.map(k => '"' + k + '"').join(', ') + '. Expected: "checks".');
+  const checks = results.checks;
+  if (!checks || typeof checks !== 'object' || Array.isArray(checks) || !Object.keys(checks).length) { errs.push('"checks" is required: an object of check name to "pass", "partial" or "fail".'); return errs; }
+  const known = new Set(Object.values(RUBRIC).flatMap(d => d.checks));
+  const unknown = Object.keys(checks).filter(k => !known.has(k));
+  if (unknown.length) errs.push('Unknown check' + (unknown.length > 1 ? 's' : '') + ': ' + unknown.join(', ') + '. Known checks: ' + [...known].join(', ') + '.');
+  const bad = Object.entries(checks).filter(([k, v]) => known.has(k) && VAL[v] == null).map(([k, v]) => k + '=' + JSON.stringify(v));
+  if (bad.length) errs.push('Values must be "pass", "partial" or "fail": ' + bad.join(', ') + '.');
+  return errs;
+}
+
 function score(results){
   const checks = (results && results.checks) || {};
   let total = 0;
@@ -99,6 +116,8 @@ function render(results){
   } else {
     out.push('No gaps — all checks passing.');
   }
+  const omitted = Object.values(RUBRIC).flatMap(d => d.checks).filter(k => !(results.checks && results.checks[k]));
+  if (omitted.length) out.push(`\nNot assessed (${omitted.length}, counted as fail): ${omitted.join(', ')}`);
   out.push('');
   out.push('--- JSON ---');
   out.push(JSON.stringify(r, null, 2));
@@ -123,4 +142,6 @@ else {
   }};
   console.log('(no results — demo: a typical un-prerendered SPA)');
 }
+const problems = validate(results);
+if (problems.length){ console.error(problems.join('\n') + '\nRun --help for the input shape.'); process.exit(1); }
 console.log(render(results));

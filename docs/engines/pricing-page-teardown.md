@@ -28,7 +28,7 @@
 No engine needs customer names, emails or other personal data; leave them out.
 
 **Limitations:**
-- A page's score is a share of points on the checks answered, so unanswered checks drop out: a page with two of 21 checks answered scored 100%. Answer all 21.
+- Every page needs all 21 checks answered (use "unsure" if you have not looked; it scores zero). Missing or unknown check ids stop the run, so a half-answered page cannot score 100%.
 - The 21 checks and weights are AAJ's judgement applied to your yes, partly or no answers. They are not a benchmark and cannot see real buyer behaviour.
 - The honesty checks point at US rules (ROSCA, California auto-renewal, FTC pricing guides). They do not replace legal review and do not cover rules outside the US.
 - The test plan rests on your guess at conversion at the new price. Before-after and sales-quote reads are not randomised and give direction only.

@@ -2,9 +2,9 @@
   "decision": "Did this channel's spend cause conversions that would not have happened anyway, and is our holdout test big enough to tell?",
   "limitations": [
     "Uses a two-tailed two-proportion z-test that treats every user as independent and reads only the final counts. No correction for peeking, no geo-level analysis, and no media mix model: MMM is guidance in the skill, not computed.",
-    "In readout mode the inconclusive verdict compares the test with --mde, which defaults to a 15% lift if you leave it out. Pass the lift you said you would act on, or the verdict answers a different question.",
-    "The holdout cost counts every conversion the control group would make at the baseline rate, not only the lift held back, so it reads well above the conversions the holdout actually forgoes.",
-    "Input it doesn't recognise (JSON, or a misspelled flag) is ignored without an error and the engine designs a test from its defaults. Check the result reflects your numbers."
+    "In a readout, --mde is the lift you would act on. Without it no inconclusive verdict is made and the smallest detectable lift is shown instead; in design mode a missing --mde assumes 15% and says so.",
+    "Holdout cost counts only the lift withheld from control (the extra conversions treatment would add), not the baseline conversions control still makes by other routes.",
+    "Unknown flags or fields, non-numeric values and options that belong to the other mode stop the run. Design options you leave out take defaults and are listed in the output."
   ],
   "review": "The growth or finance lead confirms the conversion definition, the real baseline rate and the lift they would act on before the test runs, and that nothing else changed in the window before iROAS moves budget. An inconclusive test is reported as inconclusive, not negative."
 }

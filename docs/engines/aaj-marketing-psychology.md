@@ -31,7 +31,7 @@ No engine needs customer names, emails or other personal data; leave them out.
 - It matches wording patterns. It cannot tell whether a scarcity, urgency or social-proof claim is true; a VERIFY flag means someone must confirm the fact, not that the claim is fine.
 - A PASS means no listed pattern matched, not that the copy is honest or will convert. Manipulative copy worded outside its patterns passes.
 - It checks copy only. It does not diagnose which friction (attention, comprehension, belief, value, risk, inertia) is blocking the buyer; that diagnosis comes first.
-- Anything passed is read as copy, so JSON or a mistyped flag such as --fiel is checked as text and returns PASS rather than an error; check the result quotes your draft.
+- Unknown flags, JSON with other keys, more than one text argument and empty text stop the run. JSON input is {"copy": "..."}; a PASS now means copy was read and nothing matched.
 
 **Review before acting:** Whoever owns the page confirms every VERIFY claim (seat counts, deadlines, customer numbers) is literally true before it ships. Legal checks any auto-renewal or trial-to-paid wording the engine flags.
 

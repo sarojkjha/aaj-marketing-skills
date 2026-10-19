@@ -101,8 +101,13 @@ function normInv(p) {
   return (((((a[0] * r + a[1]) * r + a[2]) * r + a[3]) * r + a[4]) * r + a[5]) * q / (((((b[0] * r + b[1]) * r + b[2]) * r + b[3]) * r + b[4]) * r + 1);
 }
 
-function scorePage(answers) {
+function scorePage(answers, label) {
   answers = answers || {};
+  var where = label ? '"' + label + '": ' : '';
+  var stray = Object.keys(answers).filter(function (k) { return !CHECKS.some(function (c) { return String(c.id) === String(k); }); });
+  if (stray.length) throw inputError(where + 'unknown check id' + (stray.length > 1 ? 's' : '') + ' ' + stray.map(function (k) { return '"' + k + '"'; }).join(', ') + '. Checks are numbered 1 to ' + CHECKS.length + '.');
+  var missing = CHECKS.filter(function (c) { var v = answers[c.id] != null ? answers[c.id] : answers[String(c.id)]; return v == null || v === ''; }).map(function (c) { return c.id; });
+  if (missing.length) throw inputError(where + 'answer all ' + CHECKS.length + ' checks (yes, partly, no or unsure). Missing: ' + missing.join(', ') + '. Unanswered checks would otherwise drop out and inflate the score; use "unsure" if you have not looked.');
   var byArea = {}, total = 0, avail = 0, answered = 0, unsure = 0, fails = [];
   AREAS.forEach(function (a) { byArea[a] = { points: 0, available: 0 }; });
   CHECKS.forEach(function (c) {
@@ -125,9 +130,12 @@ function teardown(t) {
   var pages = t.pages || {};
   var names = Object.keys(pages);
   if (!names.length) throw inputError('"teardown.pages" needs at least one page with answers per check id.');
-  var yours = t.yours && pages[t.yours] ? t.yours : names[0];
+  if (t.yours !== undefined && !pages[t.yours]) throw inputError('"teardown.yours" is "' + t.yours + '", which is not one of the pages: ' + names.join(', ') + '.');
+  var yours = t.yours || names[0];
+  var tk = Object.keys(t).filter(function (k) { return k !== 'pages' && k !== 'yours'; });
+  if (tk.length) throw inputError('Unrecognised field in "teardown": ' + tk.join(', ') + '. Expected: pages, yours.');
   var scored = {};
-  names.forEach(function (n) { scored[n] = scorePage(pages[n]); });
+  names.forEach(function (n) { scored[n] = scorePage(pages[n], n); });
   var mine = scored[yours];
   var rivals = names.filter(function (n) { return n !== yours; });
   var fixes = mine.fails.map(function (f) {
@@ -139,7 +147,6 @@ function teardown(t) {
     .sort(function (a, b) { return (b.share == null ? -1 : b.share) - (a.share == null ? -1 : a.share); });
   var notes = [];
   if (mine.unsure > 0) notes.push(mine.unsure + ' "not sure" answer' + (mine.unsure > 1 ? 's' : '') + ' on your own page. Those score zero; go and look, then re-run.');
-  if (mine.answered < CHECKS.length) notes.push((CHECKS.length - mine.answered) + ' check' + (CHECKS.length - mine.answered > 1 ? 's' : '') + ' unanswered; they are left out of the score.');
   var legal = fixes.filter(function (f) { return f.area === 'Honesty & terms' && f.id !== 21; });
   if (legal.length) notes.push((legal.length > 1 ? 'Checks ' : 'Check ') + legal.map(function (f) { return f.id; }).join(', ') + (legal.length > 1 ? ' touch' : ' touches') + ' ROSCA, California\'s automatic renewal law or the FTC pricing guides. Fix those first, whatever they score.');
   return { yours: yours, pages: scored, ranking: ranking, topFixes: fixes.slice(0, 5), allFixes: fixes, notes: notes };
@@ -208,6 +215,11 @@ function testRead(r) {
 
 function run(cfg) {
   cfg = cfg || {};
+  if (typeof cfg !== 'object' || Array.isArray(cfg)) throw inputError('The input must be a JSON object.');
+  var top = Object.keys(cfg).filter(function (k) { return k !== 'teardown' && k !== 'testPlan' && k !== 'testRead'; });
+  if (top.length) throw inputError('Unrecognised field' + (top.length > 1 ? 's' : '') + ': ' + top.map(function (k) { return '"' + k + '"'; }).join(', ') + '. Expected: teardown, testPlan, testRead.');
+  var sub = { testPlan: ['currentPrice','testPrice','conversion','guessConversion','visitorsPerWeek','shareInTest','alpha','power','weeksAvailable'], testRead: ['design','priceA','priceB','visitorsA','conversionsA','revenueA','visitorsB','conversionsB','revenueB','plannedPerArm','alpha','retainedA','retainedB'] };
+  Object.keys(sub).forEach(function (sec) { if (cfg[sec] && typeof cfg[sec] === 'object') { var bad = Object.keys(cfg[sec]).filter(function (k) { return sub[sec].indexOf(k) < 0; }); if (bad.length) throw inputError('Unrecognised field' + (bad.length > 1 ? 's' : '') + ' in "' + sec + '": ' + bad.join(', ') + '. Expected: ' + sub[sec].join(', ') + '.'); } });
   if (!cfg.teardown && !cfg.testPlan && !cfg.testRead) throw inputError('Give a "teardown", a "testPlan", a "testRead", or any combination.');
   return {
     teardown: cfg.teardown ? teardown(cfg.teardown) : null,

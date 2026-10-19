@@ -89,7 +89,7 @@ ok(opt.status === 204 && opt.headers.get("access-control-allow-origin") === "*",
 for (const [engine, input] of [
   ["pipeline-and-forecast", { target: 100000, winRate: 0.3, stageProbabilities: { Proposal: 0.5 }, deals: [{ name: "a", amount: 50000, stage: "Proposal" }] }],
   ["pricing-and-packaging", { tiers: [{ name: "A", price: 50, customers: 10 }, { name: "B", price: 150, customers: 5 }] }],
-  ["target-account-list", { accounts: [{ name: "Acme", industryMatch: true, sizeBand: true }] }],
+  ["target-account-list", { accounts: [{ name: "Acme", signals: { industryMatch: true, sizeBand: true } }] }],
 ]) {
   const [st, bd] = await j(await post({ jsonrpc: "2.0", id: 99, method: "tools/call", params: { name: "run_engine", arguments: { engine, input } } }));
   ok(st === 200 && /Source: your input/.test(bd.result.content[0].text), `${engine} uses the input it was given, not its demo`);
@@ -128,6 +128,26 @@ for (const [engine, input, expect] of [
   ["ai-marketing-governance", { check: "nope", input: {} }, /"check" must be one of/],
   ["partnerships-and-co-marketing", { zzz: 1 }, /Unrecognised field.*zzz/],
   ["pr-and-earned-media", { check: "scoreStory" }, /"input" is required/],
+  // Batch 2 (Oct 19): the rest of the engine-issues list.
+  ["incrementality-and-mmm", { zzz: 1 }, /Unrecognised field.*zzz/],
+  ["incrementality-and-mmm", { controlN: 1000, controlConv: 50 }, /Readout needs all of/],
+  ["aaj-marketing-psychology", {}, /JSON input is/],
+  ["pricing-page-teardown", { teardown: { pages: { A: { 1: "yes", 2: "no" } } } }, /answer all 21 checks/],
+  ["structured-data-for-ai-search", { pagetype: "product", jsonld: {} }, /Unrecognised field.*pagetype/],
+  ["buying-committee-map", { roles: [{ role: "champion", nme: "A" }] }, /unrecognised field.*nme/],
+  ["product-launch", { launch: { what: "new-product" }, zzz: 1 }, /Unrecognised field.*zzz/],
+  ["marketing-budget-planning", { stage: "series_a", annualRevenue: 3000000, runwayMonths: 12 }, /runwayMonths.*only used/],
+  ["webinar-and-event-programs", { readout: { cost: 100, winrate: 0.2 } }, /Unrecognised field.*winrate/],
+  ["aaj-copywriting", {}, /JSON input is/],
+  ["market-sizing", { segments: [] }, /segment/i],
+  ["target-account-list", { accounts: [{ name: "Acme", industryMatch: true }] }, /signals|unrecognised|Unrecognised/],
+  ["website-conversion-audit", { checks: { nope: "pass" } }, /unknown|Unrecognised|not a known/i],
+  ["seo-geo-aeo-audit", { checks: { nope: "pass" } }, /unknown|Unrecognised|not a known/i],
+  ["marketing-report", { current: { MQLs: 5 } }, /MQLs|Unrecognised|unrecognised/],
+  ["win-loss-analysis", { deals: [{ outcome: "maybe", amount: 5 }] }, /outcome/],
+  ["agent-readiness-audit", { zzz: 1 }, /Unrecognised|unrecognised|unknown/],
+  ["signup-flow-optimizer", { zzz: 1 }, /Unrecognised|unrecognised|unknown/],
+  ["email-lifecycle-sequence", { zzz: 1 }, /Unrecognised|unrecognised|unknown/],
 ]) {
   const e = ENGINES.find((x) => x.id === engine || x.slug === engine);
   const argv = [JSON.stringify(input)];
@@ -141,6 +161,21 @@ for (const id of ["founder-led-content", "ai-marketing-governance", "partnership
   const w = runInProcess(e, []);
   ok(w.code === 0 && /built-in demo/.test(w.out) && w.out.length > 200, `${id}: no input prints a labelled demo`);
   ok(runInProcess(e, ["--help"]).out.length > 200, `${id}: --help prints the header`);
+}
+// Batch-2 behaviour (Oct 19): wrong answers that used to look right.
+{
+  const eng = (id) => ENGINES.find((x) => x.id === id || x.slug === id);
+  const run = (id, input) => runInProcess(eng(id), [JSON.stringify(input)]);
+  const bc = run("buying-committee-map", { roles: [{ role: "champion", name: "A", access: "direct", stance: "for", mustBelieve: "x", asset: "y" }] });
+  ok(!/Coverage.*\(100%\)/.test(bc.out), "buying-committee: one champion alone is not 100% coverage");
+  const pl = run("partnerships-and-co-marketing", { check: "reviewPartnership", input: { signups: 100, qualifiedLeads: 30, pipelineValue: 50000, ourHours: 20, theirHours: 10, fullSalesCycleElapsed: false } });
+  ok(/Too early to decide/.test(pl.out), "partnerships: pipeline before a full sales cycle is too early to repeat");
+  const ic = run("incrementality-and-mmm", { baseline: 2.5, mde: 15, daily: 4000, split: 50, value: 400 });
+  ok(/Lift withheld/.test(ic.out) && !/Conversions withheld/.test(ic.out), "incrementality: holdout cost counts the withheld lift only");
+  const cs = runInProcess(eng("aaj-copywriting"), ["Buy now today"]);
+  ok(/NOT SCORED/.test(cs.out) && !/\/100/.test(cs.out), "copywriting: a three-word input is not given a score");
+  const sd = run("structured-data-for-ai-search", { pageType: "product", jsonld: { "@context": "https://schema.org", "@type": "Product", name: "X", offers: { "@type": "Offer", price: "10", priceCurrency: "USD" } } });
+  ok(!/READY TO PUBLISH/i.test(sd.out), "structured-data: no page text is not 'Ready to publish'");
 }
 // A one-tailed test no longer calls a worse variant a winner, and the CI label follows the confidence level.
 {

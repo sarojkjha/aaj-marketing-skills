@@ -28,10 +28,10 @@
 No engine needs customer names, emails or other personal data; leave them out.
 
 **Limitations:**
-- Pass {check, input} for scorePartner, checkTerms or reviewPartnership; with no input you get a labelled demo. Unknown checks and top-level fields stop the run, but unknown fields inside input are ignored.
+- Pass {check, input} for scorePartner, checkTerms or reviewPartnership; with no input you get a labelled demo. Unknown checks, top-level fields and fields inside input stop the run.
 - The score is a rubric of your own 0-3 ratings, not a prediction. It cannot know whether the partner will promote as promised, and inputs you list as unknowns are noted but do not lower the score.
 - checkTerms checks that each of the five terms is present, not what it says; any entry passes.
-- The review says "Do it again" whenever there is any qualified lead and any pipeline, even before a full sales cycle or with a low qualified rate. Read pipeline per hour and the effort split before repeating.
+- "Do it again" needs a qualified lead, pipeline, a full sales cycle elapsed and at least 20% of sign-ups qualified. Pipeline before a full cycle reads "Too early to decide"; a thin audience reads "Change the format".
 
 **Review before acting:** The partnership owner checks the overlap and reach ratings against the partner's own data, and both sides sign the lead-sharing and consent terms, before work starts. The review is judged on pipeline after a full sales cycle.
 

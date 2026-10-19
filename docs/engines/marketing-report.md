@@ -30,7 +30,7 @@ No engine needs customer names, emails or other personal data; leave them out.
 **Limitations:**
 - CAC is total spend over total wins, a blended figure that flatters paid channels. Use channel-level numbers for channel decisions and say which you used.
 - Every ratio uses same-period numbers. New revenue : spend is an efficiency read, not ROI; with a long sales cycle, this period's wins came from earlier spend and leads.
-- A field it doesn't recognise ("MQLs" for "mqls") is dropped without warning and the stage rate is computed across the gap. Input it doesn't recognise gives an empty report, not an error; check the result reflects your numbers.
+- Unknown fields ("MQLs" for "mqls"), non-numbers and a stage larger than the one before it stop the run. A stage you leave out is skipped and the stage rate is computed across the gap.
 - Deltas assume the prior period used the same definitions and windows. The engine cannot check that.
 
 **Review before acting:** The marketing lead or RevOps owner confirms the stage definitions and spend basis match the prior period, and states whether CAC is blended or by channel, before the report goes to the board.

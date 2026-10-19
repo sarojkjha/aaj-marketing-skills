@@ -29,7 +29,7 @@ No engine needs customer names, emails or other personal data; leave them out.
 
 **Limitations:**
 - The B2B SaaS stage bands are AAJ's estimates from client work, not third-party research. Gartner's 7.8% average is mostly companies above $1B revenue.
-- Runway does not cap the share, though the skill says it does. Aggressive takes the band's high end whatever the runway; runwayMonths only spreads a seed budget per month.
+- Runway does not cap the share: the engine does not apply it, and the skill now says to check it yourself. runwayMonths is accepted only for a b2b_saas seed budget, where it spreads the round per month.
 - Ecommerce, services and marketplaces have no stage band. Without your own pctOfRevenue it uses Gartner's large-company average, which is not a target.
 - The function split is an AAJ default, and the total covers all marketing, not just paid. It does not check the spend is affordable against LTV:CAC.
 

@@ -77,6 +77,39 @@ function scoreAccount(account, weights, totalWeight) {
   return { name: account.name, score, tier: tierFor(score), matched };
 }
 
+// Input without "accounts" used to score the demo accounts under your file's name, and a
+// misspelled signal was ignored. Both now stop the run and say which field is wrong.
+function validate(data, weights) {
+  const errs = [];
+  if (!data || typeof data !== "object" || Array.isArray(data)) return ["The input must be a JSON object."];
+  const extra = Object.keys(data).filter((k) => k !== "accounts" && k !== "weights");
+  if (extra.length) errs.push("Unrecognised field" + (extra.length > 1 ? "s" : "") + ": " + extra.map((k) => '"' + k + '"').join(", ") + '. Expected: "accounts" and, optionally, "weights".');
+  if (!Array.isArray(data.accounts) || !data.accounts.length) errs.push('"accounts" is required: a list of {"name", "signals": {signal: true/false}}.');
+  if (data.weights !== undefined) {
+    const w = data.weights;
+    if (!w || typeof w !== "object" || Array.isArray(w) || !Object.keys(w).length) errs.push('"weights" is an object of signal name to a number above 0.');
+    else {
+      for (const [k, v] of Object.entries(w)) if (typeof v !== "number" || !(v > 0)) errs.push('weights.' + k + " must be a number above 0.");
+    }
+  }
+  if (Array.isArray(data.accounts)) {
+    const known = Object.keys(weights);
+    data.accounts.forEach((a, i) => {
+      const label = a && typeof a.name === "string" && a.name ? '"' + a.name + '"' : "account " + (i + 1);
+      if (!a || typeof a !== "object" || Array.isArray(a)) { errs.push(label + ' must be {"name", "signals"}.'); return; }
+      const bad = Object.keys(a).filter((k) => k !== "name" && k !== "signals");
+      if (bad.length) errs.push(label + ": unrecognised field " + bad.map((k) => '"' + k + '"').join(", ") + '. Put signals inside "signals": {...}.');
+      if (typeof a.name !== "string" || !a.name) errs.push(label + ': "name" is required.');
+      if (!a.signals || typeof a.signals !== "object" || Array.isArray(a.signals)) { errs.push(label + ': "signals" is required: {signal: true/false}.'); return; }
+      const unknownSig = Object.keys(a.signals).filter((k) => !known.includes(k));
+      if (unknownSig.length) errs.push(label + ": signal " + unknownSig.map((k) => '"' + k + '"').join(", ") + " has no weight. Known signals: " + known.join(", ") + ".");
+      const nonBool = Object.entries(a.signals).filter(([, v]) => typeof v !== "boolean").map(([k]) => k);
+      if (nonBool.length) errs.push(label + ": " + nonBool.join(", ") + " must be true or false.");
+    });
+  }
+  return errs;
+}
+
 function main() {
   const args = parseArgs(process.argv);
   let weights = DEMO_WEIGHTS;
@@ -85,9 +118,12 @@ function main() {
 
   if (args.input) {
     const fs = require("fs");
-    const data = JSON.parse(fs.readFileSync(args.input, "utf8"));
+    let data;
+    try { data = JSON.parse(fs.readFileSync(args.input, "utf8")); } catch (e) { console.error("Could not read " + args.input + ": " + e.message); process.exit(1); }
+    const problems = validate(data, data && data.weights ? data.weights : weights);
+    if (problems.length) { console.error(problems.join("\n")); process.exit(1); }
     if (data.weights) weights = data.weights;
-    if (Array.isArray(data.accounts)) accounts = data.accounts;
+    accounts = data.accounts;
     source = args.input;
   }
   // A JSON argument works too (agents and the MCP server pass input this way; Oct 10).
@@ -95,7 +131,8 @@ function main() {
   if (inline) {
     let data;
     try { data = JSON.parse(inline); } catch (e) { console.error("Invalid JSON: " + e.message); process.exit(1); }
-    if (!Array.isArray(data.accounts) || !data.accounts.length) { console.error('Give "accounts": [...] (and optionally "weights").'); process.exit(1); }
+    const problems = validate(data, data && data.weights ? data.weights : weights);
+    if (problems.length) { console.error(problems.join("\n")); process.exit(1); }
     if (data.weights) weights = data.weights;
     accounts = data.accounts;
     source = "your input";

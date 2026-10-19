@@ -30,7 +30,7 @@ No engine needs customer names, emails or other personal data; leave them out.
 **Limitations:**
 - Readiness is the team's own 0-2 scores on twelve items, and a missing item scores 0. The engine cannot verify them. The 85% and 60% thresholds are AAJ's, not an industry standard.
 - The tier comes from the launch fields you choose. It flags a mismatch with what the team intends only if you give plannedScale.
-- The work-back plan marks every task due before today as overdue, whether or not it is done; it is not linked to the gate scores.
+- Past-due tasks are marked "due date passed, not marked done" unless you list them in "done". The plan is not linked to the readiness gate scores.
 - The four launch-day go/no-go gates are listed, not checked. Someone has to confirm each one on the morning.
 
 **Review before acting:** The launch owner checks each readiness score with the person responsible for that item before a date is set, and confirms the four go/no-go gates on the morning before the launch goes out.

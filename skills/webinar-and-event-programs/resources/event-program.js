@@ -158,8 +158,31 @@ function readout(r) {
     verdict: verdict, findings: findings };
 }
 
+function onlyKeys(obj, allowed, where) {
+  if (obj === null || typeof obj !== 'object' || Array.isArray(obj)) throw inputError(where + ' must be an object.');
+  var bad = Object.keys(obj).filter(function (k) { return allowed.indexOf(k) < 0; });
+  if (bad.length) throw inputError('Unrecognised field' + (bad.length > 1 ? 's' : '') + ' in ' + where + ': ' + bad.map(function (k) { return '"' + k + '"'; }).join(', ') + '. Expected: ' + allowed.join(', ') + '.');
+}
+
+function validateConfig(cfg) {
+  onlyKeys(cfg, ['plan', 'runOfShow', 'readout'], 'the input');
+  if (cfg.plan) {
+    onlyKeys(cfg.plan, ['pipelineTarget', 'avgDealValue', 'meetingToOppRate', 'attendeeToMeetingRate', 'showRate', 'reachableRegistrations', 'costs'], '"plan"');
+    if (cfg.plan.costs !== undefined) onlyKeys(cfg.plan.costs, ['platform', 'promotion', 'production', 'venue', 'catering', 'travel', 'speakers', 'other', 'peopleHours', 'hourlyCost'], '"plan.costs"');
+  }
+  if (cfg.runOfShow) {
+    onlyKeys(cfg.runOfShow, RUN_OF_SHOW.map(function (t) { return t.id; }), '"runOfShow"');
+    Object.keys(cfg.runOfShow).forEach(function (k) { if (typeof cfg.runOfShow[k] !== 'boolean') throw inputError('"runOfShow.' + k + '" must be true or false.'); });
+  }
+  if (cfg.readout) {
+    onlyKeys(cfg.readout, ['registrations', 'attendees', 'onDemandViews', 'meetingsBooked', 'opportunities', 'pipelineCreated', 'winRate', 'cost', 'followUpHours', 'targetReturn'], '"readout"');
+    if (cfg.readout.winRate !== undefined && !(isNum(cfg.readout.winRate) && cfg.readout.winRate > 0 && cfg.readout.winRate <= 1)) throw inputError('"readout.winRate" is a fraction between 0 and 1 (0.25 for 25%).');
+  }
+}
+
 function run(cfg) {
   cfg = cfg || {};
+  validateConfig(cfg);
   if (!cfg.plan && !cfg.runOfShow && !cfg.readout) throw inputError('Give a "plan", a "runOfShow", a "readout", or any combination.');
   return {
     plan: cfg.plan ? plan(cfg.plan) : null,

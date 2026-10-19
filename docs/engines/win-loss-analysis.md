@@ -28,10 +28,10 @@
 No engine needs customer names, emails or other personal data; leave them out.
 
 **Limitations:**
-- Input it doesn't recognise returns the worked example rather than an error; check the result reflects your data. From the command line it prints the demo even for valid deals.
-- It computes rates and revenue concentration only. It does not read win reasons, interview notes or the stage a deal was lost at; that work stays with the skill.
-- The 'biggest fixable leak' is simply the segment and loss reason with the most lost revenue, even no decision or missing feature. Decide yourself whether it is fixable.
-- It does not flag thin samples. A reason with one or two deals can top the list; check the count beside each before calling it a pattern.
+- Reasons, stages and amounts are what you enter. It cannot check them, and win or loss reasons logged by reps often differ from what buyers say; confirm with buyer interviews.
+- It tallies the win reasons and lost-at stages you give it but does not read interview notes or call recordings; that work stays with the skill.
+- The biggest fixable leak is the segment and loss reason with the most lost revenue, leaving out no decision and unspecified, which are reported separately. Decide yourself whether it is fixable.
+- A thin sample (under 20 closed deals or 8 losses) is flagged using this engine's own rule of thumb. With fewer, read any ranking as a hint, not a pattern.
 
 **Review before acting:** The sales lead confirms loss reasons are coded from deal evidence into a consistent set and that each top pattern rests on enough deals, before a fix is assigned to product, marketing or sales.
 

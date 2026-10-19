@@ -76,7 +76,7 @@ function validate(cfg) {
   cfg.segments.forEach((s, i) => {
     const at = `segments[${i}]${s && s.name ? ` ("${s.name}")` : ''}`;
     if (!s || typeof s !== 'object') die(`${at} must be an object.`);
-    if (!hasText(s.name)) die(`${at} needs a "name".`);
+    if (!(typeof s.name === "string" && s.name.trim().length > 0)) die(`${at} needs a "name".`);
     if (num(s.accounts) === null || s.accounts <= 0) die(`${at}: "accounts" must be a positive number - the count of companies (or buyers) in the segment.`);
     if (num(s.acv) === null || s.acv <= 0) die(`${at}: "acv" must be a positive number - what one account pays per year.`);
     if (s.fitShare !== undefined && !frac(s.fitShare)) die(`${at}: "fitShare" must be a fraction between 0 and 1.`, 'Write 40% as 0.4.');
