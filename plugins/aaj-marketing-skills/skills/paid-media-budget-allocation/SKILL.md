@@ -78,7 +78,7 @@ Don't approximate the water-filling by hand — run the bundled engine for exact
 > Paths assume you installed with `npx skills add`. From a clone of this repo, use `skills/paid-media-budget-allocation/resources/…` instead.
 
 ```bash
-# Demo: B2B SaaS, $30k budget
+# Demo: B2B SaaS, 30k USD budget
 node .agents/skills/paid-media-budget-allocation/resources/allocation-engine.js
 
 # Custom — pass a JSON config
@@ -102,7 +102,7 @@ Use the format in `resources/output-format.md`: the split (channel, $, %, custom
 
 - **Optimize on customers/revenue, not cost-per-lead.** Cheap leads that never close are the most expensive thing in paid media.
 - **Don't pour everything into the cheapest channel** — average CAC hides diminishing returns; the next customer there may already cost more than elsewhere.
-- **Right-size the channel count.** Three to five channels funded above their learning minimums beat many channels starved of budget. If two or more channels would get under ~$1,500/mo, recommend consolidating (the engine flags this; $1,500 is this engine's rule of thumb, not a platform minimum).
+- **Right-size the channel count.** Three to five channels funded above their learning minimums beat many channels starved of budget. If two or more channels would get under about 1,500 USD a month, recommend consolidating (the engine flags this; 1,500 USD is this engine's rule of thumb, not a platform minimum).
 - **Mind attribution and lag.** In B2B, deals close weeks after the click — track ROAS to 90 days and year one, not month one.
 - **Rebalance monthly, not daily.** Large budget swings reset platform learning; give a change two to four weeks.
 - **Be explicit that this is paid-media CAC.** Fully-loaded CAC (salaries, tools, content) is higher, so LTV:CAC and payback here reflect ad efficiency only.
