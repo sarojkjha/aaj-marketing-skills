@@ -50,6 +50,8 @@ export function createServer({ skills, engines, run, log = () => {}, transport =
 const TOOLS = [
   {
     name: "list_engines",
+    title: "List marketing engines",
+    annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false },
     description:
       "List every AAJ marketing engine that can be run: id, what question it answers, and its category. " +
       "Call this first when you need to compute something (unit economics, pipeline forecast, budget " +
@@ -64,6 +66,8 @@ const TOOLS = [
   },
   {
     name: "describe_engine",
+    title: "Describe an engine's inputs",
+    annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false },
     description:
       "Show one engine's input schema: required fields, units, alternative shapes, and a worked example. " +
       "Always call this before run_engine unless you already know the schema — the engines reject bad input rather than guessing.",
@@ -76,6 +80,8 @@ const TOOLS = [
   },
   {
     name: "run_engine",
+    title: "Run a marketing engine",
+    annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false },
     description:
       "Run an AAJ engine and return its verdict. Pass `input` as an object of the engine's fields. " +
       "Omit `input` to run the engine's built-in worked example. Engines are deterministic, offline, " +
@@ -97,6 +103,8 @@ const TOOLS = [
   },
   {
     name: "search_skills",
+    title: "Find a marketing skill",
+    annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false },
     description:
       "Find AAJ marketing skills by the problem they solve — 'churn is rising', 'we're launching next month', " +
       "'not showing up in AI answers'. Returns the method to follow, and says which skills have a runnable engine.",
@@ -112,6 +120,8 @@ const TOOLS = [
   },
   {
     name: "get_skill",
+    title: "Get a skill's method",
+    annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false },
     description:
       "Return the full method for one skill: when to use it, the steps, the quality bar, and how to run its engine if it has one.",
     inputSchema: {

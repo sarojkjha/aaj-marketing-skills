@@ -44,6 +44,7 @@ ok(s === 200 && b.result.serverInfo.name === "aaj-engines" && b.result.protocolV
 ok(s === 202, `notification -> 202 (got ${s})`);
 [s, b] = await j(await post({ jsonrpc: "2.0", id: 2, method: "tools/list" }));
 ok(s === 200 && b.result.tools.map((t) => t.name).join() === "list_engines,describe_engine,run_engine,search_skills,get_skill", "tools/list");
+ok(b.result.tools.every((t) => t.title && t.annotations?.readOnlyHint === true && t.annotations?.destructiveHint === false), "every tool has a title and read-only annotations (the Claude directory requires them)");
 [s, b] = await j(await post({ jsonrpc: "2.0", id: 3, method: "tools/call", params: { name: "run_engine", arguments: { engine: "unit-economics" } } }));
 ok(s === 200 && !b.result.isError && /unit-economics/.test(b.result.content[0].text), "run_engine demo");
 [s, b] = await j(await post({ jsonrpc: "2.0", id: 4, method: "tools/call", params: { name: "run_engine", arguments: { engine: "unit-economics", input: { nonsense: true } } } }));
