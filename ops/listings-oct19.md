@@ -98,7 +98,7 @@ The registry reads `server.json` from the repo root. On Windows:
 | mcp.so | Only a paid one-time submission ($39) as of Oct 19. Skipped. | Same |
 | Glama (glama.ai/mcp) | **Listed Oct 20** at glama.ai/mcp/connectors/io.github.sarojkjha/aaj-engines (healthy, 5 tools). It indexes public GitHub servers on its own. Once listed, claim the entry; `glama.json` names you as maintainer | Nothing |
 | punkpeye/awesome-mcp-servers | Pull request, see below | One line |
-| JAW9C/awesome-remote-mcp-servers | Pull request, see below | One line |
+| JAW9C/awesome-remote-mcp-servers | **Hold:** its rules ask for OAuth 2.0, official support and an active community (see the table below) | One line, later |
 
 **Opening a pull request without the command line:**
 
@@ -106,10 +106,21 @@ The registry reads `server.json` from the repo root. On Windows:
 2. Add the line in the right section, in alphabetical order, and copy the format of the lines around it.
 3. Click "Propose changes", then "Create pull request".
 
-Lines to add (adjust the emoji or format to match each list's legend):
+Rules read on Oct 20 from each list's CONTRIBUTING.md. Two of the four lists do not fit AAJ yet; do not open those PRs until the condition is met.
 
-- awesome-mcp-servers: `- [sarojkjha/aaj-marketing-skills](https://github.com/sarojkjha/aaj-marketing-skills) 📇 ☁️ 🏠 - Deterministic marketing math for agents: unit economics, pipeline forecast, A/B significance, budget allocation and pricing engines, plus the method behind each. Hosted or local.`
-- awesome-remote-mcp-servers (table columns are Name, Category, URL, Authentication, Maintainer): `| AAJ Marketing Engines | Marketing | `https://aaj-engines-mcp.sarojkjha10.workers.dev/mcp` | Open | [AAJ](https://skills.aajconsult.com) |`
+| List | Fits today? | Why |
+|---|---|---|
+| punkpeye/awesome-mcp-servers | Yes | For servers with a public GitHub repo that you install and run; AAJ's local MCP server is in the repo. Section: Marketing. Alphabetical by owner/repo. |
+| ComposioHQ/awesome-claude-skills | Yes | Business & Marketing accepts links to skill repos elsewhere on GitHub. Needs a real use case, documentation and examples. The list's last commit was Jul 24, so a reply may be slow. |
+| JAW9C/awesome-remote-mcp-servers | **Not yet** | Asks for official, production-ready servers, an active community and OAuth 2.0 authentication ("Must be OAuth 2.0"). The hosted AAJ server has no sign-in and the repo has 0 stars. Revisit once there are users. |
+| VoltAgent/awesome-agent-skills | **Not yet** | "Brand new skills that were just created are not accepted"; it wants real community usage. Revisit in December once installs exist. Its entries are one per skill with a description of 10 words or fewer, so submit the strongest skill (for example `unit-economics`), not the whole library. |
+
+Lines to add:
+
+- **awesome-mcp-servers**, Marketing section, just before `sharozdawa/ai-visibility` (the section is roughly alphabetical by owner): `- [sarojkjha/aaj-marketing-skills](https://github.com/sarojkjha/aaj-marketing-skills) 📇 ☁️ 🏠 - Deterministic marketing math for agents: LTV:CAC, pipeline coverage, A/B significance, budget allocation and pricing engines. Run locally or hosted, no sign-in.` PR title: `Add sarojkjha/aaj-marketing-skills`.
+- **awesome-claude-skills**, Business & Marketing, same format as the external entries there: `- [AAJ Marketing Skills](https://github.com/sarojkjha/aaj-marketing-skills) - 73 marketing skills for Seed to Series B founders, 62 with engines that return the same number and verdict every time. *By [@sarojkjha](https://github.com/sarojkjha)*`
+- **awesome-remote-mcp-servers** (when it fits; Category "Data Analysis" or "Other"): `| AAJ Marketing Engines | Data Analysis | `https://aaj-engines-mcp.sarojkjha10.workers.dev/mcp` | Open | [AAJ](https://skills.aajconsult.com) |`
+- **awesome-agent-skills** (when it fits; Community Skills, Marketing, end of the subcategory; PR title `Add skill: sarojkjha/unit-economics`): `- **[sarojkjha/unit-economics](https://github.com/sarojkjha/aaj-marketing-skills/tree/main/skills/unit-economics)** - Computes LTV, CAC, payback and a verdict from your numbers`
 
 ## 5. Skill lists
 
@@ -120,8 +131,8 @@ Lines to add (adjust the emoji or format to match each list's legend):
    cd ..; Remove-Item -Recurse -Force aaj-reindex
    ```
    This adds about 73 installs to the count; note that in the next monthly metrics row.
-2. **VoltAgent/awesome-agent-skills:** a pull request, as above: `- [AAJ Marketing Skills](https://github.com/sarojkjha/aaj-marketing-skills) - The math layer for marketing agents: skills with deterministic engines for LTV:CAC, pipeline coverage, A/B significance and pricing.`
-3. **ComposioHQ/awesome-claude-skills:** the same line, in its business or marketing section.
+2. **VoltAgent/awesome-agent-skills:** **hold until December.** It does not accept brand-new skills without community usage (see the table in section 4).
+3. **ComposioHQ/awesome-claude-skills:** a pull request with the line in section 4, in Business & Marketing.
 4. **SkillRank and claudemarketplaces.com:** search for "aaj-marketing-skills". If AAJ is listed, claim it or check the description. If not, use their submit link.
 
 Each list has its own contribution rules (CONTRIBUTING.md). Read them first. Some ask for a minimum number of stars or a demo GIF, and a pull request that ignores them gets closed.
