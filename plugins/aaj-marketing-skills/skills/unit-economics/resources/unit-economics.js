@@ -237,7 +237,7 @@ function validate(c) {
   // more likely a proportion typed by mistake (0.03 meaning 3%).
   if (c.churnMonthly !== undefined && c.churnMonthly > 0 && c.churnMonthly < 0.1) {
     udie(`"churnMonthly" ${c.churnMonthly} would mean ${c.churnMonthly}% a month (a lifetime of ~${Math.round(100 / c.churnMonthly / 12)} years), which looks like a proportion.`,
-         `Pass ${+(c.churnMonthly * 100).toFixed(2)} for ${+(c.churnMonthly * 100).toFixed(2)}%. If you really mean ${c.churnMonthly}% a month, pass "lifetimeMonths": ${Math.round(100 / c.churnMonthly)} instead.`);
+         `Use ${+(c.churnMonthly * 100).toFixed(2)} for ${+(c.churnMonthly * 100).toFixed(2)}%. If you really mean ${c.churnMonthly}% a month, set "lifetimeMonths": ${Math.round(100 / c.churnMonthly)} instead.`);
   }
   if (c.grossMargin > 100) udie(`"grossMargin" cannot exceed 100 (got ${c.grossMargin}).`);
   if (c.churnMonthly !== undefined && c.churnMonthly > 100) {

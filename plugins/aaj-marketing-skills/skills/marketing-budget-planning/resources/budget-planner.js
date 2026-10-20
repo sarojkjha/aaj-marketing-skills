@@ -153,7 +153,7 @@ function run(c){
   } else {
     pct = GARTNER_PCT; baseKey = 'annualRevenue'; baseLabel = 'of revenue'; periodLabel = 'yr';
     basis = `Gartner 2026 cross-industry average (${GARTNER_PCT}% of revenue)`;
-    basisNote = `No sourced stage band exists for ${LABEL[model].toLowerCase()} — this is a large-company average, not a target for your stage. Pass "pctOfRevenue" to plan at your own level.`;
+    basisNote = `No sourced stage band exists for ${LABEL[model].toLowerCase()} — this is a large-company average, not a target for your stage. Set "pctOfRevenue" to plan at your own level.`;
   }
 
   const baseAmount = c[baseKey];
@@ -175,7 +175,7 @@ function run(c){
   const baseName = { annualRevenue: 'Annual revenue', quarterlyBurn: 'Quarterly burn', fundingRaised: 'Funding raised' }[baseKey];
   out.push(`${(baseName + ':').padEnd(20)}${money(baseAmount)}`);
   out.push(`Marketing budget:   ${money(budget)} ${perWord}${monthly != null ? `   ·   ${money(monthly)} / mo` : ''}`);
-  if (periodLabel === 'round' && monthly == null) out.push('                    Pass "runwayMonths" to see it per month.');
+  if (periodLabel === 'round' && monthly == null) out.push('                    Set "runwayMonths" to see it per month.');
   out.push('');
   out.push(`Allocation — ${c.split ? 'your split' : "AAJ default split (an assumption to edit, not a benchmark)"}`);
   out.push('-'.repeat(62));

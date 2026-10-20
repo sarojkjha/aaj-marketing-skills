@@ -133,7 +133,7 @@ needs no change to this server, and there is no manifest to fall out of sync.
 ## Troubleshooting
 
 **"0 skills, 0 engines" on stderr** — the server resolves the repo as two levels
-above itself. If you've moved the file, pass `--root <repo root>`:
+above itself. If you've moved the file, give `--root <repo root>`:
 
 ```json
 { "command": "node",

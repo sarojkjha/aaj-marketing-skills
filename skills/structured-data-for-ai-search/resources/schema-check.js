@@ -379,7 +379,7 @@ function check(cfg) {
     } else blocks.push(j);
   } else if (j && typeof j === 'object') blocks.push(j);
   if (typeof cfg.visibleText === 'string' && cfg.visibleText.trim()) text = (text ? text + ' ' : '') + cfg.visibleText;
-  if (!blocks.length) die('No JSON-LD found.', 'Pass "jsonld" (an object, a JSON string, or HTML with <script type="application/ld+json">), or "html".');
+  if (!blocks.length) die('No JSON-LD found.', 'Set "jsonld" (an object, a JSON string, or HTML with <script type="application/ld+json">), or "html".');
 
   const findings = [];
   const add = (level, id, path, textMsg, source) => findings.push({ level, id, path, text: textMsg, source });
@@ -399,7 +399,7 @@ function check(cfg) {
   }
   targets.forEach((t) => CHECKS[t.kind](t.node, t.path, add, textNorm, today));
 
-  if (textNorm === null) add('info', 'no-visible-text', '-', 'No page text supplied, so nothing was checked against what readers see. Pass "html" or "visibleText" to run those checks.', SRC.policies);
+  if (textNorm === null) add('info', 'no-visible-text', '-', 'No page text supplied, so nothing was checked against what readers see. Set "html" or "visibleText" to run those checks.', SRC.policies);
   add('info', 'ai-features', '-', 'Google says there is "no special schema.org structured data" needed for AI Overviews or AI Mode, and lists "making sure your structured data matches the visible text on the page" among the fundamentals.', SRC.aiFeatures);
 
   const count = (lvl) => findings.filter((f) => f.level === lvl).length;
@@ -409,7 +409,7 @@ function check(cfg) {
   let verdict;
   if (fixes) verdict = { level: 'fix', headline: 'Fix before publishing', body: `${fixes} issue${fixes > 1 ? 's' : ''} break the markup or describe something the page does not show.` };
   else if (elig) verdict = { level: 'valid', headline: 'Valid, not rich-result eligible', body: `The markup is sound, but ${elig} Google requirement${elig > 1 ? 's are' : ' is'} missing for ${label} rich results.` };
-  else if (textNorm === null) verdict = { level: 'valid-unchecked', headline: 'Valid markup, not checked against the page', body: `No broken or unsupported markup found for ${label}, but no page text was supplied, so ratings, prices and names were not compared with what readers see. Pass "html" or "visibleText" for a publish verdict.` };
+  else if (textNorm === null) verdict = { level: 'valid-unchecked', headline: 'Valid markup, not checked against the page', body: `No broken or unsupported markup found for ${label}, but no page text was supplied, so ratings, prices and names were not compared with what readers see. Set "html" or "visibleText" for a publish verdict.` };
   else verdict = { level: 'ready', headline: 'Ready to publish', body: `No broken or unsupported markup found for ${label}, and what it marks up appears in the page text.` };
 
   const fixList = findings.filter((f) => f.level === 'fix' || f.level === 'eligibility' || f.level === 'improve')

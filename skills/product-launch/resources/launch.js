@@ -271,7 +271,7 @@ function run(cfg) {
     out.gates = GATES.map(([k, v]) => ({ gate: k, check: v }));
     const overdueMust = out.plan.filter((p) => p.overdue && p.priority === 'Must');
     if (out.days < 0) out.findings.push('The launch date has passed.');
-    else if (overdueMust.length) out.findings.push(`${overdueMust.length} Must task${overdueMust.length > 1 ? 's are' : ' is'} past due for this date and not marked done (pass "done" for finished tasks). Either do them this week or move the date - a launch date with overdue foundations is the Building phase with a deadline attached.`);
+    else if (overdueMust.length) out.findings.push(`${overdueMust.length} Must task${overdueMust.length > 1 ? 's are' : ' is'} past due for this date and not marked done (set "done" for finished tasks). Either do them this week or move the date - a launch date with overdue foundations is the Building phase with a deadline attached.`);
     if (out.readiness && out.readiness.pct < CLOSE) out.findings.push('A date is set while readiness is in the Building phase. Most launches that slip were dated before the gate was clear.');
   }
   return out;

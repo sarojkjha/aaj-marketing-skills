@@ -83,7 +83,7 @@ const TOOLS = [
     title: "Run a marketing engine",
     annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false },
     description:
-      "Run an AAJ engine and return its verdict. Pass `input` as an object of the engine's fields. " +
+      "Run an AAJ engine and return its verdict. Give `input` as an object of the engine's fields. " +
       "Omit `input` to run the engine's built-in worked example. Engines are deterministic, offline, " +
       "and validate their input — a wrong unit is reported as an error, not absorbed into a confident answer.",
     inputSchema: {
