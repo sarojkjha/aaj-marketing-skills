@@ -82,6 +82,9 @@ The registry reads `server.json` from the repo root. On Windows:
    mcp-publisher publish
    ```
    Logging in with GitHub proves the `io.github.sarojkjha/*` namespace. No DNS record is needed.
+   **Done Oct 19, 2026:** published as `io.github.sarojkjha/aaj-engines` version 1.2.0 (status active, remote `streamable-http`). Check with `curl.exe "https://registry.modelcontextprotocol.io/v0.1/servers?search=io.github.sarojkjha/aaj-engines"`.
+
+   Windows notes: PowerShell does not run a program from the current folder by name, so call it as `.\mcp-publisher.exe` or by full path. Opening the `/mcp` URL in a browser shows "This server does not open a server-to-client stream"; that is expected, because the worker only accepts POSTed JSON-RPC.
 3. Every later change to the listing needs a new version. Bump all four version fields together; CI enforces this.
 
 [Registry docs for remote servers](https://modelcontextprotocol.io/registry/remote-servers.md). The registry is in preview, so a data reset could mean publishing again.
@@ -90,7 +93,7 @@ The registry reads `server.json` from the repo root. On Windows:
 
 | Directory | How | What to paste |
 |---|---|---|
-| Smithery (smithery.ai) | Sign in with GitHub, then add a server by URL in the dashboard, or use their CLI: `smithery mcp publish "https://aaj-engines-mcp.sarojkjha10.workers.dev/mcp" -n sarojkjha/aaj-engines` | Name and description from 2B |
+| Smithery (smithery.ai) | **Blocked on Smithery's side (Oct 19).** The account namespace is `sarojmsu`, not `sarojkjha`. Both the web flow and `smithery mcp publish "https://aaj-engines-mcp.sarojkjha10.workers.dev/mcp" -n sarojmsu/aaj-engines` fail with `403 {"error":"Updating servers has been removed. Contact support@smithery.ai."}`, and the web flow asks for a config value the server does not use. Email support@smithery.ai; do not add a config value. | Name and description from 2B |
 | PulseMCP (pulsemcp.com) | "Submit" in the top navigation | Repo URL, hosted URL, description from 2B |
 | mcp.so | The "Submit" button | Same |
 | Glama (glama.ai/mcp) | It indexes public GitHub servers on its own. Once listed, claim the entry; `glama.json` names you as maintainer | Nothing |
