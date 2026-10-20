@@ -76,7 +76,7 @@ The portal may ask for counts. Paste them from `counts.json` (`npm run counts:ph
 The registry reads `server.json` from the repo root. On Windows:
 
 1. Download `mcp-publisher` for Windows from the releases page of `modelcontextprotocol/registry` on GitHub and put it on your PATH.
-2. In `C:\dev\aaj-marketing-skills\aaj-marketing-skills`, after `git pull`, run:
+2. In `C:\dev\aaj-marketing-skills`, after `git pull`, run:
    ```
    mcp-publisher login github
    mcp-publisher publish
