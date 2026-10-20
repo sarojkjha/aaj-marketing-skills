@@ -94,9 +94,9 @@ The registry reads `server.json` from the repo root. On Windows:
 | Directory | How | What to paste |
 |---|---|---|
 | Smithery (smithery.ai) | **Blocked on Smithery's side (Oct 19).** The account namespace is `sarojmsu`, not `sarojkjha`. Both the web flow and `smithery mcp publish "https://aaj-engines-mcp.sarojkjha10.workers.dev/mcp" -n sarojmsu/aaj-engines` fail with `403 {"error":"Updating servers has been removed. Contact support@smithery.ai."}`, and the web flow asks for a config value the server does not use. Email support@smithery.ai; do not add a config value. | Name and description from 2B |
-| PulseMCP (pulsemcp.com) | "Submit" in the top navigation | Repo URL, hosted URL, description from 2B |
-| mcp.so | The "Submit" button | Same |
-| Glama (glama.ai/mcp) | It indexes public GitHub servers on its own. Once listed, claim the entry; `glama.json` names you as maintainer | Nothing |
+| PulseMCP (pulsemcp.com) | **Paused (Oct 19):** submissions and listing changes are closed. It says it will pick up servers from the official registry automatically when it reopens, so no action is needed. Originally: "Submit" in the top navigation | Repo URL, hosted URL, description from 2B |
+| mcp.so | Only a paid one-time submission ($39) as of Oct 19. Skipped. | Same |
+| Glama (glama.ai/mcp) | **Listed Oct 20** at glama.ai/mcp/connectors/io.github.sarojkjha/aaj-engines (healthy, 5 tools). It indexes public GitHub servers on its own. Once listed, claim the entry; `glama.json` names you as maintainer | Nothing |
 | punkpeye/awesome-mcp-servers | Pull request, see below | One line |
 | JAW9C/awesome-remote-mcp-servers | Pull request, see below | One line |
 
@@ -109,7 +109,7 @@ The registry reads `server.json` from the repo root. On Windows:
 Lines to add (adjust the emoji or format to match each list's legend):
 
 - awesome-mcp-servers: `- [sarojkjha/aaj-marketing-skills](https://github.com/sarojkjha/aaj-marketing-skills) 📇 ☁️ 🏠 - Deterministic marketing math for agents: unit economics, pipeline forecast, A/B significance, budget allocation and pricing engines, plus the method behind each. Hosted or local.`
-- awesome-remote-mcp-servers: `| AAJ Marketing Engines | https://aaj-engines-mcp.sarojkjha10.workers.dev/mcp | None | Deterministic marketing math: unit economics, pipeline forecast, A/B significance, pricing |`
+- awesome-remote-mcp-servers (table columns are Name, Category, URL, Authentication, Maintainer): `| AAJ Marketing Engines | Marketing | `https://aaj-engines-mcp.sarojkjha10.workers.dev/mcp` | Open | [AAJ](https://skills.aajconsult.com) |`
 
 ## 5. Skill lists
 
