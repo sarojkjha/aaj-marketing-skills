@@ -7,6 +7,9 @@
     "url": "https://aajconsult.com"
   },
   "homepage": "https://skills.aajconsult.com",
+  "documentationUrl": "https://skills.aajconsult.com",
+  "privacyPolicyUrl": "https://aajconsult.com/privacy",
+  "termsOfServiceUrl": "https://aajconsult.com/terms",
   "repository": "https://github.com/sarojkjha/aaj-marketing-skills",
   "license": "MIT",
   "keywords": [
