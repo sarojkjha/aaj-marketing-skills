@@ -1,7 +1,0 @@
-Name: AAJ Marketing Skills
-Short description: The math layer for marketing agents: skills with deterministic engines for LTV:CAC, pipeline coverage, A/B significance, budget splits, and pricing.
-Long description: 73 marketing skills for Seed to Series B founders and marketers, 62 of them with deterministic engines. Each engine takes your numbers and returns a number and a verdict, the same answer every time, from code you can read. The plugin also starts a local MCP server so Claude can run an engine directly. Engines make no network calls and write no files. Keep your writing skills; add the arithmetic.
-Category: Marketing (or Business, if Marketing isn't offered)
-Data handling: Everything runs on your machine. The engines make no network calls, write no files, and take no actions in other tools. AAJ receives nothing. Your Claude conversation is handled under your Anthropic account's terms. Details: https://github.com/sarojkjha/aaj-marketing-skills#what-happens-to-your-data
-Support: https://github.com/sarojkjha/aaj-marketing-skills/issues
-Website: https://skills.aajconsult.com
