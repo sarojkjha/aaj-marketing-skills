@@ -28,7 +28,7 @@
 No engine needs customer names, emails or other personal data; leave them out.
 
 **Limitations:**
-- Pass {check, input}; with no input you get a labelled demo. An unknown check or top-level field stops the run, but fields inside input that it doesn't know are ignored, so use the names in the header.
+- Give {check, input}; with no input you get a labelled demo. An unknown check or top-level field stops the run, but fields inside input that it doesn't know are ignored, so use the names in the header.
 - It is a rubric, not a prediction. It can't know whether a post will travel or bring buyers; judge the channel at ninety days on conversations, not impressions.
 - Most checks take your answers on trust: whether a competitor could post a theme, whether the first line carries the point, whether proof is invented or permission is written.
 - The post check spots engagement bait from a short phrase list and flags only the figures you list. It can't tell whether a draft sounds like the founder.

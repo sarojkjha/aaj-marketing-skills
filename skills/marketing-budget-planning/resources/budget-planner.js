@@ -109,7 +109,7 @@ function validate(c){
   for (const k of ['annualRevenue','quarterlyBurn','fundingRaised','runwayMonths','pctOfRevenue']) {
     if (c[k] !== undefined && (typeof c[k] !== 'number' || !isFinite(c[k]) || c[k] < 0)) die(`"${k}" must be a non-negative number.`);
   }
-  if (c.pctOfRevenue !== undefined && c.pctOfRevenue > 0 && c.pctOfRevenue < 1) die(`"pctOfRevenue" looks like a proportion (${c.pctOfRevenue}).`, `Pass ${Math.round(c.pctOfRevenue*100)} for ${Math.round(c.pctOfRevenue*100)}%.`);
+  if (c.pctOfRevenue !== undefined && c.pctOfRevenue > 0 && c.pctOfRevenue < 1) die(`"pctOfRevenue" looks like a proportion (${c.pctOfRevenue}).`, `Give ${Math.round(c.pctOfRevenue*100)} for ${Math.round(c.pctOfRevenue*100)}%.`);
   if (c.split !== undefined) {
     if (typeof c.split !== 'object' || Array.isArray(c.split) || !Object.keys(c.split).length) die('"split" must be an object of bucket: percent.');
     const vals = Object.values(c.split);
