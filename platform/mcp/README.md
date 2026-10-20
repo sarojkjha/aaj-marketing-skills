@@ -133,12 +133,11 @@ needs no change to this server, and there is no manifest to fall out of sync.
 ## Troubleshooting
 
 **"0 skills, 0 engines" on stderr** — the server resolves the repo as two levels
-above itself. If you've moved the file, set `AAJ_SKILLS_ROOT` to the repo root:
+above itself. If you've moved the file, pass `--root <repo root>`:
 
 ```json
 { "command": "node",
-  "args": ["/path/to/server.mjs"],
-  "env": { "AAJ_SKILLS_ROOT": "/path/to/aaj-marketing-skills" } }
+  "args": ["/path/to/server.mjs", "--root", "/path/to/aaj-marketing-skills"] }
 ```
 
 **An engine hangs** — it's killed after 30 seconds and reported as a timeout.
