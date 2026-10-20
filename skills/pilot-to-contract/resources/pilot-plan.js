@@ -122,20 +122,20 @@ const iso = (d) => (d ? d.toISOString().slice(0, 10) : '');
 const addDays = (d, n) => new Date(d.getTime() + n * DAY);
 const daysBetween = (a, b) => Math.round((b - a) / DAY);
 
-function optDate(cfg, key) {
-  if (cfg[key] === undefined || cfg[key] === null || cfg[key] === '') return null;
-  const d = parseDate(cfg[key]);
-  if (!d) die(`"${key}" must be a real date as YYYY-MM-DD.`);
+function optDate(cfg, field) {
+  if (cfg[field] === undefined || cfg[field] === null || cfg[field] === '') return null;
+  const d = parseDate(cfg[field]);
+  if (!d) die(`"${field}" must be a real date as YYYY-MM-DD.`);
   return d;
 }
-function weeks(cfg, key, dflt, min, max) {
-  const v = cfg[key];
+function weeks(cfg, field, dflt, min, max) {
+  const v = cfg[field];
   if (v === undefined || v === null || v === '') {
-    if (dflt === undefined) die(`Give "${key}": whole weeks.`);
+    if (dflt === undefined) die(`Give "${field}": whole weeks.`);
     return dflt;
   }
   const n = Number(v);
-  if (!Number.isInteger(n) || n < min || n > max) die(`"${key}" must be a whole number of weeks from ${min} to ${max}.`);
+  if (!Number.isInteger(n) || n < min || n > max) die(`"${field}" must be a whole number of weeks from ${min} to ${max}.`);
   return n;
 }
 function terms(v) {
