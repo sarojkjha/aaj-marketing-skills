@@ -6,5 +6,5 @@
     "It measures readiness, not traffic or citations. The GEO checks score whether claims are checkable and do not predict a lift.",
     "FAQPage schema and llms.txt still earn points though the skill calls them hygiene, not Google levers, so the score can rise with no change in search visibility."
   ],
-  "review": "Whoever owns the site confirms the rendering check used the crawler's view of the page (for example curl -A GPTBot) and spot-checks the failing items before fixes are prioritised. Pair the score with analytics for outcomes."
+  "review": "Whoever owns the site confirms the rendering check used the crawler's view of the page (for example a raw fetch with a GPTBot user agent) and spot-checks the failing items before fixes are prioritised. Pair the score with analytics for outcomes."
 }

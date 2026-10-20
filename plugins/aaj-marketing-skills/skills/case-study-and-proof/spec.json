@@ -1,0 +1,10 @@
+{
+  "decision": "Would this customer result convince a sceptical buyer, and what are we actually allowed to publish?",
+  "limitations": [
+    "It scores whether each of eight pieces is present, not whether it is true. A before number reconstructed from memory scores the same as one that was measured.",
+    "The permission check compares what you list as covered with what you list as used. It can't read the agreement or tell whether the approver could grant it.",
+    "A descriptor such as sector, size and region counts as an identifiable customer, so an anonymised study can score full marks on that factor.",
+    "The 100-point weights are AAJ's view of what a sceptic checks, not a measure of how buyers respond to the page."
+  ],
+  "review": "The account owner confirms the before number was measured and the list of other changes is complete. Legal or the account owner checks the written permission covers every use (name, logo, numbers, quote) before anything is published."
+}

@@ -1,0 +1,10 @@
+{
+  "decision": "Do our tiers and price points hold together: is the top tier a real anchor, and where does revenue actually come from?",
+  "limitations": [
+    "It does the arithmetic on the tiers you enter: ARPU, revenue mix, price steps and the anchor. It can't tell you what buyers will pay or which value metric fits.",
+    "For a product with no customers, the mix is your estimate, so the ARPU and revenue mix are assumptions, not a forecast.",
+    "The 1.5x weak-anchor line is this engine's rule of thumb, not a published benchmark.",
+    "An unrecognised tier field, or a price or customer count that isn't a number, stops the run with an error naming the tier. It can't tell whether the numbers themselves are right."
+  ],
+  "review": "Whoever owns pricing checks the tier prices and the customer mix, marked as an estimate if projected. The finance lead cross-checks the blended ARPU against CAC and payback in unit-economics before any price goes live."
+}

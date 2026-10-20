@@ -75,7 +75,7 @@ It prints LTV, LTV:CAC, payback, and a verdict, plus a JSON block.
 ## Interpret the result
 
 - **LTV:CAC above 3:1** is David Skok's reference point for SaaS ([SaaS Metrics 2.0](https://www.forentrepreneurs.com/saas-metrics-2/)); he notes the best SaaS businesses sometimes reach 7 or 8. Below 3:1, fix economics before scaling spend. For ecommerce and services the engine shows 3:1 as a SaaS reference point, not a benchmark for those models. A very high ratio can mean under-investment if demand exists — that's AAJ's read, not a benchmark.
-- **CAC payback:** Skok puts the line at 12 months for SaaS. Bessemer's guideline ([Scaling to $100 Million](https://www.bvp.com/atlas/scaling-to-100-million), 2021) varies by segment: under 12 months for SMB, 18 for mid-market, 24 for enterprise — pass `"segment"` to use it. There is no sourced payback guideline in this skill for ecommerce or services; pass `"paybackTargetMonths"` from your own cash runway to get a verdict.
+- **CAC payback:** Skok puts the line at 12 months for SaaS. Bessemer's guideline ([Scaling to $100 Million](https://www.bvp.com/atlas/scaling-to-100-million), 2021) varies by segment: under 12 months for SMB, 18 for mid-market, 24 for enterprise — set `"segment"` to use it. There is no sourced payback guideline in this skill for ecommerce or services; set `"paybackTargetMonths"` from your own cash runway to get a verdict.
 - The biggest LTV levers are usually **retention/churn and margin**, not ARPA. A small churn improvement compounds through LTV.
 
 ## Present the result

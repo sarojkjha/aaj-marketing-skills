@@ -1,0 +1,304 @@
+#!/usr/bin/env node
+/**
+ * AAJ — pseo-model
+ * Projects whether a programmatic SEO build is worth doing, using an
+ * indexation/ranking funnel rather than the usual pages x volume fantasy.
+ * No dependencies. Node 14+.
+ *
+ *   node resources/pseo-model.js                          # demo
+ *   node resources/pseo-model.js --pages 500 --volume 40 --conv 2 --value 400
+ *   node resources/pseo-model.js --help
+ *   node resources/pseo-model.js '{"pages":500,"volume":40,"conv":2,"value":400}'
+ *       the same options as one JSON object (camelCase: indexRate, rankRate,
+ *       aiDrag, costPerPage, fixedCost, uniqueData); this is what MCP clients send.
+ *       An unknown option stops the run instead of falling back to the demo.
+ */
+
+// --- AAJ arg normalisation ---------------------------------------------------
+// Accept bare `demo` / `help` as aliases for `--demo` / `--help`. First-run
+// friction: users type `node engine.js demo` and hit a JSON parse error.
+// Only these two exact tokens are rewritten, so JSON payloads and named modes
+// (design, readout, sample, segments, ...) pass through untouched.
+process.argv = process.argv.map((a, i) =>
+  i >= 2 && /^(demo|help)$/i.test(a) ? '--' + a.toLowerCase() : a
+);
+// -----------------------------------------------------------------------------
+
+
+// Organic CTR by position, from Backlinko's analysis of 4 million Google
+// results (Brian Dean, 2019, updated April 2025; Semrush and Search Console
+// data), published on the Backlinko site.
+// It predates AI Overviews and varies by vertical and SERP layout, so treat
+// it as a ceiling and override with your own Search Console data (--ctr).
+const CTR = { 1: 0.276, 2: 0.155, 3: 0.114, 4: 0.089, 5: 0.072, 6: 0.051, 7: 0.040, 8: 0.032, 9: 0.028, 10: 0.027 };
+
+const DEFAULTS = {
+  pages: 500,          // pages the template would generate
+  volume: 40,          // avg monthly searches per page's target query
+  indexRate: 0.60,     // share of pages Google actually indexes (AAJ assumption)
+  rankRate: 0.30,      // share of indexed pages that reach page 1 (AAJ assumption)
+  position: 7,         // avg position for pages that do rank
+  ctr: null,           // override CTR directly (0-1)
+  aiDrag: 0.85,        // blended click retention after AI Overviews (1 = no effect).
+                       // AAJ assumption: Ahrefs (Feb 2026, 300k keywords) found a 58%
+                       // lower position-1 CTR where an AI Overview shows; 0.85 is about
+                       // a quarter of your queries showing one. Set it from your SERPs.
+  conv: 2.0,           // visitor -> conversion, %
+  value: 200,          // value per conversion, $
+  costPerPage: 8,      // marginal cost per page (content, data, QA), $
+  fixedCost: 5000,     // template build + data acquisition, $
+  uniqueData: "some"   // none | some | strong
+};
+
+const num = v => (typeof v === "number" ? v : parseFloat(v));
+
+function ctrFor(o) {
+  if (o.ctr !== null && !Number.isNaN(num(o.ctr))) return num(o.ctr);
+  const p = Math.max(1, Math.min(10, Math.round(o.position)));
+  return CTR[p];
+}
+
+function model(o) {
+  const pages = num(o.pages);
+  const indexed = pages * num(o.indexRate);
+  const ranking = indexed * num(o.rankRate);
+  const ctr = ctrFor(o);
+  const sessions = ranking * num(o.volume) * ctr * num(o.aiDrag);
+  const conversions = sessions * (num(o.conv) / 100);
+  const monthlyValue = conversions * num(o.value);
+
+  const investment = num(o.fixedCost) + pages * num(o.costPerPage);
+  const paybackMonths = monthlyValue > 0 ? investment / monthlyValue : Infinity;
+  const year1 = monthlyValue * 12 - investment;
+
+  // Effective yield: share of built pages that produce any traffic at all.
+  const yieldRate = pages > 0 ? ranking / pages : 0;
+  const valuePerPage = pages > 0 ? (monthlyValue * 12) / pages : 0;
+  const costPerRankingPage = ranking > 0 ? investment / ranking : Infinity;
+
+  return {
+    pages, indexed, ranking, ctr, yieldRate,
+    sessions, conversions, monthlyValue,
+    investment, paybackMonths, year1,
+    valuePerPage, costPerRankingPage
+  };
+}
+
+function risks(o, r) {
+  const out = [];
+  const vol = num(o.volume);
+
+  if (vol < 10) {
+    out.push(["HIGH", `Average query volume is ${vol}/month. Below ~10 there usually isn't enough demand to justify a page, even if it ranks.`]);
+  } else if (vol < 25) {
+    out.push(["MEDIUM", `Average query volume is ${vol}/month — thin. Confirm the volume data is real and not a rounded-up estimate.`]);
+  }
+
+  if (o.uniqueData === "none") {
+    out.push(["HIGH", "No unique data per page. Pages assembled only from a template and public facts are what Google's scaled-content-abuse policy targets. This is the single biggest failure mode."]);
+  } else if (o.uniqueData === "some") {
+    out.push(["MEDIUM", "Only partial unique data per page. Each page needs something a competitor can't regenerate — proprietary numbers, real reviews, computed results."]);
+  }
+
+  if (r.pages > 5000 && o.uniqueData !== "strong") {
+    out.push(["HIGH", `${fmtInt(r.pages)} pages without strong per-page data is the classic doorway-page pattern. Ship 50, measure, then scale.`]);
+  }
+
+  if (r.paybackMonths > 18) {
+    out.push(["MEDIUM", `Payback of ${r.paybackMonths === Infinity ? "never" : Math.round(r.paybackMonths) + " months"} is long for a channel that can be reset by a single core update.`]);
+  }
+
+  if (num(o.indexRate) > 0.8) {
+    out.push(["MEDIUM", `Assuming ${Math.round(num(o.indexRate) * 100)}% indexation is optimistic for programmatic pages. Large template-generated sets are routinely indexed at well under half.`]);
+  }
+
+  if (r.ranking < 20) {
+    out.push(["MEDIUM", `Only ~${Math.round(r.ranking)} pages are projected to rank. Below about 20, this isn't a programme — it's a handful of pages you could write by hand, better.`]);
+  }
+
+  return out;
+}
+
+function verdict(r, rk) {
+  const high = rk.filter(x => x[0] === "HIGH").length;
+  if (high >= 2) return ["DON'T BUILD", "Multiple high risks. The economics or the content model don't hold."];
+  if (high === 1) return ["FIX FIRST", "One high risk must be resolved before building."];
+  if (r.paybackMonths === Infinity) return ["DON'T BUILD", "No projected value — nothing pays this back."];
+  if (r.paybackMonths <= 6) return ["BUILD", `Payback in ${Math.round(r.paybackMonths)} months. Strong case — pilot 50 pages first.`];
+  if (r.paybackMonths <= 12) return ["BUILD (pilot)", `Payback in ${Math.round(r.paybackMonths)} months. Reasonable — validate with 50 pages before full build.`];
+  if (r.paybackMonths <= 24) return ["MARGINAL", `Payback in ${Math.round(r.paybackMonths)} months. Only worth it if the pages have value beyond search.`];
+  return ["DON'T BUILD", `Payback in ${Math.round(r.paybackMonths)} months. The maths doesn't work.`];
+}
+
+const fmtInt = n => Math.round(n).toLocaleString("en-US");
+const fmtMoney = n => "$" + Math.round(n).toLocaleString("en-US");
+
+function report(o, r) {
+  const rk = risks(o, r);
+  const [v, vnote] = verdict(r, rk);
+  const L = [];
+  L.push("");
+  L.push("AAJ · PROGRAMMATIC SEO VIABILITY");
+  L.push("─".repeat(62));
+  L.push(`  ${v} — ${vnote}`);
+  L.push("");
+  L.push("THE FUNNEL  (this is where most projections go wrong)");
+  L.push(`  Pages built                 ${fmtInt(r.pages)}`);
+  L.push(`  Indexed          × ${(num(o.indexRate) * 100).toFixed(0)}%      ${fmtInt(r.indexed)}`);
+  L.push(`  Reaching page 1  × ${(num(o.rankRate) * 100).toFixed(0)}%      ${fmtInt(r.ranking)}`);
+  L.push(`  Effective yield             ${(r.yieldRate * 100).toFixed(1)}% of pages built`);
+  L.push("");
+  L.push("PROJECTION  (monthly, at maturity)");
+  L.push(`  Sessions                    ${fmtInt(r.sessions)}`);
+  L.push(`  Conversions                 ${fmtInt(r.conversions)}`);
+  L.push(`  Value                       ${fmtMoney(r.monthlyValue)}`);
+  L.push("");
+  L.push("ECONOMICS");
+  L.push(`  Investment                  ${fmtMoney(r.investment)}   (${fmtMoney(num(o.fixedCost))} build + ${fmtInt(r.pages)} × ${fmtMoney(num(o.costPerPage))})`);
+  L.push(`  Payback                     ${r.paybackMonths === Infinity ? "never" : Math.round(r.paybackMonths) + " months"}`);
+  L.push(`  Year 1 net                  ${fmtMoney(r.year1)}`);
+  L.push(`  Annual value per page       ${fmtMoney(r.valuePerPage)}`);
+  L.push(`  Cost per ranking page       ${r.costPerRankingPage === Infinity ? "n/a" : fmtMoney(r.costPerRankingPage)}`);
+  L.push("");
+  if (rk.length) {
+    L.push("RISKS");
+    rk.forEach(([lvl, msg]) => L.push(`  [${lvl}] ${msg}`));
+    L.push("");
+  }
+  L.push("─".repeat(62));
+  L.push("ASSUMPTIONS — change these before trusting the output");
+  L.push(`  Indexation ${(num(o.indexRate) * 100).toFixed(0)}% · page-1 rate ${(num(o.rankRate) * 100).toFixed(0)}% · avg position ${o.position} (CTR ${(r.ctr * 100).toFixed(1)}%)`);
+  L.push(`  AI-Overview click retention ${(num(o.aiDrag) * 100).toFixed(0)}% · conversion ${o.conv}% · value ${fmtMoney(num(o.value))}`);
+  L.push("  Index and page-1 rates and AI drag are AAJ assumptions. CTR curve:");
+  L.push("  Backlinko, 4M results (2019, updated 2025), pre-AI Overviews. Use your");
+  L.push("  own Search Console data via --ctr as soon as you have it.");
+  L.push("");
+  L.push("JSON");
+  L.push(JSON.stringify({
+    verdict: v,
+    funnel: { pages: r.pages, indexed: Math.round(r.indexed), ranking: Math.round(r.ranking), yieldRate: +(r.yieldRate * 100).toFixed(1) },
+    monthly: { sessions: Math.round(r.sessions), conversions: Math.round(r.conversions), value: Math.round(r.monthlyValue) },
+    economics: { investment: Math.round(r.investment), paybackMonths: r.paybackMonths === Infinity ? null : +r.paybackMonths.toFixed(1), year1Net: Math.round(r.year1), annualValuePerPage: +r.valuePerPage.toFixed(2) },
+    risks: rk.map(([level, note]) => ({ level, note }))
+  }, null, 2));
+  L.push("");
+  return L.join("\n");
+}
+
+const HELP = `
+AAJ pseo-model — is this programmatic SEO build worth doing?
+
+Usage
+  node resources/pseo-model.js                    Demo with defaults
+  node resources/pseo-model.js [options]
+  node resources/pseo-model.js --json [options]   JSON only
+
+Options            Default   Meaning
+  --pages          500       Pages the template would generate
+  --volume         40        Avg monthly searches per target query
+  --index-rate     0.60      Share of pages Google actually indexes
+  --rank-rate      0.30      Share of indexed pages reaching page 1
+  --position       7         Avg position for pages that rank
+  --ctr            (auto)    Override CTR directly, e.g. 0.04
+  --ai-drag        0.85      Blended click retention after AI Overviews (assumption)
+  --conv           2.0       Visitor to conversion, %
+  --value          200       Value per conversion, $
+  --cost-per-page  8         Marginal cost per page, $
+  --fixed-cost     5000      Template build + data acquisition, $
+  --unique-data    some      none | some | strong
+
+Why the funnel matters
+  Most pSEO projections multiply pages by search volume and produce a
+  fantasy. In practice a large share of template-generated pages are never
+  indexed, and most of those that are never reach page 1. The defaults
+  (60% indexed, 30% of those on page 1) mean 18% of built pages earn any
+  traffic. Both rates are AAJ assumptions, not measured industry rates.
+  CTR by position: Backlinko, 4M results (2019, updated 2025).
+  Replace all of them with your own data.
+
+The model cannot tell you whether your pages deserve to rank. That is what
+--unique-data is asking about, and it is the factor that decides most
+programmatic builds.
+`;
+
+const FLAG_TO_KEY = {
+  "--pages": "pages", "--volume": "volume", "--index-rate": "indexRate",
+  "--rank-rate": "rankRate", "--position": "position", "--ctr": "ctr",
+  "--ai-drag": "aiDrag", "--conv": "conv", "--value": "value",
+  "--cost-per-page": "costPerPage", "--fixed-cost": "fixedCost",
+  "--unique-data": "uniqueData"
+};
+const OPTION_NAMES = Object.values(FLAG_TO_KEY);
+
+// Options come as flags (--pages 500) or as one JSON object
+// ({"pages": 500, "volume": 40}), which is how an MCP client passes them.
+// Anything unrecognised stops the run: silently falling back to the demo
+// values would print a confident answer to a question nobody asked.
+function parseArgs(argv) {
+  const o = { ...DEFAULTS };
+  const first = (argv[0] || "").trim();
+  if (first.startsWith("{")) {
+    let cfg;
+    try { cfg = JSON.parse(first); } catch (e) { fail(`The JSON input does not parse: ${e.message}`); }
+    if (!cfg || typeof cfg !== "object" || Array.isArray(cfg)) fail("The JSON input must be an object of options.");
+    const unknown = Object.keys(cfg).filter(k => !OPTION_NAMES.includes(k) && k !== "json");
+    if (unknown.length) fail(`Unknown option(s): ${unknown.join(", ")}. Allowed: ${OPTION_NAMES.join(", ")}.`);
+    for (const k of OPTION_NAMES) if (cfg[k] !== undefined) o[k] = k === "uniqueData" ? String(cfg[k]) : num(cfg[k]);
+    o.__json = cfg.json === true;
+    return o;
+  }
+  for (let i = 0; i < argv.length; i++) {
+    const a = argv[i];
+    if (a === "--json" || a === "--demo") continue;
+    const k = FLAG_TO_KEY[a];
+    if (!k) fail(`Unknown argument "${a}". Run --help for the options.`);
+    if (argv[i + 1] === undefined) fail(`${a} needs a value.`);
+    o[k] = k === "uniqueData" ? String(argv[i + 1]) : num(argv[i + 1]);
+    i++;
+  }
+  return o;
+}
+
+function fail(msg) {
+  console.error(msg);
+  process.exit(1);
+}
+
+function main() {
+  const argv = process.argv.slice(2);
+  if (argv.includes("--help") || argv.includes("-h")) { console.log(HELP); return; }
+
+  const o = parseArgs(argv);
+
+  // Validate — a silent NaN produces a confident wrong answer.
+  const bad = [];
+  ["pages", "volume", "indexRate", "rankRate", "position", "aiDrag", "conv", "value", "costPerPage", "fixedCost"]
+    .forEach(k => { if (Number.isNaN(num(o[k]))) bad.push(k); });
+  if (!["none", "some", "strong"].includes(o.uniqueData)) bad.push("uniqueData (none|some|strong)");
+  if (bad.length) { console.error(`Invalid values for: ${bad.join(", ")}\nRun --help for usage.`); process.exit(1); }
+  if (num(o.indexRate) > 1 || num(o.rankRate) > 1 || num(o.aiDrag) > 1) {
+    console.error("index-rate, rank-rate and ai-drag are fractions between 0 and 1 (e.g. 0.6, not 60).");
+    process.exit(1);
+  }
+
+  const r = model(o);
+
+  if (argv.includes("--json") || o.__json) {
+    const rk = risks(o, r);
+    const [v] = verdict(r, rk);
+    console.log(JSON.stringify({
+      verdict: v,
+      funnel: { pages: r.pages, indexed: Math.round(r.indexed), ranking: Math.round(r.ranking), yieldRate: +(r.yieldRate * 100).toFixed(1) },
+      monthly: { sessions: Math.round(r.sessions), conversions: Math.round(r.conversions), value: Math.round(r.monthlyValue) },
+      economics: { investment: Math.round(r.investment), paybackMonths: r.paybackMonths === Infinity ? null : +r.paybackMonths.toFixed(1), year1Net: Math.round(r.year1) },
+      risks: rk.map(([level, note]) => ({ level, note }))
+    }, null, 2));
+    return;
+  }
+
+  if (argv.length === 0 || (argv.length === 1 && argv[0] === "--demo")) console.log("\n(demo — pass options or --help to model your own)");
+  console.log(report(o, r));
+}
+
+if (require.main === module) main();
+module.exports = { model, risks, verdict, DEFAULTS };

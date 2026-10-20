@@ -1,0 +1,10 @@
+{
+  "decision": "Where is our paid search account wasting spend, and which campaign should get more budget?",
+  "limitations": [
+    "It judges the account only against the target CPA you give it. Without one it cannot name a starved winner or a campaign far over target.",
+    "It cannot see the account. Setup items marked unknown count as not done, and unverified conversion tracking makes the verdict 'foundations'.",
+    "Ten clicks before negating, 30 conversions for automated bidding and 20% impression share lost to budget are this engine's rules, not benchmarks.",
+    "It reads one export period of attributed conversions. It cannot tell whether brand search spend is incremental; use incrementality-and-mmm for that."
+  ],
+  "review": "Whoever runs the account verifies conversion tracking and the nine setup items in the platform, and the founder or finance lead confirms the target CPA, before negatives are added or budget is moved."
+}

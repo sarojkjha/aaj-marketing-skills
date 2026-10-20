@@ -1,0 +1,10 @@
+{
+  "decision": "Can our team actually keep this content calendar, and what should we cut to make it fit?",
+  "limitations": [
+    "Hours come from fixed format defaults (pillar 12, blog 5, post 0.5 and so on). If your pieces take longer, override them with effort, or the plan looks more feasible than it is.",
+    "It checks capacity, cluster structure and timing, not topic choice. It cannot tell whether a cluster targets real demand or will rank.",
+    "Time to impact assumes a fixed ramp from publish to contribution, four months by default. That is an assumption to set, not a forecast for your site.",
+    "Cluster authority is a count: a pillar with fewer than three supporting pieces is flagged. It does not judge the quality of the pieces or how they interlink."
+  ],
+  "review": "The content lead confirms contributor hours and per-format effort match how long pieces really take, and the founder confirms the goal date, before the schedule is committed."
+}

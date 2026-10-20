@@ -1,0 +1,31 @@
+{
+  "name": "aaj-marketing-skills",
+  "version": "1.2.0",
+  "description": "The math layer for marketing agents. Keep your writing skills and add the arithmetic: deterministic engines for unit economics, pipeline coverage, A/B significance, budget allocation, pricing, retention and SEO/GEO scoring, for Seed to Series B startups.",
+  "author": {
+    "name": "Saroj Jha, AAJ",
+    "url": "https://aajconsult.com"
+  },
+  "homepage": "https://skills.aajconsult.com",
+  "repository": "https://github.com/sarojkjha/aaj-marketing-skills",
+  "license": "MIT",
+  "keywords": [
+    "marketing",
+    "skills",
+    "startups",
+    "unit-economics",
+    "pricing",
+    "pipeline",
+    "seo",
+    "geo",
+    "mcp"
+  ],
+  "mcpServers": {
+    "aaj-engines": {
+      "command": "node",
+      "args": [
+        "${CLAUDE_PLUGIN_ROOT}/platform/mcp/server.mjs"
+      ]
+    }
+  }
+}

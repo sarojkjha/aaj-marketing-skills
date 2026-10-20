@@ -23,7 +23,7 @@ The 2024 GEO study (Aggarwal et al., KDD 2024) measured these inside a fixed fiv
 - [ ] Visible "Updated [date]".
 
 ## Prerequisite
-- [ ] Page serves rendered HTML to bots (`curl -A "GPTBot" <url>` shows the content). If it's an empty SPA shell, **stop** — fix SSR/prerender first; nothing here is visible otherwise.
+- [ ] Page serves rendered HTML to bots (a raw fetch with a GPTBot user agent shows the content). If it's an empty SPA shell, **stop** — fix SSR/prerender first; nothing here is visible otherwise.
 
 ## Example transformation
 

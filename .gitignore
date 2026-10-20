@@ -16,7 +16,7 @@ AAJ-Skills-Launch-Handoff-Brief*.md
 paths.ts
 .claude/
 
-aaj-marketing-skills/
+/aaj-marketing-skills/
 *.local
 
 # Wrangler local state (hosted MCP worker)

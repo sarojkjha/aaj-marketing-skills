@@ -1,0 +1,10 @@
+{
+  "decision": "Would a referral program bring in customers more cheaply than the channel it replaces, and what is the most we can pay in rewards?",
+  "limitations": [
+    "Ask and conversion rates are usually guesses before launch. With assumed inputs the output is a scenario; replace them with measured rates after the first period.",
+    "It models one period. The amplification figure assumes referred customers refer at the same rate as others, which is unmeasured until they do.",
+    "Referred customers get the same LTV unless you pass a measured referredLtv. Do not assume they are worth more; the 16% finding is from one bank.",
+    "Compliance flags print pointers to rules (FTC, Anti-Kickback, HIPAA); they are not a legal check. The research is mostly consumer, with no peer-reviewed B2B cash-reward study."
+  ],
+  "review": "The founder or finance lead confirms LTV, the CAC being replaced and which rates are assumptions. Counsel reviews any reward involving public posts, reviews or healthcare providers before launch."
+}

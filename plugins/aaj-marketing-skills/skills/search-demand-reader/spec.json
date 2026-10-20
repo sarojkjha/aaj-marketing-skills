@@ -1,0 +1,10 @@
+{
+  "decision": "Which topics are people already finding us for where better content would win more clicks?",
+  "limitations": [
+    "It sees only queries where your pages appeared. It cannot size a market or show demand you never appeared for, and impressions are not search volume.",
+    "Topics group queries by their most common word. This is coarse on purpose; read the top queries under a topic before acting on it.",
+    "Branded share depends on the brand words you list. Leave one out and branded searches are counted as non-branded demand.",
+    "Cannibalisation needs the page for each query; without it none can be found. The 200-impression, position-10 and 20%-split cut-offs are this engine's rules."
+  ],
+  "review": "The content or SEO lead checks the export covers at least three months and includes pages, confirms the brand and rival words, and reads each gap's top queries before briefing a page."
+}

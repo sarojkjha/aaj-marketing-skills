@@ -5,7 +5,7 @@
   "plugins": [
     {
       "name": "aaj-marketing-skills",
-      "source": "./",
+      "source": "./plugins/aaj-marketing-skills",
       "description": "The math layer for marketing agents: unit economics, pipeline coverage, A/B significance, budget splits, pricing, retention and SEO/GEO scoring, computed by deterministic engines you can read."
     }
   ]

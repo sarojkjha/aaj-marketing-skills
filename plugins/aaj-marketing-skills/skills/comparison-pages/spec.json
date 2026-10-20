@@ -1,0 +1,10 @@
+{
+  "decision": "Is this vs or alternatives page fair and current enough to publish, and when must its rival facts be re-checked?",
+  "limitations": [
+    "It checks that each rival fact has a source and a date, not that the source says what the row claims. Someone has to open each source.",
+    "Who wins each row is your own marking and the engine trusts it. A table marked in your favour passes the \"each rival wins somewhere\" rule with one row.",
+    "The wording scan is a fixed word list. Disparaging or absolute claims phrased in other words get through.",
+    "The 90-day staleness window is the engine's rule, not a standard; a rival that changed pricing last week is missed. It gives no legal verdict on comparative claims."
+  ],
+  "review": "Whoever owns the page re-opens every rival source and checks prices are compared at the same tier and scale. Legal reviews the claims about the named competitor before publish."
+}

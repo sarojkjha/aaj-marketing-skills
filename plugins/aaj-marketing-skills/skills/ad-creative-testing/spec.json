@@ -1,0 +1,10 @@
+{
+  "decision": "How long must this ad test run to answer the question, and is the winning ad a real winner or noise?",
+  "limitations": [
+    "It reads only the numbers you give it. It can't see whether the platform split the audience, and it checks uneven delivery only from impression counts.",
+    "A winner on click-through rate still needs checking on cost per conversion, and if a variant changed several things a win can't tell you which one worked.",
+    "Its refusal rules (one arm over twice another's impressions, under ten events, a read before the planned size) are rules of this engine, not industry benchmarks.",
+    "A clean win on the test does not show the lift lasts. Keep the control on a small share after rollout to see whether it fades."
+  ],
+  "review": "Whoever runs paid media confirms the variants ran in the platform's experiment feature with matched budget, audience, placement and schedule, and that the read used the planned sample. Check cost per conversion before scaling a winner."
+}

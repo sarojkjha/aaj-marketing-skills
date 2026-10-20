@@ -1,0 +1,10 @@
+{
+  "decision": "Is this competitor battlecard honest, sourced and complete enough for reps to use in live deals?",
+  "limitations": [
+    "It checks that competitor facts have a source and a date and that our wins have proof, not that either is true. Someone must open each source.",
+    "Facts unchecked for more than 90 days are flagged; that window is the engine's rule. A rival that changed pricing last week is not caught.",
+    "The disparagement and absolutes scan is a word list. The same claim in other words passes.",
+    "The objection type you enter is trusted, not checked. The won/lost record carries a 90% interval; with few deals the range is wide and is not a trend."
+  ],
+  "review": "The sales lead or product marketer re-opens each competitor source and confirms every proof point is real and cleared to share before the card goes to reps. Legal checks claims about the named competitor."
+}

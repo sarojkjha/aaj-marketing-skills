@@ -33,6 +33,6 @@ No engine needs customer names, emails or other personal data; leave them out.
 - It measures readiness, not traffic or citations. The GEO checks score whether claims are checkable and do not predict a lift.
 - FAQPage schema and llms.txt still earn points though the skill calls them hygiene, not Google levers, so the score can rise with no change in search visibility.
 
-**Review before acting:** Whoever owns the site confirms the rendering check used the crawler's view of the page (for example curl -A GPTBot) and spot-checks the failing items before fixes are prioritised. Pair the score with analytics for outcomes.
+**Review before acting:** Whoever owns the site confirms the rendering check used the crawler's view of the page (for example a raw fetch with a GPTBot user agent) and spot-checks the failing items before fixes are prioritised. Pair the score with analytics for outcomes.
 
 Method: [skills.aajconsult.com/skills/seo-geo-aeo-audit](https://skills.aajconsult.com/skills/seo-geo-aeo-audit)

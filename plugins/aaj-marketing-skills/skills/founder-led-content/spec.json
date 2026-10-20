@@ -1,0 +1,10 @@
+{
+  "decision": "Is this founder ready to start posting, and does each draft stay inside themes only they can own?",
+  "limitations": [
+    "Pass {check, input}; with no input you get a labelled demo. An unknown check or top-level field stops the run, but fields inside input that it doesn't know are ignored, so use the names in the header.",
+    "It is a rubric, not a prediction. It can't know whether a post will travel or bring buyers; judge the channel at ninety days on conversations, not impressions.",
+    "Most checks take your answers on trust: whether a competitor could post a theme, whether the first line carries the point, whether proof is invented or permission is written.",
+    "The post check spots engagement bait from a short phrase list and flags only the figures you list. It can't tell whether a draft sounds like the founder."
+  ],
+  "review": "The founder approves the three themes and every draft, and checks each figure has its source in the post. Any customer result needs written permission, confirmed by whoever owns that customer relationship, before it is posted."
+}
