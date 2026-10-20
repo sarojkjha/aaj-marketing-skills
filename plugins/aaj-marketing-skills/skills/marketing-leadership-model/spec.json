@@ -1,0 +1,10 @@
+{
+  "decision": "Should we hire a head of marketing, retain a fractional leader, or use an agency, on our own numbers?",
+  "limitations": [
+    "It has no benchmarks. Every salary, retainer and ramp figure is one you enter and the demo numbers are starting assumptions, so the result is only as good as your quotes.",
+    "A ramp month counts as half productive. That is an AAJ rule, not a measurement of how fast any person or agency gets up to speed.",
+    "The exit table prices cash only. A hire assumes no severance, and it can't price lost momentum, which the skill notes is usually the larger cost.",
+    "The fit call uses AAJ's hour thresholds (30 hours of leadership means hire, 20 of execution needs hands). It can't judge whether a given candidate or agency is any good."
+  ],
+  "review": "The founder checks the salary band, load and quotes are real and the execution still to buy is counted. The finance lead reruns it at 24 and 36 months before committing, and a review date is set at the crossover or the end of the minimum term."
+}

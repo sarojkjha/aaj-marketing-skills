@@ -1,0 +1,9 @@
+{
+  "decision": "What should this page answer, for which search intent, and is the brief complete enough to hand to a writer?",
+  "limitations": [
+    "Intent is read from the titles you paste, by signal-word patterns, one vote per title. It does not fetch the SERP or model the search engine; when the tally is close, read the titles yourself. With no titles, intent is inferred.",
+    "The cannibalisation check sees only the existing pages you list with their intent after a dash. A page you leave out, or list without its intent, is not checked.",
+    "It checks the brief is complete and well formed (a 40-60 word answer block, question headings, named sources), not that the answer is right or the sources are real."
+  ],
+  "review": "The content lead checks the live SERP for the target query and the site's existing pages on the topic, and confirms each named source exists and supports its claim, before the brief goes to a writer."
+}

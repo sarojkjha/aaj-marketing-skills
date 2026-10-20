@@ -27,7 +27,7 @@ process.argv = process.argv.map((a, i) =>
 
 // Organic CTR by position, from Backlinko's analysis of 4 million Google
 // results (Brian Dean, 2019, updated April 2025; Semrush and Search Console
-// data): https://backlinko.com/google-ctr-stats
+// data), published on the Backlinko site.
 // It predates AI Overviews and varies by vertical and SERP layout, so treat
 // it as a ceiling and override with your own Search Console data (--ctr).
 const CTR = { 1: 0.276, 2: 0.155, 3: 0.114, 4: 0.089, 5: 0.072, 6: 0.051, 7: 0.040, 8: 0.032, 9: 0.028, 10: 0.027 };
@@ -228,7 +228,7 @@ const FLAG_TO_KEY = {
   "--cost-per-page": "costPerPage", "--fixed-cost": "fixedCost",
   "--unique-data": "uniqueData"
 };
-const KEYS = Object.values(FLAG_TO_KEY);
+const OPTION_NAMES = Object.values(FLAG_TO_KEY);
 
 // Options come as flags (--pages 500) or as one JSON object
 // ({"pages": 500, "volume": 40}), which is how an MCP client passes them.
@@ -241,9 +241,9 @@ function parseArgs(argv) {
     let cfg;
     try { cfg = JSON.parse(first); } catch (e) { fail(`The JSON input does not parse: ${e.message}`); }
     if (!cfg || typeof cfg !== "object" || Array.isArray(cfg)) fail("The JSON input must be an object of options.");
-    const unknown = Object.keys(cfg).filter(k => !KEYS.includes(k) && k !== "json");
-    if (unknown.length) fail(`Unknown option(s): ${unknown.join(", ")}. Allowed: ${KEYS.join(", ")}.`);
-    for (const k of KEYS) if (cfg[k] !== undefined) o[k] = k === "uniqueData" ? String(cfg[k]) : num(cfg[k]);
+    const unknown = Object.keys(cfg).filter(k => !OPTION_NAMES.includes(k) && k !== "json");
+    if (unknown.length) fail(`Unknown option(s): ${unknown.join(", ")}. Allowed: ${OPTION_NAMES.join(", ")}.`);
+    for (const k of OPTION_NAMES) if (cfg[k] !== undefined) o[k] = k === "uniqueData" ? String(cfg[k]) : num(cfg[k]);
     o.__json = cfg.json === true;
     return o;
   }

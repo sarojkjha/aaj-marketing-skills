@@ -18,6 +18,8 @@ jobs:
       - run: node platform/scripts/generate-readme.mjs --check
       - name: Versions agree (package, Claude plugin, MCP registry entry, MCP server)
         run: node platform/scripts/check-versions.mjs
+      - name: Plugin folder (what the Claude directory scans) is in sync with skills/ and the MCP server
+        run: node platform/scripts/build-plugin.mjs --check
       - name: Hosted MCP bundle builds and is in parity with Node
         run: |
           node platform/mcp-worker/build.mjs

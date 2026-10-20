@@ -1,0 +1,10 @@
+{
+  "decision": "Which customer problems are real patterns rather than anecdotes, and have we done enough interviews to act?",
+  "limitations": [
+    "It counts and ranks your coding, not the notes. Theme names and severities are your judgement, and it won't merge near-duplicates such as 'double booking' and 'scheduling clash'.",
+    "The cut-offs (five interviews, 40% and three people for a pattern, 75% from one segment, no new theme in the last three) are AAJ engine rules, not research standards.",
+    "Themes without a severity rank on frequency alone, and without segment tags a theme that belongs to one kind of customer looks like everyone's.",
+    "'Would pay' records what people said in an interview, not what they bought."
+  ],
+  "review": "The founder or researcher who ran the calls checks the coding before a pattern goes into a persona or positioning: the same theme names across interviews, near-duplicates merged, and severity and segment filled in for each one."
+}

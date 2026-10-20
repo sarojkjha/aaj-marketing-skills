@@ -1,0 +1,10 @@
+{
+  "decision": "Who has to say yes to this deal, what must each of them believe, and which conversation and asset come next?",
+  "limitations": [
+    "Core roles (champion, economic buyer, end user) missing from the map count as uncovered, so one champion alone reads 33%, not 100%. Other roles you leave off do not lower the figure.",
+    "A role counts as identified only when a person is named. Run for a segment with titles and no names, coverage reads 0% and every role asks to be identified; use the asset list, not coverage, for segment planning.",
+    "Stance, access and beliefs are what you enter, often relayed by the champion. The engine cannot check them; treat what the champion says about others as a hypothesis.",
+    "It does not score the deal or predict the close. Coverage is a checklist measure, not a win probability."
+  ],
+  "review": "The account owner or sales lead confirms each name, access route and stance with the person directly, not only through the champion, before acting on the next-conversation order. Re-run before each pipeline review."
+}

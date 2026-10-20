@@ -1,0 +1,10 @@
+{
+  "decision": "Should we hire this candidate as our first marketer, turn them down, or gather more evidence first?",
+  "limitations": [
+    "Weights, must-haves, bars and the 3.0 hire line are your inputs or AAJ's defaults, not benchmarks. A badly written role profile produces a confident wrong call.",
+    "It scores only ratings with an evidence note but cannot judge whether a note is true or relevant; notes under four words are flagged as thin, nothing more.",
+    "It holds no salary or cost data. Any pay figure is the user's own, from public wage data for the location; the engine does not compare cost.",
+    "It does not check whether the company is ready to hire (retention in a segment, a working channel, founder time). A high score does not mean a hire will work."
+  ],
+  "review": "The founder confirms the month 1 to 6 outcomes and must-haves before interviews, and puts split interviewers in one room with their notes before acting on the call. Counsel checks interview, pay-disclosure and reference rules."
+}

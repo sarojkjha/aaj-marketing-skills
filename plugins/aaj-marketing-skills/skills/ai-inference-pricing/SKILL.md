@@ -1,0 +1,139 @@
+---
+name: ai-inference-pricing
+description: >-
+  Use when the user wants to check whether an AI product's price covers its
+  inference cost, or to set included usage, overage and free-tier limits. Also
+  use when the user mentions inference cost, token cost, LLM cost per user,
+  gross margin on an AI feature, usage-based or credit pricing, model routing,
+  or "are our power users losing us money". Produces cost
+  per task and per user, all-in margin per account at normal and spike usage,
+  break-even price and usage, a verdict against the founder's own target, and
+  the biggest margin levers.
+license: MIT
+metadata:
+  publisher: AAJ
+  slug: ai-inference-pricing
+  category: Strategy & Positioning
+  phase: Design
+  difficulty: Intermediate
+  card: >-
+    Checks that an AI plan's price still covers inference when usage spikes.
+  version: 1.0.0
+  sprint: unit-economics-retention
+  topic: pricing-monetization
+  secondary_topics: [analytics-budget]
+  agents: [Claude Code, Cursor, OpenAI Codex, Windsurf, Cline]
+  inputs: Plan price and basis, task types with usage and tokens, the model prices the founder checked (with dates), routing, included usage and overage, free tier, other variable costs, and the founder's target margin.
+  outputs: Inference cost per task and per active user, all-in margin per paid account at normal and spike usage, break-even price and usage, free-tier cost per paid account, a healthy/thin/underwater verdict, and the top three margin levers.
+  related_aaj:
+    - https://aajconsult.com/tools/ai-inference-cost-modeler
+    - https://aajconsult.com/playbooks/marketing-ai-products-playbook
+    - https://aajconsult.com/tools/pricing-arpu-modeler
+    - https://aajconsult.com/tools/unit-economics-calculator
+    - https://aajconsult.com/playbooks/saas-pricing-packaging
+  tags: [ai-pricing, inference-cost, usage-pricing, gross-margin, llm-cost]
+---
+
+# AI Inference Cost & Usage Pricing
+
+Check that an AI product's price still covers what it costs to run, for a typical account and for the heavy one, before the price goes on the page.
+
+## When to use
+
+When an AI product or feature is being priced or repriced, when gross margin is falling as usage grows, when a free tier or "unlimited" plan is on the table, or when the team is deciding how much usage to include and what to charge beyond it.
+
+## Before you start
+
+1. **Read the brand/product context first.** Pull the product, plans and prices from `.agents/product-marketing.md` (or `.agents/aaj-brand.md`). If none exists, ask the user for the plan structure.
+2. **Gather inputs from the founder's own data.** Plan price and whether it is per seat or per account; users per account and the share active in a month; each task type with tasks per active user per month and input/output tokens per task (from product logs, or a direct cost per task); the model prices they pay, per million input and output tokens, **with the date they checked them**; the routing share across models; included tasks and the overage price; the free tier (users, how active, how much they use, any cap, and the number of paid accounts carrying it); hosting per account, support and payment fees as a share of revenue.
+3. **Ask for their target margin.** The verdict is measured against the founder's own target, not a benchmark. If they have none, ask what margin the business plan or the board assumes, and use that.
+4. **Never supply model prices.** Do not fill in a provider's price from memory. Ask the user to look it up on the provider's own pricing page and give the date. Provider prices change.
+
+## Method
+
+Price an AI product from the cost of one task upward. Inference cost per task is tokens times the price per token, blended across the models the task is routed to. Multiply by tasks per active user and active users per account to get inference per account, add the other variable costs and the free tier each paid account carries, and compare with what the account pays. Then stress it: the average account is rarely the problem. The heavy account is. A plan is only healthy if it meets the founder's target at normal usage and still makes money when usage spikes.
+
+## Workflow
+
+1. **Build the task list.** One row per task type the product runs. Prefer measured tokens from logs over estimates; say which are estimates.
+2. **Enter the model prices the user checked**, with dates, and the routing share across models.
+3. **Run the engine** (below) and read the verdict against the user's target.
+4. **Read the spike and the usage break-even.** If an account loses money at the spike, the usage terms (included tasks, overage, caps) need work before the price does.
+5. **Check overage.** An overage price below the cost of a task after fees loses money on every extra task.
+6. **Rank the levers** the engine returns and present the top two or three, with their trade-offs.
+7. **Hand off.** Price ladders and tiers go to `pricing-and-packaging`; LTV, CAC and payback go to `unit-economics`.
+
+## The math
+
+```
+cost per task      = (input tokens x input price + output tokens x output price) / 1,000,000, blended by routing share
+                     (or the direct cost per task, where given)
+inference/account  = active users x sum(tasks per active user x cost per task) x usage multiple
+revenue/account    = plan price (x seats, if per seat) + overage price x max(0, tasks - included)
+other costs        = hosting per account + revenue x (support % + payment fee %)
+free-tier carry    = free users x active share x min(paid tasks x usage share, cap) x average cost per task / paid accounts
+all-in margin      = (revenue - inference - other costs - free-tier carry) / revenue
+
+healthy    = all-in margin >= YOUR target at normal usage AND all-in margin >= 0 at the spike
+thin       = makes money at normal usage, but below target or loses money at the spike
+underwater = loses money at normal usage
+```
+
+The spike and the usage break-even scale paid usage only; the free tier stays at its normal level.
+
+## Run the tool
+
+```bash
+node resources/inference-pricing.js --demo
+node resources/inference-pricing.js '<json-config>'
+node resources/inference-pricing.js --help
+```
+
+`build(config)` returns cost per task and per active user, one paid account's revenue, inference, other costs, free-tier carry and all-in margin at normal usage and at the spike, the break-even price, the price for the target margin, the usage multiple where an account turns unprofitable, a verdict, the top three levers, and checks:
+
+- any model price, or direct cost per task, checked more than 90 days ago (or undated) is flagged: provider prices change; re-check. The 90 days is a rule of this engine;
+- an overage price below the cost of a task after fees;
+- no usage limit, or included usage with no overage price;
+- an account that loses money at the spike.
+
+Levers are fixed what-if moves (price +10%, 20 points of task share to the cheapest model, -20% tokens per task, -20% included tasks, -20% free-tier usage), ranked by the change in all-in margin per paid account. The demo uses a fictional product and example prices that are not quotes from any provider. The same engine runs in the free AI Inference Cost Modeler at aajconsult.com/tools/ai-inference-cost-modeler.
+
+## Reference
+
+This skill bundles no price data, on purpose. Every model price comes from the user, with the date they checked it. The schema and engine rules are in the header of `resources/inference-pricing.js` (`--help` prints it).
+
+## Present the result
+
+- **Verdict** (healthy / thin / underwater) against the user's own target, in one sentence with the margin.
+- **Cost per task** for each task type, and inference cost per active user per month.
+- **One paid account, per month,** at normal and spike usage: revenue (plan and overage), inference, other costs, free-tier carry, all-in margin.
+- **Break-evens:** the break-even price, the price for the target, and the usage level where an account stops paying.
+- **Top levers**, ranked, each with its trade-off.
+- **Checks:** stale or undated prices first.
+
+## Guardrails & common mistakes
+
+- **Do not invent model prices or token counts.** Ask for the user's numbers, and label any estimate as an estimate.
+- **Re-check prices older than 90 days.** Providers change prices and models; a stale price makes every number downstream wrong.
+- **Model the heavy account, not just the average.** Averages hide the accounts that lose money; run the spike.
+- **Count the free tier.** It is a real cost carried by paid accounts.
+- **Overage must cover cost.** An overage price below cost per task makes heavy users more expensive the more they pay.
+- **Routing is a quality decision first.** Only move tasks to a cheaper model once it has been tested on those tasks.
+- **No benchmark targets.** The target margin is the founder's; do not substitute an "industry" figure.
+- **Not financial advice.** The output is a model of the user's own inputs; decisions about pricing and contracts are theirs.
+
+## Related AAJ resources
+
+- AI Inference Cost Modeler (same engine) - https://aajconsult.com/tools/ai-inference-cost-modeler
+- Marketing AI Products Playbook (Step 6: price on a metric that grows with value) - https://aajconsult.com/playbooks/marketing-ai-products-playbook
+- Pricing & ARPU Modeler - https://aajconsult.com/tools/pricing-arpu-modeler
+- Unit Economics Calculator - https://aajconsult.com/tools/unit-economics-calculator
+- SaaS Pricing & Packaging Playbook - https://aajconsult.com/playbooks/saas-pricing-packaging
+
+## Related skills
+
+`pricing-and-packaging` · `unit-economics` · `pricing-page-teardown` · `brand-product-context`
+
+## Credits
+
+Original AAJ skill. The Agent Skills format and the marketing-skills catalog by Corey Haines (`coreyhaines31/marketingskills`, MIT) were references for structure and coverage; this skill is independently written. See the repository README for the full reference list.

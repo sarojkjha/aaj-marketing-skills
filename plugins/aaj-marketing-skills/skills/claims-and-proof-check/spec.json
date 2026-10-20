@@ -1,0 +1,10 @@
+{
+  "decision": "Which claims in this copy need proof, consent or a wording change before it goes live?",
+  "limitations": [
+    "It does not replace legal or regulatory review. It flags claims that need support and never says a claim is compliant or legal.",
+    "It matches wording in the text you paste. It can flag a phrase that is not a claim in context, and it misses implied claims, images, charts and the page's overall impression.",
+    "An evidence note clears a flag if it quotes the flagged words or names the flag id. The engine does not check that the evidence exists or would hold up.",
+    "Its guidance links are to US regulators (FTC, HHS, Department of Education) and the EDPB only, and its audience notes cover general, B2B SaaS, AI, EdTech and MedTech."
+  ],
+  "review": "Legal counsel decides whether each flagged claim can run. The founder or marketer confirms the evidence or signed consent is actually on file, and a reviewer checks the visuals and implied claims the engine cannot see."
+}

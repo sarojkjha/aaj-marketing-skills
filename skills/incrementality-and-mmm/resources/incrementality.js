@@ -289,7 +289,7 @@ const NAMES = {
   "--control-n": "controlN", "--control-conv": "controlConv",
   "--treat-n": "treatN", "--treat-conv": "treatConv"
 };
-const KEYS = Object.values(NAMES);
+const FIELD_NAMES = Object.values(NAMES);
 
 function fail(msg) { console.error(msg + "\nRun --help for the options."); process.exit(1); }
 
@@ -307,8 +307,8 @@ function parseArgs(argv) {
     let j;
     try { j = JSON.parse(first); } catch (e) { fail("Invalid JSON: " + e.message); }
     if (!j || typeof j !== "object" || Array.isArray(j)) fail("The input must be a JSON object.");
-    const bad = Object.keys(j).filter(k => !KEYS.includes(k));
-    if (bad.length) fail(`Unrecognised field${bad.length > 1 ? "s" : ""}: ${bad.map(k => '"' + k + '"').join(", ")}. Expected: ${KEYS.join(", ")}.`);
+    const bad = Object.keys(j).filter(k => !FIELD_NAMES.includes(k));
+    if (bad.length) fail(`Unrecognised field${bad.length > 1 ? "s" : ""}: ${bad.map(k => '"' + k + '"').join(", ")}. Expected: ${FIELD_NAMES.join(", ")}.`);
     for (const k of Object.keys(j)) set(k, j[k]);
   } else {
     for (let i = 0; i < argv.length; i++) {

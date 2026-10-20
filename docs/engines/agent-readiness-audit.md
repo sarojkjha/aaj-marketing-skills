@@ -28,7 +28,7 @@
 No engine needs customer names, emails or other personal data; leave them out.
 
 **Limitations:**
-- It is a self-assessment, not a crawl. It scores the flags you pass and cannot check the live site; verify each answer with view-source or curl.
+- It is a self-assessment, not a crawl. It scores the flags you pass and cannot check the live site; verify each answer with view-source or a raw-HTML fetch.
 - Each check is pass or fail, so a half-done item scores nothing. Rendering is a hard gate: without --ssr the verdict is BLOCKED whatever else passes.
 - It measures whether an agent can evaluate and act, not whether AI engines cite you. Use seo-geo-aeo-audit for that.
 - It reads --flags or {"checks": {id: true/false}}. Unknown flags or ids, non-true/false values and stray arguments stop the run with an error that names them.

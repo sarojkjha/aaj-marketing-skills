@@ -1,0 +1,10 @@
+{
+  "decision": "How big is the market we can actually sell to, counted bottom-up, and how much of it can our team win in a year?",
+  "limitations": [
+    "A missing fit share or reachable share is taken as 100%. The engine flags it, but SAM equals TAM for that segment until you enter a real share.",
+    "It checks that each count and share has a source written down, not that the source is right, current, or counts the same market your segment name describes.",
+    "SOM is one year of wins from the capacity you enter, at the average ACV in SAM, capped at SAM. An optimistic rep, pipeline or conversion input gives an optimistic SOM.",
+    "It cannot tell if segments mix currencies or monthly and annual values. ACV must be annual, in one currency, at what customers pay now, for every segment."
+  ],
+  "review": "The founder checks each account count against its source and hand-checks a sample of accounts for the fit share, and the sales lead confirms the capacity figures, before TAM, SAM or SOM goes in a deck or board plan."
+}

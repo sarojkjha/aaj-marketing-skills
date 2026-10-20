@@ -1,0 +1,10 @@
+{
+  "decision": "What do buyers praise and complain about in our reviews and our rivals', and where can we claim an advantage with proof?",
+  "limitations": [
+    "Reviews over-represent the delighted and the furious, so theme shares describe reviewers, not the market. It flags a single source; use two before generalising.",
+    "Sentiment comes from the star rating only. A review with no rating is a mention, and a complaint inside a 4- or 5-star review counts as praise for that theme.",
+    "The default word list covers twelve software themes and matches words, not meaning. Below 60% coverage or in a specialist category, add a lexicon or code by hand.",
+    "Under 10 reviews of a product the intervals are too wide to compare. An opportunity is a lead to prove, not a claim the engine has checked."
+  ],
+  "review": "Whoever owns positioning spot-checks ten word-list-coded reviews and confirms you are provably better before claiming an opportunity. Legal or the content owner confirms consent before any reviewer's words appear in marketing."
+}

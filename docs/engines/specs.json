@@ -471,7 +471,7 @@
         }
       ],
       "limitations": [
-        "It is a self-assessment, not a crawl. It scores the flags you pass and cannot check the live site; verify each answer with view-source or curl.",
+        "It is a self-assessment, not a crawl. It scores the flags you pass and cannot check the live site; verify each answer with view-source or a raw-HTML fetch.",
         "Each check is pass or fail, so a half-done item scores nothing. Rendering is a hard gate: without --ssr the verdict is BLOCKED whatever else passes.",
         "It measures whether an agent can evaluate and act, not whether AI engines cite you. Use seo-geo-aeo-audit for that.",
         "It reads --flags or {\"checks\": {id: true/false}}. Unknown flags or ids, non-true/false values and stray arguments stop the run with an error that names them."
@@ -2913,7 +2913,7 @@
         "It measures readiness, not traffic or citations. The GEO checks score whether claims are checkable and do not predict a lift.",
         "FAQPage schema and llms.txt still earn points though the skill calls them hygiene, not Google levers, so the score can rise with no change in search visibility."
       ],
-      "review": "Whoever owns the site confirms the rendering check used the crawler's view of the page (for example curl -A GPTBot) and spot-checks the failing items before fixes are prioritised. Pair the score with analytics for outcomes."
+      "review": "Whoever owns the site confirms the rendering check used the crawler's view of the page (for example a raw fetch with a GPTBot user agent) and spot-checks the failing items before fixes are prioritised. Pair the score with analytics for outcomes."
     },
     {
       "id": "signup-flow-optimizer",

@@ -1,0 +1,10 @@
+{
+  "decision": "Which lifecycle email sequences are we missing, in what order should we build them, and are new users getting too many emails?",
+  "limitations": [
+    "Send load uses default email counts and day windows per sequence unless you pass --emails, and assumes every sequence reaches every new user. It counts no transactional or product email, so the real inbox load is higher.",
+    "Breakeven uses one build cost for every sequence and is judged against monthly signups. Win-back and sunset run on lapsed users, a smaller base, so judge those against that base.",
+    "It does not estimate lift. It gives the extra conversions a month a sequence needs to pay back; whether that is plausible for your audience is your call.",
+    "Unknown names or arguments, or an --emails list that is not six whole numbers, stop the run. Fields you leave out take defaults (500 signups, $400 a conversion, nothing built); check them."
+  ],
+  "review": "The lifecycle or CRM owner lists every email that already fires, transactional included, with the real email count per sequence, before trusting the send-load verdict. They confirm the value per conversion before the breakeven decides what gets built."
+}

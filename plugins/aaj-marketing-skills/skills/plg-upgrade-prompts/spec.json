@@ -1,0 +1,10 @@
+{
+  "decision": "Which upgrade prompt and funnel stage is losing the most paid upgrades, and are the differences between prompts real?",
+  "limitations": [
+    "Prompts reach different users at different moments, so the fix-first gain ranks where to look, not what a change will add. Test the fix with an A/B test.",
+    "It holds no benchmarks and only compares your prompts with each other. With small counts the corrected tests will often say prompts are not distinguishable yet.",
+    "Counts must be unique users, one period and one attribution rule. View-through upgrades are left out, and mixed units make every rate wrong.",
+    "It cannot see what happens after the upgrade. A prompt that lifts conversion while upgraded users churn is overselling; check retention separately."
+  ],
+  "review": "The product or growth lead confirms the four event counts are unique users for one period, tagged by prompt, and that no limit gates the activation path, before a prompt is rewritten or moved."
+}

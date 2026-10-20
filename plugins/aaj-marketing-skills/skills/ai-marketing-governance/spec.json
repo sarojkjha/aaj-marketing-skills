@@ -1,0 +1,10 @@
+{
+  "decision": "Is our team ready to publish AI-drafted marketing work, and does each citation in a draft meet the rules before it ships?",
+  "limitations": [
+    "It is a rule check, not a fact checker. A citeable verdict means the citation has the right parts; it cannot tell whether the study exists. It does not replace legal or compliance review.",
+    "The draft sweep only spots figures written with %, \"percent\", \"x\" or $. Plain counts such as \"110 startups\" go unflagged, so read the draft for every number.",
+    "Readiness credits tools only against the engine's six task labels, matched exactly, and scores what you say was verified. It cannot see your plan's real training setting.",
+    "Pass {check, input}; with no input you get a labelled demo. An unknown check or top-level field stops the run, but fields inside input that it doesn't know are ignored, so use the names in the header."
+  ],
+  "review": "The named reviewer opens every cited document before publish, and the policy owner checks the training-on-inputs setting on the plan itself. Legal or compliance reviews disclosure, data and claims rules for your markets."
+}

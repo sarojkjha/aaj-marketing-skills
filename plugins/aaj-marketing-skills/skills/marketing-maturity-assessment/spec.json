@@ -1,0 +1,10 @@
+{
+  "decision": "Which parts of our marketing system are the weak links to fix first for our stage?",
+  "limitations": [
+    "It is a self-assessment against AAJ's own bands, not a benchmark. Nothing in it says how you rank against other companies.",
+    "Scores are only as honest as the answers. It flags high scores with no evidence marked, but cannot check the artefacts itself.",
+    "Each dimension is an average of three answers, so a 'fully' and a 'not yet' can land as a middling score. The engine flags the split; read the answers, not only the score.",
+    "The statements move over quarters, so monthly re-runs mostly show changes in how people answered, not in the function."
+  ],
+  "review": "The founder or marketing lead checks the artefact behind every flagged high score (positioning statement, ICP, CAC by channel, NRR and GRR) and re-scores any that are missing before the weak links set the plan."
+}

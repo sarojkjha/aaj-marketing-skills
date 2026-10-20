@@ -1,0 +1,10 @@
+{
+  "decision": "Which loss reasons, segments and competitors cost us the most revenue, and where should the fix start?",
+  "limitations": [
+    "Reasons, stages and amounts are what you enter. It cannot check them, and win or loss reasons logged by reps often differ from what buyers say; confirm with buyer interviews.",
+    "It tallies the win reasons and lost-at stages you give it but does not read interview notes or call recordings; that work stays with the skill.",
+    "The biggest fixable leak is the segment and loss reason with the most lost revenue, leaving out no decision and unspecified, which are reported separately. Decide yourself whether it is fixable.",
+    "A thin sample (under 20 closed deals or 8 losses) is flagged using this engine's own rule of thumb. With fewer, read any ranking as a hint, not a pattern."
+  ],
+  "review": "The sales lead confirms loss reasons are coded from deal evidence into a consistent set and that each top pattern rests on enough deals, before a fix is assigned to product, marketing or sales."
+}

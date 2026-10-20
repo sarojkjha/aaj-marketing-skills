@@ -104,7 +104,7 @@ Where the user's answers were uncertain, say which ones and how to verify them. 
 ## Guardrails & common mistakes
 
 - **This is not GEO.** GEO asks whether an AI engine cites your content. This asks whether an agent can evaluate and transact. Both matter; conflating them means fixing the wrong thing.
-- **DevTools lies.** It shows the rendered DOM. Use view-source or `curl` to see what a non-JavaScript agent actually receives.
+- **DevTools lies.** It shows the rendered DOM. Use view-source or a raw-HTML fetch to see what a non-JavaScript agent actually receives.
 - **Don't fabricate the forecast.** The machine-customer shift is directionally well-supported but the specific timelines are projections, not measurements. Present them as such.
 - **Blocking AI crawlers is a legitimate choice** — for training crawlers especially. What's not legitimate is blocking them by accident and calling it strategy. Know which you've done.
 - **Structured data must match the visible page.** Schema that contradicts the rendered content is a spam signal, not an optimisation.

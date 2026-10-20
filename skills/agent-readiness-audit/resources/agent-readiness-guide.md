@@ -26,7 +26,7 @@ They overlap on rendering and structured data, and diverge sharply after that. A
 
 **Content renders without JavaScript — 14 pts.** The hard gate. An agent that doesn't execute JS receives whatever is in the raw HTML. If that's `<div id="root"></div>`, you have no content as far as it's concerned.
 
-*Verify:* `view-source:yoursite.com` (or `curl -s https://yoursite.com | grep "some sentence"`). **Not** DevTools — that shows the post-JavaScript DOM and will tell you everything is fine.
+*Verify:* `view-source:yoursite.com` (or fetch the raw HTML and search it for a sentence from the page). **Not** DevTools — that shows the post-JavaScript DOM and will tell you everything is fine.
 
 *Fix:* server-render, prerender, or serve a static content layer to non-JS clients. This is exactly what a prerendering edge worker does, and it's the highest-return fix on this list.
 

@@ -6,7 +6,7 @@ Check IDs below are exactly the keys `score.js` expects.
 
 ## Technical & Crawlability — weight 25
 The make-or-break layer. If crawlers and AI engines can't get rendered HTML, nothing else matters.
-- `ssr_prerender` — **the critical one.** Does the initial HTML response contain the real content (title, meta, body, JSON-LD), or an empty SPA shell hydrated later? Test with `curl -A "GPTBot" <url>`. Empty shell = fail.
+- `ssr_prerender` — **the critical one.** Does the initial HTML response contain the real content (title, meta, body, JSON-LD), or an empty SPA shell hydrated later? Test with a raw fetch that sends a GPTBot user agent. Empty shell = fail.
 - `ai_crawlers_allowed` — does `robots.txt` allow GPTBot, OAI-SearchBot, PerplexityBot, ClaudeBot, Google-Extended?
 - `sitemap_present` — a valid `sitemap.xml` exists and lists the page.
 - `canonical_correct` — canonical, og:url, sitemap loc, and internal links are the identical string (incl. trailing-slash convention).

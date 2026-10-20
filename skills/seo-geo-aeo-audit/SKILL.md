@@ -40,7 +40,7 @@ The user wants to know why a page isn't ranking or being cited by AI, or wants a
 
 ## Before you start
 
-1. **Get the page as a crawler sees it.** Fetch the URL — and critically, fetch it the way a bot does. Run `curl -A "GPTBot" <url>` (or fetch and inspect the raw HTML). If the body, meta, and JSON-LD are missing from the initial response, the site is client-side rendered and **most other wins are blocked until SSR/prerender ships** — this is the single most important finding.
+1. **Get the page as a crawler sees it.** Fetch the URL — and critically, fetch it the way a bot does. Fetch the raw HTML with a GPTBot user agent (or inspect the unrendered source). If the body, meta, and JSON-LD are missing from the initial response, the site is client-side rendered and **most other wins are blocked until SSR/prerender ships** — this is the single most important finding.
 2. **Also retrieve** `robots.txt`, `sitemap.xml`, and `llms.txt` / `llms-full.txt` for that domain.
 
 ## Workflow

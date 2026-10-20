@@ -1,0 +1,10 @@
+{
+  "decision": "Is the JSON-LD on this page valid, true to what the page shows, and complete for its type?",
+  "limitations": [
+    "It compares markup with what readers see only when you pass html or visibleText. Without them the verdict is \"Valid markup, not checked against the page\", never \"Ready to publish\".",
+    "It checks the markup you paste, not what a crawler receives. JSON-LD added by client-side JavaScript may never reach a crawler.",
+    "A clean check does not promise a rich result or any effect on AI answers. Google says no special schema is needed for its AI features.",
+    "Its rules follow Google and schema.org pages opened on 2026-10-10. Google edits those pages; re-check the source each finding cites."
+  ],
+  "review": "Whoever owns the site confirms every price, rating, question and date in the markup appears on the live page, then re-validates the deployed URL with Google's Rich Results Test and checks the JSON-LD is in the server response."
+}
