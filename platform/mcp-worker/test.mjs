@@ -56,6 +56,22 @@ ok(s === 400 && b.error.code === -32700, "parse error");
 ok(b.error.code === -32601, "method not found");
 [s, b] = await j(await post({ jsonrpc: "2.0", id: 8, method: "tools/call", params: { name: "get_skill", arguments: { skill: "pilot-to-contract" } } }));
 ok(/Pilot/.test(b.result.content[0].text), "get_skill");
+// list_engines filter: matches category, id and skill title, not just the category name.
+const list = async (category) => { const [st, bd] = await j(await post({ jsonrpc: "2.0", id: 20, method: "tools/call", params: { name: "list_engines", arguments: category === undefined ? {} : { category } } })); return st === 200 ? bd.result.content[0].text : ""; };
+const ids = (txt) => [...txt.matchAll(/^- \*\*([^*]+)\*\*/gm)].map((m) => m[1]).sort();
+const all = ids(await list());
+ok(all.length === ENGINES.length, `unfiltered list has every engine (${all.length} vs ${ENGINES.length})`);
+const pricing = ids(await list("pricing"));
+ok(["ai-inference-pricing", "pricing-and-packaging", "pricing-page-teardown"].every((x) => pricing.includes(x)) && pricing.length <= 5, `"pricing" finds the pricing engines (got ${pricing.join(", ")})`);
+const retention = ids(await list("retention"));
+ok(retention.includes("lifecycle-and-retention") && retention.includes("email-lifecycle-sequence"), "category name still works");
+ok(ids(await list("RETENTION")).join() === retention.join(), "filter ignores case");
+ok(ids(await list("seo audit")).includes("seo-geo-aeo-audit"), "several words must all match");
+ok(ids(await list("paid search")).includes("paid-search-account-audit"), "multi-word id match");
+ok(ids(await list("")).length === all.length, "empty filter lists everything");
+const none = await list("zzzz-nothing");
+ok(/No engines matched/.test(none) && /Categories:/.test(none) && /Strategy & Positioning/.test(none), "no match lists the categories");
+
 const g = await worker.fetch(new Request("https://mcp.example/mcp"));
 ok(g.status === 405, "GET /mcp -> 405");
 const home = await worker.fetch(new Request("https://mcp.example/"));

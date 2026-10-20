@@ -57,7 +57,7 @@ const TOOLS = [
     inputSchema: {
       type: "object",
       properties: {
-        category: { type: "string", description: "Optional filter, matched loosely against the engine's category." },
+        category: { type: "string", description: "Optional filter. Words are matched against the engine's category, id and skill title (for example \"pricing\", \"retention\" or \"seo audit\"), then against its summary." },
       },
       additionalProperties: false,
     },
@@ -126,13 +126,25 @@ const TOOLS = [
 const text = (s) => ({ content: [{ type: "text", text: s }] });
 const fail = (s) => ({ content: [{ type: "text", text: s }], isError: true });
 
+// A filter word matches the category, the engine id or the skill title first, so
+// "pricing" finds the three pricing engines and "retention" finds the Retention
+// category. Only when none of those match does it look at the one-line summary.
+// Several words must all match ("seo audit").
+function filterEngines(rows, query) {
+  const terms = String(query).toLowerCase().split(/[^a-z0-9]+/).filter(Boolean);
+  if (!terms.length) return rows;
+  const every = (hay) => rows.filter((e) => terms.every((t) => hay(e).includes(t)));
+  const names = every((e) => `${e.category || ""} ${e.id} ${e.slug || ""} ${e.skillName || ""}`.toLowerCase());
+  return names.length ? names : every((e) => `${e.category || ""} ${e.summary || ""}`.toLowerCase());
+}
+
 function toolListEngines({ category }) {
   let rows = [...engines.values()];
-  if (category) {
-    const q = String(category).toLowerCase();
-    rows = rows.filter((e) => (e.category || "").toLowerCase().includes(q));
+  if (category) rows = filterEngines(rows, category);
+  if (!rows.length) {
+    const cats = [...new Set([...engines.values()].map((e) => e.category).filter(Boolean))].sort();
+    return text(`No engines matched "${category}". Categories: ${cats.join("; ")}. Call list_engines with no filter to see all of them.`);
   }
-  if (!rows.length) return text("No engines matched. Call list_engines with no filter to see all of them.");
   const byCat = new Map();
   for (const e of rows) {
     const c = e.category || "Uncategorised";
