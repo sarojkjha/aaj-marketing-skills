@@ -32,7 +32,9 @@ import {
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 // platform/mcp/server.mjs -> repo root
-const REPO_ROOT = resolve(process.env.AAJ_SKILLS_ROOT || join(HERE, "..", ".."));
+// Default: two levels up from this file. To point at another checkout, pass --root <dir>.
+const rootFlag = process.argv.indexOf("--root");
+const REPO_ROOT = resolve(rootFlag > -1 && process.argv[rootFlag + 1] ? process.argv[rootFlag + 1] : join(HERE, "..", ".."));
 const SKILLS_DIR = join(REPO_ROOT, "skills");
 
 const log = (...a) => process.stderr.write("[aaj-engines] " + a.join(" ") + "\n");
@@ -44,7 +46,7 @@ const log = (...a) => process.stderr.write("[aaj-engines] " + a.join(" ") + "\n"
 function discover() {
   const found = listSkills(REPO_ROOT);
   if (!found.length) {
-    log(`no skills found under ${SKILLS_DIR} — set AAJ_SKILLS_ROOT to the repo root`);
+    log(`no skills found under ${SKILLS_DIR} — pass --root <repo root>`);
     return { skills: [], engines: new Map() };
   }
   const skills = [];
@@ -85,7 +87,7 @@ function runEngine(e, argv) {
     const child = spawn(process.execPath, [e.file, ...argv], {
       cwd: dirname(e.file),
       stdio: ["ignore", "pipe", "pipe"],
-      env: { PATH: process.env.PATH, NODE_ENV: "production" },
+      env: { NODE_ENV: "production" }, // engines are pure; the node binary is addressed by absolute path
     });
     let out = "", err = "", capped = false, settled = false;
     const cap = (s, chunk) => {
