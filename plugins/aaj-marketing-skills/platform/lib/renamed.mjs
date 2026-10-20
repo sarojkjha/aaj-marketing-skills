@@ -26,5 +26,5 @@ export function currentSlug(id) {
   const s = String(id || "").trim();
   const [slug, file] = s.split(":");
   const now = Object.hasOwn(RENAMED_SKILLS, slug) ? RENAMED_SKILLS[slug] : slug;
-  return file ? `${now}:${file}` : now;
+  return file ? now + ":" + file : now;
 }

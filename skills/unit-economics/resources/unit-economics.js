@@ -230,14 +230,14 @@ function validate(c) {
   // grossMargin below 1% is not a real margin, so 0 < x < 1 is a proportion.
   if (c.grossMargin !== undefined && c.grossMargin > 0 && c.grossMargin < 1) {
     udie(`"grossMargin" looks like a proportion (${c.grossMargin}), but this engine expects a percentage.`,
-         `Pass ${Math.round(c.grossMargin * 100)} for ${Math.round(c.grossMargin * 100)}%, not ${c.grossMargin}.`);
+         `Use ${Math.round(c.grossMargin * 100)} for ${Math.round(c.grossMargin * 100)}%, not ${c.grossMargin}.`);
   }
   // Monthly churn between 0.1% and 1% is common in B2B SaaS, so accept it as a
   // percentage. Below 0.1% a month (a lifetime over 80 years) the value is far
   // more likely a proportion typed by mistake (0.03 meaning 3%).
   if (c.churnMonthly !== undefined && c.churnMonthly > 0 && c.churnMonthly < 0.1) {
     udie(`"churnMonthly" ${c.churnMonthly} would mean ${c.churnMonthly}% a month (a lifetime of ~${Math.round(100 / c.churnMonthly / 12)} years), which looks like a proportion.`,
-         `Pass ${+(c.churnMonthly * 100).toFixed(2)} for ${+(c.churnMonthly * 100).toFixed(2)}%. If you really mean ${c.churnMonthly}% a month, pass "lifetimeMonths": ${Math.round(100 / c.churnMonthly)} instead.`);
+         `Use ${+(c.churnMonthly * 100).toFixed(2)} for ${+(c.churnMonthly * 100).toFixed(2)}%. If you really mean ${c.churnMonthly}% a month, set "lifetimeMonths": ${Math.round(100 / c.churnMonthly)} instead.`);
   }
   if (c.grossMargin > 100) udie(`"grossMargin" cannot exceed 100 (got ${c.grossMargin}).`);
   if (c.churnMonthly !== undefined && c.churnMonthly > 100) {

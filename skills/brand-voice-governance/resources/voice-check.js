@@ -379,7 +379,7 @@ PROFILE — extract a checkable profile from a brand-context brief
     "maxGrade": 9                    // optional override
   }
 
-  Feed profile output back into check as "profile", or just pass "brief" to
+  Feed profile output back into check as "profile", or just set "brief" to
   check directly and it re-parses.
 
 Severities:  ✗ block  = violates a stated brand rule (fails the check)

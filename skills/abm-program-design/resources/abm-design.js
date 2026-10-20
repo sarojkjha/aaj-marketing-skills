@@ -83,7 +83,7 @@ function validate(cfg) {
       if (typeof v !== 'number' || !isFinite(v)) die(`${where}: "${k}" must be a number.`);
       if (v < 0 || v > 1) {
         die(`${where}: "${k}" must be a proportion between 0 and 1 (got ${v}).`,
-            v > 1 && v <= 100 ? `Pass ${v / 100} for ${v}%, not ${v}.` : undefined);
+            v > 1 && v <= 100 ? `Give ${v / 100} for ${v}%, not ${v}.` : undefined);
       }
       // The silent-wrong-answer case: a rate given as a percentage under 1.
       if (v > 0 && v < 0.001) {
