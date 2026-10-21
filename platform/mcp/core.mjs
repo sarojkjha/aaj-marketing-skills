@@ -53,9 +53,9 @@ const TOOLS = [
     title: "List marketing engines",
     annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false },
     description:
-      "List every AAJ marketing engine that can be run: id, what question it answers, and its category. " +
-      "Call this first when you need to compute something (unit economics, pipeline forecast, budget " +
-      "allocation, retention, A/B significance, SEO/GEO score, ad spend, pricing) rather than estimate it.",
+      "Lists every AAJ marketing engine: its id, the question it answers, and its category. " +
+      "Engines cover unit economics, pipeline forecast, budget allocation, retention, A/B significance, " +
+      "SEO/GEO scoring, ad spend and pricing.",
     inputSchema: {
       type: "object",
       properties: {
@@ -69,11 +69,11 @@ const TOOLS = [
     title: "Describe an engine's inputs",
     annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false },
     description:
-      "Show one engine's input schema: required fields, units, alternative shapes, and a worked example. " +
-      "Always call this before run_engine unless you already know the schema — the engines reject bad input rather than guessing.",
+      "Shows one engine's input schema: required fields, units, alternative shapes, and a worked example. " +
+      "Engines reject bad input rather than guessing.",
     inputSchema: {
       type: "object",
-      properties: { engine: { type: "string", description: "Engine id from list_engines." } },
+      properties: { engine: { type: "string", description: "Engine id." } },
       required: ["engine"],
       additionalProperties: false,
     },
@@ -83,18 +83,18 @@ const TOOLS = [
     title: "Run a marketing engine",
     annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false },
     description:
-      "Run an AAJ engine and return its verdict. Give `input` as an object of the engine's fields. " +
+      "Runs an AAJ engine and returns its verdict. Give `input` as an object of the engine's fields. " +
       "Omit `input` to run the engine's built-in worked example. Engines are deterministic, offline, " +
       "and validate their input — a wrong unit is reported as an error, not absorbed into a confident answer.",
     inputSchema: {
       type: "object",
       properties: {
-        engine: { type: "string", description: "Engine id from list_engines." },
+        engine: { type: "string", description: "Engine id." },
         input: {
           type: ["object", "string"],
           description:
             "The engine's configuration object. Some engines also accept a named mode as a plain string " +
-            "(for example 'design' or 'readout') — describe_engine says which. Omit for the demo.",
+            "(for example 'design' or 'readout'). Omit for the demo.",
         },
       },
       required: ["engine"],
@@ -106,8 +106,8 @@ const TOOLS = [
     title: "Find a marketing skill",
     annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false },
     description:
-      "Find AAJ marketing skills by the problem they solve — 'churn is rising', 'we're launching next month', " +
-      "'not showing up in AI answers'. Returns the method to follow, and says which skills have a runnable engine.",
+      "Finds AAJ marketing skills by the problem they solve — 'churn is rising', 'we're launching next month', " +
+      "'not showing up in AI answers'. Returns matching methods and marks which have a runnable engine.",
     inputSchema: {
       type: "object",
       properties: {
@@ -123,10 +123,10 @@ const TOOLS = [
     title: "Get a skill's method",
     annotations: { readOnlyHint: true, destructiveHint: false, idempotentHint: true, openWorldHint: false },
     description:
-      "Return the full method for one skill: when to use it, the steps, the quality bar, and how to run its engine if it has one.",
+      "Returns the full method for one skill: when to use it, the steps, the quality bar, and how to run its engine if it has one.",
     inputSchema: {
       type: "object",
-      properties: { skill: { type: "string", description: "Skill slug from search_skills." } },
+      properties: { skill: { type: "string", description: "Skill slug." } },
       required: ["skill"],
       additionalProperties: false,
     },
@@ -348,7 +348,7 @@ async function handle(msg) {
         instructions:
           `AAJ marketing engines. ${engines.size} engines compute answers from your numbers — unit economics, ` +
           `forecasting, budget allocation, retention, experiment significance, SEO/GEO scoring. ` +
-          `${skills.length} skills carry the method. Prefer running an engine over estimating. ` +
+          `${skills.length} skills carry the method. ` +
           `Methods are published at ${SKILLS_SITE} and ${SITE}/hub.`,
       });
     }
