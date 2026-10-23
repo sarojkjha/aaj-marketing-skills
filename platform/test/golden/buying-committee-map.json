@@ -93,6 +93,45 @@
         "  A map of who must say yes and what each needs to believe. It does not score the deal or predict the close; pipeline-and-forecast does that from stages."
       ],
       "stderr": []
+    },
+    {
+      "name": "economic buyer role with no person named (Oct 23 fix)",
+      "source": "defect found by the golden tests, Oct 23",
+      "args": [
+        "{\"deal\":\"Test deal\",\"roles\":[{\"role\":\"champion\",\"title\":\"Ops manager\",\"name\":\"J. Park\",\"access\":\"direct\",\"stance\":\"for\",\"mustBelieve\":\"It cuts no-shows\",\"asset\":\"Case study\"},{\"role\":\"economic-buyer\",\"title\":\"CFO\",\"access\":\"none\",\"stance\":\"unknown\",\"mustBelieve\":\"Payback inside a year\"},{\"role\":\"end-user\",\"title\":\"Front desk\",\"name\":\"A. Gomez\",\"access\":\"via-champion\",\"stance\":\"neutral\",\"mustBelieve\":\"No extra clicks\"}]}"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "",
+        "AAJ - BUYING COMMITTEE MAP: Test deal",
+        "------------------------------------------------------------------",
+        "  EXPOSED: The economic buyer role is on the map but nobody is named in it. Everything else can be perfect and the deal still stalls at the signature. First conversation: economic-buyer (CFO) - Identify the person; ask the champion \"who signs, and who else has to say yes?\".",
+        "  Coverage 1 of 3 roles identified, reachable and answered (33%)",
+        "",
+        "THE MAP",
+        "  champion       J. Park                access direct       stance for      must believe: It cuts no-shows",
+        "                 asset: Case study",
+        "  economic-buyer CFO                    access none         stance unknown  must believe: Payback inside a year",
+        "                 asset: NONE",
+        "  end-user       A. Gomez               access via-champion stance neutral  must believe: No extra clicks",
+        "                 asset: NONE",
+        "",
+        "NEXT CONVERSATIONS",
+        "  1. economic-buyer (CFO): Identify the person; ask the champion \"who signs, and who else has to say yes?\"",
+        "",
+        "ASSETS TO BUILD",
+        "  economic-buyer must believe \"Payback inside a year\" -> a one-page business case with the number they own and the cost of waiting",
+        "  end-user must believe \"No extra clicks\" -> a 10-minute demo of their day with the product, or a trial",
+        "",
+        "FINDINGS",
+        "  - No security, legal or procurement role. If the buyer runs a review, it appears late and adds weeks; ask the champion whether one exists.",
+        "  ! economic-buyer (CFO): nobody identified. Ask the champion who holds this role.",
+        "  - economic-buyer (CFO) must believe \"Payback inside a year\" and no asset answers it.",
+        "  - end-user (Front desk) must believe \"No extra clicks\" and no asset answers it.",
+        "",
+        "  A map of who must say yes and what each needs to believe. It does not score the deal or predict the close; pipeline-and-forecast does that from stages."
+      ],
+      "stderr": []
     }
   ]
 }

@@ -69,6 +69,19 @@
         "}"
       ],
       "stderr": []
+    },
+    {
+      "name": "misspelled field is rejected (Oct 23 fix)",
+      "source": "defect found by the golden tests, Oct 23",
+      "args": [
+        "{\"check\":\"checkPost\",\"input\":{\"txt\":\"Hello\"}}"
+      ],
+      "exitCode": 1,
+      "stdout": [],
+      "stderr": [
+        "Unrecognised field in input: \"txt\". Expected: text, figures, themes, firstLineCarriesThePoint, ideaCount, customerResult, writtenPermission, inventedProof, theme, isPromotional, saysSoPlainly.",
+        "Run --help for the input shape."
+      ]
     }
   ]
 }

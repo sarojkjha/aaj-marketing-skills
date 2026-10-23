@@ -60,6 +60,20 @@
         "  WORKING: Dark signals and pipeline are rising together. Keep the rhythm; retarget the pieces that travel and brief sales on the conversations to expect."
       ],
       "stderr": []
+    },
+    {
+      "name": "a number where an object belongs is rejected (Oct 23 fix)",
+      "source": "defect found by the golden tests, Oct 23",
+      "args": [
+        "{\"community\":2}"
+      ],
+      "exitCode": 1,
+      "stdout": [],
+      "stderr": [
+        "error: \"community\" must be an object. Run --help for its shape.",
+        "",
+        "Run --help for the schema, or --demo for a worked example."
+      ]
     }
   ]
 }

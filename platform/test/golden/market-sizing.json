@@ -72,6 +72,39 @@
         "  -  The bottom-up TAM is 31.7x smaller than the top-down figure. A gap that wide usually means the two are not counting the same market - compare their definitions before quoting either."
       ],
       "stderr": []
+    },
+    {
+      "name": "claimed share of SAM above capacity, everything else sourced (Oct 23 fix)",
+      "source": "defect found by the golden tests, Oct 23",
+      "args": [
+        "{\"segments\": [{\"name\": \"US logistics brokers, 20-200 staff\", \"accounts\": 4200, \"accountsSource\": \"industry register, 2026 export\", \"fitShare\": 0.4, \"fitSource\": \"sample of 50 checked by hand\", \"reachableShare\": 0.7, \"reachSource\": \"share with a named ops lead on LinkedIn\", \"acv\": 9000}], \"acvBasis\": \"current-pricing\", \"capacity\": {\"type\": \"sales\", \"reps\": 2, \"dealsPerRepPerYear\": 20}, \"topDown\": {\"value\": 1200000000, \"source\": \"analyst report, 2025\", \"scope\": \"all freight software\"}, \"currency\": \"USD\", \"claimedShareOfSam\": 0.5}"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "",
+        "AAJ - MARKET SIZING",
+        "------------------------------------------------------------------",
+        "  INCOMPLETE - The sized market is sourced and SOM comes from capacity, but the claimed share of SAM is larger than that capacity can win. Quote the capacity number, or show the plan that closes the gap.",
+        "",
+        "  TAM  $37.80M      4,200 accounts",
+        "  SAM  $10.58M      1,176 accounts that fit and can be reached",
+        "  SOM  $360.0K      40 wins a year from current capacity (3.4% of SAM)",
+        "",
+        "BY SEGMENT",
+        "  US logistics brokers, 20-200 staff",
+        "    4,200 accounts x 40% fit x 70% reachable x $9.0K ACV = SAM $10.58M",
+        "",
+        "CLAIMED SHARE",
+        "  50% of SAM needs 588 wins a year; capacity delivers 40. Not supported.",
+        "",
+        "TRIANGULATION",
+        "  Top-down $1.20B (analyst report, 2025); bottom-up TAM is 31.7x smaller.",
+        "",
+        "FINDINGS",
+        "  !  The claimed 50% of SAM needs 588 wins a year; current capacity delivers 40. Present the capacity number, or show the hiring or channel plan that closes the gap.",
+        "  -  The bottom-up TAM is 31.7x smaller than the top-down figure. A gap that wide usually means the two are not counting the same market - compare their definitions before quoting either."
+      ],
+      "stderr": []
     }
   ]
 }

@@ -109,7 +109,7 @@ function map(cfg) {
 
   var verdict;
   if (blockers) verdict = { level: 'blocked', text: blockers + ' person' + (blockers > 1 ? 's are' : ' is') + ' against with no plan. Deal with the objection before another demo; nothing else on this map matters until it is answered.' };
-  else if (!ebRows.length || !ebReached) verdict = { level: 'exposed', text: (ebRows.length ? 'The economic buyer is identified but you cannot reach them' : 'No economic buyer on the map') + '. Everything else can be perfect and the deal still stalls at the signature. First conversation: ' + (next[0] ? next[0].who + ' - ' + next[0].action : 'find the budget owner') + '.' };
+  else if (!ebRows.length || !ebReached) verdict = { level: 'exposed', text: (!ebRows.length ? 'No economic buyer on the map' : ebRows.some(function (r) { return r.identified; }) ? 'The economic buyer is identified but you cannot reach them' : 'The economic buyer role is on the map but nobody is named in it') + '. Everything else can be perfect and the deal still stalls at the signature. First conversation: ' + (next[0] ? next[0].who + ' - ' + next[0].action : 'find the budget owner') + '.' };
   else if (coverage < 1) verdict = { level: 'gaps', text: Math.round(coverage * 100) + '% of roles are identified, reachable and answered. ' + (build.length ? build.length + ' belief' + (build.length > 1 ? 's have' : ' has') + ' no asset; ' : '') + (next.length ? 'next: ' + next[0].who + ' - ' + next[0].action : 'close the remaining gaps in the findings') + '.' };
   else verdict = { level: 'covered', text: 'Every role is identified, reachable and has an asset for what they must believe. Confirm the stances are current, then ask for the decision date.' };
 

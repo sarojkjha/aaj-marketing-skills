@@ -174,6 +174,11 @@ function readMeasure(m) {
 
 function run(cfg) {
   cfg = cfg || {};
+  var extra = Object.keys(cfg).filter(function (k) { return k !== 'map' && k !== 'community' && k !== 'measure'; });
+  if (extra.length) throw inputError('Unrecognised field' + (extra.length > 1 ? 's' : '') + ': ' + extra.map(function (k) { return '"' + k + '"'; }).join(', ') + '. Expected: "map", "community" and/or "measure".');
+  ['map', 'community', 'measure'].forEach(function (k) {
+    if (cfg[k] !== undefined && (cfg[k] === null || typeof cfg[k] !== 'object')) throw inputError('"' + k + '" must be an object' + (k === 'map' ? ' or a list' : '') + '. Run --help for its shape.');
+  });
   if (!cfg.map && !cfg.community && !cfg.measure) throw inputError('Give a "map", a "community", "measure", or any combination.');
   return {
     map: cfg.map ? readMap(cfg.map) : null,

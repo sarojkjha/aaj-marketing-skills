@@ -224,6 +224,7 @@ function size(cfg) {
   let verdict;
   if (fixes === 0) verdict = { level: 'defensible', headline: 'Defensible', body: 'Every count is sourced and SOM comes from capacity. This will survive a sceptical reader.' };
   else if (findings.some((f) => /unsourced|no-fit|acv-aspirational|topdown-unsourced/.test(f.id))) verdict = { level: 'unsourced', headline: 'Needs sources', body: 'The arithmetic holds, but links in the chain have no source. Fix those before the number goes in a deck.' };
+  else if (findings.filter((f) => f.level === 'fix').every((f) => f.id === 'claim-outruns-capacity')) verdict = { level: 'incomplete', headline: 'Incomplete', body: 'The sized market is sourced and SOM comes from capacity, but the claimed share of SAM is larger than that capacity can win. Quote the capacity number, or show the plan that closes the gap.' };
   else verdict = { level: 'incomplete', headline: 'Incomplete', body: 'The sized market is sourced, but the obtainable part is not grounded in capacity yet.' };
 
   return {
