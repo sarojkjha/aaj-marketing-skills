@@ -14,10 +14,12 @@
  * lines, which carry no inputs, reach Workers Logs.
  *
  * Build: node platform/mcp-worker/build.mjs   (regenerates engines.generated.mjs)
+ * Version: GET /version returns the build stamp (commit, build time, engine count,
+ * engine hash); /health and the MCP initialize response carry it too.
  * Deploy: see platform/mcp-worker/README.md
  */
-import { createServer, firstSentence, MAX_OUTPUT_BYTES, SERVER_NAME, SERVER_VERSION, SKILLS_SITE } from "../mcp/core.mjs";
-import { SKILLS, ENGINES, RUNNERS, COUNTS } from "./engines.generated.mjs";
+import { createServer, firstSentence, versionWithBuild, MAX_OUTPUT_BYTES, SERVER_NAME, SERVER_VERSION, SKILLS_SITE } from "../mcp/core.mjs";
+import { SKILLS, ENGINES, RUNNERS, COUNTS, BUILD } from "./engines.generated.mjs";
 
 const MAX_BODY_BYTES = 256 * 1024;
 const RATE_PER_MINUTE = 60; // messages per client IP per minute, per isolate: a guard against loops, not a quota
@@ -113,6 +115,7 @@ const server = createServer({
   run: async (e, argv) => runInProcess(e, argv),
   log: (...a) => console.log("[aaj-engines]", ...a),
   transport: "http",
+  build: BUILD,
 });
 
 const CORS = {
@@ -149,7 +152,7 @@ function infoPage(origin) {
 <p><strong>Connect:</strong> add a custom connector (remote MCP server) with the URL <code>${url}</code>. No sign-in.</p>
 <p><strong>Your data:</strong> the engines run in memory and make no network calls, and this server keeps no copy of what you send. Cloudflare keeps error logs (no inputs) for up to 7 days. Your AI assistant's provider still sees what you give the assistant, under your own account's terms. Don't send customer names or emails; no engine needs them.</p>
 <p>Prefer to run it locally? Clone <a href="https://github.com/sarojkjha/aaj-marketing-skills">the repo</a> and see platform/mcp/README.md.</p>
-<p>${SERVER_NAME} ${SERVER_VERSION}</p></body></html>`;
+<p>${SERVER_NAME} ${versionWithBuild(BUILD)}, built ${BUILD.builtAt.slice(0, 10)} · <a href="/version">version</a></p></body></html>`;
 }
 
 export default {
@@ -168,9 +171,14 @@ export default {
       });
     }
     if (url.pathname === "/health") {
-      return json({ ok: true, server: SERVER_NAME, version: SERVER_VERSION, skills: SKILLS.length, engines: ENGINES.length });
+      return json({ ok: true, server: SERVER_NAME, version: SERVER_VERSION, skills: SKILLS.length, engines: ENGINES.length, commit: BUILD.commit, builtAt: BUILD.builtAt, engineHash: BUILD.engineHash });
     }
-    if (url.pathname !== "/mcp") return json({ error: "Not found. The MCP endpoint is /mcp; counts are at /counts.json." }, 404);
+    // What this deploy was built from, so a stale deploy shows up: compare commit with
+    // main and engineHash with `node platform/mcp/server.mjs --version` in a checkout.
+    if (url.pathname === "/version") {
+      return json(BUILD, 200, { "cache-control": "no-store" });
+    }
+    if (url.pathname !== "/mcp") return json({ error: "Not found. The MCP endpoint is /mcp; counts are at /counts.json; the build stamp is at /version." }, 404);
 
     if (request.method === "GET") {
       return new Response("This server does not open a server-to-client stream. POST JSON-RPC messages to /mcp.", { status: 405, headers: { allow: "POST, OPTIONS", ...CORS } });

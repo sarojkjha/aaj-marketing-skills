@@ -22,6 +22,7 @@ import { join, dirname, resolve, basename } from "node:path";
 import { fileURLToPath } from "node:url";
 import { listSkills, engineHelp } from "../lib/catalog.mjs";
 import { buildSpec, specForAgent, loadEnvironments } from "../lib/specs.mjs";
+import { engineFingerprint, readGitHead, describeBuild } from "../lib/stamp.mjs";
 // The protocol and the five tools live in core.mjs, shared with the hosted
 // Cloudflare Worker (platform/mcp-worker/). This file adds discovery from disk,
 // the child-process engine runner and the stdio transport.
@@ -47,7 +48,7 @@ function discover() {
   const found = listSkills(REPO_ROOT);
   if (!found.length) {
     log(`no skills found under ${SKILLS_DIR} — pass --root <repo root>`);
-    return { skills: [], engines: new Map() };
+    return { skills: [], engines: new Map(), found };
   }
   const skills = [];
   const engines = new Map();
@@ -72,11 +73,24 @@ function discover() {
       });
     }
   }
-  return { skills, engines };
+  return { skills, engines, found };
 }
 
-const { skills, engines } = discover();
-log(`${skills.length} skills, ${engines.size} engines from ${REPO_ROOT}`);
+const { skills, engines, found } = discover();
+
+// Which code this server is running. The engine hash is computed from the engine
+// files it just loaded, so it is the same as the hosted server's (/version) when the
+// engines are the same, and differs in a stale or edited copy.
+const build = {
+  server: SERVER_NAME,
+  version: SERVER_VERSION,
+  commit: readGitHead(REPO_ROOT),
+  builtAt: null,
+  skills: skills.length,
+  ...engineFingerprint(found),
+  runtime: "local",
+};
+log(`${describeBuild(build)} — from ${REPO_ROOT}`);
 
 /* ------------------------------------------------------------------ *
  * Engine runner (child process)
@@ -125,7 +139,7 @@ if (process.argv.includes("--engines")) {
   process.exit(0);
 }
 if (process.argv.includes("--version")) {
-  console.log(`${SERVER_NAME} ${SERVER_VERSION} — ${skills.length} skills, ${engines.size} engines`);
+  console.log(process.argv.includes("--json") ? JSON.stringify(build, null, 2) : describeBuild(build));
   process.exit(0);
 }
 
@@ -133,7 +147,7 @@ if (process.argv.includes("--version")) {
  * JSON-RPC 2.0 over stdio
  * ------------------------------------------------------------------ */
 
-const server = createServer({ skills, engines, run: runEngine, log, transport: "stdio" });
+const server = createServer({ skills, engines, run: runEngine, log, transport: "stdio", build });
 
 function send(msg) {
   process.stdout.write(JSON.stringify(msg) + "\n");

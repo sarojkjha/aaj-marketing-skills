@@ -153,6 +153,16 @@ node platform/mcp/smoke-test.mjs
 It exits non-zero if any engine fails, so it drops straight into CI.
 `node platform/mcp/server.mjs --engines` lists the ids alone.
 
+**Which version am I running?** — `node platform/mcp/server.mjs --version` prints
+the release, the git commit of the checkout (or `unknown` in a copy without its own
+`.git`, such as an installed plugin), the skill and engine counts, and an engine hash
+computed from the engine files it loaded. Add `--json` for the same as JSON. The
+server also logs that line to stderr at start-up and returns it in the MCP
+`initialize` response: the commit as build metadata on `serverInfo.version`
+(`1.2.0+abc1234`) and the whole stamp under `_meta["com.aajconsult/build"]`.
+Compare the engine hash with the hosted server's `/version`: the same engines give
+the same hash, so a different one means one of the two copies is stale.
+
 **Checking it by hand** — the server speaks JSON-RPC 2.0 over newline-delimited
 JSON on stdin:
 

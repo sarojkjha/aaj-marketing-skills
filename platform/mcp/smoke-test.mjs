@@ -56,6 +56,12 @@ const call = (method, params) =>
 
 const init = await call("initialize", { protocolVersion: "2025-06-18", capabilities: {} });
 console.log(`protocol ${init.result.protocolVersion} · ${init.result.serverInfo.name} ${init.result.serverInfo.version}`);
+const stamp = init.result._meta?.["com.aajconsult/build"];
+if (!stamp || stamp.engines !== ids.length || !/^[0-9a-f]{12}$/.test(stamp.engineHash)) {
+  console.error(`Build stamp missing or wrong in initialize: ${JSON.stringify(stamp)}`);
+  process.exit(1);
+}
+console.log(`build: commit ${stamp.commit || "unknown"} · engine hash ${stamp.engineHash}`);
 const tools = (await call("tools/list")).result.tools.map((t) => t.name);
 console.log(`tools: ${tools.join(", ")}\n`);
 
