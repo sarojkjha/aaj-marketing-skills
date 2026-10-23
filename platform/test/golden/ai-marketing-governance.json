@@ -77,6 +77,19 @@
         "}"
       ],
       "stderr": []
+    },
+    {
+      "name": "US spelling of a field is rejected (Oct 23 fix)",
+      "source": "defect found by the golden tests, Oct 23",
+      "args": [
+        "{\"check\":\"checkCitation\",\"input\":{\"organization\":\"Gartner\"}}"
+      ],
+      "exitCode": 1,
+      "stdout": [],
+      "stderr": [
+        "Unrecognised field in input: \"organization\". Expected: url, organisation, repeatedBy, title, date, isAnnual, edition, sample, organisationDomain, aggregator, organisationDefunct, openedByAHuman, claim.",
+        "Run --help for the input shape."
+      ]
     }
   ]
 }

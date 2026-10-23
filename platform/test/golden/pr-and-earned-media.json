@@ -136,6 +136,19 @@
         "}"
       ],
       "stderr": []
+    },
+    {
+      "name": "misspelled field is rejected (Oct 23 fix)",
+      "source": "defect found by the golden tests, Oct 23",
+      "args": [
+        "{\"check\":\"scoreStory\",\"input\":{\"headlin\":\"A story\"}}"
+      ],
+      "exitCode": 1,
+      "stdout": [],
+      "stderr": [
+        "Unrecognised field in input: \"headlin\". Expected: headline, type, audience, outlets, evidence, companyRemoved, forwardTest, materials.",
+        "Run --help for the input shape."
+      ]
     }
   ]
 }
