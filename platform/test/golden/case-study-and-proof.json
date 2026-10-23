@@ -1,0 +1,87 @@
+{
+  "engine": "case-study-and-proof",
+  "file": "skills/case-study-and-proof/resources/proof-check.js",
+  "cases": [
+    {
+      "name": "built-in worked example",
+      "source": "the engine's own --demo",
+      "args": [
+        "--demo"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "(no config - demo: an anonymised freight broker, permission covering numbers and quote but not the name)",
+        "",
+        "AAJ - CASE STUDY & PROOF",
+        "------------------------------------------------------------------",
+        "  Credibility  ##########  100/100   STRONG",
+        "",
+        "  Movement     72 -> 4 hours to quote",
+        "               -94.4% over 6 months",
+        "",
+        "WHAT IS THERE",
+        "  [x] The customer is identifiable",
+        "  [x] A baseline number",
+        "  [x] An after number on the same definition",
+        "  [x] What else changed is disclosed",
+        "  [x] The problem is specific",
+        "  [x] A timeframe",
+        "  [x] A quote attributed to a named person and role",
+        "  [x] Independently checkable",
+        "",
+        "PERMISSION",
+        "------------------------------------------------------------------",
+        "  NOT CLEARED - may publish: numbers, quote",
+        "",
+        "  BLOCKERS",
+        "  !  The asset uses the name but permission does not cover it. Either get it covered or remove it.",
+        "",
+        "  FALLBACK",
+        "     Publish it anonymised: sector, company size and region instead of the name, no logo, and the numbers only if \"numbers\" is covered. An anonymised case study with real numbers beats a named one you had to take down.",
+        "",
+        "VERDICT",
+        "------------------------------------------------------------------",
+        "  The proof is good enough to publish and the permission is not.",
+        "  Fix the permission - this is the cheaper half, and the only half",
+        "  that can force a takedown."
+      ],
+      "stderr": []
+    },
+    {
+      "name": "named study with written consent",
+      "source": "documented example in the engine header",
+      "args": [
+        "{\"study\":{\"customer\":\"Northwind Logistics\",\"descriptor\":\"a 40-person freight broker in the Midwest\",\"problem\":\"quotes took three days, so buyers went elsewhere\",\"beforeValue\":72,\"afterValue\":4,\"metric\":\"hours to quote\",\"periodMonths\":6,\"otherChanges\":[\"hired two ops staff\"],\"quote\":{\"text\":\"We quote the same afternoon now, and we win more of them.\",\"name\":\"Dana Ruiz\",\"role\":\"COO\"},\"verifiable\":\"reference-call\"},\"consent\":{\"written\":true,\"approver\":{\"name\":\"Dana Ruiz\",\"role\":\"COO\"},\"dated\":\"2026-03-04\",\"covers\":[\"name\",\"logo\",\"numbers\",\"quote\"],\"reviewMonths\":12,\"uses\":[\"name\",\"numbers\",\"quote\"]}}"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "",
+        "AAJ - CASE STUDY & PROOF",
+        "------------------------------------------------------------------",
+        "  Credibility  ##########  100/100   STRONG",
+        "",
+        "  Movement     72 -> 4 hours to quote",
+        "               -94.4% over 6 months",
+        "",
+        "WHAT IS THERE",
+        "  [x] The customer is identifiable",
+        "  [x] A baseline number",
+        "  [x] An after number on the same definition",
+        "  [x] What else changed is disclosed",
+        "  [x] The problem is specific",
+        "  [x] A timeframe",
+        "  [x] A quote attributed to a named person and role",
+        "  [x] Independently checkable",
+        "",
+        "PERMISSION",
+        "------------------------------------------------------------------",
+        "  CLEARED - may publish: name, logo, numbers, quote",
+        "",
+        "VERDICT",
+        "------------------------------------------------------------------",
+        "  Publishable as it stands. Keep the permission record with the asset."
+      ],
+      "stderr": []
+    }
+  ]
+}

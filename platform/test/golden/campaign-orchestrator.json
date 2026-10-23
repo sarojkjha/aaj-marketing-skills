@@ -1,0 +1,75 @@
+{
+  "engine": "campaign-orchestrator",
+  "file": "skills/campaign-orchestrator/resources/decision-guides.js",
+  "cases": [
+    {
+      "name": "built-in worked example",
+      "source": "the engine's own --demo",
+      "args": [
+        "--demo"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "(no config - demo: the channel guide for a fictional company with a large first-year contract, a named account list, a small paid budget and a founder willing to write)",
+        "",
+        "Which channel should we start with?",
+        "",
+        "Start with: founder-led outbound to named accounts",
+        "Then add industry events and in-person communities once the first is predictable.",
+        "",
+        "1. First: Founder-led outbound to named accounts",
+        "   Pick the accounts, score them for fit, and have a founder start conversations with the few people who own the problem.",
+        "   - ICP Fit Scorer: https://aajconsult.com/tools/icp-fit-scorer",
+        "   - ABM Playbook: https://aajconsult.com/playbooks/abm-playbook",
+        "2. Second: Industry events and in-person communities",
+        "   Go where the few hundred accounts you want already gather: one or two industry events and communities, with meetings booked before you arrive.",
+        "   - ABM Playbook: https://aajconsult.com/playbooks/abm-playbook",
+        "   - Webinar Pipeline Planner: https://aajconsult.com/tools/webinar-pipeline-planner",
+        "",
+        "Test it before you commit",
+        "  - Set your pass mark first: the most you can pay per qualified meeting or activated trial, from your margin and payback target.",
+        "  - Fix a budget and a window, usually four to eight weeks.",
+        "  - Measure the next step, not clicks: qualified meetings, activated trials, pipeline created.",
+        "  - Unit Economics Calculator: https://aajconsult.com/tools/unit-economics-calculator",
+        "  - Which marketing channels should a startup start with?: https://aajconsult.com/blog/which-marketing-channels-first",
+        "",
+        "Leave alone for now",
+        "  - A product-led motion, until people can reach value without a call.",
+        "",
+        "Why",
+        "  - You can name the accounts and the contract is large enough to pay for a conversation-led motion.",
+        "",
+        "These rules are judgement, not benchmarks. Check them against your own numbers."
+      ],
+      "stderr": []
+    },
+    {
+      "name": "hire guide, seed stage",
+      "source": "input written from the engine header schema",
+      "args": [
+        "{\"guide\":\"hire\",\"answers\":{\"stage\":\"seed\",\"positioning\":\"yes\",\"channel\":\"no\",\"who\":\"founder\",\"budget\":\"low\"}}"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "Do we need a marketing hire, and which one?",
+        "",
+        "Hire a senior part-time leader to find the first channel",
+        "The job is to find one channel that repeats. That takes judgement more than hours.",
+        "",
+        "1. A fractional head of marketing",
+        "   Someone who has found channels before, for a set number of days a month, with a clear goal: one channel you could predict next month.",
+        "   - Marketing Leadership Cost Comparator: https://aajconsult.com/tools/marketing-leadership-cost-comparator",
+        "   - Fractional marketing leadership: https://aajconsult.com/services/fractional-marketing-leadership",
+        "",
+        "Leave alone for now",
+        "  - Hiring a channel specialist. You don't know which channel yet.",
+        "",
+        "Why",
+        "  - Positioning is settled but no channel repeats yet, so the scarce thing is experience in choosing and testing channels.",
+        "",
+        "These rules are judgement, not benchmarks. Check them against your own numbers."
+      ],
+      "stderr": []
+    }
+  ]
+}

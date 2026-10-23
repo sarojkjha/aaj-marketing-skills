@@ -1,0 +1,65 @@
+{
+  "engine": "ab-test-significance",
+  "file": "skills/ab-test-significance/resources/significance.js",
+  "cases": [
+    {
+      "name": "built-in worked example",
+      "source": "the engine's own --demo",
+      "args": [
+        "--demo"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "(no config — demo: 5.0% vs 6.2%, n≈4000 each, 95%)",
+        "",
+        "AAJ A/B Test — significance",
+        "----------------------------------------------",
+        "Control   5%   (200/4000)",
+        "Variant   6.2%   (250/4050)",
+        "Relative lift  +23.5%   (abs +1.2%)",
+        "z = 2.29   p = 0.0220   (two-tailed, 95% threshold)",
+        "",
+        "✓ SIGNIFICANT at 95% — variant wins. 95% CI on the difference: 0.2% to 2.2%.",
+        "",
+        "--- JSON ---",
+        "{",
+        "  \"controlRate\": 0.05,",
+        "  \"variantRate\": 0.0617,",
+        "  \"relativeLift\": 0.2346,",
+        "  \"z\": 2.29,",
+        "  \"pValue\": 0.022,",
+        "  \"significant\": true,",
+        "  \"confidence\": 95,",
+        "  \"winner\": \"variant\"",
+        "}"
+      ],
+      "stderr": []
+    },
+    {
+      "name": "plan a sample size",
+      "source": "documented example in the engine header",
+      "args": [
+        "{\"plan\":true,\"baselineRate\":5,\"mde\":1,\"confidence\":95,\"power\":80}"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "",
+        "AAJ A/B Test — required sample size",
+        "----------------------------------------------",
+        "Baseline 5% → detect +1pt, 95% confidence, 80% power",
+        "Per variant: 8,158   ·   Total: 16,316 visitors",
+        "",
+        "--- JSON ---",
+        "{",
+        "  \"perVariant\": 8158,",
+        "  \"total\": 16316,",
+        "  \"conf\": 95,",
+        "  \"power\": 80,",
+        "  \"baselineRate\": 5,",
+        "  \"mde\": 1",
+        "}"
+      ],
+      "stderr": []
+    }
+  ]
+}

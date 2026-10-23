@@ -1,0 +1,77 @@
+{
+  "engine": "market-sizing",
+  "file": "skills/market-sizing/resources/market-size.js",
+  "cases": [
+    {
+      "name": "built-in worked example",
+      "source": "the engine's own --demo",
+      "args": [
+        "--demo"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "(no config - demo: two illustrative logistics segments, a two-person sales team, and an unsourced top-down figure)",
+        "",
+        "AAJ - MARKET SIZING",
+        "------------------------------------------------------------------",
+        "  NEEDS SOURCES - The arithmetic holds, but links in the chain have no source. Fix those before the number goes in a deck.",
+        "",
+        "  TAM  $74.20M      6,800 accounts",
+        "  SAM  $15.13M      1,501 accounts that fit and can be reached",
+        "  SOM  $403.3K      40 wins a year from current capacity (2.7% of SAM)",
+        "",
+        "BY SEGMENT",
+        "  US freight brokers, 20-200 staff",
+        "    4,200 accounts x 40% fit x 70% reachable x $9.0K ACV = SAM $10.58M",
+        "  US 3PL warehouses, 50-500 staff",
+        "    2,600 accounts x 25% fit x 50% reachable x $14.0K ACV = SAM $4.55M",
+        "",
+        "CLAIMED SHARE",
+        "  5% of SAM needs 76 wins a year; capacity delivers 40. Not supported.",
+        "",
+        "TRIANGULATION",
+        "  Top-down $900.00M (no source); bottom-up TAM is 12.1x smaller.",
+        "",
+        "VERIFY FIRST",
+        "  The fit share for \"US 3PL warehouses, 50-500 staff\" - it sits under 30.1% of SAM.",
+        "",
+        "FINDINGS",
+        "  !  The fit share for \"US 3PL warehouses, 50-500 staff\" (25%) has no source. Check a sample of real accounts by hand and record how many fit.",
+        "  !  The claimed 5% of SAM needs 76 wins a year; current capacity delivers 40. Present the capacity number, or show the hiring or channel plan that closes the gap.",
+        "  !  The top-down figure has no source. An unsourced analyst number is worse than none, because it looks authoritative.",
+        "  -  The reachable share for \"US 3PL warehouses, 50-500 staff\" (50%) has no source. Say which channel reaches them and how you counted.",
+        "  -  The bottom-up TAM is 12.1x smaller than the top-down figure. A gap that wide usually means the two are not counting the same market - compare their definitions before quoting either."
+      ],
+      "stderr": []
+    },
+    {
+      "name": "one sourced segment, sales capacity",
+      "source": "documented example in the engine header",
+      "args": [
+        "{\"segments\":[{\"name\":\"US logistics brokers, 20-200 staff\",\"accounts\":4200,\"accountsSource\":\"industry register, 2026 export\",\"fitShare\":0.4,\"fitSource\":\"sample of 50 checked by hand\",\"reachableShare\":0.7,\"reachSource\":\"share with a named ops lead on LinkedIn\",\"acv\":9000}],\"acvBasis\":\"current-pricing\",\"capacity\":{\"type\":\"sales\",\"reps\":2,\"dealsPerRepPerYear\":20},\"topDown\":{\"value\":1200000000,\"source\":\"analyst report, 2025\",\"scope\":\"all freight software\"},\"currency\":\"USD\"}"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "",
+        "AAJ - MARKET SIZING",
+        "------------------------------------------------------------------",
+        "  DEFENSIBLE - Every count is sourced and SOM comes from capacity. This will survive a sceptical reader.",
+        "",
+        "  TAM  $37.80M      4,200 accounts",
+        "  SAM  $10.58M      1,176 accounts that fit and can be reached",
+        "  SOM  $360.0K      40 wins a year from current capacity (3.4% of SAM)",
+        "",
+        "BY SEGMENT",
+        "  US logistics brokers, 20-200 staff",
+        "    4,200 accounts x 40% fit x 70% reachable x $9.0K ACV = SAM $10.58M",
+        "",
+        "TRIANGULATION",
+        "  Top-down $1.20B (analyst report, 2025); bottom-up TAM is 31.7x smaller.",
+        "",
+        "FINDINGS",
+        "  -  The bottom-up TAM is 31.7x smaller than the top-down figure. A gap that wide usually means the two are not counting the same market - compare their definitions before quoting either."
+      ],
+      "stderr": []
+    }
+  ]
+}

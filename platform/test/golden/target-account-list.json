@@ -1,0 +1,55 @@
+{
+  "engine": "target-account-list",
+  "file": "skills/target-account-list/resources/score-accounts.js",
+  "cases": [
+    {
+      "name": "built-in worked example",
+      "source": "the engine's own --demo",
+      "args": [
+        "--demo"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "AAJ — Target Account List (ICP fit scoring)",
+        "Source: built-in demo data",
+        "Weights: industryMatch=30, sizeBand=25, usesComplementaryTool=15, recentFunding=15, hiringSignal=15",
+        "",
+        "Rank  Tier  Score  Account                 Matched signals",
+        "----  ----  -----  ----------------------  ----------------------------------",
+        "1     A     100    Northwind SaaS          industryMatch, sizeBand, usesComplementaryTool, recentFunding, hiringSignal",
+        "2     A      85    Globex Software         industryMatch, sizeBand, usesComplementaryTool, hiringSignal",
+        "3     B      55    Initech                 industryMatch, sizeBand",
+        "4     B      45    Hooli Enterprise        industryMatch, usesComplementaryTool",
+        "5     B      40    Umbrella Retail         sizeBand, recentFunding",
+        "6     C      15    Stark SMB               hiringSignal",
+        "",
+        "Tiers: A=2  B=3  C=1  (A>=70, B 40-69, C<40)",
+        "Work A-tier first. For B-tier, the missing signal is usually the one to verify next."
+      ],
+      "stderr": []
+    },
+    {
+      "name": "custom weights, three accounts",
+      "source": "input written from the engine header schema",
+      "args": [
+        "{\"weights\":{\"industryMatch\":30,\"sizeBand\":25,\"usesComplementaryTool\":20,\"recentFunding\":15,\"hiringSignal\":10},\"accounts\":[{\"name\":\"Acme Freight\",\"signals\":{\"industryMatch\":true,\"sizeBand\":true,\"usesComplementaryTool\":true,\"recentFunding\":false,\"hiringSignal\":true}},{\"name\":\"Globex Logistics\",\"signals\":{\"industryMatch\":true,\"sizeBand\":false,\"usesComplementaryTool\":false,\"recentFunding\":true,\"hiringSignal\":false}},{\"name\":\"Initech Retail\",\"signals\":{\"industryMatch\":false,\"sizeBand\":true,\"usesComplementaryTool\":false,\"recentFunding\":false,\"hiringSignal\":false}}]}"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "AAJ — Target Account List (ICP fit scoring)",
+        "Source: your input",
+        "Weights: industryMatch=30, sizeBand=25, usesComplementaryTool=20, recentFunding=15, hiringSignal=10",
+        "",
+        "Rank  Tier  Score  Account                 Matched signals",
+        "----  ----  -----  ----------------------  ----------------------------------",
+        "1     A      85    Acme Freight            industryMatch, sizeBand, usesComplementaryTool, hiringSignal",
+        "2     B      45    Globex Logistics        industryMatch, recentFunding",
+        "3     C      25    Initech Retail          sizeBand",
+        "",
+        "Tiers: A=1  B=1  C=1  (A>=70, B 40-69, C<40)",
+        "Work A-tier first. For B-tier, the missing signal is usually the one to verify next."
+      ],
+      "stderr": []
+    }
+  ]
+}

@@ -1,0 +1,59 @@
+{
+  "engine": "customer-interview-synthesis",
+  "file": "skills/customer-interview-synthesis/resources/interview-synthesis.js",
+  "cases": [
+    {
+      "name": "built-in worked example",
+      "source": "the engine's own --demo",
+      "args": [
+        "--demo"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "(no config - demo: eight invented interviews with contractors in two segments)",
+        "",
+        "THEMES across 8 interviews - Why do small contractors lose jobs they already won? (segments: owner-operator 4, small-crew 4)",
+        "  PATTERN  double booking: 7 of 8 (88%), severity 2.7, priority 2.38, 2 would pay",
+        "           \"Two crews showed up at the same house. Lost the second job.\" (I-01)",
+        "           workarounds: whiteboard photo on WhatsApp; one person owns the calendar",
+        "  PATTERN  no-shows: 4 of 8 (50%), severity 2.0, priority 1.00, mostly small-crew",
+        "           \"A no-show is a wasted morning for two guys.\" (I-03)",
+        "           workarounds: text the night before; reminder call",
+        "  EMERGING crew does not know the plan: 3 of 8 (38%), severity 2.7, priority 1.00, mostly small-crew",
+        "           \"They call me at 7am to ask where they are going.\" (I-04)",
+        "           workarounds: group text at 6:30",
+        "  EMERGING late invoices: 3 of 8 (38%), severity 2.3, priority 0.88",
+        "           \"I invoice on Sundays, if I remember.\" (I-01)",
+        "           workarounds: spreadsheet",
+        "  EMERGING quoting takes too long: 2 of 8 (25%), severity 1.5, priority 0.38, mostly owner-operator",
+        "           \"A quote takes me an evening.\" (I-02)",
+        "  ANECDOTE parts not on the truck: 1 of 8 (13%), severity 2.0, priority 0.25",
+        "           \"Second trip to the supplier kills the margin.\" (I-05)",
+        "",
+        "SATURATION: I-01 +3, I-02 +1, I-03 +0, I-04 +1, I-05 +1, I-06 +0, I-07 +0, I-08 +0; 0 new in the last 3 - saturated",
+        "ENOUGH: No new theme in the last 3 interviews and 2 patterns across 8. Stop interviewing this segment and act on the top pattern."
+      ],
+      "stderr": []
+    },
+    {
+      "name": "five interviews, two recurring themes",
+      "source": "input written from the engine header schema",
+      "args": [
+        "{\"question\":\"Why do small contractors lose jobs?\",\"interviews\":[{\"id\":\"I-01\",\"segment\":\"owner-operator\",\"notes\":[{\"theme\":\"double booking\",\"severity\":3,\"quote\":\"Lost a job last month because two crews showed up.\",\"workaround\":\"whiteboard photo on WhatsApp\",\"wouldPay\":true},{\"theme\":\"late invoices\",\"severity\":2}]},{\"id\":\"I-02\",\"segment\":\"owner-operator\",\"notes\":[{\"theme\":\"double booking\",\"severity\":3,\"wouldPay\":true}]},{\"id\":\"I-03\",\"segment\":\"small crew\",\"notes\":[{\"theme\":\"late invoices\",\"severity\":2},{\"theme\":\"quote follow-up\",\"severity\":3,\"wouldPay\":true}]},{\"id\":\"I-04\",\"segment\":\"small crew\",\"notes\":[{\"theme\":\"Double booking \",\"severity\":2}]},{\"id\":\"I-05\",\"segment\":\"owner-operator\",\"notes\":[{\"theme\":\"late invoices\",\"severity\":1}]}]}"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "THEMES across 5 interviews - Why do small contractors lose jobs? (segments: owner-operator 3, small crew 2)",
+        "  PATTERN  double booking: 3 of 5 (60%), severity 2.7, priority 1.60, 2 would pay",
+        "           \"Lost a job last month because two crews showed up.\" (I-01)",
+        "           workarounds: whiteboard photo on WhatsApp",
+        "  PATTERN  late invoices: 3 of 5 (60%), severity 1.7, priority 1.00",
+        "  ANECDOTE quote follow-up: 1 of 5 (20%), severity 3.0, priority 0.60, 1 would pay",
+        "",
+        "SATURATION: I-01 +2, I-02 +0, I-03 +1, I-04 +0, I-05 +0; 1 new in the last 3",
+        "KEEP-GOING: 1 new theme in the last 3 interviews. Keep going; re-run after every two or three."
+      ],
+      "stderr": []
+    }
+  ]
+}

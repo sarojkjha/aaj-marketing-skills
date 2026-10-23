@@ -1,0 +1,63 @@
+{
+  "engine": "brand-voice-definition",
+  "file": "skills/brand-voice-definition/resources/voice-derive.js",
+  "cases": [
+    {
+      "name": "built-in worked example",
+      "source": "the engine's own --demo",
+      "args": [
+        "--demo"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "(no config - demo: three invented on-brand samples and one off-brand press release for Fieldnote)",
+        "",
+        "SAMPLES - Fieldnote",
+        "  Homepage [on-brand]: 148 words, grade 4.1, 11.4 words/sentence (longest 20), you 4.1 / we 0.7 / I 0.0 per 100, contractions 4.1, hedges 0.7, buzzwords 0.0, 0% exclamations",
+        "  Onboarding email 1 [on-brand]: 128 words, grade 3.5, 10.7 words/sentence (longest 19), you 5.5 / we 0.8 / I 1.6 per 100, contractions 5.5, hedges 1.6, buzzwords 0.0, 0% exclamations",
+        "  Pricing FAQ [on-brand]: 133 words, grade 2.6, 10.2 words/sentence (longest 25), you 7.5 / we 1.5 / I 0.0 per 100, contractions 4.5, hedges 0.8, buzzwords 0.0, 0% exclamations",
+        "  Old press release [off-brand]: 116 words, grade 15.4, 19.3 words/sentence (longest 39), you 0.0 / we 1.7 / I 0.0 per 100, contractions 0.0, hedges 0.0, buzzwords 6.9, 0% exclamations",
+        "",
+        "ON-BRAND MEDIANS (3 samples): grade 3.5, 10.7 words/sentence, person \"you\", contractions 4.5/100, hedges 0.8/100; spread 1.5 grades, 1.2 words",
+        "OFF-BRAND MEDIANS (1): grade 15.4, 19.3 words/sentence, you 0.0/100, contractions 0.0/100, hedges 0.0/100, buzzwords 6.9/100, passive 50%",
+        "",
+        "RULES (the measurable half of the guide)",
+        "  - Reading level: write at grade 5 or below (on-brand median 3.5; ceiling is the median plus 1, an engine rule).",
+        "  - Sentences: average about 11 words; keep the longest under 21 (2x the average, an engine rule).",
+        "  - Address the reader as \"you\" (5.5 per 100 words on-brand).",
+        "  - Contractions: use them (4.5 per 100 words on-brand).",
+        "  - Exclamation marks: none.",
+        "  - Hedges (very, really, just, perhaps...): on-brand runs at 0.8 per 100 words; keep new copy at or below that.",
+        "  - Words to avoid: synergy, leverage, robust, seamless, cutting-edge, best-in-class, world-class, revolutionary, game-changing, unleash, supercharge, streamline.",
+        "",
+        "PROFILE for brand-voice-governance check mode: {\"avoid\":[\"synergy\",\"leverage\",\"robust\",\"seamless\",\"cutting-edge\",\"best-in-class\",\"world-class\",\"revolutionary\",\"game-changing\",\"unleash\",\"supercharge\",\"streamline\"],\"prefer\":[\"you\",\"contractions\"],\"maxGrade\":5}",
+        "",
+        "  - Where off-brand writing differs most: grade, avgSentence, contractionsPer100, youPer100, buzzwordsPer100, adverbsPer100. Those are the rules worth writing down first.",
+        "PROFILE-READY: The on-brand samples agree. The profile is checkable; pass it to brand-voice-governance and write the do/don't list beside it."
+      ],
+      "stderr": []
+    },
+    {
+      "name": "three on-brand samples and one off-brand",
+      "source": "input written from the engine header schema",
+      "args": [
+        "{\"brand\":\"Fieldnote\",\"avoidCandidates\":[\"synergy\",\"leverage\"],\"samples\":[{\"label\":\"Homepage\",\"onBrand\":true,\"text\":\"You finish the job, then you finish the report. Fieldnote puts both in the same place. Take photos on site, tap the issues you found, and the report writes itself while you drive to the next job. Your office sees it the moment you hit send, and your customer gets a clean PDF with your logo on it. No more evenings spent typing up notes from a notebook. We built it with inspectors who were tired of doing the same work twice, and we still ride along with them every month to see what slows them down.\"},{\"label\":\"Onboarding email\",\"onBrand\":true,\"text\":\"Welcome to Fieldnote. Here is the one thing to do today: run a single inspection with it, start to finish. Pick a small job. Take your photos in the app, mark what you found, and send the report before you leave the site. That is it. If something feels slow or confusing, reply to this email and tell us. A real person reads every reply, usually within the hour. Most teams know by the end of their first week whether Fieldnote fits how they work, and we would rather you find out fast than slowly.\"},{\"label\":\"Blog intro\",\"onBrand\":true,\"text\":\"Most inspection reports are written twice. Once in the field, in a notebook or a phone's notes app, and again at a desk that evening. The second write-up is where mistakes creep in, because you are working from memory and half-legible shorthand. We asked forty inspectors how long that second pass takes. The answer was about an hour a day. This post covers what we changed in Fieldnote to remove that hour, and what we got wrong on the way, because some of our first fixes made the problem worse before they made it better.\"},{\"label\":\"Old press release\",\"onBrand\":false,\"text\":\"Fieldnote, the leading innovative provider of best-in-class field reporting solutions, today announced a revolutionary new platform that empowers organizations to leverage synergies across their inspection workflows. This game-changing offering delivers seamless, robust, end-to-end capabilities that will transform the industry and unlock unprecedented value for stakeholders everywhere!\"}]}"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "SAMPLES",
+        "  Homepage [on-brand, too short]: 97 words, grade 5.4, 16.2 words/sentence (longest 29), you 8.2 / we 2.1 / I 0.0 per 100, contractions 0.0, hedges 0.0, buzzwords 0.0, 0% exclamations",
+        "  Onboarding email [on-brand, too short]: 95 words, grade 4.2, 11.9 words/sentence (longest 26), you 4.2 / we 2.1 / I 0.0 per 100, contractions 0.0, hedges 1.1, buzzwords 0.0, 0% exclamations",
+        "  Blog intro [on-brand, too short]: 97 words, grade 6.3, 16.2 words/sentence (longest 35), you 1.0 / we 4.1 / I 0.0 per 100, contractions 0.0, hedges 0.0, buzzwords 0.0, 0% exclamations",
+        "  Old press release [off-brand, too short]: 51 words, grade 19.6, 25.5 words/sentence (longest 28), you 0.0 / we 0.0 / I 0.0 per 100, contractions 0.0, hedges 0.0, buzzwords 11.8, 50% exclamations",
+        "",
+        "  - \"Homepage\" has 97 words; under 100 it is left out of the measurements.",
+        "  - \"Onboarding email\" has 95 words; under 100 it is left out of the measurements.",
+        "  - \"Blog intro\" has 97 words; under 100 it is left out of the measurements.",
+        "  - \"Old press release\" has 51 words; under 100 it is left out of the measurements.",
+        "TOO-THIN: 0 usable on-brand samples. This engine needs 3 of 100+ words before it derives a profile; pick pieces the team agrees sound right."
+      ],
+      "stderr": []
+    }
+  ]
+}

@@ -1,0 +1,82 @@
+{
+  "engine": "ai-marketing-governance",
+  "file": "skills/ai-marketing-governance/resources/ai-governance.js",
+  "cases": [
+    {
+      "name": "built-in worked example",
+      "source": "the engine's own --demo",
+      "args": [
+        "--demo"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "=== A. THE TEAM THAT ADOPTED AI BEFORE ANYONE WROTE RULES ===",
+        "0/110 (0%) · Do not publish AI-drafted work yet",
+        "Blocked on: Tools named, by task; The never-in-a-prompt list is written down; Training-on-inputs setting verified, not assumed; A named human reviewer; Figures are added by a person, not asked for. These are the checks that sit between the draft and the publish button.",
+        "failed checks:",
+        "  - Tools named, by task — No tool named for: Research and summarising; First drafts — blog, email, social; Editing, proofing, shortening; Images and video; Code on the marketing site; Customer or revenue data analysis",
+        "  - Each approved tool says who may use it — Every row has a person against it",
+        "  - The never-in-a-prompt list is written down — Treat every prompt as though it may be read by someone outside the company, because it may be",
+        "  - Training-on-inputs setting verified, not assumed — Consumer tiers often train on inputs and the default is rarely the safe one. Check it, write the answer down, re-check it when the plan changes",
+        "  - A named human reviewer — \"the team\" is not a name. Accountability that is not a name is not accountability",
+        "  - Reviewer's name is recorded somewhere durable — The doc, the ticket or the CMS field — somewhere it survives the week",
+        "  - All four review questions in use — The four questions are what the reviewer is accountable for",
+        "  - Figures are added by a person, not asked for — Ask AI for the argument, not the statistics. A model generates plausible citations, not retrieved ones",
+        "  - Disclosure line decided — Disclose where the reader's judgement depends on who wrote it; routine drafting help needs no more disclosure than a spellchecker",
+        "  - Policy has an owner and a next review date — A policy nobody owns is a document, not a policy",
+        "",
+        "=== B. THE SAME TEAM, POLICY ADOPTED ===",
+        "110/110 (100%) · Adopt it",
+        "Tools are named, the prompt line is drawn, a person signs, and figures come from documents.",
+        "",
+        "=== CITATION CHECK (section 5) ===",
+        "\"35% of failed startups cited no market need\" — citeable",
+        "",
+        "\"Strong positioning makes the next round 30% faster\" — not citeable",
+        "  - No document title.",
+        "  - No document date.",
+        "  - Incomplete sample: it needs how many, of what, measured when.",
+        "  - Publisher index, tag or category page — a citation resolves to one document",
+        "  - Nobody has opened this document. Add figures one at a time, each from a document you opened yourself.",
+        "  If a claim needs a number you cannot find, the claim is wrong — not under-researched.",
+        "",
+        "=== DRAFT SWEEP ===",
+        "figures found: 30%, 35% — not ready",
+        "  - Figure with no citation attached: 30%. Ask AI for the argument, not the statistics.",
+        "  - Published under a named person's byline without that person reading and approving it.",
+        "  - Disclosure needed: the reader's judgement here depends on who wrote it.",
+        "  - No named reviewer. Nothing AI-drafted publishes without one.",
+        "",
+        "=== THE FIVE RULES ===",
+        "  01  AI drafts. People decide and sign.",
+        "      No exceptions, no \"it was only a social post\".",
+        "  02  Use the tools on the list.",
+        "      Anything else needs approval first.",
+        "  03  Nothing confidential goes into a prompt.",
+        "      Customers, pricing, NDAs, credentials — none of it.",
+        "  04  Ask for the argument, not the statistics.",
+        "      Add every figure yourself, from a document you opened.",
+        "  05  A named person reviews before publish.",
+        "      Their name goes somewhere that survives the week."
+      ],
+      "stderr": []
+    },
+    {
+      "name": "check a complete citation",
+      "source": "input written from the engine header schema",
+      "args": [
+        "{\"check\":\"checkCitation\",\"input\":{\"claim\":\"Marketing budgets averaged 7.7% of company revenue\",\"organisation\":\"Gartner\",\"organisationDomain\":\"gartner.com\",\"title\":\"The 2025 Gartner CMO Spend Survey\",\"date\":\"2025-05-12\",\"isAnnual\":true,\"edition\":\"2025\",\"sample\":{\"n\":402,\"of\":\"CMOs in North America and Europe\",\"when\":\"February-March 2025\"},\"url\":\"https://www.gartner.com/en/marketing/research/annual-cmo-spend-survey-research\",\"openedByAHuman\":true}}"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "{",
+        "  \"claim\": \"Marketing budgets averaged 7.7% of company revenue\",",
+        "  \"citeable\": true,",
+        "  \"issues\": [],",
+        "  \"rule\": \"If a claim needs a number you cannot find, the claim is wrong — not under-researched.\"",
+        "}"
+      ],
+      "stderr": []
+    }
+  ]
+}

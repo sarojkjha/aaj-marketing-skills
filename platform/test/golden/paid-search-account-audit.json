@@ -1,0 +1,73 @@
+{
+  "engine": "paid-search-account-audit",
+  "file": "skills/paid-search-account-audit/resources/search-audit.js",
+  "cases": [
+    {
+      "name": "built-in worked example",
+      "source": "the engine's own --demo",
+      "args": [
+        "--demo"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "(no config - demo: an invented four-campaign account over 30 days, with its search terms and landing pages)",
+        "",
+        "PAID SEARCH AUDIT - target CPA 250. Nothing here is a benchmark.",
+        "  Setup: 6 of 9 in place",
+        "  Account: 9,500 spend, 85 conversions, CPA 112; brand 9% of spend at CPA 15, non-brand CPA 344; 19% of spend in campaigns with no conversions",
+        "    Brand [brand, manual]: 900 spend, 1500 clicks, 60 conv, CPA 15, CTR 30.0%, CVR 4.0%, lost to budget 2%, lost to rank 5%",
+        "    Scheduling software [non-brand, target-cpa]: 4,200 spend, 700 clicks, 21 conv, CPA 200, CTR 3.3%, CVR 3.0%, lost to budget 35%, lost to rank 20%",
+        "    Competitors [competitor, maximize-conversions]: 2,600 spend, 320 clicks, 4 conv, CPA 650, CTR 2.0%, CVR 1.3%, lost to budget 5%, lost to rank 50%",
+        "    Generic contractor [non-brand, maximize-clicks]: 1,800 spend, 900 clicks, 0 conv, CPA -, CTR 1.5%, CVR 0.0%",
+        "  Search terms: 8 rows, 4,880 spend; waste 1,480 (30%): 3 irrelevant, 0 zero-conversion; 2 winners not yet keywords",
+        "  Landing pages: 3, median conversion rate 2.1%",
+        "",
+        "FIXES - blocking first, then by spend affected",
+        "  1. ! [campaigns, 2,600] Competitors converts at 650, more than twice your target. Fix the terms and page, or cut it.",
+        "  2. ! [campaigns, 2,262] Scheduling software converts at 200 (under your 250 target) and loses 35% of impressions to budget. This is the cheapest growth in the account: move budget here.",
+        "  3. ! [landing-pages, 2,200] /compare: the page does not repeat the ad's promise. Message mismatch is the most common reason a good keyword looks bad.",
+        "  4. ! [campaigns, 1,800] Generic contractor: 1,800 spent, 900 clicks, no conversions. Pause or rebuild before anything else.",
+        "  5. ! [search-terms, 1,480] 3 search terms match your irrelevant patterns and are not negated: \"free scheduling app\", \"contractor jobs near me\", \"crew scheduling excel template\". Add them to a shared negative list.",
+        "  6. - [setup, 9,500] Not in place: CRM outcomes imported. Without qualified or closed-won imported from the CRM, the account optimises toward form fills, including the junk ones.",
+        "  7. - [setup, 9,500] Not in place: Geo targeting: presence, not interest. The default includes people \"interested in\" your location; for a business that sells in one place, that is spend outside it.",
+        "  8. - [setup, 9,500] Not in place: Shared negative lists. A negative added to one campaign does not protect the others; account-level lists do.",
+        "  9. - [campaigns, 4,200] Scheduling software runs target-cpa on 21 conversions in the period. Below 30 (AAJ's rule) the algorithm is guessing; consolidate campaigns or bid manually until it has data.",
+        "  10. - [campaigns, 2,600] Competitors runs maximize-conversions on 4 conversions in the period. Below 30 (AAJ's rule) the algorithm is guessing; consolidate campaigns or bid manually until it has data.",
+        "  11. - [landing-pages, 2,200] /compare converts at 0.6%, under half the account's median page (2.1%). Check message match and the first screen.",
+        "  12. - [search-terms] 2 converting search terms are not keywords: \"hvac dispatch software\" (3 conv), \"plumbing dispatch app\" (4 conv). Add them as exact-match keywords so you control the bid and the ad.",
+        "",
+        "WASTE: 19% of spend is in campaigns with clicks and no conversions. Stop the waste before optimising anything."
+      ],
+      "stderr": []
+    },
+    {
+      "name": "two campaigns, tracking verified",
+      "source": "documented example in the engine header",
+      "args": [
+        "{\"targetCpa\":250,\"setup\":{\"conversionTrackingVerified\":true,\"offlineConversionsImported\":false,\"brandSeparated\":true,\"searchPartnersReviewed\":true,\"displayExpansionOff\":true,\"geoPresenceOnly\":false,\"sharedNegativeLists\":false,\"autoApplyOff\":true,\"assetsComplete\":true},\"campaigns\":[{\"name\":\"Brand\",\"type\":\"brand\",\"spend\":900,\"clicks\":1200,\"impressions\":4000,\"conversions\":60,\"bidStrategy\":\"manual\",\"lostToBudget\":0.05,\"lostToRank\":0.1},{\"name\":\"Field service - core\",\"type\":\"non-brand\",\"spend\":6000,\"clicks\":1500,\"impressions\":40000,\"conversions\":30,\"bidStrategy\":\"target-cpa\",\"lostToBudget\":0.3,\"lostToRank\":0.2}],\"searchTerms\":[{\"term\":\"field service software\",\"spend\":640,\"clicks\":80,\"conversions\":4,\"match\":\"phrase\",\"isKeyword\":true},{\"term\":\"free field service app\",\"spend\":300,\"clicks\":60,\"conversions\":0,\"match\":\"broad\",\"isKeyword\":false}],\"irrelevantPatterns\":[\"free\",\"jobs?\",\"salary\",\"tutorial\"],\"landingPages\":[{\"url\":\"/pricing\",\"spend\":1500,\"clicks\":300,\"conversions\":12,\"messageMatch\":true,\"mobileOk\":true},{\"url\":\"/\",\"spend\":3000,\"clicks\":900,\"conversions\":10,\"messageMatch\":false,\"mobileOk\":true}]}"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "PAID SEARCH AUDIT - target CPA 250. Nothing here is a benchmark.",
+        "  Setup: 6 of 9 in place",
+        "  Account: 6,900 spend, 90 conversions, CPA 77; brand 13% of spend at CPA 15, non-brand CPA 200; 0% of spend in campaigns with no conversions",
+        "    Brand [brand, manual]: 900 spend, 1200 clicks, 60 conv, CPA 15, CTR 30.0%, CVR 5.0%, lost to budget 5%, lost to rank 10%",
+        "    Field service - core [non-brand, target-cpa]: 6,000 spend, 1500 clicks, 30 conv, CPA 200, CTR 3.8%, CVR 2.0%, lost to budget 30%, lost to rank 20%",
+        "  Search terms: 2 rows, 940 spend; waste 300 (32%): 1 irrelevant, 0 zero-conversion; 0 winners not yet keywords",
+        "  Landing pages: 2, median conversion rate 2.6%",
+        "",
+        "FIXES - blocking first, then by spend affected",
+        "  1. ! [landing-pages, 3,000] /: the page does not repeat the ad's promise. Message mismatch is the most common reason a good keyword looks bad.",
+        "  2. ! [campaigns, 2,571] Field service - core converts at 200 (under your 250 target) and loses 30% of impressions to budget. This is the cheapest growth in the account: move budget here.",
+        "  3. ! [search-terms, 300] 1 search terms match your irrelevant patterns and are not negated: \"free field service app\". Add them to a shared negative list.",
+        "  4. - [setup, 6,900] Not in place: CRM outcomes imported. Without qualified or closed-won imported from the CRM, the account optimises toward form fills, including the junk ones.",
+        "  5. - [setup, 6,900] Not in place: Geo targeting: presence, not interest. The default includes people \"interested in\" your location; for a business that sells in one place, that is spend outside it.",
+        "  6. - [setup, 6,900] Not in place: Shared negative lists. A negative added to one campaign does not protect the others; account-level lists do.",
+        "  7. - [landing-pages, 3,000] / converts at 1.1%, under half the account's median page (2.6%). Check message match and the first screen.",
+        "",
+        "WASTE: 32% of search-term spend went to terms that cannot or did not convert. Negatives first."
+      ],
+      "stderr": []
+    }
+  ]
+}

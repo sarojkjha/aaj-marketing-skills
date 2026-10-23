@@ -1,0 +1,65 @@
+{
+  "engine": "structured-data-for-ai-search",
+  "file": "skills/structured-data-for-ai-search/resources/schema-check.js",
+  "cases": [
+    {
+      "name": "built-in worked example",
+      "source": "the engine's own --demo",
+      "args": [
+        "--demo"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "(no config - demo: a fictional SaaS pricing page whose markup shows a price and rating the page does not)",
+        "",
+        "AAJ - STRUCTURED DATA CHECK (software page)",
+        "------------------------------------------------------------------",
+        "  FIX BEFORE PUBLISHING - 3 issues break the markup or describe something the page does not show.",
+        "  Nodes found: SoftwareApplication, BreadcrumbList",
+        "  Checked: SoftwareApplication at block 1; BreadcrumbList at block 2   Visible text: compared",
+        "",
+        "FIX",
+        "  !  [block 1.offers] The price 49.00 does not appear in the page text. Mark up the price the page shows.",
+        "       source: https://developers.google.com/search/docs/appearance/structured-data/sd-policies",
+        "  !  [block 1.aggregateRating] aggregateRating needs ratingCount or reviewCount (Google: \"At least one of ratingCount or reviewCount is required\").",
+        "       source: https://developers.google.com/search/docs/appearance/structured-data/review-snippet",
+        "  !  [block 1.aggregateRating] The rating 4.8 does not appear in the page text. Google: \"Don't mark up content that is not visible to readers of the page.\" Show the rating and its count on the page, or remove the markup.",
+        "       source: https://developers.google.com/search/docs/appearance/structured-data/sd-policies",
+        "",
+        "IMPROVE (recommended)",
+        "  -  [block 1] No operatingSystem (Google recommends it: the operating system(s) required to use the app).",
+        "       source: https://developers.google.com/search/docs/appearance/structured-data/software-app",
+        "",
+        "CONTEXT",
+        "  i  [-] Google says there is \"no special schema.org structured data\" needed for AI Overviews or AI Mode, and lists \"making sure your structured data matches the visible text on the page\" among the fundamentals.",
+        "       source: https://developers.google.com/search/docs/appearance/ai-features"
+      ],
+      "stderr": []
+    },
+    {
+      "name": "software page with matching visible text",
+      "source": "input written from the engine header schema",
+      "args": [
+        "{\"pageType\":\"software\",\"today\":\"2026-10-10\",\"jsonld\":{\"@context\":\"https://schema.org\",\"@type\":\"SoftwareApplication\",\"name\":\"Fieldnote\",\"applicationCategory\":\"BusinessApplication\",\"operatingSystem\":\"iOS, Android, Web\",\"offers\":{\"@type\":\"Offer\",\"price\":\"29\",\"priceCurrency\":\"USD\"}},\"visibleText\":\"Fieldnote. Inspection reports written on site. Works on iOS, Android and the web. Plans from $29 a month.\"}"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "",
+        "AAJ - STRUCTURED DATA CHECK (software page)",
+        "------------------------------------------------------------------",
+        "  VALID, NOT RICH-RESULT ELIGIBLE - The markup is sound, but 1 Google requirement is missing for SoftwareApplication rich results.",
+        "  Nodes found: SoftwareApplication",
+        "  Checked: SoftwareApplication at block 1   Visible text: compared",
+        "",
+        "RICH-RESULT ELIGIBILITY (Google requirements)",
+        "  *  [block 1] Neither aggregateRating nor review. Google requires one of them for software app rich results. Add one only if real ratings are shown on this page; otherwise accept no software rich result rather than invent one.",
+        "       source: https://developers.google.com/search/docs/appearance/structured-data/software-app",
+        "",
+        "CONTEXT",
+        "  i  [-] Google says there is \"no special schema.org structured data\" needed for AI Overviews or AI Mode, and lists \"making sure your structured data matches the visible text on the page\" among the fundamentals.",
+        "       source: https://developers.google.com/search/docs/appearance/ai-features"
+      ],
+      "stderr": []
+    }
+  ]
+}

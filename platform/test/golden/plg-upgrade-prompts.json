@@ -1,0 +1,89 @@
+{
+  "engine": "plg-upgrade-prompts",
+  "file": "skills/plg-upgrade-prompts/resources/upgrade-funnel.js",
+  "cases": [
+    {
+      "name": "built-in worked example",
+      "source": "the engine's own --demo",
+      "args": [
+        "--demo"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "(no config - demo: three prompts in a fictional PLG product; every count is an example input)",
+        "",
+        "AAJ - UPGRADE PROMPT FUNNEL (last 30 days, 95% intervals)",
+        "------------------------------------------------------------------------------",
+        "  ONE PROMPT TO FIX FIRST - \"Export to PDF\" at the click stage.",
+        "  71 upgrades through prompts from 5000 active free users (1.4%).",
+        "",
+        "  Prompt                    Hit    Seen   Click  Paid  Seen -> paid (interval)",
+        "  Seat limit (3 users)      600    540    130    39    7.2% (5.3% to 9.7%)",
+        "  Export to PDF             900    880    70     14    1.6% (1% to 2.7%)",
+        "  Project limit (5)         400    250    60     18    7.2% (4.6% to 11.1%)",
+        "",
+        "STAGES",
+        "  Seat limit (3 users): delivery 90%  |  click 24.1%  |  checkout 30%  |  54.9% of upgrades",
+        "  Export to PDF: delivery 97.8%  |  click 8%  |  checkout 20%  |  19.7% of upgrades",
+        "  Project limit (5): delivery 62.5%  |  click 24%  |  checkout 30%  |  25.4% of upgrades",
+        "",
+        "WHERE THE UPGRADES ARE (vs your best prompt's lower bound at each stage)",
+        "  +22.4  Export to PDF - click (saw -> clicked): 8% vs 20.7% (Seat limit (3 users))",
+        "  +9.8  Project limit (5) - delivery (hit limit -> saw prompt): 62.5% vs 96.6% (Export to PDF)",
+        "  +2.9  Seat limit (3 users) - delivery (hit limit -> saw prompt): 90% vs 96.6% (Export to PDF)",
+        "  +2.0  Export to PDF - checkout (clicked -> paid): 20% vs 22.8% (Seat limit (3 users))",
+        "",
+        "PROMPT VS PROMPT (seen -> paid, Holm-corrected)",
+        "  Seat limit (3 users) 7.2% vs Export to PDF 1.6%: p = 0.0000, adjusted 0.0000 -> different",
+        "  Seat limit (3 users) 7.2% vs Project limit (5) 7.2%: p = 0.9910, adjusted 0.9910 -> not distinguishable",
+        "  Export to PDF 1.6% vs Project limit (5) 7.2%: p = 0.0000, adjusted 0.0000 -> different",
+        "",
+        "FINDINGS",
+        "  !  Fix first: \"Export to PDF\" at click (saw -> clicked). It runs at 8%; \"Seat limit (3 users)\" runs at 24.1% at the same stage, and no lower than 20.7% at 95% confidence. Matching the lower figure would add about 22.4 upgrades per period. Prompts reach different users, so test the fix rather than assume it.",
+        "  i  60 users hit \"Seat limit (3 users)\" without seeing the prompt. Check whether that is a deliberate frequency cap or a bug.",
+        "  i  20 users hit \"Export to PDF\" without seeing the prompt. Check whether that is a deliberate frequency cap or a bug.",
+        "  i  150 users hit \"Project limit (5)\" without seeing the prompt. Check whether that is a deliberate frequency cap or a bug.",
+        "  i  At most 1900 of 5000 active free users hit a tracked limit (fewer if users hit several). The rest never met an upgrade moment; check whether the limits sit where value is proven."
+      ],
+      "stderr": []
+    },
+    {
+      "name": "two prompts, one period",
+      "source": "documented example in the engine header",
+      "args": [
+        "{\"period\":\"last 30 days\",\"activeFree\":5000,\"confidence\":95,\"prompts\":[{\"name\":\"Seat limit (3 users)\",\"kind\":\"limit\",\"hitLimit\":600,\"views\":540,\"clicks\":130,\"upgrades\":39},{\"name\":\"Export gate\",\"kind\":\"feature-gate\",\"hitLimit\":900,\"views\":860,\"clicks\":120,\"upgrades\":18}]}"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "",
+        "AAJ - UPGRADE PROMPT FUNNEL (last 30 days, 95% intervals)",
+        "------------------------------------------------------------------------------",
+        "  ONE PROMPT TO FIX FIRST - \"Export gate\" at the checkout stage.",
+        "  57 upgrades through prompts from 5000 active free users (1.1%).",
+        "",
+        "  Prompt                    Hit    Seen   Click  Paid  Seen -> paid (interval)",
+        "  Seat limit (3 users)      600    540    130    39    7.2% (5.3% to 9.7%)",
+        "  Export gate               900    860    120    18    2.1% (1.3% to 3.3%)",
+        "",
+        "STAGES",
+        "  Seat limit (3 users): delivery 90%  |  click 24.1%  |  checkout 30%  |  68.4% of upgrades",
+        "  Export gate: delivery 95.6%  |  click 14%  |  checkout 15%  |  31.6% of upgrades",
+        "",
+        "WHERE THE UPGRADES ARE (vs your best prompt's lower bound at each stage)",
+        "  +9.3  Export gate - checkout (clicked -> paid): 15% vs 22.8% (Seat limit (3 users))",
+        "  +8.7  Export gate - click (saw -> clicked): 14% vs 20.7% (Seat limit (3 users))",
+        "  +1.7  Seat limit (3 users) - delivery (hit limit -> saw prompt): 90% vs 94% (Export gate)",
+        "",
+        "PROMPT VS PROMPT (seen -> paid, Holm-corrected)",
+        "  Seat limit (3 users) 7.2% vs Export gate 2.1%: p = 0.0000, adjusted 0.0000 -> different",
+        "",
+        "FINDINGS",
+        "  !  Fix first: \"Export gate\" at checkout (clicked -> paid). It runs at 15%; \"Seat limit (3 users)\" runs at 30% at the same stage, and no lower than 22.8% at 95% confidence. Matching the lower figure would add about 9.3 upgrades per period. Prompts reach different users, so test the fix rather than assume it.",
+        "  i  60 users hit \"Seat limit (3 users)\" without seeing the prompt. Check whether that is a deliberate frequency cap or a bug.",
+        "  i  40 users hit \"Export gate\" without seeing the prompt. Check whether that is a deliberate frequency cap or a bug.",
+        "  i  At most 1500 of 5000 active free users hit a tracked limit (fewer if users hit several). The rest never met an upgrade moment; check whether the limits sit where value is proven."
+      ],
+      "stderr": []
+    }
+  ]
+}

@@ -1,0 +1,66 @@
+{
+  "engine": "lead-magnet-and-free-tool-design",
+  "file": "skills/lead-magnet-and-free-tool-design/resources/lead-magnet-fit.js",
+  "cases": [
+    {
+      "name": "built-in worked example",
+      "source": "the engine's own --demo",
+      "args": [
+        "--demo"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "(no config - demo: four invented magnet ideas, and the results of three live ones)",
+        "",
+        "IDEAS - scored on AAJ's rules, ranked by score per ten build hours",
+        "  Board marketing slide template (template, gated): 8/10, 12 h to build, 6.7 per 10 h [ranked] - specific problem +2, appeals only to your buyer +2, answer in <=30 min +1, reusable +2, leads somewhere +1",
+        "  Churn & NRR calculator (tool): 10/10, 30 h to build, 3.3 per 10 h [ranked] - specific problem +2, appeals only to your buyer +2, answer in <=10 min +2, reusable +2, inputs reveal fit +1, leads somewhere +1",
+        "  Marketing maturity assessment (assessment, gated): 8/10, 120 h to build, 0.7 per 10 h [ranked] - specific problem +2, appeals only to your buyer +2, answer in <=10 min +2, inputs reveal fit +1, leads somewhere +1",
+        "     - A one-off: once read, never returned to. Fine, but it earns no second visit.",
+        "     - 120 hours to build. Above 80 (this engine's rule) ship a smaller version first and see whether anyone uses it.",
+        "  The Ultimate Guide to SaaS Marketing (guide, gated): 0/10, 25 h to build, 0.0 per 10 h [fix]",
+        "     ! No buyer problem stated. A magnet that is \"about\" a topic collects readers, not buyers.",
+        "     - It appeals beyond the buyer you want, so the list it builds will need qualifying and most of it will never buy.",
+        "     - 45 minutes to a useful answer. Above 30 most people stop before they get it.",
+        "     - A one-off: once read, never returned to. Fine, but it earns no second visit.",
+        "     - No next step. Say what the person is offered once they have their answer.",
+        "     ! A guide is ideas, and ideas should travel. Gate tools and templates; publish the thinking so it can be forwarded.",
+        "  Build first: Board marketing slide template",
+        "",
+        "RESULTS - on qualified leads, not downloads (target 60 per qualified lead)",
+        "  Churn & NRR calculator: 1,400 visitors -> 610 starts (44%) -> 480 completions (79%) -> 130 emails (9% of visitors) -> 61 qualified (47%) -> 7 meetings; 39 per qualified lead",
+        "     KEEP: 47% of emails fit your buyer at 39 per qualified lead. Keep it, and point more of the same traffic at it.",
+        "  The Ultimate Guide to SaaS Marketing: 3,900 visitors -> 700 starts (18%) -> 700 completions (100%) -> 700 emails (18% of visitors) -> 90 qualified (13%) -> 2 meetings; 34 per qualified lead",
+        "     FIX-FIT: Qualified leads are cheap (34 each) but only 13% of the list fits your buyer. Segment the list before you email it, and re-aim the promise so the other 87% stop signing up.",
+        "  Board marketing slide template: 260 visitors -> 40 starts (15%) -> 15 completions (38%) -> 15 emails (6% of visitors) -> 12 qualified (80%); 33 per qualified lead",
+        "     - 38% of starters finish. Below 50% (this engine's rule) the flow is the problem: too many inputs, or the email asked too early.",
+        "     TOO-EARLY: 15 emails so far. Below 20 this engine does not judge; send more of the right traffic and read again."
+      ],
+      "stderr": []
+    },
+    {
+      "name": "two ideas and one live magnet",
+      "source": "documented example in the engine header",
+      "args": [
+        "{\"ideas\":[{\"name\":\"Churn & NRR calculator\",\"kind\":\"tool\",\"problem\":\"Founders cannot tell whether their retention is good\",\"minutesToValue\":5,\"reusable\":true,\"icpOnly\":true,\"qualifyingInputs\":true,\"nextStep\":\"Retention audit call\",\"gated\":false,\"buildHours\":30},{\"name\":\"State of SaaS marketing report\",\"kind\":\"report\",\"problem\":\"Marketers want to know what peers spend\",\"minutesToValue\":45,\"reusable\":false,\"icpOnly\":false,\"qualifyingInputs\":false,\"nextStep\":\"\",\"gated\":true,\"buildHours\":80}],\"results\":{\"targetCostPerQualified\":60,\"magnets\":[{\"name\":\"Churn & NRR calculator\",\"visitors\":1400,\"starts\":610,\"completions\":480,\"emails\":130,\"qualified\":61,\"meetings\":7,\"cost\":2400}]}}"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "IDEAS - scored on AAJ's rules, ranked by score per ten build hours",
+        "  Churn & NRR calculator (tool): 10/10, 30 h to build, 3.3 per 10 h [ranked] - specific problem +2, appeals only to your buyer +2, answer in <=10 min +2, reusable +2, inputs reveal fit +1, leads somewhere +1",
+        "  State of SaaS marketing report (report, gated): 2/10, 80 h to build, 0.3 per 10 h [fix] - specific problem +2",
+        "     - It appeals beyond the buyer you want, so the list it builds will need qualifying and most of it will never buy.",
+        "     - 45 minutes to a useful answer. Above 30 most people stop before they get it.",
+        "     - A one-off: once read, never returned to. Fine, but it earns no second visit.",
+        "     - No next step. Say what the person is offered once they have their answer.",
+        "     ! A report is ideas, and ideas should travel. Gate tools and templates; publish the thinking so it can be forwarded.",
+        "  Build first: Churn & NRR calculator",
+        "",
+        "RESULTS - on qualified leads, not downloads (target 60 per qualified lead)",
+        "  Churn & NRR calculator: 1,400 visitors -> 610 starts (44%) -> 480 completions (79%) -> 130 emails (9% of visitors) -> 61 qualified (47%) -> 7 meetings; 39 per qualified lead",
+        "     KEEP: 47% of emails fit your buyer at 39 per qualified lead. Keep it, and point more of the same traffic at it."
+      ],
+      "stderr": []
+    }
+  ]
+}
