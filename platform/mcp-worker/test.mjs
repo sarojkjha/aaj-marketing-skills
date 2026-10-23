@@ -10,7 +10,7 @@ import { spawnSync } from "node:child_process";
 import { join, dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import worker, { runInProcess } from "./worker.mjs";
-import { ENGINES, SKILLS } from "./engines.generated.mjs";
+import { ENGINES, SKILLS, BUILD } from "./engines.generated.mjs";
 import { readFileSync } from "node:fs";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..", "..");
@@ -40,6 +40,9 @@ const j = async (r) => [r.status, r.status === 202 ? null : await r.json()];
 
 let [s, b] = await j(await post({ jsonrpc: "2.0", id: 1, method: "initialize", params: { protocolVersion: "2025-06-18", capabilities: {}, clientInfo: { name: "t", version: "1" } } }));
 ok(s === 200 && b.result.serverInfo.name === "aaj-engines" && b.result.protocolVersion === "2025-06-18", "initialize");
+// Build stamp (Oct 23): the commit rides on serverInfo.version as semver build metadata, the whole stamp under _meta.
+ok(/^\d+\.\d+\.\d+(\+[0-9A-Za-z.-]+)?$/.test(b.result.serverInfo.version) && b.result.serverInfo.version.startsWith(BUILD.version), `serverInfo.version is semver with the build (${b.result.serverInfo.version})`);
+ok(JSON.stringify(b.result._meta?.["com.aajconsult/build"]) === JSON.stringify(BUILD), "initialize carries the build stamp under _meta");
 [s, b] = await j(await post({ jsonrpc: "2.0", method: "notifications/initialized" }));
 ok(s === 202, `notification -> 202 (got ${s})`);
 [s, b] = await j(await post({ jsonrpc: "2.0", id: 2, method: "tools/list" }));
@@ -84,6 +87,16 @@ for (let i = 0; i < 61; i++) last = await post({ jsonrpc: "2.0", id: i, method: 
 ok(last.status === 429, "rate limit");
 const opt = await worker.fetch(new Request("https://mcp.example/mcp", { method: "OPTIONS" }));
 ok(opt.status === 204 && opt.headers.get("access-control-allow-origin") === "*", "CORS preflight");
+// The build stamp: what this deploy was built from.
+{
+  const res = await worker.fetch(new Request("https://mcp.example/version"));
+  const body = await res.json();
+  ok(res.status === 200 && res.headers.get("cache-control") === "no-store", "/version is served, uncached");
+  ok(body.engines === ENGINES.length && body.skills === SKILLS.length && /^[0-9a-f]{12}$/.test(body.engineHash), "/version has the engine count, skill count and engine hash");
+  ok(typeof body.commit === "string" && body.commit.length >= 7 && !Number.isNaN(Date.parse(body.builtAt)), `/version has a commit and build time (${body.commit}, ${body.builtAt})`);
+  const health = await (await worker.fetch(new Request("https://mcp.example/health"))).json();
+  ok(health.ok && health.commit === body.commit && health.engineHash === body.engineHash, "/health carries the same stamp");
+}
 // The published counts: the same object as counts.json, readable from any page.
 {
   const res = await worker.fetch(new Request("https://mcp.example/counts.json"));

@@ -1,0 +1,77 @@
+{
+  "engine": "comparison-pages",
+  "file": "skills/comparison-pages/resources/comparison-check.js",
+  "cases": [
+    {
+      "name": "built-in worked example",
+      "source": "the engine's own --demo",
+      "args": [
+        "--demo"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "(no config - demo: two invented products; one stale and one unsourced rival fact, a loaded word, no methodology)",
+        "",
+        "AAJ - COMPARISON PAGE CHECK: Ledgerline vs Tallybook",
+        "------------------------------------------------------------------",
+        "  FIX BEFORE PUBLISHING - 5 issues would cost the page its credibility with a buyer who checks.",
+        "",
+        "WHO WINS WHAT",
+        "  vs Tallybook: Ledgerline 2, Tallybook 2, tie 0, depends 0 (of 4 criteria)",
+        "",
+        "TABLE",
+        "  - Multi-entity consolidation: Included on all plans | Tallybook: Add-on on the Pro plan  [tallybook.example/pricing, 2026-09-20] -> us",
+        "  - Entry price, one entity: $59 per month | Tallybook: $29 per month  [tallybook.example/pricing, 2026-05-02] -> them",
+        "  - App marketplace: 40 integrations | Tallybook: 300+ integrations  [no source, undated] -> them",
+        "  - Setup: Self-serve import | Tallybook: Clunky partner-led onboarding  [tallybook.example/docs/onboarding, 2026-09-20] -> us",
+        "",
+        "  Oldest rival fact checked 2026-05-02; re-check was due 2026-07-31 (overdue).",
+        "",
+        "BEFORE PUBLISHING",
+        "  !  \"Entry price, one entity\" (Tallybook) was last checked 161 days ago. Re-check it; this engine flags anything older than 90 days.",
+        "  !  \"App marketplace\" (Tallybook) has no source. A claim about another company's product is the one a buyer, or an AI answer, checks first.",
+        "  !  \"App marketplace\" (Tallybook) has no date it was last checked (YYYY-MM-DD). Readers need to know how old a claim about a rival is.",
+        "  !  Disparaging language in table (\"Clunky\"). Describe what the rival does, with a source; let the reader judge.",
+        "  !  No methodology note. Say what was compared, how (plans, versions, public pages or hands-on tests), and when. The FTC's comparative advertising policy statement (16 CFR 14.15) supports brand comparisons whose bases are clearly identified.",
+        "  -  \"App marketplace\" (Tallybook): our own claim has no source. Say where a reader can verify it (pricing page, docs, changelog).",
+        "  -  \"Setup\" (Tallybook): our own claim has no source. Say where a reader can verify it (pricing page, docs, changelog).",
+        "  -  Absolute claims in copy (\"the best\"). One counterexample disproves an absolute; say what you do and how you know.",
+        "  -  The page does not say that Ledgerline published it. Say so near the top; a reader who finds out later discounts everything.",
+        "",
+        "  Orientation, not legal advice: comparative claims about a named competitor can carry legal risk. See 16 CFR 14.15 and check the page with counsel."
+      ],
+      "stderr": []
+    },
+    {
+      "name": "vs page with sourced, dated rows",
+      "source": "documented example in the engine header",
+      "args": [
+        "{\"us\":\"Ledgerline\",\"them\":\"Tallybook\",\"pageType\":\"vs\",\"today\":\"2026-10-10\",\"lastUpdated\":\"2026-10-01\",\"rows\":[{\"criterion\":\"Multi-entity consolidation\",\"us\":\"Included on all plans\",\"them\":\"Add-on on the Pro plan\",\"source\":\"tallybook.com/pricing\",\"checked\":\"2026-09-20\",\"usSource\":\"our pricing page\",\"winner\":\"us\"},{\"criterion\":\"Payroll built in\",\"us\":\"Via integration\",\"them\":\"Built in\",\"source\":\"tallybook.com/features\",\"checked\":\"2026-09-20\",\"winner\":\"them\"}],\"copy\":\"Ledgerline and Tallybook both handle small-business accounting. Tallybook includes payroll; Ledgerline consolidates several entities on every plan.\",\"methodology\":\"We compared the public pricing and feature pages of both products on September 20, 2026.\"}"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "",
+        "AAJ - COMPARISON PAGE CHECK: Ledgerline vs Tallybook",
+        "------------------------------------------------------------------",
+        "  READY TO PUBLISH - Rival facts are sourced and current, each rival wins somewhere, and the method is stated.",
+        "",
+        "WHO WINS WHAT",
+        "  vs Tallybook: Ledgerline 1, Tallybook 1, tie 0, depends 0 (of 2 criteria)",
+        "",
+        "TABLE",
+        "  - Multi-entity consolidation: Included on all plans | Tallybook: Add-on on the Pro plan  [tallybook.com/pricing, 2026-09-20] -> us",
+        "  - Payroll built in: Via integration | Tallybook: Built in  [tallybook.com/features, 2026-09-20] -> them",
+        "",
+        "  Oldest rival fact checked 2026-09-20; re-check the table by 2026-12-19.",
+        "",
+        "BEFORE PUBLISHING",
+        "  -  \"Payroll built in\" (Tallybook): our own claim has no source. Say where a reader can verify it (pricing page, docs, changelog).",
+        "  -  The copy never says when Tallybook is the better choice. One honest paragraph on who should pick Tallybook is what makes the rest believable.",
+        "  -  The page does not say that Ledgerline published it. Say so near the top; a reader who finds out later discounts everything.",
+        "",
+        "  Orientation, not legal advice: comparative claims about a named competitor can carry legal risk. See 16 CFR 14.15 and check the page with counsel."
+      ],
+      "stderr": []
+    }
+  ]
+}

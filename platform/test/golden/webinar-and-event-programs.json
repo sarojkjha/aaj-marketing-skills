@@ -1,0 +1,61 @@
+{
+  "engine": "webinar-and-event-programs",
+  "file": "skills/webinar-and-event-programs/resources/event-program.js",
+  "cases": [
+    {
+      "name": "built-in worked example",
+      "source": "the engine's own --demo",
+      "args": [
+        "--demo"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "(no config - demo: one invented webinar planned backwards, its run-of-show, and the readout six weeks later)",
+        "",
+        "PLAN - backwards from 150,000 of pipeline",
+        "  Opportunities 10 -> meetings 20 -> live attendees 200 -> registrations 500",
+        "  Cost 7,300 (people time 3,600): 15 per registration, 37 per attendee, 365 per meeting; 20.5 of pipeline per 1 spent",
+        "  Weakest step: attendeeToMeetingRate - the rate most worth lifting.",
+        "  STRETCH: You can reach 70% of the registrations needed. Either add a partner's audience, lower the target, or lift a rate you control (show rate through reminders; attendee-to-meeting through the offer).",
+        "",
+        "RUN OF SHOW - 3 of 8 items missing",
+        "  ! Dry run done on the real platform: Audio, screen share, polls and the handoff between speakers, tested once.",
+        "  ! Follow-up sequence written before the event: Attendees, no-shows and on-demand viewers each get a different first email within a day.",
+        "  ! Sales handoff agreed: Who calls whom, within what time, on what signal (question asked, poll answer, stayed to the end).",
+        "",
+        "READOUT - on meetings and pipeline, not registrations",
+        "  320 registered, 121 attended live (38%), 64 on demand; 14 meetings, 6 opportunities, 84,000 pipeline",
+        "  Cost 7,300: 60 per attendee, 39 per person reached, 521 per meeting, 1,217 per opportunity; 11.5 of pipeline per 1 spent; expected revenue 21,000",
+        "  ! First follow-up went out 44 hours after the event. AAJ's rule is within 24 hours; the follow-up is the real event.",
+        "  CHANGE: Expected revenue (pipeline x win rate) is 2.9x cost: it pays for itself but misses your 3x target. Change the weakest step before running again."
+      ],
+      "stderr": []
+    },
+    {
+      "name": "documented plan, run-of-show and readout",
+      "source": "documented example in the engine header",
+      "args": [
+        "{\"plan\":{\"pipelineTarget\":150000,\"avgDealValue\":15000,\"meetingToOppRate\":0.5,\"attendeeToMeetingRate\":0.1,\"showRate\":0.4,\"reachableRegistrations\":350,\"costs\":{\"platform\":400,\"promotion\":2500,\"production\":800,\"peopleHours\":40,\"hourlyCost\":90}},\"runOfShow\":{\"topicIsBuyerProblem\":true,\"promotionLive14DaysOut\":true,\"dryRun\":false,\"recordingAndOnDemandPage\":true,\"followUpSequenceWritten\":false,\"salesHandoffAgreed\":false,\"questionOrPollPlanned\":true,\"singleCta\":true},\"readout\":{\"registrations\":320,\"attendees\":121,\"onDemandViews\":64,\"meetingsBooked\":14,\"opportunities\":6,\"pipelineCreated\":84000,\"winRate\":0.25,\"cost\":7300,\"followUpHours\":20,\"targetReturn\":3}}"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "PLAN - backwards from 150,000 of pipeline",
+        "  Opportunities 10 -> meetings 20 -> live attendees 200 -> registrations 500",
+        "  Cost 7,300 (people time 3,600): 15 per registration, 37 per attendee, 365 per meeting; 20.5 of pipeline per 1 spent",
+        "  Weakest step: attendeeToMeetingRate - the rate most worth lifting.",
+        "  STRETCH: You can reach 70% of the registrations needed. Either add a partner's audience, lower the target, or lift a rate you control (show rate through reminders; attendee-to-meeting through the offer).",
+        "",
+        "RUN OF SHOW - 3 of 8 items missing",
+        "  ! Dry run done on the real platform: Audio, screen share, polls and the handoff between speakers, tested once.",
+        "  ! Follow-up sequence written before the event: Attendees, no-shows and on-demand viewers each get a different first email within a day.",
+        "  ! Sales handoff agreed: Who calls whom, within what time, on what signal (question asked, poll answer, stayed to the end).",
+        "",
+        "READOUT - on meetings and pipeline, not registrations",
+        "  320 registered, 121 attended live (38%), 64 on demand; 14 meetings, 6 opportunities, 84,000 pipeline",
+        "  Cost 7,300: 60 per attendee, 39 per person reached, 521 per meeting, 1,217 per opportunity; 11.5 of pipeline per 1 spent; expected revenue 21,000",
+        "  CHANGE: Expected revenue (pipeline x win rate) is 2.9x cost: it pays for itself but misses your 3x target. Change the weakest step before running again."
+      ],
+      "stderr": []
+    }
+  ]
+}

@@ -18,7 +18,8 @@ This is the same five tools as the local server in `platform/mcp/`, served at on
   - Notifications return 202.
   - `GET /mcp` returns 405.
   - `/` is a short info page.
-  - `/health` returns counts.
+  - `/health` returns counts and the build stamp.
+  - `/version` returns the build stamp: the git commit the bundle was built from (`-dirty` if the working tree had uncommitted changes), the build time, the skill and engine counts, and the engine hash.
 - **Limits.**
   - Request bodies are capped at 256 KB.
   - Each IP gets 60 requests a minute per isolate, which guards against runaway loops. It is not a quota.
@@ -33,7 +34,7 @@ You need Node 18+ and a Cloudflare login on your computer.
 ```bash
 git clone https://github.com/sarojkjha/aaj-marketing-skills && cd aaj-marketing-skills
 node platform/mcp-worker/build.mjs       # build engines.generated.mjs (not committed; CI builds it too)
-node platform/mcp-worker/test.mjs        # 193 checks
+node platform/mcp-worker/test.mjs        # parity, transport and build-stamp checks
 cd platform/mcp-worker
 npx wrangler login                       # once
 npx wrangler deploy
@@ -49,6 +50,7 @@ Cloudflare creates the DNS record and certificate, as long as aajconsult.com is 
 
 ### After you deploy
 - **Check the server.** `curl https://<host>/health` should return the skill and engine counts.
+- **Check what it runs.** `curl https://<host>/version` should show the commit you just deployed and no `-dirty`. Its `engineHash` matches `node platform/mcp/server.mjs --version` in a checkout of the same commit; a different hash means the deploy (or the checkout) is stale. MCP clients see the commit in `serverInfo.version` (`1.2.0+abc1234`) and the whole stamp under `_meta["com.aajconsult/build"]` in the `initialize` response.
 - **Try it in Claude.** In Settings → Connectors, choose "Add custom connector" and paste `https://<host>/mcp`. Then ask: "Use the AAJ engines to check my unit economics: CAC $1,200, ARPA $300/month, 80% gross margin, 3% monthly churn."
 - **Publish the address.** Send me the URL and I'll add it to the README, the skills site and the AAJ site.
 

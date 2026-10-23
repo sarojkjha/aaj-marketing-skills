@@ -1,0 +1,58 @@
+{
+  "engine": "marketing-leadership-model",
+  "file": "skills/marketing-leadership-model/resources/leadership-model.js",
+  "cases": [
+    {
+      "name": "built-in worked example",
+      "source": "the engine's own --demo",
+      "args": [
+        "--demo"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "(no config - demo: the three options on illustrative numbers over 12 months, and a fit check for a seed-stage team)",
+        "",
+        "COMPARE - over 12 months, your time at 150 an hour. Nothing here is a benchmark.",
+        "  In-house hire: 247,990 total; starts in 2 mo; 8.5 productive months; 29,175 per productive month; 87 of your hours",
+        "     salary 150,000, load 45,000, recruiting 36,000, tools 4,000, yourTime 12,990",
+        "  Fractional leader (cheapest): 176,388 total; starts now; 11.5 productive months; 15,338 per productive month; 104 of your hours",
+        "     retainer 120,000, execution 36,000, tools 4,800, yourTime 15,588",
+        "  Agency: 184,976 total; starts now; 11.0 productive months; 16,816 per productive month; 208 of your hours",
+        "     retainer 144,000, setup 5,000, tools 4,800, yourTime 31,176",
+        "  Crossover: The in-house hire never becomes the cheaper option: once both are running it costs 6,500 more per month than the fractional leader, so the gap only widens. Check the salary load and the execution line; those are the two people usually get wrong.",
+        "  If you stop at month 6:",
+        "     In-house hire: spent 115,600, still owed 0. Recruiting again, and the replacement ramps from zero. No severance assumed.",
+        "     Fractional leader: spent 80,400, still owed 13,000. 1-month notice, then it stops.",
+        "     Agency: spent 79,400, still owed 0. Minimum term already served.",
+        "",
+        "FIT - FRACTIONAL-PLUS-EXECUTION: Judgement is part-time (10 hours) but execution is not (25 hours) and nobody in-house does it. A strategy-only retainer will not write the emails: pair a fractional leader with a contractor or a junior hire, and count both."
+      ],
+      "stderr": []
+    },
+    {
+      "name": "documented three-way comparison and fit",
+      "source": "documented example in the engine header",
+      "args": [
+        "{\"compare\":{\"horizonMonths\":12,\"ownHourly\":150,\"toolsMonthly\":400,\"inHouse\":{\"salary\":180000,\"loadPct\":30,\"recruitPct\":20,\"searchMonths\":2,\"rampMonths\":3,\"mgmtHoursPerWeek\":2},\"fractional\":{\"retainer\":10000,\"executionMonthly\":3000,\"rampMonths\":1,\"mgmtHoursPerWeek\":2,\"noticeMonths\":1},\"agency\":{\"retainer\":12000,\"setupFee\":5000,\"rampMonths\":2,\"mgmtHoursPerWeek\":4,\"minTermMonths\":6}},\"fit\":{\"leadershipHoursPerWeek\":10,\"executionHoursPerWeek\":25,\"executionInHouse\":false,\"channelSpecialism\":[\"paid search\"],\"founderHoursPerWeek\":3,\"monthsToDecide\":12}}"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "COMPARE - over 12 months, your time at 150 an hour. Nothing here is a benchmark.",
+        "  In-house hire: 247,990 total; starts in 2 mo; 8.5 productive months; 29,175 per productive month; 87 of your hours",
+        "     salary 150,000, load 45,000, recruiting 36,000, tools 4,000, yourTime 12,990",
+        "  Fractional leader (cheapest): 176,388 total; starts now; 11.5 productive months; 15,338 per productive month; 104 of your hours",
+        "     retainer 120,000, execution 36,000, tools 4,800, yourTime 15,588",
+        "  Agency: 184,976 total; starts now; 11.0 productive months; 16,816 per productive month; 208 of your hours",
+        "     retainer 144,000, setup 5,000, tools 4,800, yourTime 31,176",
+        "  Crossover: The in-house hire never becomes the cheaper option: once both are running it costs 6,500 more per month than the fractional leader, so the gap only widens. Check the salary load and the execution line; those are the two people usually get wrong.",
+        "  If you stop at month 6:",
+        "     In-house hire: spent 115,600, still owed 0. Recruiting again, and the replacement ramps from zero. No severance assumed.",
+        "     Fractional leader: spent 80,400, still owed 13,000. 1-month notice, then it stops.",
+        "     Agency: spent 79,400, still owed 0. Minimum term already served.",
+        "",
+        "FIT - AGENCY: The work is mostly hands (25 hours a week) in channels you do not have (paid search). An agency or specialist contractors fit; add a fractional leader only if nobody is setting direction."
+      ],
+      "stderr": []
+    }
+  ]
+}

@@ -1,0 +1,65 @@
+{
+  "engine": "community-and-dark-social",
+  "file": "skills/community-and-dark-social/resources/dark-social-read.js",
+  "cases": [
+    {
+      "name": "built-in worked example",
+      "source": "the engine's own --demo",
+      "args": [
+        "--demo"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "(no config - demo: five invented places, a community that is not ready, and three months of measurement)",
+        "",
+        "MAP - where your buyers already talk, ranked by evidence",
+        "  RevOps Co-op (Slack) (community): named by 6 buyers, 4 lead mentions - present, answering [covered]",
+        "  Seed Marketing Leaders (WhatsApp) (community): named by 3 buyers, 3 lead mentions - not present [fix]",
+        "     ! 3 buyers named this place and nobody from your team is in it. Join as a person, read for two weeks, then answer.",
+        "  The Bootstrapped CFO (podcast): named by 4 buyers, 2 lead mentions - present, silent [covered]",
+        "     - You are present but have not answered anything in the last month. Presence without answers is lurking, not showing up.",
+        "  Priya N. (LinkedIn) (person): named by 2 buyers, 1 lead mentions - present, answering [fix]",
+        "     ! You posted a promotion or an unasked link here. In other people's rooms: answer first, link only when asked.",
+        "  Growth Tuesdays (newsletter): named by 0 buyers, 0 lead mentions - present, silent [watch]",
+        "     - You are present but have not answered anything in the last month. Presence without answers is lurking, not showing up.",
+        "     - No buyer named this place and no lead mentioned it. Keep it only if it costs nothing; the map should be built from where buyers say they are.",
+        "  Coverage: present and answering in 2 of 4 places named by 2+ buyers (50%).",
+        "",
+        "OWN COMMUNITY - NOT-YET: Fill the gaps below before opening. Meanwhile show up, as a person, in the rooms your buyers already use.",
+        "  ! Write down what you will do when it goes quiet in month three.",
+        "",
+        "MEASURE - by asking, not tracking",
+        "  Jun: dark share 29% (10 of 34 coded answers, 4 uncoded), branded search 1,150, deep-page share of direct 24%, pipeline 58,000",
+        "  Jul: dark share 38% (14 of 37 coded answers, 4 uncoded), branded search 1,320, deep-page share of direct 29%, pipeline 61,000",
+        "  Aug: dark share 50% (20 of 40 coded answers, 4 uncoded), branded search 1,610, deep-page share of direct 35%, pipeline 59,000",
+        "  Trend of Aug vs prior: dark share up +49%; branded search up +30%; deep direct up +32%; pipeline flat",
+        "  WRONG-PEOPLE: People are talking about you where you cannot see, and pipeline is not following. Either your sales cycle is longer than the periods you are reading, or the wrong people are talking. Check the cycle first; if it is not that, go back to the map: whose rooms are these?"
+      ],
+      "stderr": []
+    },
+    {
+      "name": "map, community go/no-go and two months of measurement",
+      "source": "documented example in the engine header",
+      "args": [
+        "{\"map\":[{\"name\":\"RevOps Co-op (Slack)\",\"kind\":\"community\",\"namedByBuyers\":6,\"selfReportedMentions\":4,\"present\":true,\"answering\":true,\"pitched\":false,\"crossPosted\":false},{\"name\":\"Demand Gen Weekly\",\"kind\":\"newsletter\",\"namedByBuyers\":3,\"selfReportedMentions\":1,\"present\":false,\"answering\":false,\"pitched\":false,\"crossPosted\":false}],\"community\":{\"recurringConversation\":\"Weekly: what broke in your funnel this week\",\"host\":\"Saroj\",\"hostHoursPerWeek\":3,\"quietPlan\":\"Month-three plan: bring in two guest practitioners\",\"membersAsking\":14,\"roleOrProblem\":\"heads of marketing at seed-stage SaaS\"},\"measure\":{\"periods\":[{\"label\":\"Jun\",\"leads\":40,\"selfReported\":{\"person\":3,\"community\":2,\"podcast\":1,\"newsletter\":0,\"brandName\":4,\"search\":12,\"paid\":9,\"other\":5,\"unknown\":4},\"brandedSearchImpressions\":1200,\"directSessions\":900,\"directDeepPageSessions\":240,\"pipeline\":60000},{\"label\":\"Jul\",\"leads\":46,\"selfReported\":{\"person\":5,\"community\":4,\"podcast\":1,\"newsletter\":1,\"brandName\":6,\"search\":12,\"paid\":9,\"other\":4,\"unknown\":4},\"brandedSearchImpressions\":1450,\"directSessions\":980,\"directDeepPageSessions\":300,\"pipeline\":72000}]}}"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "MAP - where your buyers already talk, ranked by evidence",
+        "  RevOps Co-op (Slack) (community): named by 6 buyers, 4 lead mentions - present, answering [covered]",
+        "  Demand Gen Weekly (newsletter): named by 3 buyers, 1 lead mentions - not present [fix]",
+        "     ! 3 buyers named this place and nobody from your team is in it. Join as a person, read for two weeks, then answer.",
+        "  Coverage: present and answering in 1 of 2 places named by 2+ buyers (50%).",
+        "",
+        "OWN COMMUNITY - GO: Conversation, host, quiet plan and demand are all there. Open it small, around the role or problem, with the host visible from day one.",
+        "",
+        "MEASURE - by asking, not tracking",
+        "  Jun: dark share 28% (10 of 36 coded answers, 4 uncoded), branded search 1,200, deep-page share of direct 27%, pipeline 60,000",
+        "  Jul: dark share 40% (17 of 42 coded answers, 4 uncoded), branded search 1,450, deep-page share of direct 31%, pipeline 72,000",
+        "  Trend of Jul vs prior: dark share up +46%; branded search up +21%; deep direct up +15%; pipeline up +20%",
+        "  WORKING: Dark signals and pipeline are rising together. Keep the rhythm; retarget the pieces that travel and brief sales on the conversations to expect."
+      ],
+      "stderr": []
+    }
+  ]
+}

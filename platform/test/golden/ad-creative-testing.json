@@ -1,0 +1,59 @@
+{
+  "engine": "ad-creative-testing",
+  "file": "skills/ad-creative-testing/resources/creative-test.js",
+  "cases": [
+    {
+      "name": "built-in worked example",
+      "source": "the engine's own --demo",
+      "args": [
+        "--demo"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "(no config - demo: an invented three-variant ad test, planned and then read)",
+        "",
+        "PLAN - conversions per impression",
+        "  3 variants (2 comparisons with the control), alpha per comparison 0.0250",
+        "  Needs 121,173 impressions per variant, 363,519 in all: about 7 days.",
+        "  Fits inside 28 days. Run it to the planned size before reading it.",
+        "",
+        "READ - conversions per impression",
+        "  CUSTOMER QUOTE BEATS THE CONTROL: A 41% lift on conversions per impression (p < 0.0001, threshold 0.0250). Roll it out, and keep the control running on a small share to watch for decay.",
+        "",
+        "  Control - product screenshot: 0.198% (0.18% to 0.22%) on 124,000 - control, 15.12 per conversion",
+        "  Customer quote: 0.279% (0.25% to 0.31%) on 123,500 - lift +41%, p < 0.0001 *, 10.74 per conversion",
+        "  Price in the headline: 0.216% (0.19% to 0.24%) on 124,500 - lift +9%, p = 0.3326, 13.88 per conversion",
+        "",
+        "FINDINGS",
+        "  i  2 challengers were compared with the control, so each one had to clear p < 0.0250 (Bonferroni) rather than 0.05, to keep the chance of a false winner at 0.05 overall."
+      ],
+      "stderr": []
+    },
+    {
+      "name": "plan and read a three-variant test",
+      "source": "input written from the engine header schema",
+      "args": [
+        "{\"metric\":\"cpi\",\"plan\":{\"baselineRate\":0.002,\"minDetectableLift\":0.3,\"variants\":3,\"dailyUnitsPerVariant\":20000,\"maxDays\":28},\"read\":{\"variants\":[{\"name\":\"Control - product shot\",\"change\":\"\",\"impressions\":60000,\"clicks\":540,\"conversions\":118,\"spend\":1800},{\"name\":\"Customer quote\",\"change\":\"headline is a customer quote\",\"impressions\":61000,\"clicks\":610,\"conversions\":152,\"spend\":1830},{\"name\":\"Before/after\",\"change\":\"before/after visual\",\"impressions\":59000,\"clicks\":500,\"conversions\":121,\"spend\":1770}],\"plannedUnitsPerVariant\":60000}}"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "PLAN - conversions per impression",
+        "  3 variants (2 comparisons with the control), alpha per comparison 0.0250",
+        "  Needs 121,173 impressions per variant, 363,519 in all: about 7 days.",
+        "  Fits inside 28 days. Run it to the planned size before reading it.",
+        "",
+        "READ - conversions per impression",
+        "  NOT A CLEAN READ: Fix the issues flagged below before naming a winner.",
+        "",
+        "  Control - product shot: 0.197% (0.16% to 0.24%) on 60,000 - control, 15.25 per conversion",
+        "  Customer quote: 0.249% (0.21% to 0.29%) on 61,000 - lift +27%, p = 0.0529, 12.04 per conversion",
+        "  Before/after: 0.205% (0.17% to 0.24%) on 59,000 - lift +4%, p = 0.7457, 14.63 per conversion",
+        "",
+        "FINDINGS",
+        "  !  The smallest arm has 59000 of the 60000 impressions the plan called for. Reading a test before it reaches its planned size inflates false winners; finish it, or treat this as a hint.",
+        "  i  2 challengers were compared with the control, so each one had to clear p < 0.0250 (Bonferroni) rather than 0.05, to keep the chance of a false winner at 0.05 overall."
+      ],
+      "stderr": []
+    }
+  ]
+}

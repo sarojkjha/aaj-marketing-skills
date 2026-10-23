@@ -1,0 +1,58 @@
+{
+  "engine": "pricing-page-teardown",
+  "file": "skills/pricing-page-teardown/resources/pricing-teardown.js",
+  "cases": [
+    {
+      "name": "built-in worked example",
+      "source": "the engine's own --demo",
+      "args": [
+        "--demo"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "(no config - demo: Fieldnote, an invented scheduling app, against two invented competitors; a $49 to $59 test planned and read)",
+        "",
+        "TEARDOWN - share of weighted points on the checks answered",
+        "  Competitor A: 96% (21 of 21 checks answered)",
+        "  Fieldnote (you): 62% (21 of 21 checks answered)",
+        "  Competitor B: 39% (21 of 21 checks answered)",
+        "  Your areas: Clarity 73% · Choice 43% · Proof & risk 14% · Friction 88% · Honesty & terms 75%",
+        "  Top fixes on your page:",
+        "    #5 [Clarity, weight 2, you: no] Plan differences are shown as limits and outcomes a buyer cares about, not a wall of ticks. - 1 of 2 competitors pass",
+        "    #8 [Choice, weight 2, you: no] It is clear what happens at each limit: an overage charge, an upgrade, or a hard stop. - 1 of 2 competitors pass",
+        "    #12 [Proof & risk, weight 2, you: no] The FAQ answers the price questions sales hears most often. - 1 of 2 competitors pass",
+        "    #10 [Proof & risk, weight 2, you: no] Proof sits near the price and speaks to that plan's buyer: a result or quote used with written permission. - 0 of 2 competitors pass",
+        "    #1 [Clarity, weight 3, you: partly] Each plan says who it is for, in words that buyer would use. - 1 of 2 competitors pass",
+        "  - 1 \"not sure\" answer on your own page. Those score zero; go and look, then re-run.",
+        "  - Check 18 touches ROSCA, California's automatic renewal law or the FTC pricing guides. Fix those first, whatever they score.",
+        "",
+        "PRICE-TEST PLAN",
+        "  Price change 20.4%; break-even conversion 1.66% (-16.9% on conversion); revenue per visitor 0.980 now vs 1.062 on your guess (8.4%)",
+        "  Needs 126,757 visitors per arm = about 85 weeks at your traffic (alpha 0.05, power 0.8). In 8 weeks you could detect a change of about 25%.",
+        "  NOT-TESTABLE: A live test cannot answer this in 8 weeks: it would need about 85. In 8 weeks you could only detect a change of about 25% in revenue per visitor. Use an alternative: ask before you charge (price sensitivity), change it for new customers and compare periods, quote it in sales-led deals, or test a bigger change.",
+        "",
+        "TEST READ-OUT (Live A/B)",
+        "  A: conversion 2.00%, revenue/visitor 0.980; B: conversion 1.90%, revenue/visitor 1.121; change 14.4%; p 0.206; 7% of planned size",
+        "  TOO-EARLY: Too early: 7% of the planned size. Keep going unless a guardrail is breached.",
+        "  Retention: Add 90-day retention for each arm before making the price permanent."
+      ],
+      "stderr": []
+    },
+    {
+      "name": "test plan for a price rise",
+      "source": "documented example in the engine header",
+      "args": [
+        "{\"testPlan\":{\"currentPrice\":49,\"testPrice\":59,\"conversion\":0.02,\"guessConversion\":0.018,\"visitorsPerWeek\":3000,\"shareInTest\":1,\"alpha\":0.05,\"power\":0.8,\"weeksAvailable\":8}}"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "PRICE-TEST PLAN",
+        "  Price change 20.4%; break-even conversion 1.66% (-16.9% on conversion); revenue per visitor 0.980 now vs 1.062 on your guess (8.4%)",
+        "  Needs 126,757 visitors per arm = about 85 weeks at your traffic (alpha 0.05, power 0.8). In 8 weeks you could detect a change of about 25%.",
+        "  NOT-TESTABLE: A live test cannot answer this in 8 weeks: it would need about 85. In 8 weeks you could only detect a change of about 25% in revenue per visitor. Use an alternative: ask before you charge (price sensitivity), change it for new customers and compare periods, quote it in sales-led deals, or test a bigger change.",
+        ""
+      ],
+      "stderr": []
+    }
+  ]
+}

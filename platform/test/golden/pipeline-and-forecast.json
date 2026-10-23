@@ -1,0 +1,62 @@
+{
+  "engine": "pipeline-and-forecast",
+  "file": "skills/pipeline-and-forecast/resources/forecast.js",
+  "cases": [
+    {
+      "name": "built-in worked example",
+      "source": "the engine's own --demo",
+      "args": [
+        "--demo"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "AAJ — Pipeline & Forecast",
+        "Source: built-in demo data",
+        "",
+        "Target (quota):        $500,000",
+        "Win rate:              25%",
+        "Open pipeline:         $520,000  (7 deals)",
+        "",
+        "Weighted forecast:     $223,750   <- expected (Σ amount × stage probability)",
+        "  Commit (>=75%):      $150,000",
+        "  Best case (all open):$520,000",
+        "Early-stage share:     23% of open pipeline below 25% probability",
+        "",
+        "Coverage:              1.0x   (need ~4.0x at a 25% win rate)  ->  THIN",
+        "Gap to target:         $276,250",
+        "New pipeline needed:   $1,105,000   (gap ÷ win rate)",
+        "",
+        "Recommended lever: BUILD PIPELINE — coverage is below what your win rate requires; add qualified pipeline. New pipeline closes on your full sales cycle, so most of it lands after this quarter."
+      ],
+      "stderr": []
+    },
+    {
+      "name": "documented stages, five deals",
+      "source": "documented example in the engine header",
+      "args": [
+        "{\"target\":500000,\"winRate\":0.25,\"stageProbabilities\":{\"Discovery\":0.1,\"Qualified\":0.25,\"Proposal\":0.5,\"Negotiation\":0.75,\"Verbal\":0.9},\"deals\":[{\"name\":\"Acme\",\"amount\":60000,\"stage\":\"Proposal\"},{\"name\":\"Globex\",\"amount\":120000,\"stage\":\"Negotiation\"},{\"name\":\"Initech\",\"amount\":45000,\"stage\":\"Discovery\"},{\"name\":\"Umbrella\",\"amount\":90000,\"stage\":\"Verbal\"},{\"name\":\"Hooli\",\"amount\":150000,\"stage\":\"Qualified\"}]}"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "AAJ — Pipeline & Forecast",
+        "Source: your input",
+        "",
+        "Target (quota):        $500,000",
+        "Win rate:              25%",
+        "Open pipeline:         $465,000  (5 deals)",
+        "",
+        "Weighted forecast:     $243,000   <- expected (Σ amount × stage probability)",
+        "  Commit (>=75%):      $210,000",
+        "  Best case (all open):$465,000",
+        "Early-stage share:     10% of open pipeline below 25% probability",
+        "",
+        "Coverage:              0.9x   (need ~4.0x at a 25% win rate)  ->  THIN",
+        "Gap to target:         $257,000",
+        "New pipeline needed:   $1,028,000   (gap ÷ win rate)",
+        "",
+        "Recommended lever: BUILD PIPELINE — coverage is below what your win rate requires; add qualified pipeline. New pipeline closes on your full sales cycle, so most of it lands after this quarter."
+      ],
+      "stderr": []
+    }
+  ]
+}

@@ -1,0 +1,76 @@
+{
+  "engine": "marketing-maturity-assessment",
+  "file": "skills/marketing-maturity-assessment/resources/maturity-assessment.js",
+  "cases": [
+    {
+      "name": "built-in worked example",
+      "source": "the engine's own --demo",
+      "args": [
+        "--demo"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "(no config - demo: an invented seed-stage company, with a previous run for comparison)",
+        "",
+        "MATURITY 37/100 - SCATTERED (Seed)",
+        "  Capable tactics that are not yet a system. The fastest gains come from connecting them, not adding more.",
+        "  At seed, a repeatable demand engine and a site that converts are where focus pays back fastest.",
+        "",
+        "DIMENSIONS",
+        "  Positioning & Messaging     78  Established  answers Fully / Mostly / Mostly  (+22 since last run)",
+        "  Audience & Demand           44  Emerging     answers Mostly / Partly / Partly  (+11 since last run)  [stage focus]",
+        "  Website & Conversion        44  Emerging     answers Mostly / Mostly / Not yet  (+11 since last run)  [stage focus]",
+        "  Sales & Pipeline            22  Scattered    answers Partly / Partly / Not yet",
+        "  Retention & Expansion       11  Scattered    answers Partly / Not yet / Not yet",
+        "  Measurement & Economics     22  Scattered    answers Partly / Not yet / Partly  (-11 since last run)",
+        "",
+        "WEAK LINKS - fix in this order",
+        "  1. Retention & Expansion (11): Growth leaks out the back. Without retention and expansion, every new customer costs more than it should.",
+        "     Move: This is where the math compounds: map onboarding and the top churn drivers. Skills: onboarding-activation, lifecycle-and-retention, email-lifecycle-sequence. Evidence to check: NRR and GRR for the last twelve months and a coded list of churn reasons.",
+        "  2. Sales & Pipeline (22): Without a visible, qualified pipeline, the forecast is a guess and the message flies blind.",
+        "     Move: Make the number defensible. Skills: sales-process-design, pipeline-and-forecast, win-loss-analysis. Evidence to check: a written stage definition and last quarter's forecast against actual.",
+        "  3. Measurement & Economics (22): Decisions are running on opinion, not evidence: hard to defend and easy to waste.",
+        "     Move: Instrument before you scale. Skills: unit-economics, marketing-report, incrementality-and-mmm. Evidence to check: CAC, LTV and payback figures from the last quarter, and the date of the last metrics review.",
+        "",
+        "CHANGE since previous run: overall +6",
+        "",
+        "  - Measurement & Economics 33 -> 22. A score can fall because the bar rose (you learned what \"Fully\" means) or because something lapsed; say which.",
+        "",
+        "Not a benchmark: the bands are AAJ's thresholds, and the score is only as honest as the answers."
+      ],
+      "stderr": []
+    },
+    {
+      "name": "documented seed-stage answers",
+      "source": "documented example in the engine header",
+      "args": [
+        "{\"stage\":\"seed\",\"answers\":{\"positioning\":[3,2,2],\"audience\":[2,1,1],\"conversion\":[2,2,0],\"pipeline\":[1,1,0],\"retention\":[1,0,0],\"measurement\":[1,0,1]},\"evidence\":{\"positioning\":true,\"audience\":false,\"measurement\":false}}"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "MATURITY 37/100 - SCATTERED (Seed)",
+        "  Capable tactics that are not yet a system. The fastest gains come from connecting them, not adding more.",
+        "  At seed, a repeatable demand engine and a site that converts are where focus pays back fastest.",
+        "",
+        "DIMENSIONS",
+        "  Positioning & Messaging     78  Established  answers Fully / Mostly / Mostly",
+        "  Audience & Demand           44  Emerging     answers Mostly / Partly / Partly  [stage focus]",
+        "  Website & Conversion        44  Emerging     answers Mostly / Mostly / Not yet  [stage focus]",
+        "  Sales & Pipeline            22  Scattered    answers Partly / Partly / Not yet",
+        "  Retention & Expansion       11  Scattered    answers Partly / Not yet / Not yet",
+        "  Measurement & Economics     22  Scattered    answers Partly / Not yet / Partly",
+        "",
+        "WEAK LINKS - fix in this order",
+        "  1. Retention & Expansion (11): Growth leaks out the back. Without retention and expansion, every new customer costs more than it should.",
+        "     Move: This is where the math compounds: map onboarding and the top churn drivers. Skills: onboarding-activation, lifecycle-and-retention, email-lifecycle-sequence. Evidence to check: NRR and GRR for the last twelve months and a coded list of churn reasons.",
+        "  2. Sales & Pipeline (22): Without a visible, qualified pipeline, the forecast is a guess and the message flies blind.",
+        "     Move: Make the number defensible. Skills: sales-process-design, pipeline-and-forecast, win-loss-analysis. Evidence to check: a written stage definition and last quarter's forecast against actual.",
+        "  3. Measurement & Economics (22): Decisions are running on opinion, not evidence: hard to defend and easy to waste.",
+        "     Move: Instrument before you scale. Skills: unit-economics, marketing-report, incrementality-and-mmm. Evidence to check: CAC, LTV and payback figures from the last quarter, and the date of the last metrics review.",
+        "",
+        "Not a benchmark: the bands are AAJ's thresholds, and the score is only as honest as the answers."
+      ],
+      "stderr": []
+    }
+  ]
+}

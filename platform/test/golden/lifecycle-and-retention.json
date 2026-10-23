@@ -1,0 +1,89 @@
+{
+  "engine": "lifecycle-and-retention",
+  "file": "skills/lifecycle-and-retention/resources/retention.js",
+  "cases": [
+    {
+      "name": "built-in worked example",
+      "source": "the engine's own --demo",
+      "args": [
+        "--demo"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "(no config — demo: $100k start MRR; +$12k new, +$8k expansion, −$3k contraction, −$6k churned; 200 customers, 9 lost)",
+        "",
+        "AAJ Churn & Retention — monthly view",
+        "--------------------------------------------------------",
+        "Net revenue retention (NRR)   99%",
+        "Gross revenue retention (GRR) 91%",
+        "Gross revenue churn           9%/mo",
+        "Net revenue churn             1%/mo",
+        "Logo churn                    4.5%/mo",
+        "Quick ratio                   2.2",
+        "Avg customer lifetime         22.2 mo",
+        "Retained base MRR (end)       $99,000",
+        "",
+        "▼ NRR 99%/mo — under 100%: the base is shrinking; fix retention before scaling acquisition.",
+        "• GRR 91%/mo — about 32.2% a year if every month looked like this one. Published medians are annual; compare the annual figure.",
+        "• Quick ratio 2.2 — 2.2 added for every 1 lost; adds outpace losses.",
+        "• Logo churn 4.5%/mo → ~22.2 mo average lifetime.",
+        "↗ Cutting logo churn 4.5% → 3.5% lifts LTV ~28.6% (lifetime → ~28.6 mo). Retention is a direct LTV lever.",
+        "",
+        "--- JSON ---",
+        "{",
+        "  \"period\": \"monthly\",",
+        "  \"nrrPct\": 99,",
+        "  \"grrPct\": 91,",
+        "  \"grossRevChurnPct\": 9,",
+        "  \"netRevChurnPct\": 1,",
+        "  \"logoChurnPct\": 4.5,",
+        "  \"quickRatio\": 2.22,",
+        "  \"avgLifetimeMonths\": 22.2,",
+        "  \"retainedBaseMRR\": 99000",
+        "}"
+      ],
+      "stderr": []
+    },
+    {
+      "name": "documented monthly period",
+      "source": "documented example in the engine header",
+      "args": [
+        "{\"period\":\"monthly\",\"startMRR\":100000,\"newMRR\":12000,\"expansionMRR\":8000,\"contractionMRR\":3000,\"churnedMRR\":6000,\"startCustomers\":200,\"churnedCustomers\":9,\"targetChurnPct\":4}"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "",
+        "AAJ Churn & Retention — monthly view",
+        "--------------------------------------------------------",
+        "Net revenue retention (NRR)   99%",
+        "Gross revenue retention (GRR) 91%",
+        "Gross revenue churn           9%/mo",
+        "Net revenue churn             1%/mo",
+        "Logo churn                    4.5%/mo",
+        "Quick ratio                   2.2",
+        "Avg customer lifetime         22.2 mo",
+        "Retained base MRR (end)       $99,000",
+        "",
+        "▼ NRR 99%/mo — under 100%: the base is shrinking; fix retention before scaling acquisition.",
+        "• GRR 91%/mo — about 32.2% a year if every month looked like this one. Published medians are annual; compare the annual figure.",
+        "• Quick ratio 2.2 — 2.2 added for every 1 lost; adds outpace losses.",
+        "• Logo churn 4.5%/mo → ~22.2 mo average lifetime.",
+        "↗ Cutting logo churn 4.5% → 4% lifts LTV ~12.5% (lifetime → ~25 mo). Retention is a direct LTV lever.",
+        "",
+        "--- JSON ---",
+        "{",
+        "  \"period\": \"monthly\",",
+        "  \"nrrPct\": 99,",
+        "  \"grrPct\": 91,",
+        "  \"grossRevChurnPct\": 9,",
+        "  \"netRevChurnPct\": 1,",
+        "  \"logoChurnPct\": 4.5,",
+        "  \"quickRatio\": 2.22,",
+        "  \"avgLifetimeMonths\": 22.2,",
+        "  \"retainedBaseMRR\": 99000",
+        "}"
+      ],
+      "stderr": []
+    }
+  ]
+}

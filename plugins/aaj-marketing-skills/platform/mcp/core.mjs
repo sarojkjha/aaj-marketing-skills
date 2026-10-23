@@ -9,6 +9,9 @@
  * skills  — catalog entries (slug, title, description, category, body, hasEngine, url)
  * engines — Map of id -> { id, slug, help, summary, skillName, category, specText? }
  * run     — async (engine, argv) => { code, out, err, capped?, timedOut?, spawnError? }
+ * build   — optional build stamp (platform/lib/stamp.mjs): { commit, builtAt, engines, engineHash, ... }.
+ *           Reported in the initialize response: the commit as semver build metadata on
+ *           serverInfo.version ("1.2.0+abc1234"), the whole stamp under _meta.
  */
 import { currentSlug } from "../lib/renamed.mjs";
 
@@ -46,7 +49,16 @@ export function engineSummary(help, fallback) {
   return firstSentence(para.join(" ").replace(/:$/, ""));
 }
 
-export function createServer({ skills, engines, run, log = () => {}, transport = "stdio" }) {
+// The _meta key the build stamp is reported under (MCP reserves unprefixed keys).
+export const BUILD_META_KEY = "com.aajconsult/build";
+
+/** serverInfo.version: the release, plus the commit as semver build metadata when known. */
+export function versionWithBuild(build) {
+  const c = build && typeof build.commit === "string" ? build.commit.replace(/[^0-9A-Za-z.-]/g, "") : "";
+  return c && c !== "unknown" ? `${SERVER_VERSION}+${c}` : SERVER_VERSION;
+}
+
+export function createServer({ skills, engines, run, log = () => {}, transport = "stdio", build = null }) {
 const TOOLS = [
   {
     name: "list_engines",
@@ -344,12 +356,13 @@ async function handle(msg) {
       return ok(id, {
         protocolVersion: version,
         capabilities: { tools: { listChanged: false } },
-        serverInfo: { name: SERVER_NAME, version: SERVER_VERSION },
+        serverInfo: { name: SERVER_NAME, version: versionWithBuild(build) },
         instructions:
           `AAJ marketing engines. ${engines.size} engines compute answers from your numbers — unit economics, ` +
           `forecasting, budget allocation, retention, experiment significance, SEO/GEO scoring. ` +
           `${skills.length} skills carry the method. ` +
           `Methods are published at ${SKILLS_SITE} and ${SITE}/hub.`,
+        ...(build ? { _meta: { [BUILD_META_KEY]: build } } : {}),
       });
     }
     case "notifications/initialized":
@@ -385,5 +398,5 @@ async function handle(msg) {
 
   const ok = (id, result) => ({ jsonrpc: "2.0", id, result });
   const err = (id, code, message) => ({ jsonrpc: "2.0", id, error: { code, message } });
-  return { handle, TOOLS, HANDLERS, skills, engines, transport };
+  return { handle, TOOLS, HANDLERS, skills, engines, transport, build };
 }

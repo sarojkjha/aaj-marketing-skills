@@ -17,7 +17,10 @@
     "counts:phrases": "node platform/scripts/generate-readme.mjs --phrases",
     "mcp:build": "node platform/mcp-worker/build.mjs",
     "mcp:test": "node platform/mcp-worker/test.mjs",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "mcp:smoke": "node platform/mcp/smoke-test.mjs",
+    "test:golden": "node platform/test/golden.mjs",
+    "test:golden:update": "node platform/test/golden.mjs --update",
+    "test": "node platform/test/golden.mjs && node platform/mcp-worker/build.mjs && node platform/mcp-worker/test.mjs && node platform/mcp/smoke-test.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.108.2",

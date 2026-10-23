@@ -1,0 +1,66 @@
+{
+  "engine": "creator-partnerships",
+  "file": "skills/creator-partnerships/resources/creator-fit.js",
+  "cases": [
+    {
+      "name": "built-in worked example",
+      "source": "the engine's own --demo",
+      "args": [
+        "--demo"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "(no config - demo: three invented creators, a draft contract, and the results after one round)",
+        "",
+        "SHORTLIST - cost per thousand people who fit your buyer",
+        "  Ops Weekly (newsletter + YouTube) (YouTube): fee 3,000, reach 21,000 views, match 45% - 317 per 1,000 matched (best on this list)",
+        "  Startup Finance Daily (LinkedIn): fee 4,500, reach 38,000 views, match 20% - 592 per 1,000 matched (1.9x the best on this list)",
+        "     - 63% of their recent posts are sponsored. Before paying for one, compare how their sponsored posts perform against their own; this engine flags anything above 50%.",
+        "     - Check three of their past sponsored posts for a clear disclosure placed with the endorsement, not only in a bio or behind \"more\".",
+        "  The Bootstrapped CFO (Podcast): fee 2,500, reach 60,000 followers, match - - needs data",
+        "     ! Only a follower count was given. A follower count is not how many people see a post; ask for median views on their last ten posts.",
+        "     ! No audience match share. Ask for the audience breakdown from their platform analytics - location, age, job or industry where available - and count the share that fits your buyer.",
+        "",
+        "CONTRACT - missing terms",
+        "  ! Usage rights: Whether you may reuse the content in ads or on your site, where, and for how long.",
+        "  ! Exclusivity window: Whether they can promote a direct competitor, and for how long.",
+        "  ! If a post is removed or underdelivers: What happens if the post comes down early or a deliverable is missed.",
+        "",
+        "RESULTS - target cost per acquisition 250",
+        "  Ops Weekly (newsletter + YouTube): 14 tracked + 5 survey mentions; 214 per tracked conversion (158 counting survey mentions)",
+        "     KEEP: Tracked conversions alone come in at or under target. Keep, and consider a longer arrangement.",
+        "  Startup Finance Daily: 9 tracked + 12 survey mentions; 500 per tracked conversion (214 counting survey mentions)",
+        "     RENEGOTIATE: Only hits target if every survey mention is counted as extra. Renegotiate toward a lower fixed fee plus a per-conversion payment, or run once more with a stronger offer.",
+        "  The Bootstrapped CFO: 1 tracked + 2 survey mentions; 2,500 per tracked conversion (833 counting survey mentions)",
+        "     TOO-EARLY: Fewer than 5 conversions from tracking and survey combined - too few to judge. This engine treats 5 as the floor."
+      ],
+      "stderr": []
+    },
+    {
+      "name": "two-creator shortlist and results",
+      "source": "documented example in the engine header",
+      "args": [
+        "{\"shortlist\":[{\"name\":\"Creator A\",\"platform\":\"YouTube\",\"followers\":180000,\"avgViews\":42000,\"avgEngagements\":1900,\"audienceMatchShare\":0.35,\"audienceMatchSource\":\"creator's analytics screenshot, Sep 2026\",\"recentPosts\":20,\"sponsoredPosts\":6,\"disclosesSponsorships\":true,\"fee\":4000},{\"name\":\"Creator B\",\"platform\":\"LinkedIn\",\"followers\":25000,\"avgViews\":9000,\"avgEngagements\":600,\"audienceMatchShare\":0.7,\"audienceMatchSource\":\"creator's analytics screenshot, Sep 2026\",\"recentPosts\":20,\"sponsoredPosts\":2,\"disclosesSponsorships\":\"unknown\",\"fee\":1500}],\"contract\":{\"deliverables\":true,\"disclosure\":true,\"approval\":true,\"usageRights\":false,\"exclusivity\":false,\"tracking\":true,\"payment\":true,\"underperformance\":false},\"results\":{\"targetCpa\":250,\"creators\":[{\"name\":\"Creator A\",\"fee\":4000,\"trackedConversions\":11,\"surveyMentions\":6},{\"name\":\"Creator B\",\"fee\":1500,\"trackedConversions\":7,\"surveyMentions\":2}]}}"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "SHORTLIST - cost per thousand people who fit your buyer",
+        "  Creator B (LinkedIn): fee 1,500, reach 9,000 views, match 70% - 238 per 1,000 matched (best on this list)",
+        "     - Check three of their past sponsored posts for a clear disclosure placed with the endorsement, not only in a bio or behind \"more\".",
+        "  Creator A (YouTube): fee 4,000, reach 42,000 views, match 35% - 272 per 1,000 matched (1.1x the best on this list)",
+        "",
+        "CONTRACT - missing terms",
+        "  ! Usage rights: Whether you may reuse the content in ads or on your site, where, and for how long.",
+        "  ! Exclusivity window: Whether they can promote a direct competitor, and for how long.",
+        "  ! If a post is removed or underdelivers: What happens if the post comes down early or a deliverable is missed.",
+        "",
+        "RESULTS - target cost per acquisition 250",
+        "  Creator A: 11 tracked + 6 survey mentions; 364 per tracked conversion (235 counting survey mentions)",
+        "     RENEGOTIATE: Only hits target if every survey mention is counted as extra. Renegotiate toward a lower fixed fee plus a per-conversion payment, or run once more with a stronger offer.",
+        "  Creator B: 7 tracked + 2 survey mentions; 214 per tracked conversion (167 counting survey mentions)",
+        "     KEEP: Tracked conversions alone come in at or under target. Keep, and consider a longer arrangement."
+      ],
+      "stderr": []
+    }
+  ]
+}

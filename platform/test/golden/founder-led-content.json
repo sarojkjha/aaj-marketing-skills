@@ -1,0 +1,74 @@
+{
+  "engine": "founder-led-content",
+  "file": "skills/founder-led-content/resources/founder-channel.js",
+  "cases": [
+    {
+      "name": "built-in worked example",
+      "source": "the engine's own --demo",
+      "args": [
+        "--demo"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "=== A. THE USUAL START (post first, work it out later) ===",
+        "",
+        "\"(not written)\"",
+        "0/100 (0%) · Not ready to post",
+        "Blocked on: One-line purpose written; Exactly three themes; Every theme traced to seen / believe / done; Every theme survives the competitor test. Starting without these produces an account nobody can describe.",
+        "failed checks:",
+        "  - One-line purpose written — \"I help [who] with [what problem]\" — without it there is no way to tell a good post from a popular one",
+        "  - Exactly three themes — 2 named — three makes you known for something, ten makes you known for nothing",
+        "  - Every theme traced to seen / believe / done — Untraced: Hiring tips",
+        "  - Every theme survives the competitor test — A competitor's founder could post these unchanged: Startup lessons, Hiring tips",
+        "  - Headline says who you help — Not a job title — the headline is read by people arriving from a post",
+        "  - Featured section holds something usable — A sales page is featured. Feature a guide, a tool or a template instead",
+        "  - Bank of at least 8 drafts before launch — 1 drafted — 8 is about four weeks at the usual floor, which is what carries you through a busy month",
+        "  - Cadence is a worst-week floor — 5/week — set the lowest number you can keep in your worst week, then protect it",
+        "  - \"How did you hear about us?\" is being asked — Most of this channel's results arrive privately. If you do not ask, you cannot see them",
+        "bank: 1 drafts",
+        "",
+        "=== B. THE SAME FOUNDER, SET UP PROPERLY ===",
+        "",
+        "\"I help mid-market HR leaders fix onboarding that stalls in the first 30 days\"",
+        "100/100 (100%) · Start posting",
+        "The purpose is written, the themes are yours, and there is enough in the bank to survive a busy month.",
+        "bank: 8 drafts, repeats: What we cut first",
+        "",
+        "=== DRAFT CHECK (Step 6) ===",
+        "draft A — 24 words — not ready",
+        "  - First line is a warm-up. Most people read it and nothing else — put the point there.",
+        "  - 2 ideas in one post. A second idea is a second post.",
+        "  - Figure with no source in the post: 70%. A borrowed number is how you end up correcting yourself in public.",
+        "  - Engagement bait — \"Agree?\". It gets reactions from the wrong people.",
+        "  - Engagement bait — Pointing-down emoji bait. It gets reactions from the wrong people.",
+        "  - \"Hiring tips\" is outside the three themes. Post it elsewhere or change the themes deliberately.",
+        "",
+        "draft B — 46 words — ready",
+        "Protect the floor, not the peak. In a heavy quarter, post from the bank and write nothing new.",
+        "",
+        "This is a rubric, not a prediction. Judge the channel at ninety days, on conversations."
+      ],
+      "stderr": []
+    },
+    {
+      "name": "check a draft post",
+      "source": "input written from the engine header schema",
+      "args": [
+        "{\"check\":\"checkPost\",\"input\":{\"text\":\"Last quarter we lost three deals in the same week.\\n\\nNot to a competitor. To a spreadsheet.\\n\\nThe buyers had built their own model and it was good enough. Here is what we changed in our demo after that week, and the one question we now ask on every first call.\\n\\nComment YES and I will send you the question.\",\"firstLineCarriesThePoint\":true,\"ideaCount\":1,\"figures\":[{\"value\":\"three deals\",\"source\":\"our CRM, Q3 2026\"}]}}"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "{",
+        "  \"words\": 60,",
+        "  \"firstLine\": \"Last quarter we lost three deals in the same week.\",",
+        "  \"ready\": false,",
+        "  \"issues\": [",
+        "    \"Engagement bait — Comment-to-receive bait. It gets reactions from the wrong people.\"",
+        "  ],",
+        "  \"cadenceRule\": \"Protect the floor, not the peak. In a heavy quarter, post from the bank and write nothing new.\"",
+        "}"
+      ],
+      "stderr": []
+    }
+  ]
+}

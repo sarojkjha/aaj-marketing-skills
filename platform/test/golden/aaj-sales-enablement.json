@@ -1,0 +1,86 @@
+{
+  "engine": "aaj-sales-enablement",
+  "file": "skills/aaj-sales-enablement/resources/enablement-audit.js",
+  "cases": [
+    {
+      "name": "built-in worked example",
+      "source": "the engine's own --demo",
+      "args": [
+        "--demo"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "(no config - demo: six invented sales assets for a six-rep team, and two quarters of loss reasons)",
+        "",
+        "COVERAGE - 6 of 10 stage needs have an asset (as of 2026-09-28)",
+        "  discovery: 2/3 covered, 2 healthy - missing email-templates",
+        "  evaluation: 3/4 covered, 1 healthy - missing objection-guide",
+        "  decision: 1/3 covered, 1 healthy - missing roi-business-case, mutual-action-plan",
+        "",
+        "INVENTORY",
+        "  Company one-pager [one-pager, discovery] owner Marketing, updated 2 mo ago, used by 100% of reps - ok",
+        "  Discovery question bank [discovery-guide, discovery] owner Head of Sales, updated 3 mo ago, used by 83% of reps - ok",
+        "  Competitor X battlecard [battlecard, evaluation] owner PMM, updated 8 mo ago, used by 17% of reps - fix",
+        "     ! Last updated 8 months ago. This engine treats anything over 6 months as stale; for a battlecard or pricing objection that is a liability.",
+        "     ! 17% of reps use it. Below 33% (this engine's rule) either reps do not know it exists, or it does not help; ask before rebuilding.",
+        "  Acme case study [case-study, evaluation] owner Marketing, updated 3 mo ago, used by 67% of reps - ok",
+        "  Standard demo flow [demo-script, evaluation] owner -, updated 11 mo ago, used by 100% of reps - fix",
+        "     ! No owner. An asset nobody owns is never updated.",
+        "     ! Last updated 11 months ago. This engine treats anything over 6 months as stale; for a battlecard or pricing objection that is a liability.",
+        "  Security questionnaire answers [security-legal-pack, decision] owner CTO, updated 1 mo ago, used by 50% of reps - ok",
+        "",
+        "PRIORITIES - ranked by revenue lost (404,000 total, 38,000 uncoded)",
+        "  1. BUILD ROI / business case (decision): 195,000 across 14 deals, reasons no-decision, price",
+        "     Does not exist. The template the champion uses to sell it internally.",
+        "  2. FIX Battlecard (evaluation): 171,000 across 10 deals, reasons competitor, missing-feature",
+        "     Exists but is stale, unowned or unused: Competitor X battlecard. Fix before building anything new.",
+        "  3. BUILD Mutual action plan (decision): 135,000 across 9 deals, reasons no-decision",
+        "     Does not exist. The dated steps to signature, agreed with the buyer.",
+        "  4. CHECK Case study (evaluation): 126,000 across 7 deals, reasons competitor",
+        "     Exists and is in use, yet deals are still lost for this reason. Ask the reps whether it holds up in the room; the fix may be the message, not the asset.",
+        "  5. BUILD Objection guide (evaluation): 60,000 across 5 deals, reasons price",
+        "     Does not exist. The objections that lose deals, with responses reps have tested.",
+        "  - Losses to a missing feature are mostly a positioning or product question; a battlecard helps reps reframe, it does not close the gap. (3 deals, 45,000)",
+        "  - Uncoded loss reasons cannot be turned into enablement. Code them (see the win-loss-analysis skill). (4 deals, 38,000)",
+        "",
+        "BUILD: Build the ROI / business case first: 195,000 lost across 14 deals for want of it."
+      ],
+      "stderr": []
+    },
+    {
+      "name": "six-rep team, stale battlecard, two quarters of losses",
+      "source": "documented example in the engine header",
+      "args": [
+        "{\"asOf\":\"2026-09-28\",\"totalReps\":6,\"inventory\":[{\"name\":\"Competitor X battlecard\",\"type\":\"battlecard\",\"owner\":\"PMM\",\"lastUpdated\":\"2026-02-10\",\"usedByReps\":2},{\"name\":\"Discovery guide\",\"type\":\"discovery-guide\",\"owner\":\"Sales lead\",\"lastUpdated\":\"2026-08-01\",\"usedByReps\":5},{\"name\":\"Logistics case study\",\"type\":\"case-study\",\"owner\":\"PMM\",\"lastUpdated\":\"2026-06-15\",\"usedByReps\":4}],\"losses\":[{\"reason\":\"competitor\",\"count\":7,\"value\":140000},{\"reason\":\"no-decision\",\"count\":9,\"value\":90000},{\"reason\":\"price\",\"count\":3,\"value\":45000}]}"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "COVERAGE - 3 of 10 stage needs have an asset (as of 2026-09-28)",
+        "  discovery: 1/3 covered, 1 healthy - missing one-pager, email-templates",
+        "  evaluation: 2/4 covered, 1 healthy - missing demo-script, objection-guide",
+        "  decision: 0/3 covered, 0 healthy - missing roi-business-case, security-legal-pack, mutual-action-plan",
+        "",
+        "INVENTORY",
+        "  Competitor X battlecard [battlecard, evaluation] owner PMM, updated 8 mo ago, used by 33% of reps - fix",
+        "     ! Last updated 8 months ago. This engine treats anything over 6 months as stale; for a battlecard or pricing objection that is a liability.",
+        "  Discovery guide [discovery-guide, discovery] owner Sales lead, updated 2 mo ago, used by 83% of reps - ok",
+        "  Logistics case study [case-study, evaluation] owner PMM, updated 3 mo ago, used by 67% of reps - ok",
+        "",
+        "PRIORITIES - ranked by revenue lost (275,000 total)",
+        "  1. FIX Battlecard (evaluation): 140,000 across 7 deals, reasons competitor",
+        "     Exists but is stale, unowned or unused: Competitor X battlecard. Fix before building anything new.",
+        "  2. CHECK Case study (evaluation): 140,000 across 7 deals, reasons competitor",
+        "     Exists and is in use, yet deals are still lost for this reason. Ask the reps whether it holds up in the room; the fix may be the message, not the asset.",
+        "  3. BUILD ROI / business case (decision): 135,000 across 12 deals, reasons no-decision, price",
+        "     Does not exist. The template the champion uses to sell it internally.",
+        "  4. BUILD Mutual action plan (decision): 90,000 across 9 deals, reasons no-decision",
+        "     Does not exist. The dated steps to signature, agreed with the buyer.",
+        "  5. BUILD Objection guide (evaluation): 45,000 across 3 deals, reasons price",
+        "     Does not exist. The objections that lose deals, with responses reps have tested.",
+        "",
+        "BUILD: Build the ROI / business case first: 135,000 lost across 12 deals for want of it."
+      ],
+      "stderr": []
+    }
+  ]
+}

@@ -1,0 +1,71 @@
+{
+  "engine": "pricing-and-packaging",
+  "file": "skills/pricing-and-packaging/resources/price-packaging.js",
+  "cases": [
+    {
+      "name": "built-in worked example",
+      "source": "the engine's own --demo",
+      "args": [
+        "--demo"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "AAJ — Pricing & Packaging model",
+        "Source: built-in demo data",
+        "",
+        "Tier           Price  Customers    Revenue   Rev %  Cust %   Step",
+        "------------  ------  ---------  ---------  ------  ------  -----",
+        "Starter          $29        600    $17,400   19.1%     60%      —",
+        "Growth           $99        300    $29,700   32.6%     30%   3.4x",
+        "Scale           $299         80    $23,920   26.3%      8%     3x",
+        "Enterprise      $999         20    $19,980     22%      2%   3.3x",
+        "",
+        "Blended ARPU:   $91   (3.1x the $29 entry tier)",
+        "Price ladder:   $29  →  $99  →  $299  →  $999",
+        "Anchor check:   OK — top tier anchors at 3.3x the tier below",
+        "",
+        "Read-out:",
+        "  • Blended ARPU is $91 — 3.1x your entry price of $29. Your mix lifts revenue well above the entry tier.",
+        "  • Your revenue engine is the \"Growth\" tier at 32.6% of revenue.",
+        "  • 60% of customers sit on your entry tier but it's only 19.1% of revenue — that gap is your expansion opportunity.",
+        "  • Your top tier anchors well at 3.3x the tier below — that reframes the middle tiers and lifts willingness to pay.",
+        "",
+        "Note: customer counts drive the mix. For a pre-revenue design, enter an",
+        "estimated mix (counts per 100) and treat the modeled revenue as an assumption."
+      ],
+      "stderr": []
+    },
+    {
+      "name": "three tiers",
+      "source": "documented example in the engine header",
+      "args": [
+        "{\"tiers\":[{\"name\":\"Starter\",\"price\":29,\"customers\":600},{\"name\":\"Growth\",\"price\":79,\"customers\":300},{\"name\":\"Scale\",\"price\":99,\"customers\":60}]}"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "AAJ — Pricing & Packaging model",
+        "Source: your input",
+        "",
+        "Tier           Price  Customers    Revenue   Rev %  Cust %   Step",
+        "------------  ------  ---------  ---------  ------  ------  -----",
+        "Starter          $29        600    $17,400     37%   62.5%      —",
+        "Growth           $79        300    $23,700   50.4%   31.3%   2.7x",
+        "Scale            $99         60     $5,940   12.6%    6.3%   1.3x",
+        "",
+        "Blended ARPU:   $49   (1.7x the $29 entry tier)",
+        "Price ladder:   $29  →  $79  →  $99",
+        "Anchor check:   WEAK — top tier is only 1.3x the tier below (a real anchor needs a bigger jump)",
+        "",
+        "Read-out:",
+        "  • Blended ARPU is $49 — 1.7x your entry price of $29. Your mix lifts revenue well above the entry tier.",
+        "  • Your revenue engine is the \"Growth\" tier at 50.4% of revenue.",
+        "  • 62.5% of customers sit on your entry tier but it's only 37% of revenue — that gap is your expansion opportunity.",
+        "  • Your top tier is only 1.3x the tier below it — it isn't anchoring. A higher top tier makes your middle tiers look more reasonable and captures customers who'd happily pay more.",
+        "",
+        "Note: customer counts drive the mix. For a pre-revenue design, enter an",
+        "estimated mix (counts per 100) and treat the modeled revenue as an assumption."
+      ],
+      "stderr": []
+    }
+  ]
+}

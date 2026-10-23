@@ -1,0 +1,92 @@
+{
+  "engine": "search-demand-reader",
+  "file": "skills/search-demand-reader/resources/search-demand.js",
+  "cases": [
+    {
+      "name": "built-in worked example",
+      "source": "the engine's own --demo",
+      "args": [
+        "--demo"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "(no config - demo: seventeen invented queries for an invented scheduling app, with a brand word and one rival)",
+        "",
+        "AAJ - SEARCH DEMAND READER",
+        "------------------------------------------------------------------",
+        "  16240 impressions, 819 clicks; branded 85% of clicks",
+        "  GAPS: 3 topics with 200+ impressions where you rank past position 10. Largest: \"contractor\" (6800 impressions at position 13.5; top query \"invoice template for contractors\"). You already appear; a dedicated page or a refresh moves it.",
+        "",
+        "BY INTENT",
+        "  commercial       5 queries     6750 impr (42%)      59 clicks (7%)",
+        "  informational    4 queries     5900 impr (36%)      36 clicks (4%)",
+        "  unqualified      2 queries     1800 impr (11%)      10 clicks (1%)",
+        "  branded          4 queries     1490 impr (9%)     700 clicks (85%)",
+        "  rival-brand      1 queries      300 impr (2%)      14 clicks (2%)",
+        "",
+        "TOPICS (by most common word; impressions, clicks, average position, pages)",
+        "  contractor           6800      39  pos  13.5  2 pages  <- gap   e.g. \"invoice template for contractors\"",
+        "  scheduling           4000      47  pos   7.3  2 pages   e.g. \"crew scheduling software\"",
+        "  dispatch             2100       3  pos  23.3  1 page  <- gap   e.g. \"dispatch software small business\"",
+        "  (brand)              1490     700  pos   1.2  4 pages   e.g. \"fieldnote\"",
+        "  show                  900       7  pos  10.4  2 pages  <- gap   e.g. \"reduce no shows\"",
+        "  business              650       9  pos   7.1  1 page   e.g. \"no show policy for service business\"",
+        "  crewline              300      14  pos   3.5  1 page   e.g. \"crewline alternative\"",
+        "",
+        "GAPS YOU ALREADY APPEAR FOR (page two or worse)",
+        "  contractor: 6800 impressions at position 13.5; queries: \"invoice template for contractors\", \"contractor scheduling template\", \"how to schedule contractor crews\", \"contractor invoice app\", \"scheduling template excel contractors\"",
+        "  dispatch: 2100 impressions at position 23.3; queries: \"dispatch software small business\", \"field service dispatch\"",
+        "  show: 900 impressions at position 10.4; queries: \"reduce no shows\"",
+        "",
+        "SPLIT ACROSS YOUR OWN PAGES",
+        "  \"reduce no shows\" (900): /blog/no-shows 56% | /blog/reminders 44%",
+        "",
+        "RIVAL-BRAND SEARCHES YOU APPEAR IN: \"crewline alternative\" (300)",
+        "",
+        "CHECK",
+        "  - 16 queries. Export at least three months and all rows; topics need more than a handful of queries each.",
+        "",
+        "  Only what Search Console showed you. Searches where you never appeared are not in this data and are not estimated."
+      ],
+      "stderr": []
+    },
+    {
+      "name": "brand, a rival and six queries",
+      "source": "input written from the engine header schema",
+      "args": [
+        "{\"brand\":[\"aaj\",\"aajconsult\"],\"rivals\":[\"hubspot\"],\"queries\":[{\"query\":\"marketing budget calculator\",\"clicks\":30,\"impressions\":2000,\"position\":4.2,\"page\":\"/tools/marketing-budget-calculator\"},{\"query\":\"marketing budget template\",\"clicks\":4,\"impressions\":1500,\"position\":14.5,\"page\":\"/templates/budget\"},{\"query\":\"how to calculate cac\",\"clicks\":12,\"impressions\":900,\"position\":8.1,\"page\":\"/blog/cac\"},{\"query\":\"aaj consult\",\"clicks\":80,\"impressions\":120,\"position\":1,\"page\":\"/\"},{\"query\":\"hubspot alternative for startups\",\"clicks\":2,\"impressions\":600,\"position\":18,\"page\":\"/blog/crm\"},{\"query\":\"cac payback\",\"clicks\":6,\"impressions\":700,\"position\":11.2,\"page\":\"/blog/cac\"}]}"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "",
+        "AAJ - SEARCH DEMAND READER",
+        "------------------------------------------------------------------",
+        "  5820 impressions, 134 clicks; branded 60% of clicks",
+        "  GAPS: 1 topic with 200+ impressions where you rank past position 10. Largest: \"hubspot\" (600 impressions at position 18.0; top query \"hubspot alternative for startups\"). You already appear; a dedicated page or a refresh moves it.",
+        "",
+        "BY INTENT",
+        "  unqualified      2 queries     2700 impr (46%)      36 clicks (27%)",
+        "  informational    2 queries     2400 impr (41%)      16 clicks (12%)",
+        "  rival-brand      1 queries      600 impr (10%)       2 clicks (1%)",
+        "  branded          1 queries      120 impr (2%)      80 clicks (60%)",
+        "",
+        "TOPICS (by most common word; impressions, clicks, average position, pages)",
+        "  budget               3500      34  pos   8.6  2 pages   e.g. \"marketing budget calculator\"",
+        "  cac                  1600      18  pos   9.5  1 page   e.g. \"how to calculate cac\"",
+        "  hubspot               600       2  pos  18.0  1 page  <- gap   e.g. \"hubspot alternative for startups\"",
+        "  (brand)               120      80  pos   1.0  1 page   e.g. \"aaj consult\"",
+        "",
+        "GAPS YOU ALREADY APPEAR FOR (page two or worse)",
+        "  hubspot: 600 impressions at position 18.0; queries: \"hubspot alternative for startups\"",
+        "",
+        "RIVAL-BRAND SEARCHES YOU APPEAR IN: \"hubspot alternative for startups\" (600)",
+        "",
+        "CHECK",
+        "  - 6 queries. Export at least three months and all rows; topics need more than a handful of queries each.",
+        "",
+        "  Only what Search Console showed you. Searches where you never appeared are not in this data and are not estimated."
+      ],
+      "stderr": []
+    }
+  ]
+}
