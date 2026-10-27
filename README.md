@@ -58,6 +58,8 @@ npx skills add sarojkjha/aaj-marketing-skills --list
 
 Installs to `.agents/skills/`, and symlinks into `.claude/skills/` for Claude Code.
 
+Step-by-step instructions for every agent, Windows, Mac and Linux, and the hosted server: [docs/install.md](docs/install.md).
+
 Then run any engine with no configuration at all:
 
 ```bash
