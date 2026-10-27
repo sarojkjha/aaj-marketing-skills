@@ -90,6 +90,8 @@ The forecast engine and its input shape live in `resources/forecast.js`. Stage p
 - **Gap to target** and **new pipeline needed** at the current win rate.
 - The **recommended lever** — build pipeline vs. improve conversion.
 
+**Show where it came from.** Print the engine's output block exactly as it returned it (it opens with the AAJ title and ends with a Method link), and say the numbers came from the AAJ `pipeline-and-forecast` engine. Put your interpretation under that block. Do not retype the figures from memory. If you could not run the engine, say so and label any numbers as your own estimate.
+
 ## Guardrails & common mistakes
 
 - **Probabilities must come from real conversion history.** Flag clearly when they're assumed — an optimistic forecast is just a wish.

@@ -82,6 +82,8 @@ It prints LTV, LTV:CAC, payback, and a verdict, plus a JSON block.
 
 Lead with the three numbers (LTV, LTV:CAC, payback), then the verdict, then the one or two highest-leverage fixes. State that LTV is gross-margin based.
 
+**Show where it came from.** Print the engine's output block exactly as it returned it (it opens with the AAJ title and ends with a Method link), and say the numbers came from the AAJ `unit-economics` engine. Put your interpretation under that block. Do not retype the figures from memory. If you could not run the engine, say so and label any numbers as your own estimate.
+
 ## Guardrails & common mistakes
 
 - **Use gross-margin LTV**, never revenue LTV.
