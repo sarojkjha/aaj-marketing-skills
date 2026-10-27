@@ -16,7 +16,7 @@
 import { currentSlug } from "../lib/renamed.mjs";
 
 export const SERVER_NAME = "aaj-engines";
-export const SERVER_VERSION = "1.2.0";
+export const SERVER_VERSION = "1.2.1";
 export const SITE = "https://aajconsult.com";
 export const SKILLS_SITE = "https://skills.aajconsult.com";
 // Protocol versions this server knows how to speak, newest first.

@@ -2,7 +2,7 @@
 
 The math layer for marketing agents. Keep your writing skills and add the arithmetic: deterministic engines for unit economics, pipeline coverage, A/B significance, budget allocation, pricing, retention and SEO/GEO scoring, for Seed to Series B startups.
 
-Version 1.2.0. MIT licence.
+Version 1.2.1. MIT licence.
 
 - **Skills:** the marketing methods, in `skills/`.
 - **Engines:** most skills carry a small JavaScript engine in `resources/`. It takes your numbers and returns a number and a verdict, the same answer every time. Engines make no network calls and write no files.
