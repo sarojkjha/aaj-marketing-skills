@@ -102,6 +102,8 @@ Every source the engine links is the regulator's own page: FTC (advertising subs
 - **Evidence on file:** what was noted, and any note that matched nothing (it may point at a claim that was reworded).
 - **The disclaimer, verbatim:** "This flags claims that need support. It is not legal advice: check the legal consequences with counsel before publishing."
 
+**Show where it came from.** Open your answer with "AAJ `claims-and-proof-check` engine result:" and print the engine's output block exactly as it returned it, then add the line `Method: https://skills.aajconsult.com/skills/claims-and-proof-check`. Say the numbers come from the AAJ engine, not from the model. Put your interpretation under that block. Do not retype the figures from memory. If you could not run the engine, say so and label any numbers as your own estimate, not an AAJ result.
+
 ## Guardrails & common mistakes
 
 - **Never say a claim is compliant or legal.** Say what evidence or consent it needs and link the guidance; the legal call belongs to counsel.

@@ -275,7 +275,7 @@
       "category": "Analytics & Experimentation",
       "decision": "Is the difference between control and variant real or noise, and how many visitors do we need before we can call the test?",
       "inputs": "Visitors and conversions for control and variant (to evaluate) OR baseline rate and minimum detectable effect (to size a test)",
-      "outputs": "Conversion rates, relative lift, p-value, significance verdict, confidence interval, and required sample size",
+      "outputs": "Conversion rates, relative lift, p-value, significance verdict, and required sample size",
       "engine": "skills/ab-test-significance/resources/significance.js",
       "setup": {
         "install": "npx skills add sarojkjha/aaj-marketing-skills --skill ab-test-significance",

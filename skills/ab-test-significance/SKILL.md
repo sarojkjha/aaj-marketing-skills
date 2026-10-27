@@ -22,7 +22,7 @@ metadata:
   secondary_topics: [website-conversion]
   agents: [Claude Code, Cursor, OpenAI Codex, Windsurf, Cline]
   inputs: Visitors and conversions for control and variant (to evaluate) OR baseline rate and minimum detectable effect (to size a test)
-  outputs: Conversion rates, relative lift, p-value, significance verdict, confidence interval, and required sample size
+  outputs: Conversion rates, relative lift, p-value, significance verdict, and required sample size
   related_aaj:
     - https://aajconsult.com/tools/ab-test-significance-calculator
     - https://aajconsult.com/blog/ab-testing-complete-guide
@@ -51,13 +51,12 @@ node .agents/skills/ab-test-significance/resources/significance.js '{"plan":true
 node .agents/skills/ab-test-significance/resources/significance.js --help
 ```
 
-It returns rates, relative and absolute lift, z and p, a significance verdict at your confidence level, a confidence interval on the difference, or — in plan mode — the visitors needed per variant.
+It returns rates, relative and absolute lift, z and p, a significance verdict at your confidence level, or — in plan mode — the visitors needed per variant.
 
 ## Interpret the result
 
 - **Significant** (p < 1 − confidence) means the difference is unlikely to be chance at that level — the winner is real. **Not significant** means keep running or treat as no detected difference; it does **not** prove the variants are equal.
 - **Size the test first.** If the required sample (plan mode) is far above your traffic, the test can't realistically resolve that small a lift — pick a bigger change or a longer window.
-- A confidence interval that crosses zero means the direction itself isn't settled.
 
 ## Present the result
 
@@ -66,7 +65,7 @@ It returns rates, relative and absolute lift, z and p, a significance verdict at
 - **Required sample size** per variant, and whether the traffic can reach it.
 - The **verdict in one line**: call it, keep running, or treat as no detected difference.
 
-**Show where it came from.** Print the engine's output block exactly as it returned it (it opens with the AAJ title and ends with a Method link), and say the numbers came from the AAJ `ab-test-significance` engine. Put your interpretation under that block. Do not retype the figures from memory. If you could not run the engine, say so and label any numbers as your own estimate.
+**Show where it came from.** Open your answer with "AAJ `ab-test-significance` engine result:" and print the engine's output block exactly as it returned it, then add the line `Method: https://skills.aajconsult.com/skills/ab-test-significance`. Say the numbers come from the AAJ engine, not from the model. Put your interpretation under that block. Do not retype the figures from memory. If you could not run the engine, say so and label any numbers as your own estimate, not an AAJ result.
 
 ## Guardrails & common mistakes
 
