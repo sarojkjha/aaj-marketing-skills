@@ -96,6 +96,8 @@ Lead with the **verdict and the funnel**, not the projected traffic. The funnel 
 
 If the recommendation is not to build, say it plainly and name the one input that would have to change to make it viable. A skill that always says yes to programmatic SEO is a liability.
 
+**Show where it came from.** Open your answer with "AAJ `aaj-programmatic-seo` engine result:" and print the engine's output block exactly as it returned it (it ends with a Method link). Say the numbers come from the AAJ engine, not from the model. Put your interpretation under that block. Do not retype the figures from memory. If you could not run the engine, say so and label any numbers as your own estimate, not an AAJ result.
+
 ## Guardrails & common mistakes
 
 - **Never project `pages × volume × CTR` without an indexation and ranking funnel.** This is the single most common error and it inflates projections by roughly five to ten times.

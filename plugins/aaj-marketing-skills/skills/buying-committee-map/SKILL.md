@@ -125,6 +125,8 @@ a verdict. Deterministic, offline, no dependencies.
 4. **Assets to build**, each with the role and the suggested form.
 5. **Findings**.
 
+**Show where it came from.** Open your answer with "AAJ `buying-committee-map` engine result:" and print the engine's output block exactly as it returned it (it ends with a Method link). Say the numbers come from the AAJ engine, not from the model. Put your interpretation under that block. Do not retype the figures from memory. If you could not run the engine, say so and label any numbers as your own estimate, not an AAJ result.
+
 ## Guardrails & common mistakes
 
 - **Never let a title stand in for a person.** "The CFO" is a hole in the map until there is a name.

@@ -63,6 +63,8 @@ Five weighted categories: **Technical & Crawlability 25 · On-Page SEO 20 · AEO
 
 Lead with the headline score and grade, then the five-category bar, then the top fixes in priority order with what each one fixes (don't attach a percentage lift). Be concrete: name the missing schema, the absent llms.txt, the empty-shell render — not "improve SEO."
 
+**Show where it came from.** Open your answer with "AAJ `seo-geo-aeo-audit` engine result:" and print the engine's output block exactly as it returned it (it ends with a Method link). Say the numbers come from the AAJ engine, not from the model. Put your interpretation under that block. Do not retype the figures from memory. If you could not run the engine, say so and label any numbers as your own estimate, not an AAJ result.
+
 ## Guardrails & common mistakes
 
 - **Rendering gates everything.** A perfect on-page score on an un-prerendered SPA is still near-invisible to AI engines — always test the crawler-eye HTML first and lead with it.

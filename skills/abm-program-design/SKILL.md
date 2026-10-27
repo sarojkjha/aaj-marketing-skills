@@ -131,6 +131,8 @@ every time - a spreadsheet built to justify a list will only ever compute covera
 5. **Hours per opportunity by tier**, so the tier mix is a decision.
 6. **Which of the three you are proposing to move**, and why that one.
 
+**Show where it came from.** Open your answer with "AAJ `abm-program-design` engine result:" and print the engine's output block exactly as it returned it (it ends with a Method link). Say the numbers come from the AAJ engine, not from the model. Put your interpretation under that block. Do not retype the figures from memory. If you could not run the engine, say so and label any numbers as your own estimate, not an AAJ result.
+
 ## Guardrails & common mistakes
 
 - **Do not accept headcount as capacity.** Two people at "50 per cent on ABM" is almost never forty

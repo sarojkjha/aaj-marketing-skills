@@ -100,6 +100,8 @@ Lead with the **coverage map and send load** — that's the diagnosis. Then the 
 
 State the assumptions the breakeven rests on, and flag any claim in the copy that needs proof before it ships.
 
+**Show where it came from.** Open your answer with "AAJ `email-lifecycle-sequence` engine result:" and print the engine's output block exactly as it returned it (it ends with a Method link). Say the numbers come from the AAJ engine, not from the model. Put your interpretation under that block. Do not retype the figures from memory. If you could not run the engine, say so and label any numbers as your own estimate, not an AAJ result.
+
 ## Guardrails & common mistakes
 
 - **Count sends across sequences, not within them.** Every sequence can look reasonable and the combined load still be punishing. This is the most common lifecycle failure and it's invisible from inside any single flow.

@@ -66,7 +66,7 @@ It returns rates, relative and absolute lift, z and p, a significance verdict at
 - **Required sample size** per variant, and whether the traffic can reach it.
 - The **verdict in one line**: call it, keep running, or treat as no detected difference.
 
-**Show where it came from.** Print the engine's output block exactly as it returned it (it opens with the AAJ title and ends with a Method link), and say the numbers came from the AAJ `ab-test-significance` engine. Put your interpretation under that block. Do not retype the figures from memory. If you could not run the engine, say so and label any numbers as your own estimate.
+**Show where it came from.** Open your answer with "AAJ `ab-test-significance` engine result:" and print the engine's output block exactly as it returned it (it ends with a Method link). Say the numbers come from the AAJ engine, not from the model. Put your interpretation under that block. Do not retype the figures from memory. If you could not run the engine, say so and label any numbers as your own estimate, not an AAJ result.
 
 ## Guardrails & common mistakes
 

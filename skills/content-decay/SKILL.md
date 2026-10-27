@@ -120,6 +120,8 @@ title-test candidates, site totals, findings and a verdict. Deterministic, offli
 4. **Rising pages** (what is working) and **demand drops** (what to leave alone).
 5. **Findings**, especially the masked-loss one: growth on new pages hiding losses on old ones.
 
+**Show where it came from.** Open your answer with "AAJ `content-decay` engine result:" and print the engine's output block exactly as it returned it (it ends with a Method link). Say the numbers come from the AAJ engine, not from the model. Put your interpretation under that block. Do not retype the figures from memory. If you could not run the engine, say so and label any numbers as your own estimate, not an AAJ result.
+
 ## Guardrails & common mistakes
 
 - **Compare equal periods** and avoid a period that straddles a known seasonal swing or a site

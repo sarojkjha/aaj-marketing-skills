@@ -114,6 +114,8 @@ The engine returns the funnel, referral CAC split into rewards and fixed cost, b
 - **Rules to check:** the pointers that apply, stated as things to check with counsel.
 - **Tracking:** the five numbers and when they are reviewed.
 
+**Show where it came from.** Open your answer with "AAJ `referral-program-design` engine result:" and print the engine's output block exactly as it returned it (it ends with a Method link). Say the numbers come from the AAJ engine, not from the model. Put your interpretation under that block. Do not retype the figures from memory. If you could not run the engine, say so and label any numbers as your own estimate, not an AAJ result.
+
 ## Guardrails & common mistakes
 
 - **No invented rates.** If the founder has no ask or conversion rates, run the engine with labelled assumptions and say the output is a scenario.

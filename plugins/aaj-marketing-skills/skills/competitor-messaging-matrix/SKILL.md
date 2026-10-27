@@ -130,6 +130,8 @@ no dependencies; the word lists are in the source and are the whole method.
 5. **Category words** to keep out of your headline.
 6. **Findings** (stale or undated pages, thin inputs).
 
+**Show where it came from.** Open your answer with "AAJ `competitor-messaging-matrix` engine result:" and print the engine's output block exactly as it returned it (it ends with a Method link). Say the numbers come from the AAJ engine, not from the model. Put your interpretation under that block. Do not retype the figures from memory. If you could not run the engine, say so and label any numbers as your own estimate, not an AAJ result.
+
 ## Guardrails & common mistakes
 
 - **An open claim is not a recommendation.** It is a claim nobody makes; ask why before making it.
