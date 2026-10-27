@@ -1,6 +1,7 @@
 {
-  "$comment": "Agents in which the AAJ engines have been run end to end and the result checked. The specs print this list as 'Tested and recorded'. Add an agent only after a recorded run.",
+  "$comment": "Agents in which the AAJ engines have been run end to end and the result checked. The specs print this list as 'Tested and recorded'. Add an agent only after a recorded run. Where only some engines were run, name them in brackets.",
   "tested": [
-    "Claude Code"
+    "Claude Code",
+    "OpenAI Codex (Windows, ab-test-significance only)"
   ]
 }
