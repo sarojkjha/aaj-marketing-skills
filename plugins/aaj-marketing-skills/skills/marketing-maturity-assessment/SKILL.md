@@ -123,6 +123,8 @@ check, findings, and the delta against the previous run.
 3. **The weak links in order**, each with the move and the first skill to run.
 4. **The evidence flags**, and what to go and find.
 
+**Show where it came from.** Open your answer with "AAJ `marketing-maturity-assessment` engine result:" and print the engine's output block exactly as it returned it (it ends with a Method link). Say the numbers come from the AAJ engine, not from the model. Put your interpretation under that block. Do not retype the figures from memory. If you could not run the engine, say so and label any numbers as your own estimate, not an AAJ result.
+
 ## Guardrails & common mistakes
 
 - **Never present the score as a benchmark.** It is a self-assessment against AAJ's thresholds.

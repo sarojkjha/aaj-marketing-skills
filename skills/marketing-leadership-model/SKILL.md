@@ -125,6 +125,8 @@ exit table; and the fit verdict with notes. Any of the three options may be omit
 3. **The exit table**: spent and still owed at month six.
 4. **The fit call**, and what it rules out.
 
+**Show where it came from.** Open your answer with "AAJ `marketing-leadership-model` engine result:" and print the engine's output block exactly as it returned it (it ends with a Method link). Say the numbers come from the AAJ engine, not from the model. Put your interpretation under that block. Do not retype the figures from memory. If you could not run the engine, say so and label any numbers as your own estimate, not an AAJ result.
+
 ## Guardrails & common mistakes
 
 - **Never compare on salary against retainer.** Compare fully loaded cost per productive month.

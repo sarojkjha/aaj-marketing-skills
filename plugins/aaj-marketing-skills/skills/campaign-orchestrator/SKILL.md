@@ -120,6 +120,8 @@ Lead with **the Play and the phase you're starting in**, each with its one-line 
 
 Where two Plays genuinely both apply, say so and name which you'd run first and why — usually the upstream one, since fixing it changes the diagnosis of the other.
 
+**Show where it came from.** Open your answer with "AAJ `campaign-orchestrator` engine result:" and print the engine's output block exactly as it returned it (it ends with a Method link). Say the numbers come from the AAJ engine, not from the model. Put your interpretation under that block. Do not retype the figures from memory. If you could not run the engine, say so and label any numbers as your own estimate, not an AAJ result.
+
 ## Guardrails & common mistakes
 
 - **Don't start in Execute because that's what was asked for.** The most common request is a task; the most common need is a diagnosis. Say so, briefly, and move.

@@ -132,6 +132,8 @@ may be omitted.
 3. **The negative list** to add today, and the winners to promote to keywords.
 4. **What to re-check in 30 days.**
 
+**Show where it came from.** Open your answer with "AAJ `paid-search-account-audit` engine result:" and print the engine's output block exactly as it returned it (it ends with a Method link). Say the numbers come from the AAJ engine, not from the model. Put your interpretation under that block. Do not retype the figures from memory. If you could not run the engine, say so and label any numbers as your own estimate, not an AAJ result.
+
 ## Guardrails & common mistakes
 
 - **Never judge CTR or CPC against a benchmark.** Judge CPA against your target, and terms and
