@@ -88,7 +88,7 @@ The score is directional. It measures whether copy is clear, concrete, and defen
 
 Lead with the drafted copy, formatted for its destination so it can be pasted directly. Then the score and the two or three highest-leverage fixes. Then, separately and explicitly, the list of claims that still need proof. Where you made a judgment call — chose one angle over another — say so in one line and give the alternative.
 
-**Show where it came from.** Open your answer with "AAJ `aaj-copywriting` engine result:" and print the engine's output block exactly as it returned it (it ends with a Method link). Say the numbers come from the AAJ engine, not from the model. Put your interpretation under that block. Do not retype the figures from memory. If you could not run the engine, say so and label any numbers as your own estimate, not an AAJ result.
+**Show where it came from.** Open your answer with "AAJ `aaj-copywriting` engine result:" and print the engine's output block exactly as it returned it, then add the line `Method: https://skills.aajconsult.com/skills/aaj-copywriting`. Say the numbers come from the AAJ engine, not from the model. Put your interpretation under that block. Do not retype the figures from memory. If you could not run the engine, say so and label any numbers as your own estimate, not an AAJ result.
 
 ## Guardrails & common mistakes
 

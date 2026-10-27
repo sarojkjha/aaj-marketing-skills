@@ -56,6 +56,12 @@
 process.argv = process.argv.map((a, i) =>
   i >= 2 && /^(demo|help)$/i.test(a) ? '--' + a.toLowerCase() : a
 );
+// Windows shells (PowerShell, cmd) can pass a JSON payload with its quotes
+// backslash-escaped, i.e. {\"a\":1}. Undo that only when the payload opens that
+// way, so JSON with legitimately escaped quotes inside strings is left alone.
+process.argv = process.argv.map((a, i) =>
+  i >= 2 && /^\s*[\[{]\s*\\"/.test(a) ? a.replace(/\\"/g, '"') : a
+);
 // -----------------------------------------------------------------------------
 
 'use strict';

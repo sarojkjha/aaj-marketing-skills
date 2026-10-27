@@ -108,7 +108,7 @@ The scoring model and SLA terms follow the AAJ Lead Scoring and SLA Sheet: fit p
 - **Three fixes,** each with an owner (marketing, sales or both).
 - **Data notes** that change how the numbers read.
 
-**Show where it came from.** Open your answer with "AAJ `lead-handoff-sla` engine result:" and print the engine's output block exactly as it returned it (it ends with a Method link). Say the numbers come from the AAJ engine, not from the model. Put your interpretation under that block. Do not retype the figures from memory. If you could not run the engine, say so and label any numbers as your own estimate, not an AAJ result.
+**Show where it came from.** Open your answer with "AAJ `lead-handoff-sla` engine result:" and print the engine's output block exactly as it returned it, then add the line `Method: https://skills.aajconsult.com/skills/lead-handoff-sla`. Say the numbers come from the AAJ engine, not from the model. Put your interpretation under that block. Do not retype the figures from memory. If you could not run the engine, say so and label any numbers as your own estimate, not an AAJ result.
 
 ## Guardrails & common mistakes
 

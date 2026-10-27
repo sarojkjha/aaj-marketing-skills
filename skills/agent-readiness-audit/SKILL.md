@@ -101,7 +101,7 @@ Lead with **the verdict and any hard blocker**, then the four-line "what an agen
 
 Where the user's answers were uncertain, say which ones and how to verify them. A confident score built on guesses is worse than an honest partial one.
 
-**Show where it came from.** Open your answer with "AAJ `agent-readiness-audit` engine result:" and print the engine's output block exactly as it returned it (it ends with a Method link). Say the numbers come from the AAJ engine, not from the model. Put your interpretation under that block. Do not retype the figures from memory. If you could not run the engine, say so and label any numbers as your own estimate, not an AAJ result.
+**Show where it came from.** Open your answer with "AAJ `agent-readiness-audit` engine result:" and print the engine's output block exactly as it returned it, then add the line `Method: https://skills.aajconsult.com/skills/agent-readiness-audit`. Say the numbers come from the AAJ engine, not from the model. Put your interpretation under that block. Do not retype the figures from memory. If you could not run the engine, say so and label any numbers as your own estimate, not an AAJ result.
 
 ## Guardrails & common mistakes
 

@@ -135,7 +135,7 @@ best number so far; they do not tell you whether the difference is real.
 4. **The next test**: if there is a winner, the next idea to test against it; if there is no winner,
    a bigger idea, not a longer run.
 
-**Show where it came from.** Open your answer with "AAJ `ad-creative-testing` engine result:" and print the engine's output block exactly as it returned it (it ends with a Method link). Say the numbers come from the AAJ engine, not from the model. Put your interpretation under that block. Do not retype the figures from memory. If you could not run the engine, say so and label any numbers as your own estimate, not an AAJ result.
+**Show where it came from.** Open your answer with "AAJ `ad-creative-testing` engine result:" and print the engine's output block exactly as it returned it, then add the line `Method: https://skills.aajconsult.com/skills/ad-creative-testing`. Say the numbers come from the AAJ engine, not from the model. Put your interpretation under that block. Do not retype the figures from memory. If you could not run the engine, say so and label any numbers as your own estimate, not an AAJ result.
 
 ## Guardrails & common mistakes
 

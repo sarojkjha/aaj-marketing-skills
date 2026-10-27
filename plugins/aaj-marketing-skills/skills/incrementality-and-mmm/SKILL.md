@@ -108,7 +108,7 @@ Lead with **the verdict and iROAS** — those drive the budget decision. Then th
 
 If the test was inconclusive, say so plainly and give the sample size that would have answered it. Do not let an inconclusive test be reported as a negative finding.
 
-**Show where it came from.** Open your answer with "AAJ `incrementality-and-mmm` engine result:" and print the engine's output block exactly as it returned it (it ends with a Method link). Say the numbers come from the AAJ engine, not from the model. Put your interpretation under that block. Do not retype the figures from memory. If you could not run the engine, say so and label any numbers as your own estimate, not an AAJ result.
+**Show where it came from.** Open your answer with "AAJ `incrementality-and-mmm` engine result:" and print the engine's output block exactly as it returned it, then add the line `Method: https://skills.aajconsult.com/skills/incrementality-and-mmm`. Say the numbers come from the AAJ engine, not from the model. Put your interpretation under that block. Do not retype the figures from memory. If you could not run the engine, say so and label any numbers as your own estimate, not an AAJ result.
 
 ## Guardrails & common mistakes
 
