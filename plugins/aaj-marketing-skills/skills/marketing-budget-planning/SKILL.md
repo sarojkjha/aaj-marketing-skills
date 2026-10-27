@@ -89,7 +89,7 @@ It returns the planned share and where it comes from, the budget per period and 
 
 Lead with the headline budget (share of the base, per period, per month) and its basis — AAJ band, your own figure, or the Gartner average — then the function split, then the affordability check against unit economics and the handoff to channel allocation.
 
-**Show where it came from.** Open your answer with "AAJ `marketing-budget-planning` engine result:" and print the engine's output block exactly as it returned it (it ends with a Method link). Say the numbers come from the AAJ engine, not from the model. Put your interpretation under that block. Do not retype the figures from memory. If you could not run the engine, say so and label any numbers as your own estimate, not an AAJ result.
+**Show where it came from.** Open your answer with "AAJ `marketing-budget-planning` engine result:" and print the engine's output block exactly as it returned it, then add the line `Method: https://skills.aajconsult.com/skills/marketing-budget-planning`. Say the numbers come from the AAJ engine, not from the model. Put your interpretation under that block. Do not retype the figures from memory. If you could not run the engine, say so and label any numbers as your own estimate, not an AAJ result.
 
 ## Guardrails & common mistakes
 

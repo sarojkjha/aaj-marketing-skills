@@ -97,7 +97,7 @@ Lead with the **score and the ranked fixes** — that's the decision. Then the r
 
 Be explicit that the opportunity figures rank rather than forecast, and say which assumption would most change the ranking if it's wrong.
 
-**Show where it came from.** Open your answer with "AAJ `signup-flow-optimizer` engine result:" and print the engine's output block exactly as it returned it (it ends with a Method link). Say the numbers come from the AAJ engine, not from the model. Put your interpretation under that block. Do not retype the figures from memory. If you could not run the engine, say so and label any numbers as your own estimate, not an AAJ result.
+**Show where it came from.** Open your answer with "AAJ `signup-flow-optimizer` engine result:" and print the engine's output block exactly as it returned it, then add the line `Method: https://skills.aajconsult.com/skills/signup-flow-optimizer`. Say the numbers come from the AAJ engine, not from the model. Put your interpretation under that block. Do not retype the figures from memory. If you could not run the engine, say so and label any numbers as your own estimate, not an AAJ result.
 
 ## Guardrails & common mistakes
 

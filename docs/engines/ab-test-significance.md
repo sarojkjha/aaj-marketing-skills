@@ -7,7 +7,7 @@
 
 **Inputs:** Visitors and conversions for control and variant (to evaluate) OR baseline rate and minimum detectable effect (to size a test)
 
-**Output:** Conversion rates, relative lift, p-value, significance verdict, confidence interval, and required sample size
+**Output:** Conversion rates, relative lift, p-value, significance verdict, and required sample size
 
 **Setup:**
 - Install the skill: `npx skills add sarojkjha/aaj-marketing-skills --skill ab-test-significance`

@@ -84,7 +84,7 @@ The scoring engine and its input shape live in `resources/score-accounts.js`. Ac
 - The **weighting used**, so the list is auditable.
 - The **A-tier count** and a one-line note on what separates B from A.
 
-**Show where it came from.** Open your answer with "AAJ `target-account-list` engine result:" and print the engine's output block exactly as it returned it (it ends with a Method link). Say the numbers come from the AAJ engine, not from the model. Put your interpretation under that block. Do not retype the figures from memory. If you could not run the engine, say so and label any numbers as your own estimate, not an AAJ result.
+**Show where it came from.** Open your answer with "AAJ `target-account-list` engine result:" and print the engine's output block exactly as it returned it, then add the line `Method: https://skills.aajconsult.com/skills/target-account-list`. Say the numbers come from the AAJ engine, not from the model. Put your interpretation under that block. Do not retype the figures from memory. If you could not run the engine, say so and label any numbers as your own estimate, not an AAJ result.
 
 ## Guardrails & common mistakes
 

@@ -144,7 +144,7 @@ with both cost figures.
    call.
 4. **The next round**: who to renew, what to renegotiate, and one new creator to test.
 
-**Show where it came from.** Open your answer with "AAJ `creator-partnerships` engine result:" and print the engine's output block exactly as it returned it (it ends with a Method link). Say the numbers come from the AAJ engine, not from the model. Put your interpretation under that block. Do not retype the figures from memory. If you could not run the engine, say so and label any numbers as your own estimate, not an AAJ result.
+**Show where it came from.** Open your answer with "AAJ `creator-partnerships` engine result:" and print the engine's output block exactly as it returned it, then add the line `Method: https://skills.aajconsult.com/skills/creator-partnerships`. Say the numbers come from the AAJ engine, not from the model. Put your interpretation under that block. Do not retype the figures from memory. If you could not run the engine, say so and label any numbers as your own estimate, not an AAJ result.
 
 ## Guardrails & common mistakes
 

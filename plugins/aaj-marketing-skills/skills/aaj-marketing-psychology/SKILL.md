@@ -101,7 +101,7 @@ Lead with the **friction diagnosis** and the evidence for it — this is the par
 
 Where you're uncertain which friction dominates, say so and give the diagnostic that would resolve it, rather than hedging across all six.
 
-**Show where it came from.** Open your answer with "AAJ `aaj-marketing-psychology` engine result:" and print the engine's output block exactly as it returned it (it ends with a Method link). Say the numbers come from the AAJ engine, not from the model. Put your interpretation under that block. Do not retype the figures from memory. If you could not run the engine, say so and label any numbers as your own estimate, not an AAJ result.
+**Show where it came from.** Open your answer with "AAJ `aaj-marketing-psychology` engine result:" and print the engine's output block exactly as it returned it, then add the line `Method: https://skills.aajconsult.com/skills/aaj-marketing-psychology`. Say the numbers come from the AAJ engine, not from the model. Put your interpretation under that block. Do not retype the figures from memory. If you could not run the engine, say so and label any numbers as your own estimate, not an AAJ result.
 
 ## Guardrails & common mistakes
 

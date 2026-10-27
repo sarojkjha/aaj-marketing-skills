@@ -73,7 +73,7 @@ Two limits to handle before presenting: the template fills slots literally, so r
 
 Use the output format in `resources/positioning-template.md`: the core statement, the three proof points, the one-line value proposition, the three audience-lens variants, and the list of claims needing proof.
 
-**Show where it came from.** Open your answer with "AAJ `positioning-statement` engine result:" and print the engine's output block exactly as it returned it (it ends with a Method link). Say the numbers come from the AAJ engine, not from the model. Put your interpretation under that block. Do not retype the figures from memory. If you could not run the engine, say so and label any numbers as your own estimate, not an AAJ result.
+**Show where it came from.** Open your answer with "AAJ `positioning-statement` engine result:" and print the engine's output block exactly as it returned it, then add the line `Method: https://skills.aajconsult.com/skills/positioning-statement`. Say the numbers come from the AAJ engine, not from the model. Put your interpretation under that block. Do not retype the figures from memory. If you could not run the engine, say so and label any numbers as your own estimate, not an AAJ result.
 
 ## Guardrails & common mistakes
 

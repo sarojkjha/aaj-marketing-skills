@@ -92,7 +92,7 @@ Use the template in `resources/brief-template.md`. Lead with intent and the answ
 
 Flag explicitly where you're inferring intent rather than reading it from a live SERP, so the user knows which parts to verify.
 
-**Show where it came from.** Open your answer with "AAJ `seo-content-brief` engine result:" and print the engine's output block exactly as it returned it (it ends with a Method link). Say the numbers come from the AAJ engine, not from the model. Put your interpretation under that block. Do not retype the figures from memory. If you could not run the engine, say so and label any numbers as your own estimate, not an AAJ result.
+**Show where it came from.** Open your answer with "AAJ `seo-content-brief` engine result:" and print the engine's output block exactly as it returned it, then add the line `Method: https://skills.aajconsult.com/skills/seo-content-brief`. Say the numbers come from the AAJ engine, not from the model. Put your interpretation under that block. Do not retype the figures from memory. If you could not run the engine, say so and label any numbers as your own estimate, not an AAJ result.
 
 ## Guardrails & common mistakes
 

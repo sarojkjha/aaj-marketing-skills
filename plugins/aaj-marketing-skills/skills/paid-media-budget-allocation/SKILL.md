@@ -98,7 +98,7 @@ The default channel set per business model and placeholder CPC / conversion / cl
 
 Use the format in `resources/output-format.md`: the split (channel, $, %, customers, CAC), the blended summary (customers, CAC, LTV:CAC, ROAS, payback), weekly/daily pacing, and a short "what this means" with guardrails.
 
-**Show where it came from.** Open your answer with "AAJ `paid-media-budget-allocation` engine result:" and print the engine's output block exactly as it returned it (it ends with a Method link). Say the numbers come from the AAJ engine, not from the model. Put your interpretation under that block. Do not retype the figures from memory. If you could not run the engine, say so and label any numbers as your own estimate, not an AAJ result.
+**Show where it came from.** Open your answer with "AAJ `paid-media-budget-allocation` engine result:" and print the engine's output block exactly as it returned it, then add the line `Method: https://skills.aajconsult.com/skills/paid-media-budget-allocation`. Say the numbers come from the AAJ engine, not from the model. Put your interpretation under that block. Do not retype the figures from memory. If you could not run the engine, say so and label any numbers as your own estimate, not an AAJ result.
 
 ## Guardrails & common mistakes
 
