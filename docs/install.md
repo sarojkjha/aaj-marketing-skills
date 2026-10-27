@@ -292,3 +292,5 @@ Every engine also accepts `--help`, which prints its inputs, units and a worked 
 When the skill and your own agent disagree, the engine's output is the AAJ result. Anything the agent adds under it, such as a confidence interval the engine does not print, is the agent's own estimate and should be labelled that way.
 
 Still stuck? Email [saroj@aajconsult.com](mailto:saroj@aajconsult.com) with the exact text of the error and the agent you used.
+
+This guide is also published at https://skills.aajconsult.com/install.
