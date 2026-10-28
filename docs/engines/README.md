@@ -22,6 +22,7 @@ One page per engine: the decision it supports, its inputs and output, setup, whe
 | [Buying Committee Map](buying-committee-map.md) | Design | Who has to say yes to this deal, what must each of them believe, and which conversation and asset come next? |
 | [Campaign Orchestrator](campaign-orchestrator.md) | Diagnose | Which channel should we start with, do we need a marketing hire, and which marketing tools should we set up now? |
 | [Case Study & Proof](case-study-and-proof.md) | Execute | Would this customer result convince a sceptical buyer, and what are we actually allowed to publish? |
+| [Channel Selection & Testing](channel-selection-and-testing.md) | Design | How much should we spend, and for how long, before judging a new channel; when should we stop early; and which channel should we test first? |
 | [Claims & Proof Check](claims-and-proof-check.md) | Execute | Which claims in this copy need proof, consent or a wording change before it goes live? |
 | [Community & Dark Social](community-and-dark-social.md) | Execute | Where do our buyers already talk, should we open a community of our own, and is word of mouth growing? |
 | [Comparison Pages](comparison-pages.md) | Execute | Is this vs or alternatives page fair and current enough to publish, and when must its rival facts be re-checked? |
