@@ -35,7 +35,7 @@ metadata:
 
 # Channel Selection and Testing
 
-Most channel tests end with "we tried it and it didn't work". Usually that verdict came from too little data: a few weeks, a few thousand spent, a handful of leads, and a gut call. A channel judged on five leads has not been judged at all.
+In AAJ's view, the most common way a channel test fails is that it ends before it can tell: a few weeks, a few thousand spent, a handful of leads, and a gut call. A handful of leads can show a channel is clearly worse than target, which is what the stop rule is for. It can't show that a channel works.
 
 This skill fixes the test before it starts. It works out, from your own cost per click and conversion rates, how many leads a fair read needs, what that costs and how long it takes. It writes down the stop rule before any money moves. With several candidate channels, it says which one is cheapest to learn about, so the first test is the one most likely to give an answer.
 
@@ -57,21 +57,21 @@ Do not use it to split an ongoing budget across channels that already work: that
 
 **Kill on paper first.** Divide cost per click by the click-to-lead rate and the lead-to-customer rate. If that cost per customer is already above the target, the test can only confirm a miss unless one of the rates is wrong. The engine says how much better the click-to-lead rate would have to be. Check that before spending.
 
-**Read on leads, sized in advance.** A count of n leads has a relative standard error of about 1/√n. To read cost per lead within ±30% at 90% confidence, the test needs 31 leads. Fewer leads means a wider range, not a faster answer. The precision and confidence are AAJ's defaults, not industry benchmarks; the user can change both.
+**Read on leads, sized in advance.** Cost per lead is spend divided by leads, so its range is lopsided: wider above than below. The engine finds the fewest leads whose exact Poisson range is within ±30% on both sides at 90% confidence: 46 leads. Fewer leads means a wider range, not a faster answer. The precision and confidence are AAJ's defaults, not industry benchmarks; the user can change both. Leads, not customers, are the default unit because with a sales cycle of more than a few weeks most customers from a test close after it ends.
 
 **Compare against the target cost per lead.** Target cost per lead = target cost per customer × the lead-to-customer rate. That is the number the test is judged against while customers are still closing.
 
-**Write the stop rule down first.** The engine gives a table. If the spend reaches a line with that many leads or fewer, the channel is worse than target at the chosen confidence, so stop. These lines come from the exact Poisson distribution, not a rule of thumb. Stopping early is fine when this table says so. Stopping early because a week looked bad is not.
+**Write the stop rule down first.** The engine gives a table, built to be checked once a week. If the spend reaches a line with that many leads or fewer, stop. Each weekly check gets an equal share of the 10% error budget, so a channel that is really on target hits a line by mistake less than 10% of the time over the whole test, not 10% at each check. The lines come from the exact Poisson distribution, not a rule of thumb. Stopping early is fine when this table says so. Stopping early because a week looked bad is not.
 
 **Rank by cost to judge.** Among channels that clear the target on paper, test first the one that is cheapest to read. When two are within 10% of each other on that cost, test first the one with more room under the target.
 
 **Run at least two weeks**, so every day of the week is seen at least twice. This is AAJ's rule, and the user can change it.
 
-**Test one or two channels at a time.** Splitting a small budget across five channels gives five unreadable tests instead of one readable one.
+**Test one or two channels at a time.** AAJ's view: the test budget for one fair read is fixed by the lead count, so splitting the same budget across five channels gives five reads that are each too small to call.
 
 ## Workflow
 
-**Step 1 - Shortlist.** Two to four channels where the buyer already looks. Use evidence: "where did you hear about us" answers, customer interviews, review sites (`review-mining`). Leave out channels chosen because a competitor uses them.
+**Step 1 - Shortlist.** Two to four channels where the buyer already looks. Use evidence: "where did you hear about us" answers, customer interviews, review sites (`review-mining`). AAJ's view: a competitor using a channel is not evidence your buyers are there.
 
 **Step 2 - Size.** Run the engine with every shortlisted channel. Drop any that miss on paper unless the user can show a rate is wrong.
 
@@ -79,7 +79,7 @@ Do not use it to split an ongoing budget across channels that already work: that
 
 **Step 4 - Set up.** One campaign, one offer, one landing page, tracking on the lead event. Note the planned lead count, spend, weeks and stop table where the team will see them.
 
-**Step 5 - Run and check weekly.** Each week, enter the spend and leads so far as `progress`. Act only on what it says: stop, keep going, or read complete.
+**Step 5 - Run and check weekly.** Once a week, not daily, enter the spend and leads so far as `progress`. The stop rule's error budget assumes one check a week. Act only on what it says: stop, ahead, keep going, or read complete.
 
 **Step 6 - Read.** At the planned lead count, compare the cost-per-lead range with the target. Then follow the customers through one full sales cycle before scaling.
 
@@ -91,7 +91,7 @@ node resources/channel-test.js '{"targetCpa":3000,"weeklyBudget":2500,"leadToCus
 node resources/channel-test.js --help
 ```
 
-`run(config)` returns, for each channel, the expected cost per lead and per customer, the target cost per lead, the break-even click-to-lead rate, the lead read (leads, spend, weeks, weekly pace), the customer read and whether it fits, the chance of no customers by the end even exactly on target, the stop table, a verdict ("testable", "slow", "over-budget" or "misses-on-paper") with options, and, with `progress`, a status ("stop", "ahead", "read" or "continue"). Across channels it returns a ranking and a recommendation. It rejects unknown fields rather than guessing.
+`run(config)` returns, for each channel, the expected cost per lead and per customer, the target cost per lead, the break-even click-to-lead rate, the lead read (leads, spend, weeks, weekly pace), the customer read and whether it fits, the chance of no customers by the end (at the user's own rates and exactly on target), the stop table and the weekly checks it assumes, a verdict ("testable", "slow", "over-budget" or "misses-on-paper") with options, and, with `progress`, a status ("stop", "ahead", "read" or "continue"). Across channels it returns a ranking and a recommendation. It rejects unknown fields rather than guessing.
 
 ## Reference
 
@@ -108,7 +108,7 @@ The free browser version is at https://aajconsult.com/tools/channel-test-budget-
 
 ## Guardrails & common mistakes
 
-- **Never judge a channel on customers alone inside the test.** With a 45-day sales cycle, a four-week test has seen almost none of its customers. The engine shows the chance of zero customers even on target.
+- **Never judge a channel on customers alone inside the test.** With a 45-day sales cycle, a four-week test has seen few of its customers close. The engine shows the chance of no customer at all by the end of the lead read, at the user's own rates and if exactly on target.
 - **Never call a channel dead before the stop table says so.** One bad week is noise.
 - **Do not let the lead definition drift mid-test.** Changing what counts as a lead resets the read.
 - **Do not quote platform-wide averages as the user's numbers.** Cost per click, click-to-lead and lead-to-customer rates must be the user's own, or labelled as estimates. The engine has no benchmarks built in.

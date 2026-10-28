@@ -68,10 +68,10 @@ process.argv = process.argv.map((a, i) =>
 /* aaj:core:begin - copied verbatim into any AAJ tool that runs this engine */
 // Rules of this engine, stated where they are used so a reader can argue with them.
 // These are AAJ's defaults, not industry benchmarks; every one can be overridden.
-var DEFAULT_PRECISION = 0.3;   // read cost per lead to within ±30%
-var DEFAULT_CONFIDENCE = 0.9;  // at 90% confidence
+var DEFAULT_PRECISION = 0.3;   // read cost per lead to within ±30% on both sides
+var DEFAULT_CONFIDENCE = 0.9;  // at 90% confidence; also caps the chance of a false stop or a false "ahead" across all weekly checks
 var DEFAULT_MIN_WEEKS = 2;     // so every day of the week is seen at least twice
-var DEFAULT_MAX_WEEKS = 12;    // a quarter: longer than this and the market has moved
+var DEFAULT_MAX_WEEKS = 12;    // a quarter: AAJ's view of the longest a test stays comparable
 var MAX_CHANNELS = 6;
 var MAX_STOP_ROWS = 6;
 var CLOSE_COST = 0.10;         // two channels within 10% on cost to judge: prefer the one with more room under target
@@ -113,21 +113,45 @@ function normInv(p) {
   return (((((a[0] * r + a[1]) * r + a[2]) * r + a[3]) * r + a[4]) * r + a[5]) * q / (((((b[0] * r + b[1]) * r + b[2]) * r + b[3]) * r + b[4]) * r + 1);
 }
 
-// P(X <= x) for X ~ Poisson(lambda), summed in log space so large lambdas do not underflow.
+// log Gamma (Lanczos, g = 7, n = 9).
+function logGamma(x) {
+  var c = [0.99999999999980993, 676.5203681218851, -1259.1392167224028, 771.32342877765313, -176.61502916214059,
+    12.507343278686905, -0.13857109526572012, 9.9843695780195716e-6, 1.5056327351493116e-7];
+  if (x < 0.5) return Math.log(Math.PI / Math.sin(Math.PI * x)) - logGamma(1 - x);
+  x -= 1; var a = c[0], t = x + 7.5, i;
+  for (i = 1; i < 9; i++) a += c[i] / (x + i);
+  return 0.5 * Math.log(2 * Math.PI) + (x + 0.5) * Math.log(t) - t + Math.log(a);
+}
+// Regularized upper incomplete gamma Q(a, x) (series or continued fraction, Numerical Recipes 6.2).
+function gammaQ(a, x) {
+  if (x <= 0) return 1;
+  var gln = logGamma(a), i;
+  if (x < a + 1) {
+    var ap = a, sum = 1 / a, del = sum;
+    for (i = 0; i < 100000; i++) { ap += 1; del *= x / ap; sum += del; if (Math.abs(del) < Math.abs(sum) * 1e-15) break; }
+    return Math.max(0, 1 - sum * Math.exp(-x + a * Math.log(x) - gln));
+  }
+  var b = x + 1 - a, c = 1 / 1e-300, d = 1 / b, h = d, an, del2;
+  for (i = 1; i < 100000; i++) {
+    an = -i * (i - a); b += 2;
+    d = an * d + b; if (Math.abs(d) < 1e-300) d = 1e-300;
+    c = b + an / c; if (Math.abs(c) < 1e-300) c = 1e-300;
+    d = 1 / d; del2 = d * c; h *= del2; if (Math.abs(del2 - 1) < 1e-15) break;
+  }
+  return Math.min(1, Math.exp(-x + a * Math.log(x) - gln) * h);
+}
+// P(X <= x) for X ~ Poisson(lambda), exactly: Q(x + 1, lambda). Fast for any x.
 function poissonCdf(x, lambda) {
   if (x < 0) return 0;
   if (lambda <= 0) return 1;
-  var logTerm = -lambda, logs = [logTerm], max = logTerm, i, s = 0;
-  for (i = 1; i <= x; i++) { logTerm += Math.log(lambda) - Math.log(i); logs.push(logTerm); if (logTerm > max) max = logTerm; }
-  for (i = 0; i < logs.length; i++) s += Math.exp(logs[i] - max);
-  return Math.min(1, Math.exp(max) * s);
+  return gammaQ(x + 1, lambda);
 }
 // The mean at which seeing x or fewer events has probability p: the exact
 // one-sided upper bound on a Poisson mean (x = 0 gives -ln p).
 function poissonUpper(x, p) {
   var lo = 0, hi = x + 10 + 10 * Math.sqrt(x + 1), i;
   while (poissonCdf(x, hi) > p) hi *= 2;
-  for (i = 0; i < 200; i++) { var mid = (lo + hi) / 2; if (poissonCdf(x, mid) > p) lo = mid; else hi = mid; }
+  for (i = 0; i < 100; i++) { var mid = (lo + hi) / 2; if (poissonCdf(x, mid) > p) lo = mid; else hi = mid; }
   return (lo + hi) / 2;
 }
 // The mean at which seeing x or more events has probability p: the exact
@@ -135,8 +159,25 @@ function poissonUpper(x, p) {
 function poissonLower(x, p) {
   if (x <= 0) return 0;
   var lo = 0, hi = x, i;
-  for (i = 0; i < 200; i++) { var mid = (lo + hi) / 2; if (1 - poissonCdf(x - 1, mid) < p) lo = mid; else hi = mid; }
+  for (i = 0; i < 100; i++) { var mid = (lo + hi) / 2; if (1 - poissonCdf(x - 1, mid) < p) lo = mid; else hi = mid; }
   return (lo + hi) / 2;
+}
+
+// How far the cost-per-lead read can be off with n leads, on the worse side:
+// cost per lead is spend / leads, so its range is lopsided (wider above).
+// Exact two-sided Poisson interval at the given confidence.
+function precisionFor(n, confidence) {
+  if (n < 1) return Infinity;
+  var tail = (1 - confidence) / 2;
+  return Math.max(n / poissonLower(n, tail) - 1, 1 - n / poissonUpper(n, tail));
+}
+// The fewest leads that read cost per lead within ±precision on both sides.
+function leadsFor(precision, confidence) {
+  var z = normInv(1 - (1 - confidence) / 2);
+  var lo = 1, hi = Math.ceil(4 * Math.pow(z / precision, 2)) + 20;
+  while (precisionFor(hi, confidence) > precision) hi *= 2;
+  while (lo < hi) { var mid = Math.floor((lo + hi) / 2); if (precisionFor(mid, confidence) <= precision) hi = mid; else lo = mid + 1; }
+  return lo;
 }
 
 function normalise(cfg) {
@@ -161,10 +202,12 @@ function normalise(cfg) {
   if (cfg.leadToCustomer != null) rate(cfg.leadToCustomer, '"leadToCustomer"');
   if (!Array.isArray(cfg.channels) || !cfg.channels.length) throw inputError('Give "channels": a list of 1 to ' + MAX_CHANNELS + ' candidate channels.');
   if (cfg.channels.length > MAX_CHANNELS) throw inputError('At most ' + MAX_CHANNELS + ' channels at once (got ' + cfg.channels.length + ').');
-  var names = {};
+  var names = {}, given = {};
+  cfg.channels.forEach(function (ch) { if (ch && ch.name != null && ch.name !== '') given[String(ch.name)] = true; });
   s.channels = cfg.channels.map(function (ch, i) {
     if (!ch || typeof ch !== 'object' || Array.isArray(ch)) throw inputError('channels[' + i + '] must be an object.');
-    var name = ch.name == null || ch.name === '' ? 'Channel ' + (i + 1) : String(ch.name);
+    var name = ch.name == null || ch.name === '' ? null : String(ch.name);
+    if (name === null) { var k = i + 1; while (given['Channel ' + k] || names['Channel ' + k]) k++; name = 'Channel ' + k; }
     var where = ' on channel "' + name + '"';
     unknownFields(ch, CHANNEL_FIELDS, where);
     if (names[name]) throw inputError('Two channels are both called "' + name + '". Give each a different name.');
@@ -184,7 +227,7 @@ function normalise(cfg) {
       if (typeof ch.progress !== 'object' || Array.isArray(ch.progress)) throw inputError('"progress"' + where + ' must be an object.');
       unknownFields(ch.progress, PROGRESS_FIELDS, ' in progress' + where);
       var p = ch.progress;
-      if (!isNum(p.spent) || p.spent < 0) throw inputError('"progress.spent"' + where + ' must be 0 or more.');
+      if (!isNum(p.spent) || p.spent <= 0) throw inputError('"progress.spent"' + where + ' must be above 0. Add progress once the test has started spending.');
       if (!isNum(p.leads) || p.leads < 0 || Math.floor(p.leads) !== p.leads) throw inputError('"progress.leads"' + where + ' must be a whole number, 0 or more.');
       if (p.customers != null && (!isNum(p.customers) || p.customers < 0 || Math.floor(p.customers) !== p.customers)) throw inputError('"progress.customers"' + where + ' must be a whole number, 0 or more.');
       progress = { spent: p.spent, leads: p.leads, customers: p.customers == null ? null : p.customers };
@@ -195,36 +238,36 @@ function normalise(cfg) {
   return s;
 }
 
-function readProgress(p, ch, s, leadsNeeded, alpha) {
+// One check a week against one-sided alphaLook = alpha / planned weeks: by the
+// union bound, a channel that is exactly on target gets a false "stop" (or a
+// false "ahead") at most alpha of the time across all the planned checks.
+function readProgress(p, ch, s, leadsNeeded, alphaLook) {
   var targetCpl = ch.targetCpl;
   var lambda = p.spent / targetCpl;                 // leads you would expect by now if exactly on target
   var pLow = poissonCdf(p.leads, lambda);            // chance of this few or fewer, if on target
   var pHigh = p.leads === 0 ? 1 : 1 - poissonCdf(p.leads - 1, lambda);
+  var tail = (1 - s.confidence) / 2;
   var cpl = p.leads > 0 ? p.spent / p.leads : null;
-  var range = p.leads > 0 ? { low: p.spent / poissonUpper(p.leads, alpha / 2), high: p.spent / poissonLower(p.leads, alpha / 2) } : null;
+  var range = p.leads > 0 ? { low: p.spent / poissonUpper(p.leads, tail), high: p.spent / poissonLower(p.leads, tail) } : null;
   var out = { spent: p.spent, leads: p.leads, customers: p.customers, expectedLeadsOnTarget: lambda, cpl: cpl, cplRange: range,
     impliedCac: cpl == null ? null : cpl / ch.leadToCustomer, customerCac: p.customers ? p.spent / p.customers : null,
-    leadsToGo: Math.max(0, leadsNeeded - p.leads), pIfOnTarget: { thisFewOrFewer: pLow, thisManyOrMore: pHigh } };
+    leadsToGo: Math.max(0, leadsNeeded - p.leads), pIfOnTarget: { thisFewOrFewer: pLow, thisManyOrMore: pHigh }, alphaPerCheck: alphaLook };
   // The spend at which the current lead count would trigger the stop rule.
-  out.nextStopSpend = poissonUpper(p.leads, alpha) * targetCpl;
-  var pct = Math.round((1 - alpha) * 100) + '%';
-  if (pLow < alpha) {
+  out.nextStopSpend = poissonUpper(p.leads, alphaLook) * targetCpl;
+  var odds = Math.round(1 / alphaLook);
+  if (pLow < alphaLook) {
     out.status = 'stop';
     out.headline = 'Stop: worse than your target';
-    out.body = 'This few leads for this spend would happen less than ' + Math.round(alpha * 100) + '% of the time if the channel were on target. Stop, and check the offer and the audience before trying it again.';
+    out.body = 'A channel that was on target would show this few leads for this spend less than 1 time in ' + odds + '. Stop, and check the offer and the audience before trying it again.';
+  } else if (pHigh < alphaLook) {
+    out.status = p.leads >= leadsNeeded ? 'read' : 'ahead';
+    out.headline = p.leads >= leadsNeeded ? 'Read complete: better than your target' : 'Ahead of your target';
+    out.body = 'A channel that was only on target would show this many leads for this spend less than 1 time in ' + odds + '. ' +
+      (p.leads >= leadsNeeded ? 'Keep it running and judge it next on the customers it brings, once a full sales cycle has passed.' : 'Keep going to the planned lead count to learn by how much.');
   } else if (p.leads >= leadsNeeded) {
     out.status = 'read';
-    if (range && range.high <= targetCpl) {
-      out.headline = 'Read complete: better than your target';
-      out.body = 'Cost per lead is below the target at ' + pct + ' confidence. Keep it running and judge it next on the customers it brings, once a full sales cycle has passed.';
-    } else {
-      out.headline = 'Read complete: too close to your target to call';
-      out.body = 'Cost per lead could be either side of the target. Run it longer to narrow the range, or decide on the customers it brings once a full sales cycle has passed.';
-    }
-  } else if (pHigh < alpha) {
-    out.status = 'ahead';
-    out.headline = 'Ahead of your target';
-    out.body = 'This many leads for this spend would happen less than ' + Math.round(alpha * 100) + '% of the time if the channel were only on target. Keep going to the planned lead count to learn by how much.';
+    out.headline = 'Read complete: too close to your target to call';
+    out.body = 'Cost per lead could be either side of the target. Run it longer to narrow the range, or decide on the customers it brings once a full sales cycle has passed.';
   } else {
     out.status = 'continue';
     out.headline = 'Keep going';
@@ -233,7 +276,7 @@ function readProgress(p, ch, s, leadsNeeded, alpha) {
   return out;
 }
 
-function assess(ch, s, z, alpha, leadsNeeded) {
+function assess(ch, s, alpha, leadsNeeded) {
   var r = { name: ch.name, cpc: ch.cpc, cpcFromCpm: ch.cpcFromCpm, clickToLead: ch.clickToLead, leadToCustomer: ch.leadToCustomer };
   r.expectedCpl = ch.cpc / ch.clickToLead;
   r.expectedCac = r.expectedCpl / ch.leadToCustomer;
@@ -250,13 +293,17 @@ function assess(ch, s, z, alpha, leadsNeeded) {
   var cWeeks = Math.max(s.minWeeks, Math.ceil(cSpend / s.weeklyBudget - 1e-9)) + Math.ceil(s.salesCycleDays / 7);
   r.customerRead = { customers: leadsNeeded, spend: cSpend, weeks: cWeeks,
     feasible: (s.testBudget == null || cSpend <= s.testBudget) && cWeeks <= s.maxWeeks };
-  // Chance of seeing no customer at all by the end of the lead read, even if the
-  // channel is exactly on target (and every sale had already closed).
-  r.zeroCustomerChance = Math.exp(-spend / s.targetCpa);
+  // Chance of seeing no customer at all by the end of the lead read, with every
+  // sale already closed: at your own rates, and if the channel were exactly on target.
+  r.zeroCustomerChance = Math.exp(-spend / r.expectedCac);
+  r.zeroCustomerChanceOnTarget = Math.exp(-spend / s.targetCpa);
 
+  // One check a week for the planned weeks; each check gets an equal share of alpha.
+  r.checks = weeks;
+  r.alphaPerCheck = alpha / weeks;
   r.stopRule = [];
   for (var x = 0; x < leadsNeeded && r.stopRule.length < MAX_STOP_ROWS; x++) {
-    var at = poissonUpper(x, alpha) * r.targetCpl;
+    var at = poissonUpper(x, r.alphaPerCheck) * r.targetCpl;
     if (x > 0 && at > spend) break;
     r.stopRule.push({ leads: x, spend: at });
   }
@@ -264,7 +311,7 @@ function assess(ch, s, z, alpha, leadsNeeded) {
   var budgetCap = s.testBudget == null ? Infinity : s.testBudget;
   var timeCap = s.maxWeeks * s.weeklyBudget;
   var affordable = Math.floor(Math.min(budgetCap, timeCap) / r.expectedCpl);
-  r.achievablePrecision = affordable > 0 ? z / Math.sqrt(affordable) : null;
+  r.achievablePrecision = affordable > 0 ? precisionFor(affordable, s.confidence) : null;
   r.weeklyBudgetForMaxWeeks = spend / s.maxWeeks;
 
   var cur = s.currency, money = function (v) { return cur + Math.round(v).toLocaleString('en-US'); };
@@ -299,18 +346,16 @@ function assess(ch, s, z, alpha, leadsNeeded) {
   if (r.level === 'over-budget' || r.level === 'slow') {
     r.options.push({ id: 'cheaper-lead', text: 'Count an earlier, more frequent conversion as the lead, if it tracks customers.' });
   }
-  if (ch.progress) r.progress = readProgress(ch.progress, ch, s, leadsNeeded, alpha);
+  if (ch.progress) r.progress = readProgress(ch.progress, ch, s, leadsNeeded, r.alphaPerCheck);
   return r;
 }
 
 function run(cfg) {
   var s = normalise(cfg);
-  var alpha = 1 - s.confidence;                       // one-sided, for the stop rule and progress checks
-  var z = normInv(1 - alpha / 2);                     // two-sided, for the precision of the read
-  // A Poisson count of n has a relative standard error of 1/sqrt(n), so the
-  // read is within ±precision when z/sqrt(n) <= precision (normal approximation).
-  var leadsNeeded = Math.ceil(Math.pow(z / s.precision, 2) - 1e-9);
-  var channels = s.channels.map(function (ch) { return assess(ch, s, z, alpha, leadsNeeded); });
+  var alpha = 1 - s.confidence;                       // the chance of a false stop or false "ahead" over the whole test
+  // The fewest leads whose exact range on cost per lead is within ±precision on both sides.
+  var leadsNeeded = leadsFor(s.precision, s.confidence);
+  var channels = s.channels.map(function (ch) { return assess(ch, s, alpha, leadsNeeded); });
   var sorted = channels.slice().sort(function (a, b) {
     return (LEVEL_ORDER[a.level] - LEVEL_ORDER[b.level]) || (a.leadRead.spend - b.leadRead.spend);
   });
@@ -335,7 +380,7 @@ function run(cfg) {
   }
   return { settings: { targetCpa: s.targetCpa, weeklyBudget: s.weeklyBudget, testBudget: s.testBudget, salesCycleDays: s.salesCycleDays,
       maxWeeks: s.maxWeeks, minWeeks: s.minWeeks, precision: s.precision, confidence: s.confidence, currency: s.currency },
-    z: z, alpha: alpha, leadsNeeded: leadsNeeded, channels: channels, ranking: ranking, recommendation: recommendation,
+    alpha: alpha, leadsNeeded: leadsNeeded, channels: channels, ranking: ranking, recommendation: recommendation,
     rules: { DEFAULT_PRECISION: DEFAULT_PRECISION, DEFAULT_CONFIDENCE: DEFAULT_CONFIDENCE, DEFAULT_MIN_WEEKS: DEFAULT_MIN_WEEKS,
       DEFAULT_MAX_WEEKS: DEFAULT_MAX_WEEKS, MAX_CHANNELS: MAX_CHANNELS, CLOSE_COST: CLOSE_COST } };
 }
@@ -370,18 +415,18 @@ function render(r) {
     L.push('─'.repeat(58));
     L.push('  ' + c.body);
     L.push('');
-    L.push(`  Cost per click      ${cur}${c.cpc.toFixed(2)}${c.cpcFromCpm ? '  (from CPM and CTR)' : ''}`);
+    L.push(`  Cost per click      ${cur}${c.cpc.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}${c.cpcFromCpm ? '  (from CPM and CTR)' : ''}`);
     L.push(`  Cost per lead       ${money(c.expectedCpl)}   target ${money(c.targetCpl)} (target CPA × ${pct(c.leadToCustomer)} lead-to-customer)`);
     L.push(`  Cost per customer   ${money(c.expectedCac)}   on your own rates; ${c.onPaper === 'clears' ? 'clears' : 'misses'} the target`);
     L.push(`  Break-even          clicks must become leads at ${pct(c.breakEvenClickToLead, 2)} or better (you entered ${pct(c.clickToLead, 2)})`);
     L.push('');
     L.push(`  Lead read           ${c.leadRead.leads} leads · ${money(c.leadRead.spend)} · ${c.leadRead.weeks} weeks (${money(c.leadRead.perWeek)} a week)`);
     L.push(`  Customer read       ${c.customerRead.customers} customers · ${money(c.customerRead.spend)} · ${c.customerRead.weeks} weeks${c.customerRead.feasible ? '' : ' - beyond your limits'}`);
-    L.push(`  Zero customers      ${pct(c.zeroCustomerChance, 0)} chance of none by the end of the lead read, even exactly on target with every sale closed`);
+    L.push(`  Zero customers      ${pct(c.zeroCustomerChance, 0)} chance of none by the end of the lead read at your own rates (${pct(c.zeroCustomerChanceOnTarget, 0)} if exactly on target), with every sale closed`);
     L.push('');
-    L.push('  STOP RULE - stop early if you reach this spend with this many leads or fewer:');
-    c.stopRule.forEach((s) => L.push(`    ${String(s.leads).padStart(3)} lead${s.leads === 1 ? ' ' : 's'}  by ${money(s.spend)}`));
-    L.push(`    (each line: worse than the ${money(c.targetCpl)} target cost per lead, at ${Math.round(st.confidence * 100)}% confidence)`);
+    L.push('  STOP RULE - check once a week; stop if you reach this spend with this many leads or fewer:');
+    c.stopRule.forEach((s) => L.push(`    ${s.leads === 0 ? 'no leads' : String(s.leads).padStart(3) + (s.leads === 1 ? ' lead ' : ' leads')}  by ${money(s.spend)}`));
+    L.push(`    (a channel on its ${money(c.targetCpl)} target cost per lead hits a line by mistake less than ${Math.round((1 - st.confidence) * 100)}% of the time over all ${c.checks} weekly checks)`);
     if (c.options.length) {
       L.push('');
       L.push('  OPTIONS');
@@ -395,7 +440,7 @@ function render(r) {
         `; on target you would expect about ${p.expectedLeadsOnTarget.toFixed(1)} leads by now.`);
       if (p.cpl != null) L.push(`    Cost per lead ${money(p.cpl)} (range ${money(p.cplRange.low)} to ${money(p.cplRange.high)}); implies about ${money(p.impliedCac)} a customer at ${pct(c.leadToCustomer)} lead-to-customer.`);
       L.push('    ' + p.body);
-      if (p.status === 'continue') L.push(`    ${p.leadsToGo} more leads to finish the read. Stop if you reach ${money(p.nextStopSpend)} with ${p.leads} or fewer.`);
+      if (p.status === 'continue') L.push(`    ${p.leadsToGo} more leads to finish the read. Stop if you reach ${money(p.nextStopSpend)} with ${p.leads === 0 ? 'no leads' : p.leads + ' or fewer'}.`);
       if (p.status === 'ahead') L.push(`    ${p.leadsToGo} more leads to finish the read.`);
       if (p.customerCac != null) L.push(`    Spend per customer so far ${money(p.customerCac)} - read this only after a full sales cycle.`);
     }

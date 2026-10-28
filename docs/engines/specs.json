@@ -914,7 +914,7 @@
       "limitations": [
         "It is only as good as the rates you give it. Cost per click, click-to-lead and lead-to-customer rates are your inputs; guesses there carry straight into the plan, so label them and re-run once the first week's numbers are in.",
         "The read is on leads, not customers, because customers arrive too slowly to judge a test on. A good cost per lead still has to be followed to customers over one full sales cycle before you scale.",
-        "The lead count uses a normal approximation; the stop table and progress checks use exact Poisson math. Both assume leads arrive at a steady rate, which a campaign change, a holiday or a viral post breaks.",
+        "The lead count, stop table and progress checks use exact Poisson math, and assume leads arrive at a steady rate, which a campaign change, a holiday or a viral post breaks. The stop rule assumes one check a week.",
         "The ±30% precision, 90% confidence, two-week minimum, twelve-week maximum and the 10% near-tie rule are AAJ's defaults, not industry benchmarks. Change them to fit the decision."
       ],
       "review": "Whoever owns the channel confirms the rates are measured or clearly labelled as estimates, that the lead event will not change during the test, and that the stop table is written into the plan before the first dollar is spent."
