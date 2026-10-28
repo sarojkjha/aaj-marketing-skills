@@ -38,6 +38,12 @@ process.argv = process.argv.map((a, i) =>
 
 'use strict';
 
+/* aaj:core:begin - copied verbatim into any AAJ tool that runs this engine */
+
+// Bad input throws instead of exiting, so a browser tool can run this core.
+// The CLI below catches it and prints the same message.
+function inputError(msg) { const e = new Error(msg); e.isInputError = true; return e; }
+
 /* ─────────────────────────────  loop math  ───────────────────────────── */
 
 /**
@@ -91,8 +97,8 @@ function project(cfg) {
   const seed = cfg.seed ?? 0;
   const paid = cfg.paidPerPeriod ?? 0;
 
-  if (typeof k !== 'number' || k < 0) die('project needs a non-negative loop factor "k"');
-  if (periods < 1 || periods > 240) die('periods must be between 1 and 240');
+  if (typeof k !== 'number' || k < 0) throw inputError('project needs a non-negative loop factor "k"');
+  if (periods < 1 || periods > 240) throw inputError('periods must be between 1 and 240');
 
   const rows = [];
   let total = seed;
@@ -104,29 +110,11 @@ function project(cfg) {
     rows.push({ period: t, newUsers, loopNew, paid, total });
     lastNew = newUsers;
   }
-  return { k, seed, paid, periods, rows, final: total };
-}
-
-/* ─────────────────────────────  helpers  ───────────────────────────── */
-
-const fmt = (n) => {
-  if (!isFinite(n)) return '∞';
-  if (Math.abs(n) >= 1000) return Math.round(n).toLocaleString('en-US');
-  if (Number.isInteger(n)) return String(n);
-  return n.toFixed(2);
-};
-const pct = (x) => `${(x * 100).toFixed(1)}%`;
-const pad = (s, n) => { s = String(s); return s + ' '.repeat(Math.max(0, n - s.length)); };
-const padL = (s, n) => { s = String(s); return ' '.repeat(Math.max(0, n - s.length)) + s; };
-function bar(v, max, w = 30) {
-  if (max <= 0) return '';
-  const f = Math.max(0, Math.min(w, Math.round((v / max) * w)));
-  return '█'.repeat(f);
-}
-
-function die(msg) {
-  console.error(`error: ${msg}\n\nRun --help for usage, or --demo for a worked example.`);
-  process.exit(1);
+  // Decompose the final total: how much came from the loop vs paid alone.
+  const paidOnly = seed + paid * periods;
+  const fromLoop = total - paidOnly;
+  const multiplier = paidOnly > 0 ? total / paidOnly : null;
+  return { k, seed, paid, periods, rows, final: total, paidOnly, fromLoop, multiplier };
 }
 
 /* ─────────────────────────────  loop types  ───────────────────────────── */
@@ -154,12 +142,12 @@ function verdictFor(k) {
 function score(cfg) {
   const stages = cfg.stages;
   const branches = cfg.branches;
-  if (!Array.isArray(stages) || !stages.length) die('score needs "stages": an array of {name, rate} steps in the loop');
-  if (typeof branches !== 'number' || branches <= 0) die('score needs "branches": output per loop completion (e.g. invites sent per user)');
+  if (!Array.isArray(stages) || !stages.length) throw inputError('score needs "stages": an array of {name, rate} steps in the loop');
+  if (typeof branches !== 'number' || branches <= 0) throw inputError('score needs "branches": output per loop completion (e.g. invites sent per user)');
 
   for (const s of stages) {
     if (typeof s.rate !== 'number' || s.rate < 0 || s.rate > 1) {
-      die(`stage "${s.name || '?'}" needs a rate between 0 and 1 (got ${s.rate})`);
+      throw inputError(`stage "${s.name || '?'}" needs a rate between 0 and 1 (got ${s.rate})`);
     }
   }
 
@@ -176,6 +164,30 @@ function score(cfg) {
                 paidCac: cfg.paidCac ?? null };
   if (cfg.paidCac != null) out.effectiveCac = effectiveCac(cfg.paidCac, k);
   return { __score: out };
+}
+
+/* aaj:core:end */
+
+/* ─────────────────────────────  helpers  ───────────────────────────── */
+
+const fmt = (n) => {
+  if (!isFinite(n)) return '∞';
+  if (Math.abs(n) >= 1000) return Math.round(n).toLocaleString('en-US');
+  if (Number.isInteger(n)) return String(n);
+  return n.toFixed(2);
+};
+const pct = (x) => `${(x * 100).toFixed(1)}%`;
+const pad = (s, n) => { s = String(s); return s + ' '.repeat(Math.max(0, n - s.length)); };
+const padL = (s, n) => { s = String(s); return ' '.repeat(Math.max(0, n - s.length)) + s; };
+function bar(v, max, w = 30) {
+  if (max <= 0) return '';
+  const f = Math.max(0, Math.min(w, Math.round((v / max) * w)));
+  return '█'.repeat(f);
+}
+
+function die(msg) {
+  console.error(`error: ${msg}\n\nRun --help for usage, or --demo for a worked example.`);
+  process.exit(1);
 }
 
 /* ─────────────────────────────  rendering  ───────────────────────────── */
@@ -271,15 +283,11 @@ function renderProject(r) {
   }
   out.push('');
 
-  // Decompose the final total: how much came from the loop vs paid alone
-  const paidOnly = r.seed + r.paid * r.periods;
-  const fromLoop = r.final - paidOnly;
   out.push('WHERE THE GROWTH CAME FROM');
-  out.push(`  Paid + seed alone    ${fmt(paidOnly)}`);
-  out.push(`  Added by the loop    ${fmt(fromLoop)}`);
-  if (paidOnly > 0) {
-    const mult = r.final / paidOnly;
-    out.push(`  Loop multiplier      ${mult.toFixed(2)}×   the loop turned ${fmt(paidOnly)} into ${fmt(r.final)}`);
+  out.push(`  Paid + seed alone    ${fmt(r.paidOnly)}`);
+  out.push(`  Added by the loop    ${fmt(r.fromLoop)}`);
+  if (r.multiplier != null) {
+    out.push(`  Loop multiplier      ${r.multiplier.toFixed(2)}×   the loop turned ${fmt(r.paidOnly)} into ${fmt(r.final)}`);
   }
   out.push('');
 
@@ -307,6 +315,7 @@ AAJ — marketing-loops engine
 
   node loop-model.js score   '<json>'
   node loop-model.js project '<json>'
+  node loop-model.js '<json>'         # mode from the shape: "stages" = score, "k" = project
   node loop-model.js --demo
   node loop-model.js --help
 
@@ -372,17 +381,39 @@ function main() {
     return;
   }
 
-  const mode = argv[0];
-  const raw = argv[1];
+  let mode = argv[0];
+  let raw = argv[1];
+  let cfg;
+
+  // One JSON argument with no mode word: route by its shape. This is how the
+  // hosted MCP server calls every engine. "stages" means score, "k" means
+  // project; an explicit "mode" field wins.
+  if (raw === undefined && /^\s*\{/.test(mode)) {
+    raw = mode;
+    try { cfg = JSON.parse(raw); }
+    catch (e) { die(`could not parse JSON — ${e.message}`); }
+    mode = typeof cfg.mode === 'string' ? cfg.mode
+      : Array.isArray(cfg.stages) ? 'score'
+      : cfg.k !== undefined ? 'project'
+      : null;
+    if (!mode) die('a JSON config needs "stages" (to score a loop) or "k" (to project one), or a "mode" field of "score" or "project".');
+  }
+
   if (!raw) die(`mode "${mode}" needs a JSON argument. Try --demo to see the shape.`);
 
-  let cfg;
-  try { cfg = JSON.parse(raw); }
-  catch (e) { die(`could not parse JSON — ${e.message}`); }
+  if (cfg === undefined) {
+    try { cfg = JSON.parse(raw); }
+    catch (e) { die(`could not parse JSON — ${e.message}`); }
+  }
 
-  if (mode === 'score') console.log(renderScore(score(cfg).__score));
-  else if (mode === 'project') console.log(renderProject(project(cfg)));
-  else die(`unknown mode "${mode}". Use score, project, --demo, or --help.`);
+  try {
+    if (mode === 'score') console.log(renderScore(score(cfg).__score));
+    else if (mode === 'project') console.log(renderProject(project(cfg)));
+    else die(`unknown mode "${mode}". Use score, project, --demo, or --help.`);
+  } catch (e) {
+    if (!e.isInputError) throw e;
+    die(e.message);
+  }
 }
 
 if (require.main === module) main();
