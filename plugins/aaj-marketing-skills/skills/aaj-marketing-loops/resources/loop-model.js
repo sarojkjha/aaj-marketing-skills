@@ -315,6 +315,7 @@ AAJ — marketing-loops engine
 
   node loop-model.js score   '<json>'
   node loop-model.js project '<json>'
+  node loop-model.js '<json>'         # mode from the shape: "stages" = score, "k" = project
   node loop-model.js --demo
   node loop-model.js --help
 
@@ -380,13 +381,30 @@ function main() {
     return;
   }
 
-  const mode = argv[0];
-  const raw = argv[1];
+  let mode = argv[0];
+  let raw = argv[1];
+  let cfg;
+
+  // One JSON argument with no mode word: route by its shape. This is how the
+  // hosted MCP server calls every engine. "stages" means score, "k" means
+  // project; an explicit "mode" field wins.
+  if (raw === undefined && /^\s*\{/.test(mode)) {
+    raw = mode;
+    try { cfg = JSON.parse(raw); }
+    catch (e) { die(`could not parse JSON — ${e.message}`); }
+    mode = typeof cfg.mode === 'string' ? cfg.mode
+      : Array.isArray(cfg.stages) ? 'score'
+      : cfg.k !== undefined ? 'project'
+      : null;
+    if (!mode) die('a JSON config needs "stages" (to score a loop) or "k" (to project one), or a "mode" field of "score" or "project".');
+  }
+
   if (!raw) die(`mode "${mode}" needs a JSON argument. Try --demo to see the shape.`);
 
-  let cfg;
-  try { cfg = JSON.parse(raw); }
-  catch (e) { die(`could not parse JSON — ${e.message}`); }
+  if (cfg === undefined) {
+    try { cfg = JSON.parse(raw); }
+    catch (e) { die(`could not parse JSON — ${e.message}`); }
+  }
 
   try {
     if (mode === 'score') console.log(renderScore(score(cfg).__score));

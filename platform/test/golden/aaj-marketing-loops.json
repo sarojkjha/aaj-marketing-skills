@@ -263,6 +263,106 @@
         "",
         "Run --help for usage, or --demo for a worked example."
       ]
+    },
+    {
+      "name": "scores from one JSON argument",
+      "source": "how the hosted MCP server calls the engine: no mode word, routed by \"stages\"",
+      "args": [
+        "{\"loopType\":\"viral\",\"stages\":[{\"name\":\"shares\",\"rate\":0.4},{\"name\":\"opens\",\"rate\":0.7},{\"name\":\"signs up\",\"rate\":0.3}],\"branches\":4,\"paidCac\":120}"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "MARKETING LOOP — SCORE",
+        "══════════════════════════════════════════════════════════",
+        "",
+        "Loop type   Viral / referral — users invite users; k = invites × accept-rate",
+        "",
+        "LOOP FACTOR k = 0.336",
+        "VERDICT       CONTRIBUTING",
+        "",
+        "  k in [0.2, 0.5) — a real assist. The loop meaningfully lowers effective CAC but won't carry growth alone. Worth improving; don't rely on it.",
+        "",
+        "THE LOOP",
+        "  stage                       rate",
+        "  shares                     40.0%",
+        "  opens                      70.0%",
+        "  signs up                   30.0%  ← throttle",
+        "  × output per turn              4",
+        "  ────────────────────────────────",
+        "  = loop factor k            0.336",
+        "",
+        "WHAT k BUYS YOU",
+        "  Amplification    1.51×   every seeded user ultimately yields 1.51 users",
+        "  Effective CAC    79.68   paid CAC 120 × (1 − k)",
+        "                   the loop pays for 33.6% of every acquisition",
+        "",
+        "WHERE TO PUSH",
+        "  The throttle is \"signs up\" at 30.0%. Because k is the product",
+        "  of every stage rate, the lowest rate caps the whole loop — a 10-point gain",
+        "  there lifts k more than a 10-point gain anywhere else. Fix the throttle first.",
+        "",
+        "WHAT THIS MEANS",
+        "  A genuine assist, not an engine. Bank the lower effective CAC, but plan",
+        "  growth around paid and treat the loop as leverage on it, not a substitute."
+      ],
+      "stderr": []
+    },
+    {
+      "name": "projects from one JSON argument",
+      "source": "no mode word, routed by \"k\"",
+      "args": [
+        "{\"k\":0.336,\"seed\":500,\"paidPerPeriod\":300,\"periods\":12}"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "MARKETING LOOP — PROJECTION",
+        "══════════════════════════════════════════════════════════",
+        "",
+        "Loop factor k        0.336",
+        "Seed users           500",
+        "Paid feed / period   300",
+        "Periods              12",
+        "",
+        "CUMULATIVE USERS",
+        "  period         new       total",
+        "  1              468         968  █████",
+        "  2           457.25       1,425  ███████",
+        "  3           453.64       1,879  █████████",
+        "  4           452.42       2,331  ████████████",
+        "  5           452.01       2,783  ██████████████",
+        "  6           451.88       3,235  ████████████████",
+        "  7           451.83       3,687  ███████████████████",
+        "  8           451.82       4,139  █████████████████████",
+        "  9           451.81       4,591  ███████████████████████",
+        "  10          451.81       5,042  █████████████████████████",
+        "  11          451.81       5,494  ████████████████████████████",
+        "  12          451.81       5,946  ██████████████████████████████",
+        "",
+        "WHERE THE GROWTH CAME FROM",
+        "  Paid + seed alone    4,100",
+        "  Added by the loop    1,846",
+        "  Loop multiplier      1.45×   the loop turned 4,100 into 5,946",
+        "",
+        "WHAT THIS MEANS",
+        "  The loop adds a real but bounded lift over paid-alone. Growth here is",
+        "  mostly the paid feed; the loop lowers effective cost rather than driving",
+        "  the curve. Plan the budget accordingly."
+      ],
+      "stderr": []
+    },
+    {
+      "name": "rejects one JSON argument with neither shape",
+      "source": "no stages, no k, no mode field",
+      "args": [
+        "{\"foo\":1}"
+      ],
+      "exitCode": 1,
+      "stdout": [],
+      "stderr": [
+        "error: a JSON config needs \"stages\" (to score a loop) or \"k\" (to project one), or a \"mode\" field of \"score\" or \"project\".",
+        "",
+        "Run --help for usage, or --demo for a worked example."
+      ]
     }
   ]
 }
