@@ -355,6 +355,7 @@ AAJ — brand-voice-governance engine
 
   node voice-check.js check   '<json>'
   node voice-check.js profile '<json>'
+  node voice-check.js '<json>'         # mode from the shape: "content" = check, "brief" = profile
   node voice-check.js --demo
   node voice-check.js --help
 
@@ -429,13 +430,30 @@ function main() {
     return;
   }
 
-  const mode = argv[0];
-  const raw = argv[1];
+  let mode = argv[0];
+  let raw = argv[1];
+  let cfg;
+
+  // One JSON argument with no mode word: route by its shape. This is how the
+  // hosted MCP server calls every engine. "content" means check, "brief"
+  // alone means profile; an explicit "mode" field wins.
+  if (raw === undefined && /^\s*\{/.test(mode)) {
+    raw = mode;
+    try { cfg = JSON.parse(raw); }
+    catch (e) { die(`could not parse JSON — ${e.message}`); }
+    mode = typeof cfg.mode === 'string' ? cfg.mode
+      : cfg.content !== undefined ? 'check'
+      : cfg.brief !== undefined ? 'profile'
+      : null;
+    if (!mode) die('a JSON config needs "content" (to check it against the voice) or "brief" (to build a profile from it), or a "mode" field of "check" or "profile".');
+  }
+
   if (!raw) die(`mode "${mode}" needs a JSON argument. Try --demo to see the shape.`);
 
-  let cfg;
-  try { cfg = JSON.parse(raw); }
-  catch (e) { die(`could not parse JSON — ${e.message}`); }
+  if (cfg === undefined) {
+    try { cfg = JSON.parse(raw); }
+    catch (e) { die(`could not parse JSON — ${e.message}`); }
+  }
 
   if (mode === 'check') console.log(renderCheck(check(cfg).__check));
   else if (mode === 'profile') console.log(renderProfile(profile(cfg).__profile));

@@ -124,6 +124,82 @@
         "  ✗ blocks before publishing; the notes can wait."
       ],
       "stderr": []
+    },
+    {
+      "name": "checks from one JSON argument",
+      "source": "how the hosted MCP server calls the engine: no mode word, routed by \"content\"",
+      "args": [
+        "{\"brand\":\"X\",\"content\":\"We leverage seamless synergy to unlock actionable insights.\\n\\nPlain words win. Set up in an afternoon.\",\"profile\":{\"avoid\":[\"leverage\",\"synergy\"],\"maxGrade\":9}}"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "BRAND VOICE GOVERNANCE — X",
+        "════════════════════════════════════════════════════════",
+        "",
+        "VERDICT   REVISE",
+        "",
+        "  Conformance     50%  ███████████···········   1/2 blocks clean",
+        "  Profile       brand profile",
+        "  Grade ceiling 9",
+        "",
+        "  1 to revise · 0 with notes · 1 pass",
+        "",
+        "BANNED TERMS FOUND",
+        "  \"leverage\"            1×",
+        "  \"synergy\"             1×",
+        "",
+        "BY BLOCK",
+        "  ✗ REVISE  #1   We leverage seamless synergy to unlock actionable insights.",
+        "        ✗ \"leverage\" is on this brand's avoid list",
+        "        ✗ \"synergy\" is on this brand's avoid list",
+        "        · reads at grade 14.1, ceiling is 9",
+        "  ✓ PASS    #2   Plain words win. Set up in an afternoon.",
+        "",
+        "AUDIT TRAIL",
+        "  3 finding(s) across 2 block(s). Each is quoted above with its",
+        "  block number, so an editor or a compliance log can trace every flag to its",
+        "  source. Blocking findings (✗) violate a stated brand rule; notes (·) are",
+        "  advisory and do not fail the check.",
+        "",
+        "WHAT THIS MEANS",
+        "  Content violates the brand's own stated voice rules. These are not style",
+        "  opinions — they are the do/don't list the brand wrote for itself. Fix the",
+        "  ✗ blocks before publishing; the notes can wait."
+      ],
+      "stderr": []
+    },
+    {
+      "name": "profiles from one JSON argument",
+      "source": "no mode word, routed by \"brief\"",
+      "args": [
+        "{\"brand\":\"X\",\"brief\":\"# Brand\\n\\n## Voice & tone\\n- Plain, concrete, short sentences.\\n- Avoid: synergy, leverage, seamless.\\n- Reading grade: 8\\n\"}"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "VOICE PROFILE — X",
+        "════════════════════════════════════════════════════════",
+        "",
+        "Words to avoid   synergy, leverage, seamless",
+        "Grade ceiling    8",
+        "",
+        "Ready to check against. Pass this object as \"profile\" to check mode,",
+        "or pass the same brief and it will be re-parsed."
+      ],
+      "stderr": []
+    },
+    {
+      "name": "rejects one JSON argument with neither shape",
+      "source": "no content, no brief, no mode field",
+      "args": [
+        "{\"foo\":1}"
+      ],
+      "exitCode": 1,
+      "stdout": [],
+      "stderr": [
+        "error: a JSON config needs \"content\" (to check it against the voice) or \"brief\" (to build a profile from it), or a \"mode\" field of \"check\" or \"profile\".",
+        "",
+        "Run --help for usage, or --demo for a worked example."
+      ]
     }
   ]
 }
