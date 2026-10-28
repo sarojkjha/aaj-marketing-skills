@@ -3,7 +3,7 @@
   "name": "io.github.sarojkjha/aaj-engines",
   "title": "AAJ Marketing Engines",
   "description": "Deterministic marketing math for AI agents: LTV:CAC, pipeline coverage, A/B tests, pricing.",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "websiteUrl": "https://skills.aajconsult.com",
   "repository": {
     "url": "https://github.com/sarojkjha/aaj-marketing-skills",
