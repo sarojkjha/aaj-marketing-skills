@@ -129,6 +129,140 @@
         "  growth around paid and treat the loop as leverage on it, not a substitute."
       ],
       "stderr": []
+    },
+    {
+      "name": "project a sub-viral loop over 24 periods",
+      "source": "project mode with a paid feed; exercises the thinned table and the loop decomposition",
+      "args": [
+        "project",
+        "{\"k\":0.6,\"seed\":1000,\"paidPerPeriod\":500,\"periods\":24}"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "MARKETING LOOP — PROJECTION",
+        "══════════════════════════════════════════════════════════",
+        "",
+        "Loop factor k        0.600",
+        "Seed users           1,000",
+        "Paid feed / period   500",
+        "Periods              24",
+        "",
+        "CUMULATIVE USERS",
+        "  period         new       total",
+        "  1            1,100       2,100  ██",
+        "  2            1,160       3,260  ███",
+        "  3            1,196       4,456  ████",
+        "  4            1,218       5,674  ██████",
+        "  5            1,231       6,904  ███████",
+        "  6            1,238       8,142  ████████",
+        "  …       ",
+        "  9            1,247      11,879  ████████████",
+        "  …       ",
+        "  12           1,249      15,626  ███████████████",
+        "  …       ",
+        "  15           1,250      19,375  ███████████████████",
+        "  …       ",
+        "  18           1,250      23,125  ███████████████████████",
+        "  …       ",
+        "  21           1,250      26,875  ██████████████████████████",
+        "  22           1,250      28,125  ████████████████████████████",
+        "  23           1,250      29,375  █████████████████████████████",
+        "  24           1,250      30,625  ██████████████████████████████",
+        "",
+        "WHERE THE GROWTH CAME FROM",
+        "  Paid + seed alone    13,000",
+        "  Added by the loop    17,625",
+        "  Loop multiplier      2.36×   the loop turned 13,000 into 30,625",
+        "",
+        "WHAT THIS MEANS",
+        "  The loop is doing more than half the work. Notice the total far exceeds",
+        "  paid-alone — that gap is the compounding you'd miss modeling this as a",
+        "  funnel. Fund the paid feed; the loop multiplies it."
+      ],
+      "stderr": []
+    },
+    {
+      "name": "project a viral loop",
+      "source": "k >= 1 runaway warning",
+      "args": [
+        "project",
+        "{\"k\":1.2,\"seed\":100,\"periods\":6}"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "MARKETING LOOP — PROJECTION",
+        "══════════════════════════════════════════════════════════",
+        "",
+        "Loop factor k        1.200",
+        "Seed users           100",
+        "Paid feed / period   0",
+        "Periods              6",
+        "",
+        "CUMULATIVE USERS",
+        "  period         new       total",
+        "  1              120         220  █████",
+        "  2              144         364  ████████",
+        "  3           172.80      536.80  ████████████",
+        "  4           207.36      744.16  █████████████████",
+        "  5           248.83      992.99  ███████████████████████",
+        "  6           298.60       1,292  ██████████████████████████████",
+        "",
+        "WHERE THE GROWTH CAME FROM",
+        "  Paid + seed alone    100",
+        "  Added by the loop    1,192",
+        "  Loop multiplier      12.92×   the loop turned 100 into 1,292",
+        "",
+        "WHAT THIS MEANS",
+        "  With k ≥ 1 this curve is exponential and the projection runs away — the",
+        "  real limit is saturation, which this model doesn't impose. Trust the shape,",
+        "  not the final number; add a saturation ceiling before planning against it."
+      ],
+      "stderr": []
+    },
+    {
+      "name": "rejects a loop with no stages",
+      "source": "input error path: the core throws, the CLI prints and exits 1",
+      "args": [
+        "score",
+        "{\"stages\":[],\"branches\":3}"
+      ],
+      "exitCode": 1,
+      "stdout": [],
+      "stderr": [
+        "error: score needs \"stages\": an array of {name, rate} steps in the loop",
+        "",
+        "Run --help for usage, or --demo for a worked example."
+      ]
+    },
+    {
+      "name": "rejects a stage rate above 1",
+      "source": "input error path",
+      "args": [
+        "score",
+        "{\"stages\":[{\"name\":\"x\",\"rate\":1.4}],\"branches\":3}"
+      ],
+      "exitCode": 1,
+      "stdout": [],
+      "stderr": [
+        "error: stage \"x\" needs a rate between 0 and 1 (got 1.4)",
+        "",
+        "Run --help for usage, or --demo for a worked example."
+      ]
+    },
+    {
+      "name": "rejects a period count out of range",
+      "source": "input error path in project mode",
+      "args": [
+        "project",
+        "{\"k\":0.5,\"periods\":0}"
+      ],
+      "exitCode": 1,
+      "stdout": [],
+      "stderr": [
+        "error: periods must be between 1 and 240",
+        "",
+        "Run --help for usage, or --demo for a worked example."
+      ]
     }
   ]
 }
