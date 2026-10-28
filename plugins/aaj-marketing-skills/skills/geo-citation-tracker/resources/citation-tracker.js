@@ -348,6 +348,7 @@ AAJ — geo-citation-tracker engine
 
   node citation-tracker.js design  '<json>'
   node citation-tracker.js readout '<json>'
+  node citation-tracker.js '<json>'           # mode from the shape: "baselinePresence" = design, "engines" object = readout
   node citation-tracker.js --demo
   node citation-tracker.js --help
 
@@ -468,15 +469,32 @@ function main() {
     return;
   }
 
-  const mode = argv[0];
-  const raw = argv[1];
+  let mode = argv[0];
+  let raw = argv[1];
+  let cfg;
+
+  // One JSON argument with no mode word: route by its shape. This is how the
+  // hosted MCP server calls every engine. "baselinePresence" means design; an
+  // "engines" object of logged answers means readout. An explicit "mode" wins.
+  if (raw === undefined && /^\s*\{/.test(mode)) {
+    raw = mode;
+    try { cfg = JSON.parse(raw); }
+    catch (e) { die(`could not parse JSON — ${e.message}`); }
+    mode = typeof cfg.mode === 'string' ? cfg.mode
+      : cfg.baselinePresence !== undefined ? 'design'
+      : cfg.engines && typeof cfg.engines === 'object' && !Array.isArray(cfg.engines) ? 'readout'
+      : null;
+    if (!mode) die('a JSON config needs "baselinePresence" (to design a prompt set) or an "engines" object of logged answers (to read out a run), or a "mode" field of "design" or "readout".');
+  }
+
   if (!raw) die(`mode "${mode}" needs a JSON argument. Try --demo to see the shape.`);
 
-  let cfg;
-  try {
-    cfg = JSON.parse(raw);
-  } catch (e) {
-    die(`could not parse JSON — ${e.message}`);
+  if (cfg === undefined) {
+    try {
+      cfg = JSON.parse(raw);
+    } catch (e) {
+      die(`could not parse JSON — ${e.message}`);
+    }
   }
 
   if (mode === 'design') console.log(design(cfg));

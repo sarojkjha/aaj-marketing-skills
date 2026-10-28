@@ -4,6 +4,7 @@ AAJ - content-calendar-planning engine
   node .agents/skills/content-calendar-planning/resources/calendar-engine.js --demo
   node .agents/skills/content-calendar-planning/resources/calendar-engine.js plan '{...}'
   node .agents/skills/content-calendar-planning/resources/calendar-engine.js audit '{...}'
+  node .agents/skills/content-calendar-planning/resources/calendar-engine.js '{...}'   (mode from the shape: "clusters" = plan, "published" = audit)
 
 Two modes.
 
@@ -407,16 +408,33 @@ if (argv.includes('--demo') || argv.length === 0) {
   process.exit(0);
 }
 
-const mode = argv[0];
-const raw = argv[1];
+let mode = argv[0];
+let raw = argv[1];
+let cfg;
+
+// One JSON argument with no mode word: route by its shape. This is how the
+// hosted MCP server calls every engine. "published" means audit, "clusters"
+// means plan; an explicit "mode" field wins.
+if (raw === undefined && /^\s*\{/.test(mode)) {
+  raw = mode;
+  try { cfg = JSON.parse(raw); }
+  catch (e) { die('invalid JSON: ' + e.message); }
+  mode = typeof cfg.mode === 'string' ? cfg.mode
+    : cfg.published !== undefined ? 'audit'
+    : cfg.clusters !== undefined ? 'plan'
+    : null;
+  if (!mode) die('a JSON config needs "clusters" (to plan a calendar) or "published" (to audit one), or a "mode" field of "plan" or "audit".', 'Try --demo to see the shape.');
+}
+
 if (!['plan', 'audit'].includes(mode)) {
   die(`unknown mode "${mode}".`, 'Use plan, audit, --demo, or --help.');
 }
 if (!raw) die(`mode "${mode}" needs a JSON argument.`, 'Try --demo to see the shape.');
 
-let cfg;
-try { cfg = JSON.parse(raw); }
-catch (e) { die('invalid JSON: ' + e.message); }
+if (cfg === undefined) {
+  try { cfg = JSON.parse(raw); }
+  catch (e) { die('invalid JSON: ' + e.message); }
+}
 
 if (mode === 'plan')  { validatePlan(cfg);  console.log(renderPlan(plan(cfg), cfg)); }
 if (mode === 'audit') { validateAudit(cfg); console.log(renderAudit(audit(cfg))); }

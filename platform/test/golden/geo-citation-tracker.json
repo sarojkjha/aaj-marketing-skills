@@ -127,6 +127,102 @@
         "prompts changes the measurement, and the delta becomes uninterpretable."
       ],
       "stderr": []
+    },
+    {
+      "name": "designs from one JSON argument",
+      "source": "how the hosted MCP server calls the engine: no mode word, routed by \"baselinePresence\"",
+      "args": [
+        "{\"baselinePresence\":0.3,\"detectAbsoluteLift\":0.15}"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "GEO CITATION TRACKER — PROMPT SET DESIGN",
+        "════════════════════════════════════════════════════════════",
+        "",
+        "Baseline presence rate      30.0%",
+        "Change worth detecting      +15.0 pts  (→ 45.0%)",
+        "Confidence / power          95.0% / 80.0%",
+        "Engines tracked             4",
+        "",
+        "────────────────────────────────────────────────────────────",
+        "PROMPTS PER ENGINE, PER RUN    160",
+        "TOTAL QUERIES PER RUN          640   (160 × 4 engines)",
+        "────────────────────────────────────────────────────────────",
+        "",
+        "What you could detect at other prompt-set sizes:",
+        "",
+        "  prompts   smallest detectable change    ",
+        "  20        40.6 pts                      ",
+        "  30        33.1 pts                      ",
+        "  50        25.7 pts                      ",
+        "  75        21.0 pts                      ",
+        "  100       18.2 pts                      ",
+        "",
+        "⚠  VIABILITY WARNING",
+        "   160 prompts per engine is a heavy manual run. Either accept a",
+        "   larger detectable change, track fewer engines, or treat this as",
+        "   directional monitoring rather than measurement — and say so in the report.",
+        "",
+        "Cadence: monthly. Hold the prompt set FIXED between runs — changing",
+        "prompts changes the measurement, and the delta becomes uninterpretable."
+      ],
+      "stderr": []
+    },
+    {
+      "name": "reads out from one JSON argument",
+      "source": "no mode word, routed by an \"engines\" object",
+      "args": [
+        "{\"brand\":\"Acme\",\"runDate\":\"2026-10-20\",\"engines\":{\"chatgpt\":[{\"prompt\":\"best x\",\"mentioned\":true,\"rank\":1,\"cited\":false,\"framing\":\"neutral\",\"competitors\":[\"B\"]},{\"prompt\":\"y\",\"mentioned\":false,\"cited\":false,\"competitors\":[\"B\"]}]}}"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "GEO CITATION TRACKER — READOUT · Acme · 2026-10-20",
+        "════════════════════════════════════════════════════════════",
+        "",
+        "VERDICT   ESTABLISHED",
+        "",
+        "  Presence rate       50.0%  ████████████············   named in 1/2 answers",
+        "  Citation rate        0.0%  ························   own domain sourced in 0/2",
+        "  Visibility score     50.0  ████████████············   rank-weighted",
+        "  Share of voice      33.3%  ████████················   vs 1 tracked competitors",
+        "",
+        "BY ENGINE",
+        "  engine            n   presence   citation  visibility",
+        "  chatgpt           2      50.0%       0.0%        50.0",
+        "",
+        "SHARE OF VOICE",
+        "    B                        66.7%  ████████████······",
+        "  ▸ Acme                     33.3%  ██████············",
+        "",
+        "FRAMING (of answers where mentioned)",
+        "  recommended 0   neutral 1   negative 0",
+        "",
+        "MOVEMENT",
+        "  No prior run supplied — this run is the baseline.",
+        "  At n = 2, the smallest change a future run could reliably detect",
+        "  is larger than the entire 0-100% scale — this prompt set cannot detect any change at all.",
+        "",
+        "WHAT THIS MEANS",
+        "  Mentioned but not sourced. Engines know the brand and describe it from",
+        "  their own priors — they are not reading and linking your pages. This is a",
+        "  content-extractability problem, not an awareness problem.",
+        "  → Run geo-content-optimization on the pages that should be the source."
+      ],
+      "stderr": []
+    },
+    {
+      "name": "rejects one JSON argument with neither shape",
+      "source": "no baselinePresence, no engines object, no mode field",
+      "args": [
+        "{\"foo\":1}"
+      ],
+      "exitCode": 1,
+      "stdout": [],
+      "stderr": [
+        "error: a JSON config needs \"baselinePresence\" (to design a prompt set) or an \"engines\" object of logged answers (to read out a run), or a \"mode\" field of \"design\" or \"readout\".",
+        "",
+        "Run with --help for usage, or --demo for a worked example."
+      ]
     }
   ]
 }
