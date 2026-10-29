@@ -51,8 +51,30 @@
  *       "paymentPct": 0.03                    // payment fees as a share of revenue
  *     },
  *     "targetMargin": 0.7,                    // YOUR target all-in gross margin. Required; not a benchmark.
- *     "spikeMultiplier": 2.5                  // stress test: paid usage x this (default 2)
+ *     "spikeMultiplier": 2.5,                 // stress test: paid usage x this (default 2)
+ *     "freeTierLimit": { ... }                // optional: see FREE-TIER LIMIT below
  *   }
+ *
+ * FREE-TIER LIMIT - the most usage a free tier can afford, from your own conversion
+ * and payback target. Give it with the full config above (cost per task and margin
+ * per paid account come from the model), or on its own with costPerTask and
+ * contributionPerAccount:
+ *
+ *   { "freeTierLimit": {
+ *       "conversionRate": 0.04,               // share of free sign-ups that become paid accounts (required)
+ *       "monthsOnFree": 3,                    // average months a free user stays on the free tier (required)
+ *       "paybackMonths": 6,                   // YOUR target: months of a paid account's margin the free tier may use (required)
+ *       "costPerTask": 0.004,                 // cost of one free task (default: the model's average cost per task)
+ *       "contributionPerAccount": 120,        // margin per paid account per month before free-tier costs (default: the model's)
+ *       "activeShare": 0.35,                  // share of free users active in a month (default 1)
+ *       "usedShareOfCap": 1,                  // share of the cap an active free user uses (default 1 = all of it)
+ *       "otherCostPerUser": 0,                // non-inference cost per free user per month (default 0)
+ *       "currentCap": 40                      // optional: your current cap, to check against the target
+ *   } }
+ *
+ *   Budget per free user = conversionRate x contributionPerAccount x paybackMonths.
+ *   Most tasks per active free user a month =
+ *     (budget / monthsOnFree - otherCostPerUser) / (activeShare x usedShareOfCap x costPerTask), rounded down.
  *
  * RULES OF THIS ENGINE (stated so you can argue with them)
  *   - Healthy: all-in margin at normal usage meets your target AND the account
@@ -292,7 +314,60 @@ function money(v) {
 }
 function times(k) { return (Math.round(k * 100) / 100) + 'x'; }
 
+// ---- free-tier limit: how much free usage the founder's own conversion and payback target can afford
+const FTL_FIELDS = ['conversionRate', 'monthsOnFree', 'paybackMonths', 'costPerTask', 'contributionPerAccount', 'activeShare', 'usedShareOfCap', 'otherCostPerUser', 'currentCap'];
+const FTL_WHATIF = [0.5, 1.5];   // AAJ's what-ifs: conversion at half and one and a half times your figure
+
+function freeTierLimit(raw, model) {
+  if (!raw || typeof raw !== 'object' || Array.isArray(raw)) die('"freeTierLimit" must be an object.');
+  Object.keys(raw).forEach((k) => { if (FTL_FIELDS.indexOf(k) < 0) die(`Unknown field "freeTierLimit.${k}".`, 'Allowed: ' + FTL_FIELDS.join(', ') + '.'); });
+  const fromModel = !!model;
+  const f = {
+    conversion: num(raw.conversionRate, 'the free-to-paid conversion rate ("freeTierLimit.conversionRate")', { required: true, min: 0, max: 1, hint: 'The share of free sign-ups that become paid accounts, as a fraction: 0.04 for 4%.' }),
+    months: num(raw.monthsOnFree, 'months on the free tier ("freeTierLimit.monthsOnFree")', { required: true, min: 0, max: 120, hint: 'On average, how many months a free user stays on the free tier, whether they convert or leave.' }),
+    payback: num(raw.paybackMonths, 'your payback target in months ("freeTierLimit.paybackMonths")', { required: true, min: 0, max: 120, hint: 'Your own target: how many months of a paid account\'s margin the free tier may use up. Not a benchmark.' }),
+    cpt: num(raw.costPerTask, 'the cost of one free task ("freeTierLimit.costPerTask")', { required: !fromModel, min: 0, def: fromModel ? model.normal.avgCostPerTask : undefined, hint: 'Your inference cost for one task a free user runs.' }),
+    contribution: num(raw.contributionPerAccount, 'margin per paid account per month ("freeTierLimit.contributionPerAccount")', { required: !fromModel, def: fromModel ? model.normal.contribution : undefined, hint: 'Revenue minus inference and other variable costs, per paid account per month, before free-tier costs.' }),
+    active: num(raw.activeShare, 'the free active share ("freeTierLimit.activeShare")', { def: 1, min: 0, max: 1 }),
+    used: num(raw.usedShareOfCap, 'the share of the cap used ("freeTierLimit.usedShareOfCap")', { def: 1, min: 0, max: 1 }),
+    other: num(raw.otherCostPerUser, 'other cost per free user ("freeTierLimit.otherCostPerUser")', { def: 0, min: 0 }),
+    current: blank(raw.currentCap) ? null : num(raw.currentCap, 'your current cap ("freeTierLimit.currentCap")', { min: 0 }),
+  };
+  if (f.conversion <= 0) die('The conversion rate must be more than 0: with no conversions, no free usage pays back.');
+  if (f.months <= 0 || f.payback <= 0) die('Months on free and the payback target must be more than 0.');
+  if (f.active <= 0 || f.used <= 0) die('The active share and the share of the cap used must be more than 0.');
+  const source = {
+    costPerTask: blank(raw.costPerTask) ? 'the model\'s average cost per task' : 'entered',
+    contribution: blank(raw.contributionPerAccount) ? 'the model\'s margin per paid account before free-tier costs' : 'entered',
+  };
+  const capFor = (conversion) => {
+    const budget = conversion * f.contribution * f.payback;           // per free user, over their time on free
+    const perMonth = budget / f.months - f.other;                     // left for inference each month
+    if (f.contribution <= 0 || perMonth <= 0) return { budget, perMonth, cap: 0, status: 'no-room' };
+    if (f.cpt === 0) return { budget, perMonth, cap: null, status: 'unlimited' };
+    return { budget, perMonth, cap: Math.floor(perMonth / (f.active * f.used * f.cpt) + 1e-9), status: 'capped' };
+  };
+  const base = capFor(f.conversion);
+  const out = { inputs: f, source, budgetPerFreeUser: base.budget, inferenceBudgetPerMonth: base.perMonth, cap: base.cap, status: base.status,
+    whatIf: FTL_WHATIF.map((m) => ({ conversionMultiplier: m, conversionRate: Math.min(1, f.conversion * m), cap: capFor(Math.min(1, f.conversion * m)).cap, status: capFor(Math.min(1, f.conversion * m)).status })),
+    rules: { FTL_WHATIF } };
+  if (f.current !== null) {
+    const monthly = f.active * f.used * f.current * f.cpt + f.other;    // cost per free user per month at your cap
+    const perPaid = monthly * f.months / f.conversion;                  // free-tier cost behind each new paid account
+    const months = f.contribution > 0 ? perPaid / f.contribution : null;
+    out.current = { cap: f.current, costPerFreeUserMonth: monthly, costPerPaidAccount: perPaid, paybackMonths: months,
+      withinTarget: months !== null && months <= f.payback + 1e-9 };
+  }
+  if (model && model.normal.free) out.modelFree = { tasksPerActiveUser: model.normal.free.tasksPerActiveUser };
+  return out;
+}
+
 function build(cfg) {
+  if (cfg && typeof cfg === 'object' && !Array.isArray(cfg) && cfg.freeTierLimit !== undefined && cfg.plan === undefined) {
+    const others = Object.keys(cfg).filter((k) => k !== 'freeTierLimit' && k !== 'today');
+    if (others.length) die(`On its own, "freeTierLimit" takes no other fields (got ${others.map((k) => '"' + k + '"').join(', ')}).`, 'Give the full config with a plan, or only freeTierLimit with costPerTask and contributionPerAccount.');
+    return { mode: 'free-tier-limit', freeTierLimit: freeTierLimit(cfg.freeTierLimit, null) };
+  }
   const n = normalise(cfg);
   const now = n.today || new Date(Date.UTC(new Date().getUTCFullYear(), new Date().getUTCMonth(), new Date().getUTCDate()));
   const findings = [];
@@ -371,19 +446,50 @@ function build(cfg) {
   if (n.free) tryLever('free', 'Tighten the free tier', `-${LEVER.free * 100}% usage per free user`, { free: 1 - LEVER.free }, 'May slow free-to-paid conversion.');
   levers.sort((x, y) => y.gain - x.gain);
 
-  return {
+  const model = {
+    mode: 'model',
     plan: n.plan, targetMargin: n.targetMargin, spikeMultiplier: n.spike,
     models: n.models, normal, spike,
     breakEven: { price: breakEven, targetPrice, usage },
     verdict, levers: levers.slice(0, 3), allLevers: levers, findings, prices: ages,
     rules: { STALE_DAYS, DEFAULT_SPIKE, LEVER },
   };
+  if (cfg.freeTierLimit !== undefined) model.freeTierLimit = freeTierLimit(cfg.freeTierLimit, model);
+  return model;
 }
 /* aaj:core:end */
 
 /* ─────────────────────────── rendering ─────────────────────────── */
 
+function renderLimit(t, L) {
+  const f = t.inputs;
+  L.push('FREE-TIER LIMIT (from your conversion and payback target)');
+  if (f.contribution <= 0) L.push(`  Paid accounts make ${money(f.contribution)} a month before free-tier costs, so nothing is left to pay for a free tier.`);
+  else L.push(`  Each free user may cost up to ${money(t.budgetPerFreeUser)} over ${f.months} month${f.months === 1 ? '' : 's'} on free`);
+  if (f.contribution > 0) {
+    L.push(`    = ${pct(f.conversion)} conversion x ${money(f.contribution)} margin a paid account a month x your ${f.payback}-month payback target`);
+    L.push(`  That leaves ${money(Math.max(0, t.inferenceBudgetPerMonth))} a month for inference per free user` + (f.other > 0 ? ` after ${money(f.other)} other cost` : ''));
+  }
+  L.push(`  Cost of one free task: ${money(f.cpt)} (${t.source.costPerTask}); margin per paid account: ${money(f.contribution)} (${t.source.contribution})`);
+  const capTxt = (x, st) => st === 'no-room' ? 'no room for any free usage' : st === 'unlimited' ? 'no limit needed (tasks cost nothing)' : x.toLocaleString('en-US') + ' tasks per active free user a month';
+  L.push(`  MOST THE FREE TIER CAN AFFORD: ${capTxt(t.cap, t.status)}`);
+  L.push(`    assuming ${pct(f.active)} of free users are active and use ${pct(f.used)} of the cap`);
+  L.push('  If conversion is different (AAJ\'s what-ifs):');
+  t.whatIf.forEach((w) => L.push(`    ${pct(w.conversionRate)} conversion -> ${capTxt(w.cap, w.status)}`));
+  if (t.current) {
+    const c = t.current;
+    L.push(`  Your current cap of ${c.cap} tasks: ${money(c.costPerFreeUserMonth)} per free user a month, ${money(c.costPerPaidAccount)} of free-tier cost behind each new paid account,`);
+    L.push(`    paid back in ${c.paybackMonths === null ? 'never (no margin per paid account)' : c.paybackMonths < 0.1 ? 'under 0.1 months' : (Math.round(c.paybackMonths * 10) / 10) + ' months'}: ${c.withinTarget ? 'within' : 'over'} your ${f.payback}-month target`);
+  }
+  if (t.modelFree) L.push(`  The free tier in your model runs ${Math.round(t.modelFree.tasksPerActiveUser)} tasks per active free user a month.`);
+}
+
 function render(r) {
+  if (r.mode === 'free-tier-limit') {
+    const L = ['', 'AAJ - AI FREE-TIER COST LIMIT', '-'.repeat(66)];
+    renderLimit(r.freeTierLimit, L);
+    return L.join('\n');
+  }
   const L = [];
   const n = r.normal, s = r.spike, b = r.breakEven;
   const per = r.plan.basis === 'seat' ? 'seat' : 'account';
@@ -417,6 +523,7 @@ function render(r) {
     L.push('BIGGEST LEVERS (all-in margin per account, per month)');
     r.levers.forEach((l, i) => L.push(`  ${i + 1}. ${l.label}: ${l.move} -> +${money(l.gain)} (${pct(l.marginAfter)} margin). ${l.caveat}`));
   }
+  if (r.freeTierLimit) { L.push(''); renderLimit(r.freeTierLimit, L); }
   if (r.findings.length) {
     L.push('');
     L.push('CHECKS');
@@ -474,4 +581,4 @@ function main() {
 
 if (require.main === module) main();
 
-module.exports = { build, scenario, normalise, usageBreakEven, priceFor, STALE_DAYS, DEFAULT_SPIKE, LEVER };
+module.exports = { build, scenario, normalise, usageBreakEven, priceFor, freeTierLimit, STALE_DAYS, DEFAULT_SPIKE, LEVER };

@@ -5,10 +5,11 @@ description: >-
   inference cost, or to set included usage, overage and free-tier limits. Also
   use when the user mentions inference cost, token cost, LLM cost per user,
   gross margin on an AI feature, usage-based or credit pricing, model routing,
-  or "are our power users losing us money". Produces cost
-  per task and per user, all-in margin per account at normal and spike usage,
+  "are our power users losing us money", or "how much free usage can we
+  afford". Produces cost per task and per user, all-in margin per account at normal and spike usage,
   break-even price and usage, a verdict against the founder's own target, and
-  the biggest margin levers.
+  the biggest margin levers; or the largest free-tier usage cap the founder's
+  own conversion rate and payback target can afford.
 license: MIT
 metadata:
   publisher: AAJ
@@ -27,6 +28,7 @@ metadata:
   outputs: Inference cost per task and per active user, all-in margin per paid account at normal and spike usage, break-even price and usage, free-tier cost per paid account, a healthy/thin/underwater verdict, and the top three margin levers.
   related_aaj:
     - https://aajconsult.com/tools/ai-inference-cost-modeler
+    - https://aajconsult.com/tools/free-tier-cost-limit-calculator
     - https://aajconsult.com/playbooks/marketing-ai-products-playbook
     - https://aajconsult.com/tools/pricing-arpu-modeler
     - https://aajconsult.com/tools/unit-economics-calculator
@@ -61,7 +63,8 @@ Price an AI product from the cost of one task upward. Inference cost per task is
 4. **Read the spike and the usage break-even.** If an account loses money at the spike, the usage terms (included tasks, overage, caps) need work before the price does.
 5. **Check overage.** An overage price below the cost of a task after fees loses money on every extra task.
 6. **Rank the levers** the engine returns and present the top two or three, with their trade-offs.
-7. **Hand off.** Price ladders and tiers go to `pricing-and-packaging`; LTV, CAC and payback go to `unit-economics`.
+7. **Size the free tier, if there is one.** Add `freeTierLimit` with the user's free-to-paid conversion rate, how long free users stay on free, and their payback target. The engine returns the most tasks per active free user a month that target can afford, and checks the current cap.
+8. **Hand off.** Price ladders and tiers go to `pricing-and-packaging`; LTV, CAC and payback go to `unit-economics`.
 
 ## The math
 
@@ -81,6 +84,18 @@ underwater = loses money at normal usage
 
 The spike and the usage break-even scale paid usage only; the free tier stays at its normal level.
 
+**Free-tier limit.** The free tier is paid for by the free users who convert. The engine turns the user's own conversion rate and payback target into a usage cap:
+
+```
+budget per free user  = conversion rate x margin per paid account a month x payback target (months)
+inference per month   = budget per free user / months on free - other cost per free user a month
+cap (tasks a month)   = inference per month / (active share x share of the cap used x cost per task), rounded down
+current cap check     = (active share x share used x current cap x cost per task + other cost) x months on free
+                        / conversion rate / margin per paid account   ->  months to pay back, vs the target
+```
+
+With a full config, the cost per task is the model's average and the margin per paid account is the margin before free-tier costs; both can be overridden. On its own, `freeTierLimit` needs `costPerTask` and `contributionPerAccount`. The engine also shows the cap at half and one and a half times the conversion rate, because conversion is the least certain input; those two what-ifs are AAJ's choice. The conversion rate, months on free and payback target are the user's own figures, not benchmarks.
+
 ## Run the tool
 
 ```bash
@@ -95,6 +110,8 @@ node resources/inference-pricing.js --help
 - an overage price below the cost of a task after fees;
 - no usage limit, or included usage with no overage price;
 - an account that loses money at the spike.
+
+With `freeTierLimit`, it also returns the free-tier budget per free user, the most tasks per active free user a month, the cap at half and one and a half times the conversion rate, and, for a current cap, the free-tier cost behind each new paid account and how many months of margin repay it. The free AI Free-Tier Cost Limit Calculator at aajconsult.com/tools/free-tier-cost-limit-calculator runs this mode.
 
 Levers are fixed what-if moves (price +10%, 20 points of task share to the cheapest model, -20% tokens per task, -20% included tasks, -20% free-tier usage), ranked by the change in all-in margin per paid account. The demo uses a fictional product and example prices that are not quotes from any provider. The same engine runs in the free AI Inference Cost Modeler at aajconsult.com/tools/ai-inference-cost-modeler.
 
@@ -119,6 +136,7 @@ This skill bundles no price data, on purpose. Every model price comes from the u
 - **Re-check prices older than 90 days.** Providers change prices and models; a stale price makes every number downstream wrong.
 - **Model the heavy account, not just the average.** Averages hide the accounts that lose money; run the spike.
 - **Count the free tier.** It is a real cost carried by paid accounts.
+- **Size the free cap from the user's own conversion.** Never substitute a typical freemium conversion rate; if the user doesn't know theirs, run the what-ifs and say the cap rests on a guess.
 - **Overage must cover cost.** An overage price below cost per task makes heavy users more expensive the more they pay.
 - **Routing is a quality decision first.** Only move tasks to a cheaper model once it has been tested on those tasks.
 - **No benchmark targets.** The target margin is the founder's; do not substitute an "industry" figure.
