@@ -60,6 +60,7 @@ One page per engine: the decision it supports, its inputs and output, setup, whe
 | [Product Launch](product-launch.md) | Execute | How big a launch does this change deserve, is it ready for a date, and what has to happen on which day? |
 | [Referral Program Design](referral-program-design.md) | Design | Would a referral program bring in customers more cheaply than the channel it replaces, and what is the most we can pay in rewards? |
 | [Review Mining](review-mining.md) | Diagnose | What do buyers praise and complain about in our reviews and our rivals', and where can we claim an advantage with proof? |
+| [Saas Growth Efficiency](saas-growth-efficiency.md) | Diagnose | How efficiently is this SaaS company turning spend into growth, by the four numbers investors and boards ask about, and which should we fix first? |
 | [Search Demand Reader](search-demand-reader.md) | Diagnose | Which topics are people already finding us for where better content would win more clicks? |
 | [SEO Content Brief](seo-content-brief.md) | Design | What should this page answer, for which search intent, and is the brief complete enough to hand to a writer? |
 | [SEO GEO AEO Audit](seo-geo-aeo-audit.md) | Diagnose | How ready is this page to rank in search, be cited by AI engines and win direct answers, and what should we fix first? |

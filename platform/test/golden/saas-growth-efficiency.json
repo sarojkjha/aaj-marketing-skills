@@ -1,0 +1,418 @@
+{
+  "engine": "saas-growth-efficiency",
+  "file": "skills/saas-growth-efficiency/resources/growth-efficiency.js",
+  "cases": [
+    {
+      "name": "built-in worked example",
+      "source": "the engine's --demo",
+      "args": [
+        "--demo"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "(no config - demo: Example Co., a fictional company, with invented numbers)",
+        "",
+        "SAAS GROWTH EFFICIENCY",
+        "══════════════════════════════════════════════════════════",
+        "Magic number    0.86x",
+        "  Between 0.5x and 1x: Scale Venture Partners says a company here will probably reach success and cash-flow break-even, but in a relatively capital-inefficient way.",
+        "Burn multiple   1.50x",
+        "  Below 3x and at or under the 2x after a Series A that Sacks uses as a worked example.",
+        "Rule of 40      30  (growth 60% + EBITDA margin -30%)",
+        "  10 points short of Feld's Rule of 40.",
+        "CAC payback     18.7 months",
+        "  Longer than Bessemer's 6-18 month range for SMB customers.",
+        "",
+        "Net new ARR this quarter: $600,000 (revenue change x 4)",
+        "",
+        "FIX FIRST (AAJ's view)",
+        "  Close the Rule of 40 gap: growth alone clears 40, so the gap is the loss margin.",
+        "",
+        "SOURCES",
+        "  Scale Venture Partners (Rory O'Driscoll), \"Magic Number Math\", 2010-04-20: https://www.scalevp.com/blog/magic-number-math",
+        "  David Sacks, \"The Burn Multiple\", 2020-04-23: https://sacks.substack.com/p/the-burn-multiple-51a7e43cb200",
+        "  Brad Feld, \"The Rule of 40% For a Healthy SaaS Company\", 2015-02-03: https://feld.com/archives/2015/02/rule-40-healthy-saas-company/",
+        "  Bessemer Venture Partners, \"10 Laws of Cloud\", 2019-06-19: https://www.bvp.com/atlas/10-laws-of-cloud"
+      ],
+      "stderr": []
+    },
+    {
+      "name": "strong magic number, not burning",
+      "source": "above 1x; burn multiple not meaningful when cash-flow positive",
+      "args": [
+        "{\"revenue\": 500000, \"revenuePrior\": 400000, \"smPrior\": 150000, \"netBurn\": -20000, \"grossMargin\": 0.8, \"segment\": \"enterprise\"}"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "SAAS GROWTH EFFICIENCY",
+        "══════════════════════════════════════════════════════════",
+        "Magic number    2.67x",
+        "  Above 1x: Scale Venture Partners calls this a compelling business investment.",
+        "Burn multiple   not burning",
+        "  Not burning cash this quarter while adding net new ARR: the burn multiple is at or below 0, the direction Sacks says it should move over time.",
+        "CAC payback     5.6 months",
+        "  Within or under Bessemer's 24-36 month range for enterprise customers.",
+        "",
+        "Net new ARR this quarter: $400,000 (revenue change x 4)",
+        "",
+        "FIX FIRST (AAJ's view)",
+        "  Nothing stands out against the sources' own readings. Keep tracking these numbers each quarter; a single quarter can mislead.",
+        "",
+        "NOT COMPUTED",
+        "  Rule of 40: add growthYoY, profitMargin",
+        "",
+        "SOURCES",
+        "  Scale Venture Partners (Rory O'Driscoll), \"Magic Number Math\", 2010-04-20: https://www.scalevp.com/blog/magic-number-math",
+        "  David Sacks, \"The Burn Multiple\", 2020-04-23: https://sacks.substack.com/p/the-burn-multiple-51a7e43cb200",
+        "  Bessemer Venture Partners, \"10 Laws of Cloud\", 2019-06-19: https://www.bvp.com/atlas/10-laws-of-cloud"
+      ],
+      "stderr": []
+    },
+    {
+      "name": "weak magic number puts go-to-market first",
+      "source": "below 0.5x; payback beyond 36 months",
+      "args": [
+        "{\"revenue\": 1030000, \"revenuePrior\": 1000000, \"smPrior\": 400000, \"netBurn\": 600000, \"grossMargin\": 0.7, \"growthYoY\": 0.15, \"profitMargin\": -0.2}"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "SAAS GROWTH EFFICIENCY",
+        "══════════════════════════════════════════════════════════",
+        "Magic number    0.30x",
+        "  Below 0.5x: Scale Venture Partners says a company here has not yet figured out its model.",
+        "Burn multiple   5.00x",
+        "  5x or more: Sacks calls this a terrible burn multiple.",
+        "Rule of 40      -5  (growth 15% + EBITDA margin -20%)",
+        "  45 points short of Feld's Rule of 40.",
+        "CAC payback     57.1 months",
+        "  Over 36 months: Bessemer says growth is often hard to fund here unless customer lifetime value is exceptionally high.",
+        "",
+        "Net new ARR this quarter: $120,000 (revenue change x 4)",
+        "",
+        "FIX FIRST (AAJ's view)",
+        "  Fix go-to-market efficiency first: new revenue is not yet paying back sales and marketing spend, so spending more would raise the burn without fixing it.",
+        "",
+        "SOURCES",
+        "  Scale Venture Partners (Rory O'Driscoll), \"Magic Number Math\", 2010-04-20: https://www.scalevp.com/blog/magic-number-math",
+        "  David Sacks, \"The Burn Multiple\", 2020-04-23: https://sacks.substack.com/p/the-burn-multiple-51a7e43cb200",
+        "  Brad Feld, \"The Rule of 40% For a Healthy SaaS Company\", 2015-02-03: https://feld.com/archives/2015/02/rule-40-healthy-saas-company/",
+        "  Bessemer Venture Partners, \"10 Laws of Cloud\", 2019-06-19: https://www.bvp.com/atlas/10-laws-of-cloud"
+      ],
+      "stderr": []
+    },
+    {
+      "name": "burning with no new ARR",
+      "source": "burn multiple has no value; payback never",
+      "args": [
+        "{\"revenue\": 1000000, \"revenuePrior\": 1000000, \"smPrior\": 300000, \"netBurn\": 500000, \"grossMargin\": 0.75}"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "SAAS GROWTH EFFICIENCY",
+        "══════════════════════════════════════════════════════════",
+        "Magic number    0.00x",
+        "  Below 0.5x: Scale Venture Partners says a company here has not yet figured out its model.",
+        "Burn multiple   n/a",
+        "  Burning cash while net new ARR is zero: the burn multiple has no meaningful value, and it is the worst case it measures.",
+        "CAC payback     never",
+        "  Net new ARR is not positive, so sales and marketing spend is not being paid back.",
+        "",
+        "Net new ARR this quarter: $0 (revenue change x 4)",
+        "",
+        "FIX FIRST (AAJ's view)",
+        "  Fix go-to-market efficiency first: new revenue is not yet paying back sales and marketing spend, so spending more would raise the burn without fixing it.",
+        "",
+        "NOT COMPUTED",
+        "  Rule of 40: add growthYoY, profitMargin",
+        "",
+        "SOURCES",
+        "  Scale Venture Partners (Rory O'Driscoll), \"Magic Number Math\", 2010-04-20: https://www.scalevp.com/blog/magic-number-math",
+        "  David Sacks, \"The Burn Multiple\", 2020-04-23: https://sacks.substack.com/p/the-burn-multiple-51a7e43cb200",
+        "  Bessemer Venture Partners, \"10 Laws of Cloud\", 2019-06-19: https://www.bvp.com/atlas/10-laws-of-cloud"
+      ],
+      "stderr": []
+    },
+    {
+      "name": "high burn multiple puts burn first",
+      "source": "3x or more with a working go-to-market",
+      "args": [
+        "{\"revenue\": 1200000, \"revenuePrior\": 1100000, \"smPrior\": 300000, \"netBurn\": 1500000, \"grossMargin\": 0.75, \"stage\": \"seed\"}"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "SAAS GROWTH EFFICIENCY",
+        "══════════════════════════════════════════════════════════",
+        "Magic number    1.33x",
+        "  Above 1x: Scale Venture Partners calls this a compelling business investment.",
+        "Burn multiple   3.75x",
+        "  3x or more: Sacks says this needs extraordinary investment and may mean product-market fit is not what it appears to be, or there is some other problem in the business.",
+        "CAC payback     12.0 months",
+        "  36 months or under. Bessemer gives about 6-18 months for SMB customers and as long as 24-36 for enterprise.",
+        "",
+        "Net new ARR this quarter: $400,000 (revenue change x 4)",
+        "",
+        "FIX FIRST (AAJ's view)",
+        "  Bring the burn down relative to new ARR first: the go-to-market numbers are workable, but spending outside it is outrunning growth.",
+        "",
+        "NOT COMPUTED",
+        "  Rule of 40: add growthYoY, profitMargin",
+        "",
+        "SOURCES",
+        "  Scale Venture Partners (Rory O'Driscoll), \"Magic Number Math\", 2010-04-20: https://www.scalevp.com/blog/magic-number-math",
+        "  David Sacks, \"The Burn Multiple\", 2020-04-23: https://sacks.substack.com/p/the-burn-multiple-51a7e43cb200",
+        "  Bessemer Venture Partners, \"10 Laws of Cloud\", 2019-06-19: https://www.bvp.com/atlas/10-laws-of-cloud"
+      ],
+      "stderr": []
+    },
+    {
+      "name": "Rule of 40 only, FCF basis",
+      "source": "partial inputs list what the rest need",
+      "args": [
+        "{\"growthYoY\": 0.3, \"profitMargin\": 0.05, \"marginBasis\": \"fcf\"}"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "SAAS GROWTH EFFICIENCY",
+        "══════════════════════════════════════════════════════════",
+        "Rule of 40      35  (growth 30% + FCF margin 5%)",
+        "  5 points short of Feld's Rule of 40. Feld prefers EBITDA as the profit measure; you used free cash flow margin.",
+        "",
+        "FIX FIRST (AAJ's view)",
+        "  Close the Rule of 40 gap: look at growth and margin together.",
+        "",
+        "NOT COMPUTED",
+        "  Magic number: add revenue, revenuePrior, smPrior",
+        "  Burn multiple: add netBurn, netNewArr (or revenue and revenuePrior)",
+        "  CAC payback: add smPrior, grossMargin, netNewArr (or revenue and revenuePrior)",
+        "",
+        "SOURCES",
+        "  Brad Feld, \"The Rule of 40% For a Healthy SaaS Company\", 2015-02-03: https://feld.com/archives/2015/02/rule-40-healthy-saas-company/"
+      ],
+      "stderr": []
+    },
+    {
+      "name": "entered ARR far from revenue change",
+      "source": "the 25% mismatch note",
+      "args": [
+        "{\"revenue\": 1200000, \"revenuePrior\": 1050000, \"smPrior\": 700000, \"netNewArr\": 1000000, \"netBurn\": 900000, \"grossMargin\": 0.75, \"stage\": \"series-b-plus\"}"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "SAAS GROWTH EFFICIENCY",
+        "══════════════════════════════════════════════════════════",
+        "Magic number    0.86x",
+        "  Between 0.5x and 1x: Scale Venture Partners says a company here will probably reach success and cash-flow break-even, but in a relatively capital-inefficient way.",
+        "Burn multiple   0.90x",
+        "  Below 3x. Sacks expects efficiency to keep improving after a Series B, toward 0 over time; he gives no Series B number.",
+        "CAC payback     11.2 months",
+        "  36 months or under. Bessemer gives about 6-18 months for SMB customers and as long as 24-36 for enterprise.",
+        "",
+        "Net new ARR this quarter: $1,000,000 (entered)",
+        "",
+        "FIX FIRST (AAJ's view)",
+        "  Nothing stands out against the sources' own readings. Keep tracking these numbers each quarter; a single quarter can mislead.",
+        "",
+        "CHECK",
+        "  ! The net new ARR you entered ($1,000,000) differs from this quarter's revenue change x 4 ($600,000) by more than 25%. The magic number uses revenue; burn multiple and CAC payback use your ARR. Check which is right.",
+        "",
+        "NOT COMPUTED",
+        "  Rule of 40: add growthYoY, profitMargin",
+        "",
+        "SOURCES",
+        "  Scale Venture Partners (Rory O'Driscoll), \"Magic Number Math\", 2010-04-20: https://www.scalevp.com/blog/magic-number-math",
+        "  David Sacks, \"The Burn Multiple\", 2020-04-23: https://sacks.substack.com/p/the-burn-multiple-51a7e43cb200",
+        "  Bessemer Venture Partners, \"10 Laws of Cloud\", 2019-06-19: https://www.bvp.com/atlas/10-laws-of-cloud"
+      ],
+      "stderr": []
+    },
+    {
+      "name": "rejects a percentage written as a whole number",
+      "source": "rates are fractions",
+      "args": [
+        "{\"growthYoY\": 60, \"profitMargin\": -0.3}"
+      ],
+      "exitCode": 1,
+      "stdout": [],
+      "stderr": [
+        "error: \"growthYoY\" must be a number from -1 to 5 (got 60).",
+        "       Write 60% growth as 0.6. Above 5 (500%) is read as a percentage typed in by mistake.",
+        "",
+        "Run --help for the schema, or --demo for a worked example."
+      ]
+    },
+    {
+      "name": "rejects an unknown field",
+      "source": "strict inputs",
+      "args": [
+        "{\"growthYoY\": 0.6, \"profitMargin\": -0.3, \"arr\": 5}"
+      ],
+      "exitCode": 1,
+      "stdout": [],
+      "stderr": [
+        "error: Unknown field \"arr\".",
+        "       Allowed: revenue, revenuePrior, smPrior, netNewArr, netBurn, grossMargin, growthYoY, profitMargin, marginBasis, stage, segment, currency.",
+        "",
+        "Run --help for the schema, or --demo for a worked example."
+      ]
+    },
+    {
+      "name": "rejects input that computes nothing",
+      "source": "needs at least one metric's inputs",
+      "args": [
+        "{\"revenue\": 1000000}"
+      ],
+      "exitCode": 1,
+      "stdout": [],
+      "stderr": [
+        "error: Not enough to compute any metric.",
+        "       Give revenue, revenuePrior and smPrior for the magic number, or growthYoY and profitMargin for the Rule of 40. See --help.",
+        "",
+        "Run --help for the schema, or --demo for a worked example."
+      ]
+    },
+    {
+      "name": "review: Rule of 40 rounding (57% growth, -17% margin) meets 40",
+      "source": "independent review, Oct 2026",
+      "args": [
+        "{\"growthYoY\": 0.57, \"profitMargin\": -0.17}"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "SAAS GROWTH EFFICIENCY",
+        "══════════════════════════════════════════════════════════",
+        "Rule of 40      40  (growth 57% + EBITDA margin -17%)",
+        "  At or above 40: meets Feld's Rule of 40.",
+        "",
+        "FIX FIRST (AAJ's view)",
+        "  Nothing stands out against the sources' own readings. Keep tracking these numbers each quarter; a single quarter can mislead.",
+        "",
+        "NOT COMPUTED",
+        "  Magic number: add revenue, revenuePrior, smPrior",
+        "  Burn multiple: add netBurn, netNewArr (or revenue and revenuePrior)",
+        "  CAC payback: add smPrior, grossMargin, netNewArr (or revenue and revenuePrior)",
+        "",
+        "SOURCES",
+        "  Brad Feld, \"The Rule of 40% For a Healthy SaaS Company\", 2015-02-03: https://feld.com/archives/2015/02/rule-40-healthy-saas-company/"
+      ],
+      "stderr": []
+    },
+    {
+      "name": "review: 2.5x burn at Series A is above Sacks's example, fix-first says watch",
+      "source": "independent review, Oct 2026",
+      "args": [
+        "{\"revenue\": 1000000, \"revenuePrior\": 900000, \"smPrior\": 400000, \"netBurn\": 1000000, \"stage\": \"series-a\", \"grossMargin\": 0.8}"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "SAAS GROWTH EFFICIENCY",
+        "══════════════════════════════════════════════════════════",
+        "Magic number    1.00x",
+        "  Between 0.5x and 1x: Scale Venture Partners says a company here will probably reach success and cash-flow break-even, but in a relatively capital-inefficient way.",
+        "Burn multiple   2.50x",
+        "  Below 3x, but above the 2x after a Series A that Sacks uses as a worked example. His example is not a cut-off.",
+        "CAC payback     15.0 months",
+        "  36 months or under. Bessemer gives about 6-18 months for SMB customers and as long as 24-36 for enterprise.",
+        "",
+        "Net new ARR this quarter: $400,000 (revenue change x 4)",
+        "",
+        "FIX FIRST (AAJ's view)",
+        "  Nothing crosses a source's hard line, but the burn multiple is above Sacks's worked example for your stage. Watch it over the next quarters.",
+        "",
+        "NOT COMPUTED",
+        "  Rule of 40: add growthYoY, profitMargin",
+        "",
+        "SOURCES",
+        "  Scale Venture Partners (Rory O'Driscoll), \"Magic Number Math\", 2010-04-20: https://www.scalevp.com/blog/magic-number-math",
+        "  David Sacks, \"The Burn Multiple\", 2020-04-23: https://sacks.substack.com/p/the-burn-multiple-51a7e43cb200",
+        "  Bessemer Venture Partners, \"10 Laws of Cloud\", 2019-06-19: https://www.bvp.com/atlas/10-laws-of-cloud"
+      ],
+      "stderr": []
+    },
+    {
+      "name": "review: high burn with no go-to-market inputs does not claim go-to-market is workable",
+      "source": "independent review, Oct 2026",
+      "args": [
+        "{\"netBurn\": 900000, \"netNewArr\": 200000}"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "SAAS GROWTH EFFICIENCY",
+        "══════════════════════════════════════════════════════════",
+        "Burn multiple   4.50x",
+        "  3x or more: Sacks says this needs extraordinary investment and may mean product-market fit is not what it appears to be, or there is some other problem in the business.",
+        "",
+        "Net new ARR this quarter: $200,000 (entered)",
+        "",
+        "FIX FIRST (AAJ's view)",
+        "  Bring the burn down relative to new ARR first: add revenue, revenuePrior, smPrior and grossMargin to check whether go-to-market or other spending is the cause.",
+        "",
+        "NOT COMPUTED",
+        "  Magic number: add revenue, revenuePrior, smPrior",
+        "  Rule of 40: add growthYoY, profitMargin",
+        "  CAC payback: add smPrior, grossMargin, netNewArr (or revenue and revenuePrior)",
+        "",
+        "SOURCES",
+        "  David Sacks, \"The Burn Multiple\", 2020-04-23: https://sacks.substack.com/p/the-burn-multiple-51a7e43cb200"
+      ],
+      "stderr": []
+    },
+    {
+      "name": "review: not burning while revenue falls is not good news",
+      "source": "independent review, Oct 2026",
+      "args": [
+        "{\"revenue\": 900000, \"revenuePrior\": 1000000, \"netBurn\": -50000}"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "SAAS GROWTH EFFICIENCY",
+        "══════════════════════════════════════════════════════════",
+        "Burn multiple   not burning",
+        "  Not burning cash, but net new ARR is negative: the burn multiple has no meaningful value, and not burning while revenue is flat or falling is not the efficiency Sacks describes.",
+        "",
+        "Net new ARR this quarter: -$400,000 (revenue change x 4)",
+        "",
+        "FIX FIRST (AAJ's view)",
+        "  Find out why net new ARR is not positive first: with revenue flat or falling, the efficiency numbers say little until growth returns.",
+        "",
+        "NOT COMPUTED",
+        "  Magic number: add revenue, revenuePrior, smPrior",
+        "  Rule of 40: add growthYoY, profitMargin",
+        "  CAC payback: add smPrior, grossMargin, netNewArr (or revenue and revenuePrior)",
+        "",
+        "SOURCES",
+        "  David Sacks, \"The Burn Multiple\", 2020-04-23: https://sacks.substack.com/p/the-burn-multiple-51a7e43cb200"
+      ],
+      "stderr": []
+    },
+    {
+      "name": "review: mid-market payback at exactly 36 months, no invented mid-market range",
+      "source": "independent review, Oct 2026",
+      "args": [
+        "{\"revenue\": 1100000, \"revenuePrior\": 1000000, \"smPrior\": 400000, \"grossMargin\": 0.3333333333333333, \"segment\": \"mid-market\"}"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "SAAS GROWTH EFFICIENCY",
+        "══════════════════════════════════════════════════════════",
+        "Magic number    1.00x",
+        "  Between 0.5x and 1x: Scale Venture Partners says a company here will probably reach success and cash-flow break-even, but in a relatively capital-inefficient way.",
+        "CAC payback     36.0 months",
+        "  36 months or under. Bessemer gives about 6-18 months for SMB customers and as long as 24-36 for enterprise; it gives no range for mid-market.",
+        "",
+        "Net new ARR this quarter: $400,000 (revenue change x 4)",
+        "",
+        "FIX FIRST (AAJ's view)",
+        "  Nothing stands out against the sources' own readings. Keep tracking these numbers each quarter; a single quarter can mislead.",
+        "",
+        "NOT COMPUTED",
+        "  Burn multiple: add netBurn, netNewArr (or revenue and revenuePrior)",
+        "  Rule of 40: add growthYoY, profitMargin",
+        "",
+        "SOURCES",
+        "  Scale Venture Partners (Rory O'Driscoll), \"Magic Number Math\", 2010-04-20: https://www.scalevp.com/blog/magic-number-math",
+        "  Bessemer Venture Partners, \"10 Laws of Cloud\", 2019-06-19: https://www.bvp.com/atlas/10-laws-of-cloud"
+      ],
+      "stderr": []
+    }
+  ]
+}

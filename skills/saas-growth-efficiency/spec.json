@@ -1,0 +1,10 @@
+{
+  "decision": "How efficiently is this SaaS company turning spend into growth, by the four numbers investors and boards ask about, and which should we fix first?",
+  "limitations": [
+    "One quarter can mislead: a big renewal, a price change or a one-off deal moves every number. Read the trend over several quarters before acting on one.",
+    "The readings are the sources' own words, not AAJ thresholds. Each was written for a context (venture-backed SaaS, a stage, a segment); they are reference points, not pass marks.",
+    "Net new ARR defaults to this quarter's revenue change x 4. Enter your own net new ARR when you track it; the engine flags a gap of more than 25% between the two.",
+    "The fix-first order (go-to-market, then burn, then Rule of 40) is AAJ's view, not something the sources prescribe."
+  ],
+  "review": "The finance lead confirms each input against the books for the same quarter, that net burn and net new ARR cover the same period, and which profit measure the Rule of 40 used."
+}
