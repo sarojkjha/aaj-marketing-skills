@@ -399,6 +399,12 @@ function render(r) {
   L.push('═'.repeat(58));
   L.push(`Target ${money(st.targetCpa)} a customer · ${money(st.weeklyBudget)} a week` +
     (st.testBudget != null ? ` · test budget ${money(st.testBudget)}` : '') + ` · up to ${st.maxWeeks} weeks${(st.defaulted || []).indexOf('maxWeeks') >= 0 ? " (AAJ's default)" : ''}`);
+  {
+    const a = [];
+    if ((st.defaulted || []).indexOf('salesCycleDays') >= 0) a.push('a sales cycle of 0 days');
+    if ((st.defaulted || []).indexOf('minWeeks') >= 0) a.push(`judging after at least ${st.minWeeks} weeks`);
+    if (a.length) L.push(`Assumed (AAJ defaults, not your settings): ${a.join('; ')}.`);
+  }
   L.push(`Read: cost per lead within ±${Math.round(st.precision * 100)}% at ${Math.round(st.confidence * 100)}% confidence → ${r.leadsNeeded} leads per channel${(() => { const d = (st.defaulted || []).filter((k) => k === 'precision' || k === 'confidence'); return d.length ? ` (${d.map((k) => k === 'precision' ? `±${Math.round(st.precision * 100)}%` : `${Math.round(st.confidence * 100)}%`).join(' and ')} ${d.length > 1 ? 'are' : 'is'} AAJ's default${d.length > 1 ? 's' : ''})` : ''; })()}`);
   L.push('');
   if (r.recommendation) {

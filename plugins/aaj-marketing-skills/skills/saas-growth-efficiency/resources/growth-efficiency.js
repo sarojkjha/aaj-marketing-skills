@@ -162,7 +162,7 @@ function run(cfg) {
     else {
       bm.value = tidy(s.netBurn / arr);
       bm.level = bm.value >= BURN_TERRIBLE ? 'terrible' : bm.value >= BURN_HIGH ? 'high' : (bm.reference != null && bm.value > bm.reference) ? 'above-example' : 'within-example';
-      var stageTxt = s.stage === 'seed' ? '3x for a seed-stage company' : s.stage === 'series-a' ? '2x after a Series A' : '2x for an early-stage startup';
+      var stageTxt = s.stage === 'seed' ? '3x for a seed-stage company' : s.stage === 'series-a' ? '2x after a Series A' : '2x for an early-stage startup (stage not stated, so read as early stage)';
       bm.reading = bm.level === 'terrible' ? '5x or more: Sacks calls this a terrible burn multiple.'
         : bm.level === 'high' ? '3x or more: Sacks says this needs extraordinary investment and may mean product-market fit is not what it appears to be, or there is some other problem in the business.'
         : bm.level === 'above-example' ? 'Below 3x, but above the ' + stageTxt + ' that Sacks uses as a worked example. His example is not a cut-off.'
