@@ -29,7 +29,7 @@ No engine needs customer names, emails or other personal data; leave them out.
 
 **Limitations:**
 - The scores are the user's judgements against a written rubric. The engine cannot check them; it can only flag the ones with no evidence and test how much the pick depends on them.
-- Equal weights, the 1-is-out knock-out rule and the 10-point margin for a clear pick are AAJ's defaults, not benchmarks. Change them when the situation calls for it.
+- Equal weights, the 1-is-out rule, and a clear pick needing a 10-point lead and 3 of 5 scores on evidence are AAJ's defaults, not benchmarks.
 - The size check uses the buyer count and contract value the user gives. It only rules out segments too small for the target; it does not judge whether a bigger segment is better.
 - The weight test changes one weight at a time and the evidence test lowers unevidenced scores by one point. A pick that passes both can still be wrong if the evidenced scores are wrong.
 

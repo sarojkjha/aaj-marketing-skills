@@ -36,7 +36,7 @@ metadata:
 
 # Beachhead Segment Selection
 
-A young company with ten possible markets usually tries to serve all of them and wins none. The fix is to pick one segment to win first: a beachhead. The idea comes from Geoffrey Moore's *Crossing the Chasm*. In AAJ's view, the hard part is not agreeing to focus; it is choosing the segment on evidence about buyers rather than on which market sounds biggest or most exciting.
+In AAJ's view, a young company that tries to serve ten markets at once usually wins none of them. The fix is to pick one segment to win first: a beachhead. The idea comes from Geoffrey Moore's *Crossing the Chasm*. In AAJ's view, the hard part is not agreeing to focus; it is choosing the segment on evidence about buyers rather than on which market sounds biggest or most exciting.
 
 This skill makes the choice explicit. Each candidate is scored on five criteria against a written rubric. Any segment that fails one outright is ruled out. The engine picks one, says why the runner-up lost, and checks whether the pick still wins when the weights change or when the scores without evidence turn out to be one point too generous. When the pick is still a guess, it says so, and names the one thing to find out next.
 
@@ -71,7 +71,7 @@ Do not use it to size the market for a pitch deck (`market-sizing`) or to rank i
 
 **The score.** Each 1-5 score maps to 0-100 and the engine takes a weighted mean. Weights are equal by default. That is AAJ's starting point, not a benchmark; change them when one criterion clearly matters more, and say why.
 
-**Is the pick solid?** The engine runs two checks. It doubles and then halves each weight in turn (ten scenarios) and counts how often the pick keeps the lead. A tie counts as losing it. It also lowers each of the pick's unevidenced scores by one and checks whether it still wins. A pick is **clear** only when it leads by at least 10 points, survives every weight change, and survives the evidence check. The 10-point margin is AAJ's rule. Otherwise the verdict is **leaning**.
+**Is the pick solid?** The engine runs two checks. It doubles and then halves each weight in turn (ten scenarios) and counts how often the pick keeps the lead. A tie counts as losing it. It also lowers each of the pick's unevidenced scores by one and checks whether it still wins. A pick is **clear** only when it leads by at least 10 points, survives every weight change, survives the evidence check, and at least 3 of its 5 scores rest on evidence. The 10-point margin and the 3-of-5 rule are AAJ's. Otherwise the verdict is **leaning**. A tie at the top is never a pick, and a weight set to 0 is left out of the weight check, since changing it tests nothing.
 
 **The next piece of evidence.** When the pick is not clear, the engine names the criterion that moves the gap most and lacks evidence, and for which segment. That is the next interview, list or pilot, before committing.
 

@@ -46,6 +46,8 @@
  *   the pick, why the runner-up lost, whether the pick holds when each weight
  *   is doubled or halved and when its unevidenced scores drop by one, a verdict
  *   (clear, leaning, only one left, or none eligible), and the test that would decide it.
+ *   A pick is clear only if it leads by 10+ points, survives both checks, and at
+ *   least 3 of its 5 scores rest on evidence (AAJ's rules).
  */
 
 // --- AAJ arg normalisation ---------------------------------------------------
@@ -76,6 +78,8 @@ var RUBRIC = {
   proof: { 1: 'No conversations with this segment yet', 3: 'Interviews or a pilot', 5: 'Paying customers and references in this segment' }
 };
 var CLEAR_MARGIN = 10;   // points out of 100 the pick must lead by to be called clear
+var CLEAR_EVIDENCE = 3;  // and at least this many of its 5 scores must rest on evidence
+var MAX_WEIGHT = 100;    // weights are relative; this keeps the arithmetic finite
 var MIN_SEGMENTS = 2, MAX_SEGMENTS = 10;
 var TOP_FIELDS = ['segments', 'weights', 'knockout', 'revenueTarget'];
 var SEGMENT_FIELDS = ['name', 'scores', 'evidence', 'accounts', 'acv'];
@@ -98,7 +102,7 @@ function normalise(cfg) {
   var total = 0;
   CRITERIA.forEach(function (c) {
     var v = w[c] == null ? 1 : w[c];
-    if (!isNum(v) || v < 0) throw inputError('Weight "' + c + '" must be 0 or more (got ' + JSON.stringify(w[c]) + ').');
+    if (!isNum(v) || v < 0 || v > MAX_WEIGHT) throw inputError('Weight "' + c + '" must be between 0 and ' + MAX_WEIGHT + ' (got ' + JSON.stringify(w[c]) + ').', 'Weights are relative: 2 means twice as important as 1.');
     weights[c] = v; total += v;
   });
   if (total <= 0) throw inputError('At least one weight must be above 0.');
@@ -131,8 +135,8 @@ function normalise(cfg) {
     unknownFields(ev, CRITERIA, ' in evidence' + where);
     var evidence = {};
     CRITERIA.forEach(function (c) {
-      var t = ev[c] == null ? '' : String(ev[c]).trim();
-      evidence[c] = t;
+      if (ev[c] != null && typeof ev[c] !== 'string') throw inputError('Evidence "' + c + '"' + where + ' must be text: what the score rests on.');
+      evidence[c] = ev[c] == null ? '' : ev[c].trim();
     });
     var accounts = sg.accounts == null ? null : sg.accounts, acv = sg.acv == null ? null : sg.acv;
     if (accounts !== null && (!isNum(accounts) || accounts <= 0)) throw inputError('"accounts"' + where + ' must be a number above 0.');
@@ -187,7 +191,7 @@ function run(cfg) {
   ranked.forEach(function (r, i) { r.rank = i + 1; });
   var eligible = ranked.filter(function (r) { return r.eligible; });
   var out = { weights: s.weights, knockout: s.knockout, revenueTarget: s.revenueTarget, segments: ranked, pick: null, runnerUp: null,
-    rules: { CLEAR_MARGIN: CLEAR_MARGIN, MIN_SEGMENTS: MIN_SEGMENTS, MAX_SEGMENTS: MAX_SEGMENTS } };
+    rules: { CLEAR_MARGIN: CLEAR_MARGIN, CLEAR_EVIDENCE: CLEAR_EVIDENCE, MIN_SEGMENTS: MIN_SEGMENTS, MAX_SEGMENTS: MAX_SEGMENTS, MAX_WEIGHT: MAX_WEIGHT } };
   if (!eligible.length) {
     out.verdict = { level: 'none', headline: 'No segment is ready to be the beachhead',
       body: 'Every candidate fails at least one criterion outright. Fix the weakest criterion of the most promising segment, or look for a narrower segment inside it.' };
@@ -209,6 +213,7 @@ function run(cfg) {
   // Robustness 1: double and halve each weight in turn (ten scenarios).
   var scen = [], held = 0;
   CRITERIA.forEach(function (c) {
+    if (s.weights[c] === 0) return;   // doubling or halving a zero weight tests nothing
     [2, 0.5].forEach(function (f) {
       var w2 = {}; CRITERIA.forEach(function (k) { w2[k] = s.weights[k] * (k === c ? f : 1); });
       if (CRITERIA.every(function (k) { return w2[k] === 0; })) return;
@@ -224,10 +229,14 @@ function run(cfg) {
   var stressed = segs.map(function (sg) {
     if (sg.name !== win.name) return sg;
     var sc = {}; CRITERIA.forEach(function (c) { sc[c] = sg.assumed.indexOf(c) >= 0 ? Math.max(1, sg.scores[c] - 1) : sg.scores[c]; });
-    return { name: sg.name, scores: sc, eligible: sg.eligible };
+    // A score lowered to 1 triggers the knock-out rule, as it would in a real re-score.
+    var out1 = s.knockout && CRITERIA.some(function (c) { return sc[c] === 1; });
+    return { name: sg.name, scores: sc, eligible: sg.eligible && !out1 };
   });
   var sp = pick(stressed, s.weights);
-  out.assumptionTest = { lowered: win.assumed.slice(), pick: sp ? sp.name : null, tied: !!sp && sp.tied, held: holds(sp, win.name),
+  var stressedWin = stressed.filter(function (x) { return x.name === win.name; })[0];
+  out.assumptionTest = { lowered: win.assumed.slice(), pick: sp ? sp.name : null, tied: !!sp && sp.tied, knockedOut: !stressedWin.eligible,
+    held: win.assumed.length === 0 ? null : holds(sp, win.name),
     scoreAfter: scoreOf(stressed.filter(function (x) { return x.name === win.name; })[0].scores, s.weights) };
 
   // The test that would decide it: among criteria that move the gap and lack
@@ -245,35 +254,57 @@ function run(cfg) {
     });
     if (cands.length) {
       var dc = cands[0].criterion;
-      decider = { criterion: dc, segments: [win, ru].filter(function (x) { return x.assumed.indexOf(dc) >= 0; }).map(function (x) { return x.name; }) };
+      decider = { criterion: dc, why: 'gap', segments: [win, ru].filter(function (x) { return x.assumed.indexOf(dc) >= 0; }).map(function (x) { return x.name; }) };
     }
+  }
+  // When the evidence check is what fails, the pick's own unevidenced score that
+  // causes it comes first: one that would drop to 1, else the heaviest one.
+  if (out.assumptionTest.held === false) {
+    var sorted = win.assumed.slice().sort(function (a, b) {
+      return ((out.assumptionTest.knockedOut && win.scores[b] === 2 ? 1 : 0) - (out.assumptionTest.knockedOut && win.scores[a] === 2 ? 1 : 0)) ||
+        (s.weights[b] - s.weights[a]) || (CRITERIA.indexOf(a) - CRITERIA.indexOf(b));
+    });
+    decider = { criterion: sorted[0], why: 'pick', segments: [win.name] };
   }
   if (!decider && win.assumed.length) {
     var dw = win.assumed.slice().sort(function (a, b) { return s.weights[b] - s.weights[a]; })[0];
-    decider = { criterion: dw, segments: [win.name] };
+    decider = { criterion: dw, why: 'heaviest', segments: [win.name] };
   }
   out.decidingCriterion = decider ? decider.criterion : null;
   out.decidingTest = decider;
 
-  var clear = (!ru || out.margin >= CLEAR_MARGIN) && out.weightTest.flips.length === 0 && out.assumptionTest.held;
+  // Ties at the top of the base ranking.
+  var tiedTop = eligible.filter(function (x) { return Math.abs(x.score - win.score) <= 1e-9; }).map(function (x) { return x.name; });
+  out.tiedWith = tiedTop.length > 1 ? tiedTop.slice(1) : [];
+  var lowKnock = !s.knockout ? CRITERIA.filter(function (c) { return win.scores[c] === 1; }) : [];
+  var evidenced = CRITERIA.length - win.assumed.length;
+
   var reasons = [];
-  if (ru && out.margin < CLEAR_MARGIN) reasons.push('it leads ' + ru.name + ' by only ' + out.margin.toFixed(1) + ' points');
+  if (ru && out.margin < CLEAR_MARGIN && !out.tiedWith.length) reasons.push('it leads ' + ru.name + ' by only ' + out.margin.toFixed(1) + ' points');
   if (out.weightTest.flips.length) reasons.push('its lead disappears in ' + out.weightTest.flips.length + ' of ' + out.weightTest.scenarios + ' weight changes');
-  if (!out.assumptionTest.held) reasons.push(out.assumptionTest.tied ? 'it only ties when its unevidenced scores are one point lower'
-    : out.assumptionTest.pick && out.assumptionTest.pick !== win.name ? 'with its unevidenced scores one point lower, ' + out.assumptionTest.pick + ' wins' : 'it relies on scores with no evidence');
-  if (!ru) {
-    var out_ = segs.length - 1;
+  if (out.assumptionTest.held === false) reasons.push(out.assumptionTest.knockedOut ? 'one of its unevidenced scores would drop to 1 and rule it out'
+    : out.assumptionTest.tied ? 'it only ties when its unevidenced scores are one point lower'
+    : 'with its unevidenced scores one point lower, ' + out.assumptionTest.pick + ' wins');
+  if (evidenced < CLEAR_EVIDENCE) reasons.push('only ' + evidenced + ' of its 5 scores rest on evidence');
+  if (lowKnock.length) reasons.push('it scores 1 on ' + lowKnock.map(function (c) { return LABELS[c].toLowerCase(); }).join(' and ') + ', which the knock-out rule (turned off) would rule out; fix that before committing');
+  var WHY = { gap: 'it moves the gap most and is not yet backed by evidence', pick: 'the pick leans on it most, and it has no evidence yet', heaviest: 'it carries the most weight among the scores with no evidence' };
+  var nextTxt = decider ? ' Get evidence on ' + LABELS[decider.criterion].toLowerCase() + ' for ' + decider.segments.join(' and ') + ' first: ' + WHY[decider.why] + '.' : '';
+
+  if (out.tiedWith.length) {
+    out.verdict = { level: 'leaning', headline: 'No pick yet: ' + tiedTop.length + ' segments tie',
+      body: tiedTop.join(', ') + ' score the same (' + win.score.toFixed(1) + '). The scores can\'t separate them.' + (nextTxt || ' Look for the one fact that would: a lost deal, a list that turns out unreachable, a buyer who says no to the price.') };
+  } else if (!ru) {
+    var outN = segs.length - 1;
     out.verdict = { level: 'only', headline: win.name + ' is the only segment left',
-      body: 'The other ' + (out_ === 1 ? 'candidate is' : out_ + ' candidates are') + ' ruled out, so ' + win.name + ' is the default, not a proven choice' +
+      body: 'The other ' + (outN === 1 ? 'candidate is' : outN + ' candidates are') + ' ruled out, so ' + win.name + ' is the default, not a proven choice' +
         (win.assumed.length ? ': ' + win.assumed.length + ' of its 5 scores have no evidence yet.' + (decider ? ' Start with ' + LABELS[decider.criterion].toLowerCase() + '.' : '') : '.') };
-  } else if (clear) {
+  } else if (!reasons.length) {
     out.verdict = { level: 'clear', headline: 'Start with ' + win.name,
-      body: win.name + ' leads' + (ru ? ' ' + ru.name + ' by ' + out.margin.toFixed(1) + ' points' : '') + ', keeps the lead when any weight is doubled or halved' +
-        (win.assumed.length ? ', and still wins with its unevidenced scores one point lower.' : ', and every score rests on evidence.') };
+      body: win.name + ' leads ' + ru.name + ' by ' + out.margin.toFixed(1) + ' points, keeps the lead when any weight is doubled or halved, and ' +
+        (win.assumed.length ? 'still wins with its ' + win.assumed.length + ' unevidenced score' + (win.assumed.length === 1 ? '' : 's') + ' one point lower.' : 'every score rests on evidence.') };
   } else {
     out.verdict = { level: 'leaning', headline: 'Leaning to ' + win.name + ', not settled',
-      body: win.name + ' scores highest, but ' + reasons.join('; ') + '.' +
-        (decider ? ' Get evidence on ' + LABELS[decider.criterion].toLowerCase() + ' for ' + decider.segments.join(' and ') + ' first: it moves the gap most and is not yet backed by evidence.' : '') };
+      body: win.name + ' scores highest, but ' + reasons.join('; ') + '.' + nextTxt };
   }
   return out;
 }
@@ -302,17 +333,20 @@ function render(r) {
   });
   if (r.pick && r.runnerUp) {
     L.push('');
-    L.push(`WHY ${r.runnerUp.toUpperCase()} CAME SECOND (points of the ${r.margin.toFixed(1)}-point gap)`);
+    L.push(r.tiedWith.length ? `${r.pick.toUpperCase()} VS ${r.runnerUp.toUpperCase()} (tied: the points cancel out)` : `WHY ${r.runnerUp.toUpperCase()} CAME SECOND (points of the ${r.margin.toFixed(1)}-point gap)`);
     r.comparison.forEach((x) => L.push(`  ${LBL[x.criterion].padEnd(12)} ${x.pick} vs ${x.runnerUp}   ${x.points >= 0 ? '+' : ''}${x.points.toFixed(1)}`));
   }
   if (r.pick) {
     L.push('');
     L.push('HOW SOLID THE PICK IS');
-    L.push(`  Weights   holds in ${r.weightTest.held} of ${r.weightTest.scenarios} changes (each weight doubled, then halved)` +
+    L.push(`  Weights   holds in ${r.weightTest.held} of ${r.weightTest.scenarios} changes (each non-zero weight doubled, then halved)` +
       (r.weightTest.flips.length ? '; ' + r.weightTest.flips.map((f) => `${f.tied ? 'ties' : f.pick + ' wins'} when ${LBL[f.criterion].toLowerCase()} is ${f.factor === 2 ? 'doubled' : 'halved'}`).join('; ') : ''));
     const p = r.segments.find((s) => s.name === r.pick);
-    L.push(`  Evidence  ${p.assumed.length ? 'unevidenced: ' + p.assumed.map((c) => LBL[c].toLowerCase()).join(', ') + '; with those one point lower, ' + (r.assumptionTest.held ? 'it still wins' : r.assumptionTest.tied ? 'it only ties' : r.assumptionTest.pick + ' wins') : 'every score has evidence'}`);
-    if (r.decidingTest) L.push(`  Next test evidence on ${LBL[r.decidingTest.criterion].toLowerCase()} for ${r.decidingTest.segments.join(' and ')}, before committing`);
+    const A = r.assumptionTest;
+    L.push(`  Evidence  ${p.assumed.length ? 'unevidenced: ' + p.assumed.map((c) => LBL[c].toLowerCase()).join(', ') + '; with those one point lower, ' + (A.held ? 'it still wins' : A.knockedOut ? 'it is ruled out' : A.tied ? 'it only ties' : A.pick + ' wins') : 'every score has evidence'}`);
+    if (r.decidingTest) L.push(r.verdict.level === 'clear'
+      ? `  Worth    evidence on ${LBL[r.decidingTest.criterion].toLowerCase()} for ${r.decidingTest.segments.join(' and ')} to confirm it`
+      : `  Next test evidence on ${LBL[r.decidingTest.criterion].toLowerCase()} for ${r.decidingTest.segments.join(' and ')}, before committing`);
   }
   return L.join('\n');
 }
