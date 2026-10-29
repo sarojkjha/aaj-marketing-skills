@@ -224,6 +224,84 @@
         "}"
       ],
       "stderr": []
+    },
+    {
+      "name": "only the listed channels, no LTV, ACV or margin given",
+      "source": "Oct 29: no silent defaults when Ask AAJ runs the engine",
+      "args": [
+        "{\"mode\":\"budget\",\"budget\":3000,\"onlyListedChannels\":true,\"channels\":[{\"key\":\"linkedin\",\"cpc\":9,\"cvr\":5,\"l2c\":10,\"cap\":5000},{\"key\":\"google\",\"cpc\":4,\"cvr\":6,\"l2c\":10,\"cap\":4000}]}"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "",
+        "AAJ Paid Media Budget Allocator — your channels only",
+        "Mode: budget  ·  Diminishing returns: moderate (0.8)",
+        "",
+        "Channel            Spend     %  Customers      CAC  Marg.CAC  BaseCAC",
+        "---------------------------------------------------------------------",
+        "LinkedIn              $0    0%          0        —    $1,800   $1,800",
+        "Google            $3,000  100%        3.5     $851    $1,067     $667",
+        "---------------------------------------------------------------------",
+        "BLENDED           $3,000  100%        3.5     $851",
+        "",
+        "Not computed, because the input was not given: LTV:CAC (give ltv), ROAS (give acv), CAC payback (give acv and margin).",
+        "• Excluded at this budget (base CAC too high to compete): LinkedIn.",
+        "",
+        "--- JSON ---",
+        "{",
+        "  \"model\": \"saas\",",
+        "  \"mode\": \"budget\",",
+        "  \"diminishingReturns\": \"moderate\",",
+        "  \"totalSpend\": 3000,",
+        "  \"customers\": 3.5,",
+        "  \"blendedCAC\": 851,",
+        "  \"ltvCac\": null,",
+        "  \"roas\": null,",
+        "  \"cacPaybackMonths\": null,",
+        "  \"placeholderChannels\": [],",
+        "  \"ltvCacReference\": {",
+        "    \"figure\": \"LTV:CAC above 3:1\",",
+        "    \"source\": \"David Skok, SaaS Metrics 2.0\",",
+        "    \"url\": \"https://www.forentrepreneurs.com/saas-metrics-2/\"",
+        "  },",
+        "  \"allocation\": [",
+        "    {",
+        "      \"channel\": \"LinkedIn\",",
+        "      \"spend\": 0,",
+        "      \"customers\": 0,",
+        "      \"cac\": null,",
+        "      \"marginalCAC\": 1800,",
+        "      \"baseCAC\": 1800,",
+        "      \"leads\": 0,",
+        "      \"placeholderInputs\": false",
+        "    },",
+        "    {",
+        "      \"channel\": \"Google\",",
+        "      \"spend\": 3000,",
+        "      \"customers\": 3.5,",
+        "      \"cac\": 851,",
+        "      \"marginalCAC\": 1067,",
+        "      \"baseCAC\": 667,",
+        "      \"leads\": 45,",
+        "      \"placeholderInputs\": false",
+        "    }",
+        "  ]",
+        "}"
+      ],
+      "stderr": []
+    },
+    {
+      "name": "only the listed channels, refuses an incomplete channel",
+      "source": "Oct 29: no silent defaults when Ask AAJ runs the engine",
+      "args": [
+        "{\"budget\":3000,\"onlyListedChannels\":true,\"channels\":[{\"key\":\"linkedin\",\"cpc\":9}]}"
+      ],
+      "exitCode": 1,
+      "stdout": [],
+      "stderr": [
+        "channels[0] (linkedin) needs cvr, l2c, cap with \"onlyListedChannels\": every input must be your own.",
+        "Run --help for the input shape."
+      ]
     }
   ]
 }

@@ -92,7 +92,7 @@ The engine prints a per-channel table plus a JSON block you can parse. Always se
 
 ## Channel defaults
 
-The default channel set per business model and placeholder CPC / conversion / close-rate numbers are in `resources/channel-benchmarks.md`. They are AAJ's illustrative defaults, not benchmarks, and aren't traced to a published survey. Say so whenever an output still uses them, and replace them with the client's own numbers before anyone budgets from the result.
+To run on the user's numbers alone, add `"onlyListedChannels": true`: the engine then uses only the channels listed (each needs `cpc`, `cvr`, `l2c` and `cap`, or `cpl`, `l2c` and `cap`), no preset LTV, ACV or margin, and skips LTV:CAC, ROAS or payback when their input is missing. The default channel set per business model and placeholder CPC / conversion / close-rate numbers are in `resources/channel-benchmarks.md`. They are AAJ's illustrative defaults, not benchmarks, and aren't traced to a published survey. Say so whenever an output still uses them, and replace them with the client's own numbers before anyone budgets from the result.
 
 ## Present the result
 
