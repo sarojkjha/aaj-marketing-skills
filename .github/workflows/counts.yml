@@ -17,6 +17,8 @@ jobs:
         with:
           node-version: 20
       - run: node platform/scripts/generate-readme.mjs --check
+      - name: Skill phase and difficulty match the skills site schema
+        run: node platform/scripts/check-frontmatter.mjs
       - name: Versions agree (package, Claude plugin, MCP registry entry, MCP server)
         run: node platform/scripts/check-versions.mjs
       - name: Plugin folder (what the Claude directory scans) is in sync with skills/ and the MCP server

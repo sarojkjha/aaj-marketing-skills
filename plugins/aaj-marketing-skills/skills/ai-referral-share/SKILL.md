@@ -15,7 +15,7 @@ metadata:
   slug: ai-referral-share
   category: SEO, GEO & AEO
   phase: Diagnose
-  difficulty: Beginner
+  difficulty: Starter
   card: >-
     Separates ChatGPT, Perplexity, Gemini and Copilot visits in a GA4 export, and
     says whether they really convert differently.
