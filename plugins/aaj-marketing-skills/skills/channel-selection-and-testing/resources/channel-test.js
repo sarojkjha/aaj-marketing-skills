@@ -192,7 +192,9 @@ function normalise(cfg) {
     minWeeks: cfg.minWeeks == null ? DEFAULT_MIN_WEEKS : cfg.minWeeks,
     precision: cfg.precision == null ? DEFAULT_PRECISION : cfg.precision,
     confidence: cfg.confidence == null ? DEFAULT_CONFIDENCE : cfg.confidence,
-    currency: cfg.currency == null ? '$' : String(cfg.currency).slice(0, 4)
+    currency: cfg.currency == null ? '$' : String(cfg.currency).slice(0, 4),
+    // Settings the user did not give: printed as AAJ's defaults, never as theirs (Oct 29).
+    defaulted: ['maxWeeks', 'minWeeks', 'precision', 'confidence', 'salesCycleDays'].filter(function (k) { return cfg[k] == null; })
   };
   if (!isNum(s.salesCycleDays) || s.salesCycleDays < 0) throw inputError('"salesCycleDays" must be 0 or more.');
   if (!isNum(s.maxWeeks) || s.maxWeeks < 1 || s.maxWeeks > 104) throw inputError('"maxWeeks" must be between 1 and 104.');
@@ -332,7 +334,7 @@ function assess(ch, s, alpha, leadsNeeded) {
     r.level = 'slow';
     r.headline = 'Too slow at this weekly budget';
     r.body = 'Reaching ' + leadsNeeded + ' leads takes about ' + money(spend) + ', which is ' + weeks + ' weeks at ' + money(s.weeklyBudget) +
-      ' a week, longer than the ' + s.maxWeeks + ' you allowed.';
+      ' a week, longer than the ' + s.maxWeeks + (s.defaulted.indexOf('maxWeeks') >= 0 ? '-week default limit.' : ' you allowed.');
     r.options.push({ id: 'raise-weekly', text: 'Spend about ' + money(r.weeklyBudgetForMaxWeeks) + ' a week to finish in ' + s.maxWeeks + ' weeks.' });
   } else {
     r.level = 'testable';
@@ -379,7 +381,7 @@ function run(cfg) {
     }
   }
   return { settings: { targetCpa: s.targetCpa, weeklyBudget: s.weeklyBudget, testBudget: s.testBudget, salesCycleDays: s.salesCycleDays,
-      maxWeeks: s.maxWeeks, minWeeks: s.minWeeks, precision: s.precision, confidence: s.confidence, currency: s.currency },
+      maxWeeks: s.maxWeeks, minWeeks: s.minWeeks, precision: s.precision, confidence: s.confidence, currency: s.currency, defaulted: s.defaulted },
     alpha: alpha, leadsNeeded: leadsNeeded, channels: channels, ranking: ranking, recommendation: recommendation,
     rules: { DEFAULT_PRECISION: DEFAULT_PRECISION, DEFAULT_CONFIDENCE: DEFAULT_CONFIDENCE, DEFAULT_MIN_WEEKS: DEFAULT_MIN_WEEKS,
       DEFAULT_MAX_WEEKS: DEFAULT_MAX_WEEKS, MAX_CHANNELS: MAX_CHANNELS, CLOSE_COST: CLOSE_COST } };
@@ -396,8 +398,14 @@ function render(r) {
   L.push('CHANNEL TEST BUDGET');
   L.push('═'.repeat(58));
   L.push(`Target ${money(st.targetCpa)} a customer · ${money(st.weeklyBudget)} a week` +
-    (st.testBudget != null ? ` · test budget ${money(st.testBudget)}` : '') + ` · up to ${st.maxWeeks} weeks`);
-  L.push(`Read: cost per lead within ±${Math.round(st.precision * 100)}% at ${Math.round(st.confidence * 100)}% confidence → ${r.leadsNeeded} leads per channel`);
+    (st.testBudget != null ? ` · test budget ${money(st.testBudget)}` : '') + ` · up to ${st.maxWeeks} weeks${(st.defaulted || []).indexOf('maxWeeks') >= 0 ? " (AAJ's default)" : ''}`);
+  {
+    const a = [];
+    if ((st.defaulted || []).indexOf('salesCycleDays') >= 0) a.push('a sales cycle of 0 days');
+    if ((st.defaulted || []).indexOf('minWeeks') >= 0) a.push(`judging after at least ${st.minWeeks} weeks`);
+    if (a.length) L.push(`Assumed (AAJ defaults, not your settings): ${a.join('; ')}.`);
+  }
+  L.push(`Read: cost per lead within ±${Math.round(st.precision * 100)}% at ${Math.round(st.confidence * 100)}% confidence → ${r.leadsNeeded} leads per channel${(() => { const d = (st.defaulted || []).filter((k) => k === 'precision' || k === 'confidence'); return d.length ? ` (${d.map((k) => k === 'precision' ? `±${Math.round(st.precision * 100)}%` : `${Math.round(st.confidence * 100)}%`).join(' and ')} ${d.length > 1 ? 'are' : 'is'} AAJ's default${d.length > 1 ? 's' : ''})` : ''; })()}`);
   L.push('');
   if (r.recommendation) {
     L.push('RECOMMENDATION');
@@ -421,7 +429,7 @@ function render(r) {
     L.push(`  Break-even          clicks must become leads at ${pct(c.breakEvenClickToLead, 2)} or better (you entered ${pct(c.clickToLead, 2)})`);
     L.push('');
     L.push(`  Lead read           ${c.leadRead.leads} leads · ${money(c.leadRead.spend)} · ${c.leadRead.weeks} weeks (${money(c.leadRead.perWeek)} a week)`);
-    L.push(`  Customer read       ${c.customerRead.customers} customers · ${money(c.customerRead.spend)} · ${c.customerRead.weeks} weeks${c.customerRead.feasible ? '' : ' - beyond your limits'}`);
+    L.push(`  Customer read       ${c.customerRead.customers} customers · ${money(c.customerRead.spend)} · ${c.customerRead.weeks} weeks${c.customerRead.feasible ? '' : ((st.defaulted || []).indexOf('maxWeeks') >= 0 && st.testBudget == null ? ` - beyond the ${st.maxWeeks}-week default limit` : ' - beyond your limits')}`);
     L.push(`  Zero customers      ${pct(c.zeroCustomerChance, 0)} chance of none by the end of the lead read at your own rates (${pct(c.zeroCustomerChanceOnTarget, 0)} if exactly on target), with every sale closed`);
     L.push('');
     L.push('  STOP RULE - check once a week; stop if you reach this spend with this many leads or fewer:');

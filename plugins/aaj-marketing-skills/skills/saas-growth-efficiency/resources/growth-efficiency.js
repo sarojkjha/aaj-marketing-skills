@@ -113,6 +113,7 @@ function normalise(cfg) {
     grossMargin: num(cfg, 'grossMargin', 0, 1, 'Write 75% as 0.75.'), growthYoY: num(cfg, 'growthYoY', -1, 5, 'Write 60% growth as 0.6. Above 5 (500%) is read as a percentage typed in by mistake.'),
     profitMargin: num(cfg, 'profitMargin', -5, 1, 'Write a 25% loss as -0.25.'),
     marginBasis: cfg.marginBasis == null ? 'ebitda' : cfg.marginBasis,
+    marginBasisGiven: cfg.marginBasis != null,
     stage: cfg.stage == null ? null : cfg.stage, segment: cfg.segment == null ? null : cfg.segment,
     currency: cfg.currency == null ? '$' : String(cfg.currency).slice(0, 4)
   };
@@ -161,7 +162,7 @@ function run(cfg) {
     else {
       bm.value = tidy(s.netBurn / arr);
       bm.level = bm.value >= BURN_TERRIBLE ? 'terrible' : bm.value >= BURN_HIGH ? 'high' : (bm.reference != null && bm.value > bm.reference) ? 'above-example' : 'within-example';
-      var stageTxt = s.stage === 'seed' ? '3x for a seed-stage company' : s.stage === 'series-a' ? '2x after a Series A' : '2x for an early-stage startup';
+      var stageTxt = s.stage === 'seed' ? '3x for a seed-stage company' : s.stage === 'series-a' ? '2x after a Series A' : '2x for an early-stage startup (stage not stated, so read as early stage)';
       bm.reading = bm.level === 'terrible' ? '5x or more: Sacks calls this a terrible burn multiple.'
         : bm.level === 'high' ? '3x or more: Sacks says this needs extraordinary investment and may mean product-market fit is not what it appears to be, or there is some other problem in the business.'
         : bm.level === 'above-example' ? 'Below 3x, but above the ' + stageTxt + ' that Sacks uses as a worked example. His example is not a cut-off.'
@@ -173,7 +174,7 @@ function run(cfg) {
   // Rule of 40
   if (s.growthYoY !== null && s.profitMargin !== null) {
     var r40 = tidy((s.growthYoY + s.profitMargin) * 100);
-    out.metrics.ruleOf40 = { value: r40, growth: s.growthYoY * 100, margin: s.profitMargin * 100, basis: s.marginBasis, source: 'ruleOf40',
+    out.metrics.ruleOf40 = { value: r40, growth: s.growthYoY * 100, margin: s.profitMargin * 100, basis: s.marginBasis, basisGiven: s.marginBasisGiven, source: 'ruleOf40',
       level: r40 >= RULE_OF_40 ? 'meets' : 'below', shortfall: tidy(Math.max(0, RULE_OF_40 - r40)),
       reading: r40 >= RULE_OF_40 ? 'At or above 40: meets Feld\'s Rule of 40.' : (Math.round((RULE_OF_40 - r40) * 10) / 10) + ' points short of Feld\'s Rule of 40.' +
         (s.marginBasis !== 'ebitda' ? ' Feld prefers EBITDA as the profit measure; you used ' + (s.marginBasis === 'fcf' ? 'free cash flow' : 'operating') + ' margin.' : '') };
@@ -238,7 +239,8 @@ function render(r) {
     L.push(`  ${M.burnMultiple.reading}`);
   }
   if (M.ruleOf40) {
-    L.push(`Rule of 40      ${M.ruleOf40.value.toFixed(0)}  (growth ${M.ruleOf40.growth.toFixed(0)}% + ${M.ruleOf40.basis === 'fcf' ? 'FCF' : M.ruleOf40.basis === 'operating' ? 'operating' : 'EBITDA'} margin ${M.ruleOf40.margin.toFixed(0)}%)`);
+    L.push(`Rule of 40      ${M.ruleOf40.value.toFixed(0)}  (growth ${M.ruleOf40.growth.toFixed(0)}% + ${M.ruleOf40.basisGiven === false ? 'profit' : M.ruleOf40.basis === 'fcf' ? 'FCF' : M.ruleOf40.basis === 'operating' ? 'operating' : 'EBITDA'} margin ${M.ruleOf40.margin.toFixed(0)}%)`);
+  if (M.ruleOf40.basisGiven === false) L.push("  Margin basis not stated; read as EBITDA, Feld's preferred measure.");
     L.push(`  ${M.ruleOf40.reading}`);
   }
   if (M.cacPayback) {

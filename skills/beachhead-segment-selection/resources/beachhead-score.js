@@ -143,7 +143,7 @@ function normalise(cfg) {
     if (acv !== null && (!isNum(acv) || acv <= 0)) throw inputError('"acv"' + where + ' must be a number above 0.');
     return { name: name, scores: scores, evidence: evidence, accounts: accounts, acv: acv };
   });
-  return { segments: segments, weights: weights, knockout: cfg.knockout !== false, revenueTarget: target };
+  return { segments: segments, weights: weights, knockout: cfg.knockout !== false, knockoutDefault: cfg.knockout == null, revenueTarget: target };
 }
 
 // Weighted 0-100: each 1-5 score maps to 0-100, then a weighted mean.
@@ -190,7 +190,7 @@ function run(cfg) {
   });
   ranked.forEach(function (r, i) { r.rank = i + 1; });
   var eligible = ranked.filter(function (r) { return r.eligible; });
-  var out = { weights: s.weights, knockout: s.knockout, revenueTarget: s.revenueTarget, segments: ranked, pick: null, runnerUp: null,
+  var out = { weights: s.weights, knockout: s.knockout, knockoutDefault: s.knockoutDefault, revenueTarget: s.revenueTarget, segments: ranked, pick: null, runnerUp: null,
     rules: { CLEAR_MARGIN: CLEAR_MARGIN, CLEAR_EVIDENCE: CLEAR_EVIDENCE, MIN_SEGMENTS: MIN_SEGMENTS, MAX_SEGMENTS: MAX_SEGMENTS, MAX_WEIGHT: MAX_WEIGHT } };
   if (!eligible.length) {
     out.verdict = { level: 'none', headline: 'No segment is ready to be the beachhead',
@@ -319,7 +319,7 @@ function render(r) {
   L.push('BEACHHEAD SEGMENT SCORER');
   L.push('═'.repeat(58));
   const wEqual = C.every((c) => r.weights[c] === r.weights.pain);
-  L.push('Weights: ' + (wEqual ? 'equal (AAJ default)' : C.map((c) => `${LBL[c]} ${r.weights[c]}`).join(', ')) + (r.knockout ? ' · a 1 on any criterion rules a segment out' : ''));
+  L.push('Weights: ' + (wEqual ? 'equal (AAJ default)' : C.map((c) => `${LBL[c]} ${r.weights[c]}`).join(', ')) + (r.knockout ? ' · a 1 on any criterion rules a segment out' + (r.knockoutDefault ? ' (AAJ default)' : '') : ''));
   L.push('');
   L.push(r.verdict.headline.toUpperCase());
   L.push('  ' + r.verdict.body);

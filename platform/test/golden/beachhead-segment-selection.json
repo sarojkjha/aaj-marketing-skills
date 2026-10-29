@@ -14,7 +14,7 @@
         "",
         "BEACHHEAD SEGMENT SCORER",
         "══════════════════════════════════════════════════════════",
-        "Weights: equal (AAJ default) · a 1 on any criterion rules a segment out",
+        "Weights: equal (AAJ default) · a 1 on any criterion rules a segment out (AAJ default)",
         "",
         "LEANING TO INDEPENDENT DENTAL CLINICS, NOT SETTLED",
         "  Independent dental clinics scores highest, but it leads Multi-site dental groups by only 5.0 points; its lead disappears in 2 of 10 weight changes; with its unevidenced scores one point lower, Multi-site dental groups wins. Get evidence on budget for Independent dental clinics first: the pick leans on it most, and it has no evidence yet.",
@@ -54,7 +54,7 @@
       "stdout": [
         "BEACHHEAD SEGMENT SCORER",
         "══════════════════════════════════════════════════════════",
-        "Weights: equal (AAJ default) · a 1 on any criterion rules a segment out",
+        "Weights: equal (AAJ default) · a 1 on any criterion rules a segment out (AAJ default)",
         "",
         "START WITH A",
         "  A leads B by 35.0 points, keeps the lead when any weight is doubled or halved, and every score rests on evidence.",
@@ -87,7 +87,7 @@
       "stdout": [
         "BEACHHEAD SEGMENT SCORER",
         "══════════════════════════════════════════════════════════",
-        "Weights: equal (AAJ default) · a 1 on any criterion rules a segment out",
+        "Weights: equal (AAJ default) · a 1 on any criterion rules a segment out (AAJ default)",
         "",
         "LEANING TO A, NOT SETTLED",
         "  A scores highest, but it leads B by only 5.0 points; its lead disappears in 2 of 10 weight changes; with its unevidenced scores one point lower, B wins. Get evidence on budget for A first: the pick leans on it most, and it has no evidence yet.",
@@ -120,7 +120,7 @@
       "stdout": [
         "BEACHHEAD SEGMENT SCORER",
         "══════════════════════════════════════════════════════════",
-        "Weights: Pain 3, Reach 1, Budget 1, Competition 1, Proof 0 · a 1 on any criterion rules a segment out",
+        "Weights: Pain 3, Reach 1, Budget 1, Competition 1, Proof 0 · a 1 on any criterion rules a segment out (AAJ default)",
         "",
         "LEANING TO A, NOT SETTLED",
         "  A scores highest, but one of its unevidenced scores would drop to 1 and rule it out; only 0 of its 5 scores rest on evidence. Get evidence on reach for A first: the pick leans on it most, and it has no evidence yet.",
@@ -153,7 +153,7 @@
       "stdout": [
         "BEACHHEAD SEGMENT SCORER",
         "══════════════════════════════════════════════════════════",
-        "Weights: equal (AAJ default) · a 1 on any criterion rules a segment out",
+        "Weights: equal (AAJ default) · a 1 on any criterion rules a segment out (AAJ default)",
         "",
         "NO SEGMENT IS READY TO BE THE BEACHHEAD",
         "  Every candidate fails at least one criterion outright. Fix the weakest criterion of the most promising segment, or look for a narrower segment inside it.",
@@ -209,7 +209,7 @@
       "stdout": [
         "BEACHHEAD SEGMENT SCORER",
         "══════════════════════════════════════════════════════════",
-        "Weights: equal (AAJ default) · a 1 on any criterion rules a segment out",
+        "Weights: equal (AAJ default) · a 1 on any criterion rules a segment out (AAJ default)",
         "",
         "B IS THE ONLY SEGMENT LEFT",
         "  The other candidate is ruled out, so B is the default, not a proven choice: 5 of its 5 scores have no evidence yet. Start with pain.",
@@ -237,7 +237,7 @@
       "stdout": [
         "BEACHHEAD SEGMENT SCORER",
         "══════════════════════════════════════════════════════════",
-        "Weights: equal (AAJ default) · a 1 on any criterion rules a segment out",
+        "Weights: equal (AAJ default) · a 1 on any criterion rules a segment out (AAJ default)",
         "",
         "LEANING TO S3, NOT SETTLED",
         "  S3 scores highest, but its lead disappears in 1 of 10 weight changes; one of its unevidenced scores would drop to 1 and rule it out; only 0 of its 5 scores rest on evidence. Get evidence on reach for S3 first: the pick leans on it most, and it has no evidence yet.",
@@ -344,7 +344,7 @@
       "stdout": [
         "BEACHHEAD SEGMENT SCORER",
         "══════════════════════════════════════════════════════════",
-        "Weights: equal (AAJ default) · a 1 on any criterion rules a segment out",
+        "Weights: equal (AAJ default) · a 1 on any criterion rules a segment out (AAJ default)",
         "",
         "NO PICK YET: 2 SEGMENTS TIE",
         "  A, B score the same (75.0). The scores can't separate them. Look for the one fact that would: a lost deal, a list that turns out unreachable, a buyer who says no to the price.",
@@ -377,7 +377,7 @@
       "stdout": [
         "BEACHHEAD SEGMENT SCORER",
         "══════════════════════════════════════════════════════════",
-        "Weights: equal (AAJ default) · a 1 on any criterion rules a segment out",
+        "Weights: equal (AAJ default) · a 1 on any criterion rules a segment out (AAJ default)",
         "",
         "LEANING TO A, NOT SETTLED",
         "  A scores highest, but only 0 of its 5 scores rest on evidence. Get evidence on pain for A and B first: it moves the gap most and is not yet backed by evidence.",
@@ -443,7 +443,7 @@
       "stdout": [
         "BEACHHEAD SEGMENT SCORER",
         "══════════════════════════════════════════════════════════",
-        "Weights: equal (AAJ default) · a 1 on any criterion rules a segment out",
+        "Weights: equal (AAJ default) · a 1 on any criterion rules a segment out (AAJ default)",
         "",
         "LEANING TO A, NOT SETTLED",
         "  A scores highest, but one of its unevidenced scores would drop to 1 and rule it out. Get evidence on reach for A first: the pick leans on it most, and it has no evidence yet.",
@@ -476,7 +476,7 @@
       "stdout": [
         "BEACHHEAD SEGMENT SCORER",
         "══════════════════════════════════════════════════════════",
-        "Weights: Pain 1, Reach 0, Budget 0, Competition 0, Proof 0 · a 1 on any criterion rules a segment out",
+        "Weights: Pain 1, Reach 0, Budget 0, Competition 0, Proof 0 · a 1 on any criterion rules a segment out (AAJ default)",
         "",
         "START WITH A",
         "  A leads B by 75.0 points, keeps the lead when any weight is doubled or halved, and every score rests on evidence.",
