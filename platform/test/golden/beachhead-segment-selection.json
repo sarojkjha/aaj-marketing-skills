@@ -1,0 +1,338 @@
+{
+  "engine": "beachhead-segment-selection",
+  "file": "skills/beachhead-segment-selection/resources/beachhead-score.js",
+  "cases": [
+    {
+      "name": "built-in worked example",
+      "source": "the engine's --demo",
+      "args": [
+        "--demo"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "(no config - demo: Example Co., a fictional company, with invented scores)",
+        "",
+        "BEACHHEAD SEGMENT SCORER",
+        "══════════════════════════════════════════════════════════",
+        "Weights: equal (AAJ default) · a 1 on any criterion rules a segment out",
+        "",
+        "LEANING TO INDEPENDENT DENTAL CLINICS, NOT SETTLED",
+        "  Independent dental clinics scores highest, but it leads Multi-site dental groups by only 5.0 points; its lead disappears in 2 of 10 weight changes; with its unevidenced scores one point lower, Multi-site dental groups wins. Get evidence on budget for Independent dental clinics and Multi-site dental groups first: it moves the gap most and is not yet backed by evidence.",
+        "",
+        "RANKING                           Score  Pa Re Bu Co Pr  Evidence",
+        "   1. Independent dental clinics      60   4  4  3  3  3  3/5",
+        "      Pool $14,400,000 a year; your target needs 4.2% of it",
+        "   2. Multi-site dental groups        55   5  3  4  2  2  1/5",
+        "      Pool $10,800,000 a year; your target needs 5.6% of it",
+        "   3. Physiotherapy practices         50   3  4  2  4  2  1/5",
+        "      Pool $6,000,000 a year; your target needs 10.0% of it",
+        "   4. Veterinary clinics             out   3  3  3  4  1  0/5",
+        "      ✗ Proof scored 1: no conversations with this segment yet.",
+        "      Pool $9,000,000 a year; your target needs 6.7% of it",
+        "",
+        "WHY MULTI-SITE DENTAL GROUPS CAME SECOND (points of the 5.0-point gap)",
+        "  Pain         4 vs 5   -5.0",
+        "  Reach        4 vs 3   +5.0",
+        "  Budget       3 vs 4   -5.0",
+        "  Competition  3 vs 2   +5.0",
+        "  Proof        3 vs 2   +5.0",
+        "",
+        "HOW SOLID THE PICK IS",
+        "  Weights   holds in 8 of 10 changes (each weight doubled, then halved); ties when pain is doubled; ties when budget is doubled",
+        "  Evidence  unevidenced: budget, competition; with those one point lower, Multi-site dental groups wins",
+        "  Next test evidence on budget for Independent dental clinics and Multi-site dental groups, before committing"
+      ],
+      "stderr": []
+    },
+    {
+      "name": "clear pick, all evidence",
+      "source": "a wide margin that survives both checks",
+      "args": [
+        "{\"segments\": [{\"name\": \"A\", \"scores\": {\"pain\": 5, \"reach\": 4, \"budget\": 4, \"competition\": 4, \"proof\": 4}, \"evidence\": {\"pain\": \"x\", \"reach\": \"x\", \"budget\": \"x\", \"competition\": \"x\", \"proof\": \"x\"}}, {\"name\": \"B\", \"scores\": {\"pain\": 3, \"reach\": 3, \"budget\": 3, \"competition\": 3, \"proof\": 2}}]}"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "BEACHHEAD SEGMENT SCORER",
+        "══════════════════════════════════════════════════════════",
+        "Weights: equal (AAJ default) · a 1 on any criterion rules a segment out",
+        "",
+        "START WITH A",
+        "  A leads B by 35.0 points, keeps the lead when any weight is doubled or halved, and every score rests on evidence.",
+        "",
+        "RANKING                           Score  Pa Re Bu Co Pr  Evidence",
+        "   1. A                               80   5  4  4  4  4  5/5",
+        "   2. B                               45   3  3  3  3  2  0/5",
+        "",
+        "WHY B CAME SECOND (points of the 35.0-point gap)",
+        "  Pain         5 vs 3   +10.0",
+        "  Proof        4 vs 2   +10.0",
+        "  Reach        4 vs 3   +5.0",
+        "  Budget       4 vs 3   +5.0",
+        "  Competition  4 vs 3   +5.0",
+        "",
+        "HOW SOLID THE PICK IS",
+        "  Weights   holds in 10 of 10 changes (each weight doubled, then halved)",
+        "  Evidence  every score has evidence",
+        "  Next test evidence on pain for B, before committing"
+      ],
+      "stderr": []
+    },
+    {
+      "name": "leaning: narrow margin and a tie under weights",
+      "source": "ties count as losing the lead",
+      "args": [
+        "{\"segments\": [{\"name\": \"A\", \"scores\": {\"pain\": 4, \"reach\": 4, \"budget\": 3, \"competition\": 3, \"proof\": 3}, \"evidence\": {\"pain\": \"x\", \"reach\": \"x\", \"proof\": \"x\"}}, {\"name\": \"B\", \"scores\": {\"pain\": 5, \"reach\": 3, \"budget\": 4, \"competition\": 2, \"proof\": 2}, \"evidence\": {\"pain\": \"x\"}}]}"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "BEACHHEAD SEGMENT SCORER",
+        "══════════════════════════════════════════════════════════",
+        "Weights: equal (AAJ default) · a 1 on any criterion rules a segment out",
+        "",
+        "LEANING TO A, NOT SETTLED",
+        "  A scores highest, but it leads B by only 5.0 points; its lead disappears in 2 of 10 weight changes; with its unevidenced scores one point lower, B wins. Get evidence on budget for A and B first: it moves the gap most and is not yet backed by evidence.",
+        "",
+        "RANKING                           Score  Pa Re Bu Co Pr  Evidence",
+        "   1. A                               60   4  4  3  3  3  3/5",
+        "   2. B                               55   5  3  4  2  2  1/5",
+        "",
+        "WHY B CAME SECOND (points of the 5.0-point gap)",
+        "  Pain         4 vs 5   -5.0",
+        "  Reach        4 vs 3   +5.0",
+        "  Budget       3 vs 4   -5.0",
+        "  Competition  3 vs 2   +5.0",
+        "  Proof        3 vs 2   +5.0",
+        "",
+        "HOW SOLID THE PICK IS",
+        "  Weights   holds in 8 of 10 changes (each weight doubled, then halved); ties when pain is doubled; ties when budget is doubled",
+        "  Evidence  unevidenced: budget, competition; with those one point lower, B wins",
+        "  Next test evidence on budget for A and B, before committing"
+      ],
+      "stderr": []
+    },
+    {
+      "name": "leaning: wide margin but rests on assumptions",
+      "source": "the evidence test flips it",
+      "args": [
+        "{\"weights\": {\"pain\": 3, \"proof\": 0}, \"segments\": [{\"name\": \"A\", \"scores\": {\"pain\": 5, \"reach\": 2, \"budget\": 3, \"competition\": 3, \"proof\": 2}}, {\"name\": \"B\", \"scores\": {\"pain\": 3, \"reach\": 4, \"budget\": 3, \"competition\": 3, \"proof\": 5}}]}"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "BEACHHEAD SEGMENT SCORER",
+        "══════════════════════════════════════════════════════════",
+        "Weights: Pain 3, Reach 1, Budget 1, Competition 1, Proof 0 · a 1 on any criterion rules a segment out",
+        "",
+        "LEANING TO A, NOT SETTLED",
+        "  A scores highest, but with its unevidenced scores one point lower, B wins. Get evidence on pain for A and B first: it moves the gap most and is not yet backed by evidence.",
+        "",
+        "RANKING                           Score  Pa Re Bu Co Pr  Evidence",
+        "   1. A                               71   5  2  3  3  2  0/5",
+        "   2. B                               54   3  4  3  3  5  0/5",
+        "",
+        "WHY B CAME SECOND (points of the 16.7-point gap)",
+        "  Pain         5 vs 3   +25.0",
+        "  Reach        2 vs 4   -8.3",
+        "  Budget       3 vs 3   +0.0",
+        "  Competition  3 vs 3   +0.0",
+        "  Proof        2 vs 5   +0.0",
+        "",
+        "HOW SOLID THE PICK IS",
+        "  Weights   holds in 10 of 10 changes (each weight doubled, then halved)",
+        "  Evidence  unevidenced: pain, reach, budget, competition, proof; with those one point lower, B wins",
+        "  Next test evidence on pain for A and B, before committing"
+      ],
+      "stderr": []
+    },
+    {
+      "name": "no segment eligible",
+      "source": "every candidate has a 1",
+      "args": [
+        "{\"segments\": [{\"name\": \"A\", \"scores\": {\"pain\": 1, \"reach\": 4, \"budget\": 4, \"competition\": 4, \"proof\": 4}}, {\"name\": \"B\", \"scores\": {\"pain\": 3, \"reach\": 3, \"budget\": 3, \"competition\": 3, \"proof\": 1}}]}"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "BEACHHEAD SEGMENT SCORER",
+        "══════════════════════════════════════════════════════════",
+        "Weights: equal (AAJ default) · a 1 on any criterion rules a segment out",
+        "",
+        "NO SEGMENT IS READY TO BE THE BEACHHEAD",
+        "  Every candidate fails at least one criterion outright. Fix the weakest criterion of the most promising segment, or look for a narrower segment inside it.",
+        "",
+        "RANKING                           Score  Pa Re Bu Co Pr  Evidence",
+        "   1. A                              out   1  4  4  4  4  0/5",
+        "      ✗ Pain scored 1: nice to have; nobody raised it.",
+        "   2. B                              out   3  3  3  3  1  0/5",
+        "      ✗ Proof scored 1: no conversations with this segment yet."
+      ],
+      "stderr": []
+    },
+    {
+      "name": "knock-out rule turned off",
+      "source": "a 1 no longer rules a segment out",
+      "args": [
+        "{\"knockout\": false, \"segments\": [{\"name\": \"A\", \"scores\": {\"pain\": 1, \"reach\": 5, \"budget\": 5, \"competition\": 5, \"proof\": 5}}, {\"name\": \"B\", \"scores\": {\"pain\": 3, \"reach\": 3, \"budget\": 3, \"competition\": 3, \"proof\": 3}}]}"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "BEACHHEAD SEGMENT SCORER",
+        "══════════════════════════════════════════════════════════",
+        "Weights: equal (AAJ default)",
+        "",
+        "START WITH A",
+        "  A leads B by 30.0 points, keeps the lead when any weight is doubled or halved, and still wins with its unevidenced scores one point lower.",
+        "",
+        "RANKING                           Score  Pa Re Bu Co Pr  Evidence",
+        "   1. A                               80   1  5  5  5  5  0/5",
+        "   2. B                               50   3  3  3  3  3  0/5",
+        "",
+        "WHY B CAME SECOND (points of the 30.0-point gap)",
+        "  Pain         1 vs 3   -10.0",
+        "  Reach        5 vs 3   +10.0",
+        "  Budget       5 vs 3   +10.0",
+        "  Competition  5 vs 3   +10.0",
+        "  Proof        5 vs 3   +10.0",
+        "",
+        "HOW SOLID THE PICK IS",
+        "  Weights   holds in 10 of 10 changes (each weight doubled, then halved)",
+        "  Evidence  unevidenced: pain, reach, budget, competition, proof; with those one point lower, it still wins",
+        "  Next test evidence on pain for A and B, before committing"
+      ],
+      "stderr": []
+    },
+    {
+      "name": "only one segment left after the size check",
+      "source": "target bigger than the segment's yearly spend",
+      "args": [
+        "{\"revenueTarget\": 5000000, \"segments\": [{\"name\": \"A\", \"scores\": {\"pain\": 4, \"reach\": 4, \"budget\": 4, \"competition\": 4, \"proof\": 4}, \"accounts\": 100, \"acv\": 10000}, {\"name\": \"B\", \"scores\": {\"pain\": 3, \"reach\": 3, \"budget\": 3, \"competition\": 3, \"proof\": 3}}]}"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "BEACHHEAD SEGMENT SCORER",
+        "══════════════════════════════════════════════════════════",
+        "Weights: equal (AAJ default) · a 1 on any criterion rules a segment out",
+        "",
+        "B IS THE ONLY SEGMENT LEFT",
+        "  The other candidate is ruled out, so B is the default, not a proven choice: 5 of its 5 scores have no evidence yet. Start with pain.",
+        "",
+        "RANKING                           Score  Pa Re Bu Co Pr  Evidence",
+        "   1. B                               50   3  3  3  3  3  0/5",
+        "   2. A                              out   4  4  4  4  4  0/5",
+        "      ✗ Too small: your revenue target is 5x everything this segment spends on it in a year.",
+        "      Pool $1,000,000 a year; your target needs 500.0% of it",
+        "",
+        "HOW SOLID THE PICK IS",
+        "  Weights   holds in 10 of 10 changes (each weight doubled, then halved)",
+        "  Evidence  unevidenced: pain, reach, budget, competition, proof; with those one point lower, it still wins",
+        "  Next test evidence on pain for B, before committing"
+      ],
+      "stderr": []
+    },
+    {
+      "name": "ten segments",
+      "source": "the maximum",
+      "args": [
+        "{\"segments\": [{\"name\": \"S0\", \"scores\": {\"pain\": 1, \"reach\": 1, \"budget\": 1, \"competition\": 2, \"proof\": 2}}, {\"name\": \"S1\", \"scores\": {\"pain\": 2, \"reach\": 3, \"budget\": 4, \"competition\": 3, \"proof\": 3}}, {\"name\": \"S2\", \"scores\": {\"pain\": 3, \"reach\": 5, \"budget\": 2, \"competition\": 4, \"proof\": 4}}, {\"name\": \"S3\", \"scores\": {\"pain\": 4, \"reach\": 2, \"budget\": 5, \"competition\": 5, \"proof\": 5}}, {\"name\": \"S4\", \"scores\": {\"pain\": 5, \"reach\": 4, \"budget\": 3, \"competition\": 1, \"proof\": 2}}, {\"name\": \"S5\", \"scores\": {\"pain\": 1, \"reach\": 1, \"budget\": 1, \"competition\": 2, \"proof\": 3}}, {\"name\": \"S6\", \"scores\": {\"pain\": 2, \"reach\": 3, \"budget\": 4, \"competition\": 3, \"proof\": 4}}, {\"name\": \"S7\", \"scores\": {\"pain\": 3, \"reach\": 5, \"budget\": 2, \"competition\": 4, \"proof\": 5}}, {\"name\": \"S8\", \"scores\": {\"pain\": 4, \"reach\": 2, \"budget\": 5, \"competition\": 5, \"proof\": 2}}, {\"name\": \"S9\", \"scores\": {\"pain\": 5, \"reach\": 4, \"budget\": 3, \"competition\": 1, \"proof\": 3}}]}"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "BEACHHEAD SEGMENT SCORER",
+        "══════════════════════════════════════════════════════════",
+        "Weights: equal (AAJ default) · a 1 on any criterion rules a segment out",
+        "",
+        "LEANING TO S3, NOT SETTLED",
+        "  S3 scores highest, but its lead disappears in 1 of 10 weight changes; with its unevidenced scores one point lower, S7 wins. Get evidence on reach for S3 and S7 first: it moves the gap most and is not yet backed by evidence.",
+        "",
+        "RANKING                           Score  Pa Re Bu Co Pr  Evidence",
+        "   1. S3                              80   4  2  5  5  5  0/5",
+        "   2. S7                              70   3  5  2  4  5  0/5",
+        "   3. S2                              65   3  5  2  4  4  0/5",
+        "   4. S8                              65   4  2  5  5  2  0/5",
+        "   5. S6                              55   2  3  4  3  4  0/5",
+        "   6. S1                              50   2  3  4  3  3  0/5",
+        "   7. S9                             out   5  4  3  1  3  0/5",
+        "      ✗ Competition scored 1: an entrenched leader and a costly switch.",
+        "   8. S4                             out   5  4  3  1  2  0/5",
+        "      ✗ Competition scored 1: an entrenched leader and a costly switch.",
+        "   9. S5                             out   1  1  1  2  3  0/5",
+        "      ✗ Pain scored 1: nice to have; nobody raised it.",
+        "      ✗ Reach scored 1: no list or channel to reach them.",
+        "      ✗ Budget scored 1: no one owns a budget for this.",
+        "  10. S0                             out   1  1  1  2  2  0/5",
+        "      ✗ Pain scored 1: nice to have; nobody raised it.",
+        "      ✗ Reach scored 1: no list or channel to reach them.",
+        "      ✗ Budget scored 1: no one owns a budget for this.",
+        "",
+        "WHY S7 CAME SECOND (points of the 10.0-point gap)",
+        "  Reach        2 vs 5   -15.0",
+        "  Budget       5 vs 2   +15.0",
+        "  Pain         4 vs 3   +5.0",
+        "  Competition  5 vs 4   +5.0",
+        "  Proof        5 vs 5   +0.0",
+        "",
+        "HOW SOLID THE PICK IS",
+        "  Weights   holds in 9 of 10 changes (each weight doubled, then halved); S7 wins when reach is doubled",
+        "  Evidence  unevidenced: pain, reach, budget, competition, proof; with those one point lower, S7 wins",
+        "  Next test evidence on reach for S3 and S7, before committing"
+      ],
+      "stderr": []
+    },
+    {
+      "name": "rejects a missing score",
+      "source": "every criterion must be scored",
+      "args": [
+        "{\"segments\": [{\"name\": \"A\", \"scores\": {\"pain\": 5, \"reach\": 4, \"budget\": 4, \"competition\": 4, \"proof\": 4}}, {\"name\": \"B\", \"scores\": {\"pain\": 3}}]}"
+      ],
+      "exitCode": 1,
+      "stdout": [],
+      "stderr": [
+        "error: Missing score \"reach\" on segment \"B\".",
+        "       Score every criterion 1 to 5; see --help for the rubric.",
+        "",
+        "Run --help for the schema and the rubric, or --demo for a worked example."
+      ]
+    },
+    {
+      "name": "rejects a half score",
+      "source": "scores are whole numbers",
+      "args": [
+        "{\"segments\": [{\"name\": \"A\", \"scores\": {\"pain\": 5, \"reach\": 4, \"budget\": 4, \"competition\": 4, \"proof\": 4}}, {\"name\": \"B\", \"scores\": {\"pain\": 3, \"reach\": 3, \"budget\": 3, \"competition\": 3, \"proof\": 2.5}}]}"
+      ],
+      "exitCode": 1,
+      "stdout": [],
+      "stderr": [
+        "error: Score \"proof\" on segment \"B\" must be a whole number from 1 to 5 (got 2.5).",
+        "",
+        "Run --help for the schema and the rubric, or --demo for a worked example."
+      ]
+    },
+    {
+      "name": "rejects an unknown field",
+      "source": "strict inputs",
+      "args": [
+        "{\"segments\": [{\"name\": \"A\", \"scores\": {\"pain\": 5, \"reach\": 4, \"budget\": 4, \"competition\": 4, \"proof\": 4}, \"pains\": 3}, {\"name\": \"B\", \"scores\": {\"pain\": 3, \"reach\": 3, \"budget\": 3, \"competition\": 3, \"proof\": 3}}]}"
+      ],
+      "exitCode": 1,
+      "stdout": [],
+      "stderr": [
+        "error: Unknown field \"pains\" on segment \"A\".",
+        "       Allowed: name, scores, evidence, accounts, acv.",
+        "",
+        "Run --help for the schema and the rubric, or --demo for a worked example."
+      ]
+    },
+    {
+      "name": "rejects a single segment",
+      "source": "a choice needs at least two",
+      "args": [
+        "{\"segments\": [{\"name\": \"A\", \"scores\": {\"pain\": 5, \"reach\": 4, \"budget\": 4, \"competition\": 4, \"proof\": 4}}]}"
+      ],
+      "exitCode": 1,
+      "stdout": [],
+      "stderr": [
+        "error: Give \"segments\": a list of 2 to 10 candidates.",
+        "",
+        "Run --help for the schema and the rubric, or --demo for a worked example."
+      ]
+    }
+  ]
+}

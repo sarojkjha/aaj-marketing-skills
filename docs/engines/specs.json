@@ -596,6 +596,60 @@
       "review": "The named reviewer opens every cited document before publish, and the policy owner checks the training-on-inputs setting on the plan itself. Legal or compliance reviews disclosure, data and claims rules for your markets."
     },
     {
+      "id": "beachhead-segment-selection",
+      "slug": "beachhead-segment-selection",
+      "title": "Beachhead Segment Selection",
+      "version": "1.0.0",
+      "phase": "Design",
+      "category": "Strategy & Positioning",
+      "decision": "Which segment, industry or grade level should we win first, and is that choice settled or still resting on assumptions?",
+      "inputs": "Two to ten candidate segments, each scored 1 to 5 on pain, reach, budget, competition and proof against the rubric, with the evidence behind each score where there is some; optionally the number of buyers you could reach and the annual contract value per segment, a revenue target, and weights",
+      "outputs": "Each segment's 0-100 score, knock-outs and evidence coverage; the pick and why the runner-up lost, criterion by criterion; whether the pick holds when each weight is doubled or halved and when its unevidenced scores drop by one; a verdict and the one piece of evidence to get next",
+      "engine": "skills/beachhead-segment-selection/resources/beachhead-score.js",
+      "setup": {
+        "install": "npx skills add sarojkjha/aaj-marketing-skills --skill beachhead-segment-selection",
+        "hosted_mcp": "https://aaj-engines-mcp.sarojkjha10.workers.dev/mcp",
+        "local_mcp": "node platform/mcp/server.mjs (Node 18 or newer)",
+        "runtime": "Node 18 or newer for local runs; none for the hosted server",
+        "agents_listed": [
+          "Claude Code",
+          "Cursor",
+          "OpenAI Codex",
+          "Windsurf",
+          "Cline"
+        ],
+        "agents_tested": [
+          "Claude Code",
+          "OpenAI Codex (Windows, ab-test-significance only)"
+        ]
+      },
+      "acts": {
+        "analyzes_only": true,
+        "network_calls": false,
+        "writes_files": false,
+        "starts_processes": false,
+        "reads_a_file_you_name": false,
+        "agent_writes": null
+      },
+      "data_flow": [
+        {
+          "path": "Skill installed in your agent, or the local MCP server",
+          "where": "The engine runs on your machine and AAJ receives nothing. Your AI agent still sends what you give it to its model provider (Anthropic, OpenAI and so on), under your own account's terms."
+        },
+        {
+          "path": "Hosted MCP server",
+          "where": "Your agent's model provider, as above, plus AAJ's server on Cloudflare, which receives the engine inputs over HTTPS, runs them in memory and keeps no copy. Cloudflare keeps error logs (no inputs) for up to 7 days."
+        }
+      ],
+      "limitations": [
+        "The scores are the user's judgements against a written rubric. The engine cannot check them; it can only flag the ones with no evidence and test how much the pick depends on them.",
+        "Equal weights, the 1-is-out knock-out rule and the 10-point margin for a clear pick are AAJ's defaults, not benchmarks. Change them when the situation calls for it.",
+        "The size check uses the buyer count and contract value the user gives. It only rules out segments too small for the target; it does not judge whether a bigger segment is better.",
+        "The weight test changes one weight at a time and the evidence test lowers unevidenced scores by one point. A pick that passes both can still be wrong if the evidenced scores are wrong."
+      ],
+      "review": "The founder or head of marketing confirms each score against the evidence written beside it, names the runner-up and why it lost, and sets a date to re-score once the next piece of evidence is in."
+    },
+    {
       "id": "brand-voice-definition",
       "slug": "brand-voice-definition",
       "title": "Brand Voice Definition",

@@ -2,7 +2,7 @@
 
 [![Listed on mcpservers.org](https://mcpservers.org/badge.svg)](https://mcpservers.org/servers/sarojkjha/aaj-marketing-skills)
 
-<!-- aaj:n skills -->74<!-- aaj:/n --> marketing skills for AI agents, and **<!-- aaj:n engines -->63<!-- aaj:/n --> of them run real engines**. Each engine is a dependency-free Node script. It takes your numbers and returns a number and a verdict: LTV:CAC and payback, pipeline coverage, A/B significance, budget splits, price ladders, NRR, market size, inference cost.
+<!-- aaj:n skills -->75<!-- aaj:/n --> marketing skills for AI agents, and **<!-- aaj:n engines -->64<!-- aaj:/n --> of them run real engines**. Each engine is a dependency-free Node script. It takes your numbers and returns a number and a verdict: LTV:CAC and payback, pipeline coverage, A/B significance, budget splits, price ladders, NRR, market size, inference cost.
 
 Most marketing skills are writing instructions. They help an agent draft a page, an email or a plan, so keep them. These add the arithmetic underneath. The agent that drafts your pricing page can check whether the price still covers inference cost. The agent that writes the board update can compute the forecast instead of estimating it. Same input, same output, and code you can read.
 
@@ -25,7 +25,7 @@ Built by [Saroj Jha](https://github.com/sarojkjha) / [AAJ](https://aajconsult.co
 - [What a runnable engine means](#what-a-runnable-engine-means)
 - [The catalog](#the-catalog)
 <!-- aaj:begin catalog-contents -->
-  - [Strategy & Positioning](#strategy-positioning) — 12 skills, 9 engines
+  - [Strategy & Positioning](#strategy-positioning) — 13 skills, 10 engines
   - [Research & Personas](#research-personas) — 4 skills, 3 engines
   - [SEO, GEO & AEO](#seo-geo-aeo) — 9 skills, 8 engines
   - [Content & Copy](#content-copy) — 11 skills, 10 engines
@@ -114,8 +114,8 @@ codex plugin add aaj-marketing-skills@aaj
 
 ## Use it from an MCP client
 
-Instead of installing the skills into a project, you can expose all <!-- aaj:n skills -->74<!-- aaj:/n --> skills and
-all <!-- aaj:n engines -->63<!-- aaj:/n --> engines to any MCP client — Claude Desktop, Claude Code, Cursor, Windsurf —
+Instead of installing the skills into a project, you can expose all <!-- aaj:n skills -->75<!-- aaj:/n --> skills and
+all <!-- aaj:n engines -->64<!-- aaj:/n --> engines to any MCP client — Claude Desktop, Claude Code, Cursor, Windsurf —
 as five tools:
 
 | Tool | What it does |
@@ -181,7 +181,7 @@ Vendor MCP servers bring the data; the engines turn it into a verdict. Each reci
 
 ## What a runnable engine means
 
-Most agent skills are instructions. These are too — but <!-- aaj:n engines -->63<!-- aaj:/n --> of them also ship a dependency-free Node script that does the arithmetic and returns a judgement.
+Most agent skills are instructions. These are too — but <!-- aaj:n engines -->64<!-- aaj:/n --> of them also ship a dependency-free Node script that does the arithmetic and returns a judgement.
 
 | | Instruction-only skill | Skill with an engine |
 |---|---|---|
@@ -205,6 +205,7 @@ Every engine accepts `--demo` (a worked example, no config), `--help` (the input
 |---|---|---|---|
 | **E** | [`aaj-marketing-psychology`](skills/aaj-marketing-psychology) | Diagnoses which decision friction blocks the buyer, with a line between persuasion and manipulation. | Design |
 | **E** | [`ai-inference-pricing`](skills/ai-inference-pricing) | Checks that an AI plan's price still covers inference when usage spikes. | Design |
+| **E** | [`beachhead-segment-selection`](skills/beachhead-segment-selection) | Picks the segment to win first from evidence, and says when the pick is still a guess. | Design |
 |  | [`brand-product-context`](skills/brand-product-context) | Builds the shared brand brief every other skill reads first. | Diagnose |
 | **E** | [`campaign-orchestrator`](skills/campaign-orchestrator) | Diagnoses which play applies, then sequences the other skills in order. | Diagnose |
 | **E** | [`competitor-messaging-matrix`](skills/competitor-messaging-matrix) | Reads rival homepages side by side and says which claims are crowded, which are open, and whether your headline blends in. | Diagnose |
@@ -344,6 +345,7 @@ Every runnable engine, and the command to try it:
 | `agent-readiness-audit` | `node .agents/skills/agent-readiness-audit/resources/agent-readiness.js --demo` |
 | `ai-inference-pricing` | `node .agents/skills/ai-inference-pricing/resources/inference-pricing.js --demo` |
 | `ai-marketing-governance` | `node .agents/skills/ai-marketing-governance/resources/ai-governance.js --demo` |
+| `beachhead-segment-selection` | `node .agents/skills/beachhead-segment-selection/resources/beachhead-score.js --demo` |
 | `brand-voice-definition` | `node .agents/skills/brand-voice-definition/resources/voice-derive.js --demo` |
 | `brand-voice-governance` | `node .agents/skills/brand-voice-governance/resources/voice-check.js --demo` |
 | `buying-committee-map` | `node .agents/skills/buying-committee-map/resources/buying-committee.js --demo` |
@@ -405,7 +407,7 @@ Every runnable engine, and the command to try it:
 Every skill is tagged to a phase, and the ordering is deliberate — the catalog refuses to let you execute before you have diagnosed.
 
 - **Diagnose** (<!-- aaj:n phase-diagnose -->20<!-- aaj:/n --> skills) — find out what is actually broken before choosing a fix.
-- **Design** (<!-- aaj:n phase-design -->24<!-- aaj:/n --> skills) — decide the approach, with the trade-offs stated.
+- **Design** (<!-- aaj:n phase-design -->25<!-- aaj:/n --> skills) — decide the approach, with the trade-offs stated.
 - **Execute** (<!-- aaj:n phase-execute -->30<!-- aaj:/n --> skills) — build and ship it.
 
 If you do not know where to start, `campaign-orchestrator` diagnoses which play applies and sequences the rest for you.
