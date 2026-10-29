@@ -92,54 +92,54 @@
       "stderr": []
     },
     {
-      "name": "free-tier limit on its own: cap from conversion and payback, with a current cap",
+      "name": "free-tier limit on its own: cap from conversion and the margin allowance, with a current cap",
       "source": "free-tier limit mode, hand-checked",
       "args": [
-        "{\"freeTierLimit\": {\"conversionRate\": 0.04, \"monthsOnFree\": 3, \"paybackMonths\": 6, \"costPerTask\": 0.004, \"contributionPerAccount\": 120, \"activeShare\": 0.35, \"currentCap\": 40}}"
+        "{\"freeTierLimit\": {\"conversionRate\": 0.04, \"monthsOnFree\": 3, \"marginMonths\": 6, \"costPerTask\": 0.004, \"marginPerConversion\": 120, \"activeShare\": 0.35, \"currentCap\": 40}}"
       ],
       "exitCode": 0,
       "stdout": [
         "",
         "AAJ - AI FREE-TIER COST LIMIT",
         "------------------------------------------------------------------",
-        "FREE-TIER LIMIT (from your conversion and payback target)",
+        "FREE-TIER LIMIT (from your conversion and the margin you allow the free tier)",
         "  Each free user may cost up to $28.80 over 3 months on free",
-        "    = 4% conversion x $120.00 margin a paid account a month x your 6-month payback target",
+        "    = 4% conversion x $120.00 margin a month x 6 months of margin you allow the free tier",
         "  That leaves $9.60 a month for inference per free user",
-        "  Cost of one free task: $0.00400 (entered); margin per paid account: $120.00 (entered)",
+        "  Cost of one free task: $0.00400 (entered). Margin per converted free user: $120.00 (entered).",
         "  MOST THE FREE TIER CAN AFFORD: 6,857 tasks per active free user a month",
-        "    assuming 35% of free users are active and use 100% of the cap",
+        "    a ceiling, not a recommended setting; assumes 35% of free users are active, they use 100% of the cap, and conversion doesn't change with the cap",
         "  If conversion is different (AAJ's what-ifs):",
         "    2% conversion -> 3,428 tasks per active free user a month",
         "    6% conversion -> 10,285 tasks per active free user a month",
-        "  Your current cap of 40 tasks: $0.0560 per free user a month, $4.20 of free-tier cost behind each new paid account,",
-        "    paid back in under 0.1 months: within your 6-month target"
+        "  Your current cap of 40 tasks: $0.0560 per free user a month, $4.20 of free-tier cost behind each converted free user.",
+        "    That is under 0.1 months of their margin: within the 6 you allow."
       ],
       "stderr": []
     },
     {
-      "name": "free-tier limit: a cap that misses the payback target",
+      "name": "free-tier limit: a cap that misses the margin allowance",
       "source": "free-tier limit mode, hand-checked",
       "args": [
-        "{\"freeTierLimit\": {\"conversionRate\": 0.01, \"monthsOnFree\": 6, \"paybackMonths\": 3, \"costPerTask\": 0.05, \"contributionPerAccount\": 40, \"activeShare\": 0.5, \"usedShareOfCap\": 0.6, \"otherCostPerUser\": 0.1, \"currentCap\": 100}}"
+        "{\"freeTierLimit\": {\"conversionRate\": 0.01, \"monthsOnFree\": 6, \"marginMonths\": 3, \"costPerTask\": 0.05, \"marginPerConversion\": 40, \"activeShare\": 0.5, \"usedShareOfCap\": 0.6, \"otherCostPerUser\": 0.1, \"currentCap\": 100}}"
       ],
       "exitCode": 0,
       "stdout": [
         "",
         "AAJ - AI FREE-TIER COST LIMIT",
         "------------------------------------------------------------------",
-        "FREE-TIER LIMIT (from your conversion and payback target)",
+        "FREE-TIER LIMIT (from your conversion and the margin you allow the free tier)",
         "  Each free user may cost up to $1.20 over 6 months on free",
-        "    = 1% conversion x $40.00 margin a paid account a month x your 3-month payback target",
+        "    = 1% conversion x $40.00 margin a month x 3 months of margin you allow the free tier",
         "  That leaves $0.1000 a month for inference per free user after $0.1000 other cost",
-        "  Cost of one free task: $0.0500 (entered); margin per paid account: $40.00 (entered)",
+        "  Cost of one free task: $0.0500 (entered). Margin per converted free user: $40.00 (entered).",
         "  MOST THE FREE TIER CAN AFFORD: 6 tasks per active free user a month",
-        "    assuming 50% of free users are active and use 60% of the cap",
+        "    a ceiling, not a recommended setting; assumes 50% of free users are active, they use 60% of the cap, and conversion doesn't change with the cap",
         "  If conversion is different (AAJ's what-ifs):",
-        "    0.5% conversion -> 0 tasks per active free user a month",
+        "    0.5% conversion -> no room for any free usage",
         "    1.5% conversion -> 13 tasks per active free user a month",
-        "  Your current cap of 100 tasks: $1.60 per free user a month, $960.00 of free-tier cost behind each new paid account,",
-        "    paid back in 24 months: over your 3-month target"
+        "  Your current cap of 100 tasks: $1.60 per free user a month, $960.00 of free-tier cost behind each converted free user.",
+        "    That is 24 months of their margin: over the 3 you allow."
       ],
       "stderr": []
     },
@@ -147,18 +147,18 @@
       "name": "free-tier limit: paid accounts have no margin, so no room",
       "source": "free-tier limit mode, hand-checked",
       "args": [
-        "{\"freeTierLimit\": {\"conversionRate\": 0.05, \"monthsOnFree\": 2, \"paybackMonths\": 12, \"costPerTask\": 0.01, \"contributionPerAccount\": -5}}"
+        "{\"freeTierLimit\": {\"conversionRate\": 0.05, \"monthsOnFree\": 2, \"marginMonths\": 12, \"costPerTask\": 0.01, \"marginPerConversion\": -5}}"
       ],
       "exitCode": 0,
       "stdout": [
         "",
         "AAJ - AI FREE-TIER COST LIMIT",
         "------------------------------------------------------------------",
-        "FREE-TIER LIMIT (from your conversion and payback target)",
-        "  Paid accounts make -$5.00 a month before free-tier costs, so nothing is left to pay for a free tier.",
-        "  Cost of one free task: $0.0100 (entered); margin per paid account: -$5.00 (entered)",
+        "FREE-TIER LIMIT (from your conversion and the margin you allow the free tier)",
+        "  Each converted free user brings -$5.00 a month before free-tier costs, so nothing is left to pay for a free tier.",
+        "  Cost of one free task: $0.0100 (entered). Margin per converted free user: -$5.00 (entered).",
         "  MOST THE FREE TIER CAN AFFORD: no room for any free usage",
-        "    assuming 100% of free users are active and use 100% of the cap",
+        "    a ceiling, not a recommended setting; assumes 100% of free users are active, they use 100% of the cap, and conversion doesn't change with the cap",
         "  If conversion is different (AAJ's what-ifs):",
         "    2.5% conversion -> no room for any free usage",
         "    7.5% conversion -> no room for any free usage"
@@ -166,16 +166,16 @@
       "stderr": []
     },
     {
-      "name": "free-tier limit: rejects a missing payback target",
+      "name": "free-tier limit: rejects a missing margin allowance",
       "source": "free-tier limit mode, hand-checked",
       "args": [
-        "{\"freeTierLimit\": {\"conversionRate\": 0.04, \"monthsOnFree\": 3, \"costPerTask\": 0.004, \"contributionPerAccount\": 120}}"
+        "{\"freeTierLimit\": {\"conversionRate\": 0.04, \"monthsOnFree\": 3, \"costPerTask\": 0.004, \"marginPerConversion\": 120}}"
       ],
       "exitCode": 1,
       "stdout": [],
       "stderr": [
-        "error: Give your payback target in months (\"freeTierLimit.paybackMonths\").",
-        "       Your own target: how many months of a paid account's margin the free tier may use up. Not a benchmark.",
+        "error: Give months of margin you allow the free tier (\"freeTierLimit.marginMonths\").",
+        "       Your own choice: how many months of a new paying customer's margin you are willing to spend on the free tier. Keep it separate from what you allow for acquisition (CAC payback). Not a benchmark.",
         "",
         "Run --help for the schema, or --demo for a worked example."
       ]
@@ -184,13 +184,13 @@
       "name": "free-tier limit: rejects an unknown field",
       "source": "free-tier limit mode, hand-checked",
       "args": [
-        "{\"freeTierLimit\": {\"conversionRate\": 0.04, \"monthsOnFree\": 3, \"paybackMonths\": 6, \"costPerTask\": 0.004, \"contributionPerAccount\": 120, \"cap\": 40}}"
+        "{\"freeTierLimit\": {\"conversionRate\": 0.04, \"monthsOnFree\": 3, \"marginMonths\": 6, \"costPerTask\": 0.004, \"marginPerConversion\": 120, \"cap\": 40}}"
       ],
       "exitCode": 1,
       "stdout": [],
       "stderr": [
         "error: Unknown field \"freeTierLimit.cap\".",
-        "       Allowed: conversionRate, monthsOnFree, paybackMonths, costPerTask, contributionPerAccount, activeShare, usedShareOfCap, otherCostPerUser, currentCap.",
+        "       Allowed: conversionRate, monthsOnFree, marginMonths, costPerTask, marginPerConversion, activeShare, usedShareOfCap, otherCostPerUser, currentCap.",
         "",
         "Run --help for the schema, or --demo for a worked example."
       ]
@@ -199,7 +199,7 @@
       "name": "free-tier limit with the full model: cost per task and margin from the model",
       "source": "free-tier limit mode, hand-checked",
       "args": [
-        "{\"today\": \"2026-10-10\", \"plan\": {\"basis\": \"seat\", \"price\": 25, \"usersPerAccount\": 8, \"activeShare\": 0.75, \"includedTasks\": 1500, \"overagePrice\": 0.02}, \"models\": [{\"name\": \"Large model (example price, not a quote)\", \"inputPerM\": 4, \"outputPerM\": 16, \"share\": 0.4, \"checked\": \"2026-09-15\"}, {\"name\": \"Small model (example price, not a quote)\", \"inputPerM\": 0.3, \"outputPerM\": 1.2, \"share\": 0.6, \"checked\": \"2026-05-20\"}], \"tasks\": [{\"name\": \"Meeting summary\", \"perActiveUser\": 60, \"inputTokens\": 18000, \"outputTokens\": 1200}, {\"name\": \"Follow-up email draft\", \"perActiveUser\": 120, \"inputTokens\": 2500, \"outputTokens\": 500}, {\"name\": \"Transcription (per meeting)\", \"perActiveUser\": 60, \"costPerTask\": 0.03, \"checked\": \"2026-09-15\"}], \"freeTier\": {\"users\": 4000, \"activeShare\": 0.35, \"usageShare\": 0.3, \"capTasks\": 40, \"paidAccounts\": 120}, \"otherCosts\": {\"hostingPerAccount\": 6, \"supportPct\": 0.04, \"paymentPct\": 0.03}, \"targetMargin\": 0.7, \"spikeMultiplier\": 2.5, \"freeTierLimit\": {\"conversionRate\": 0.03, \"monthsOnFree\": 4, \"paybackMonths\": 3, \"activeShare\": 0.35, \"usedShareOfCap\": 0.5, \"currentCap\": 40}}"
+        "{\"today\": \"2026-10-10\", \"plan\": {\"basis\": \"seat\", \"price\": 25, \"usersPerAccount\": 8, \"activeShare\": 0.75, \"includedTasks\": 1500, \"overagePrice\": 0.02}, \"models\": [{\"name\": \"Large model (example price, not a quote)\", \"inputPerM\": 4, \"outputPerM\": 16, \"share\": 0.4, \"checked\": \"2026-09-15\"}, {\"name\": \"Small model (example price, not a quote)\", \"inputPerM\": 0.3, \"outputPerM\": 1.2, \"share\": 0.6, \"checked\": \"2026-05-20\"}], \"tasks\": [{\"name\": \"Meeting summary\", \"perActiveUser\": 60, \"inputTokens\": 18000, \"outputTokens\": 1200}, {\"name\": \"Follow-up email draft\", \"perActiveUser\": 120, \"inputTokens\": 2500, \"outputTokens\": 500}, {\"name\": \"Transcription (per meeting)\", \"perActiveUser\": 60, \"costPerTask\": 0.03, \"checked\": \"2026-09-15\"}], \"freeTier\": {\"users\": 4000, \"activeShare\": 0.35, \"usageShare\": 0.3, \"capTasks\": 40, \"paidAccounts\": 120}, \"otherCosts\": {\"hostingPerAccount\": 6, \"supportPct\": 0.04, \"paymentPct\": 0.03}, \"targetMargin\": 0.7, \"spikeMultiplier\": 2.5, \"freeTierLimit\": {\"conversionRate\": 0.03, \"monthsOnFree\": 4, \"marginMonths\": 3, \"activeShare\": 0.35, \"usedShareOfCap\": 0.5, \"currentCap\": 40}}"
       ],
       "exitCode": 0,
       "stdout": [
@@ -234,23 +234,131 @@
         "  2. Route more tasks to the cheaper model: move 20 points of task share from \"Large model (example price, not a quote)\" to \"Small model (example price, not a quote)\" -> +$11.22 (75% margin). Only if the cheaper model does those tasks well enough. Test quality first.",
         "  3. Trim tokens per task: -20% input and output tokens per task (shorter prompts and outputs) -> +$5.40 (72.1% margin). Check output quality holds.",
         "",
-        "FREE-TIER LIMIT (from your conversion and payback target)",
-        "  Each free user may cost up to $13.39 over 4 months on free",
-        "    = 3% conversion x $148.82 margin a paid account a month x your 3-month payback target",
-        "  That leaves $3.35 a month for inference per free user",
-        "  Cost of one free task: $0.0217 (the model's average cost per task); margin per paid account: $148.82 (the model's margin per paid account before free-tier costs)",
-        "  MOST THE FREE TIER CAN AFFORD: 883 tasks per active free user a month",
-        "    assuming 35% of free users are active and use 50% of the cap",
+        "FREE-TIER LIMIT (from your conversion and the margin you allow the free tier)",
+        "  Each free user may cost up to $1.67 over 4 months on free",
+        "    = 3% conversion x $18.60 margin a month x 3 months of margin you allow the free tier",
+        "  That leaves $0.4186 a month for inference per free user",
+        "  Cost of one free task: $0.0217 (the model's average cost per task). Margin per converted free user: $18.60 (the model's margin per seat, assuming each converted free user adds one seat).",
+        "  MOST THE FREE TIER CAN AFFORD: 110 tasks per active free user a month",
+        "    a ceiling, not a recommended setting; assumes 35% of free users are active, they use 50% of the cap, and conversion doesn't change with the cap",
         "  If conversion is different (AAJ's what-ifs):",
-        "    1.5% conversion -> 441 tasks per active free user a month",
-        "    4.5% conversion -> 1,325 tasks per active free user a month",
-        "  Your current cap of 40 tasks: $0.1516 per free user a month, $20.21 of free-tier cost behind each new paid account,",
-        "    paid back in 0.1 months: within your 3-month target",
-        "  The free tier in your model runs 40 tasks per active free user a month.",
+        "    1.5% conversion -> 55 tasks per active free user a month",
+        "    4.5% conversion -> 165 tasks per active free user a month",
+        "  Your current cap of 40 tasks: $0.1516 per free user a month, $20.21 of free-tier cost behind each converted free user.",
+        "    That is 1.1 months of their margin: within the 3 you allow.",
+        "  For comparison, the model above charges the same free tier as $10.10 a month to each paid account: the same cost, seen month by month instead of per converted user. Don't add the two.",
+        "  Seat plan: if a converted free user brings a whole account, enter marginPerConversion for the account instead.",
         "",
         "CHECKS",
         "  !  \"Small model (example price, not a quote)\" prices were checked 143 days ago. Provider prices change; re-check them before you rely on this result. This engine flags anything older than 90 days.",
         "  !  The overage price ($0.0200 a task) is below what an average task costs you after fees ($0.0233). Every task over the included amount loses money."
+      ],
+      "stderr": []
+    },
+    {
+      "name": "free-tier limit: exactly zero budget is no room, not 0 tasks",
+      "source": "free-tier limit review fixes",
+      "args": [
+        "{\"freeTierLimit\": {\"conversionRate\": 0.005, \"monthsOnFree\": 6, \"marginMonths\": 3, \"costPerTask\": 0.05, \"marginPerConversion\": 40, \"otherCostPerUser\": 0.1}}"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "",
+        "AAJ - AI FREE-TIER COST LIMIT",
+        "------------------------------------------------------------------",
+        "FREE-TIER LIMIT (from your conversion and the margin you allow the free tier)",
+        "  Each free user may cost up to $0.6000 over 6 months on free",
+        "    = 0.5% conversion x $40.00 margin a month x 3 months of margin you allow the free tier",
+        "  That leaves $0.00 a month for inference per free user after $0.1000 other cost",
+        "  Cost of one free task: $0.0500 (entered). Margin per converted free user: $40.00 (entered).",
+        "  MOST THE FREE TIER CAN AFFORD: no room for any free usage",
+        "    a ceiling, not a recommended setting; assumes 100% of free users are active, they use 100% of the cap, and conversion doesn't change with the cap",
+        "  If conversion is different (AAJ's what-ifs):",
+        "    0.25% conversion -> no room for any free usage",
+        "    0.75% conversion -> 1 task per active free user a month"
+      ],
+      "stderr": []
+    },
+    {
+      "name": "free-tier limit: zero cost per task and zero current cap",
+      "source": "free-tier limit review fixes",
+      "args": [
+        "{\"freeTierLimit\": {\"conversionRate\": 0.04, \"monthsOnFree\": 3, \"marginMonths\": 6, \"costPerTask\": 0, \"marginPerConversion\": 120, \"currentCap\": 0}}"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "",
+        "AAJ - AI FREE-TIER COST LIMIT",
+        "------------------------------------------------------------------",
+        "FREE-TIER LIMIT (from your conversion and the margin you allow the free tier)",
+        "  Each free user may cost up to $28.80 over 3 months on free",
+        "    = 4% conversion x $120.00 margin a month x 6 months of margin you allow the free tier",
+        "  That leaves $9.60 a month for inference per free user",
+        "  Cost of one free task: $0.00 (entered). Margin per converted free user: $120.00 (entered).",
+        "  MOST THE FREE TIER CAN AFFORD: no practical limit",
+        "    a ceiling, not a recommended setting; assumes 100% of free users are active, they use 100% of the cap, and conversion doesn't change with the cap",
+        "  If conversion is different (AAJ's what-ifs):",
+        "    2% conversion -> no practical limit",
+        "    6% conversion -> no practical limit",
+        "  Your current cap of 0 tasks: $0.00 per free user a month, $0.00 of free-tier cost behind each converted free user.",
+        "    No free-tier cost at this cap."
+      ],
+      "stderr": []
+    },
+    {
+      "name": "free-tier limit with a seat plan and the model's free tier: margin per seat, free-tier defaults from the model",
+      "source": "free-tier limit review fixes",
+      "args": [
+        "{\"plan\": {\"basis\": \"seat\", \"price\": 20, \"usersPerAccount\": 5}, \"tasks\": [{\"name\": \"a\", \"perActiveUser\": 100, \"costPerTask\": 0.01}], \"targetMargin\": 0.5, \"freeTier\": {\"users\": 1000, \"activeShare\": 0.3, \"usageShare\": 0.5, \"capTasks\": 40, \"otherCostPerUser\": 0.05, \"paidAccounts\": 20}, \"freeTierLimit\": {\"conversionRate\": 0.04, \"monthsOnFree\": 3, \"marginMonths\": 6}}"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "",
+        "AAJ - AI INFERENCE COST & USAGE PRICING",
+        "------------------------------------------------------------------",
+        "  HEALTHY AGAINST YOUR TARGET - All-in margin is 86.5% at normal usage, at or above your 50% target, and an account still makes money at 2x usage.",
+        "",
+        "INFERENCE COST",
+        "  a                                     $0.0100 a task  x 100 = $1.00 per active user",
+        "  Per active user: $1.00 a month (100 tasks; $0.0100 average a task)",
+        "",
+        "ONE PAID ACCOUNT, PER MONTH          normal (1x)    spike (2x)",
+        "  Plan revenue                            $100.00        $100.00",
+        "  Overage revenue (0 / 0 tasks)             $0.00          $0.00",
+        "  Inference                                -$5.00        -$10.00",
+        "  Other variable costs                      $0.00          $0.00",
+        "  Margin before free tier              $95.00 95%     $90.00 90%",
+        "  Free tier carried                        -$8.50         -$8.50",
+        "  ALL-IN MARGIN                      $86.50 86.5%   $81.50 81.5%",
+        "",
+        "BREAK-EVENS",
+        "  Break-even price: $2.70 per seat",
+        "  Price for your 50% target: $5.40 per seat",
+        "  Account turns unprofitable: at 18.3x normal usage (1830 tasks per active user a month)",
+        "  Free tier: $170.00 a month, $8.50 per paid account",
+        "",
+        "BIGGEST LEVERS (all-in margin per account, per month)",
+        "  1. Raise the plan price: +10% on the plan price -> +$10.00 (87.7% margin). Check what buyers will pay before you move it.",
+        "  2. Tighten the free tier: -20% usage per free user -> +$1.20 (87.7% margin). May slow free-to-paid conversion.",
+        "",
+        "FREE-TIER LIMIT (from your conversion and the margin you allow the free tier)",
+        "  Each free user may cost up to $4.56 over 3 months on free",
+        "    = 4% conversion x $19.00 margin a month x 6 months of margin you allow the free tier",
+        "  That leaves $1.47 a month for inference per free user after $0.0500 other cost",
+        "  Cost of one free task: $0.0100 (the model's average cost per task). Margin per converted free user: $19.00 (the model's margin per seat, assuming each converted free user adds one seat).",
+        "  MOST THE FREE TIER CAN AFFORD: 490 tasks per active free user a month",
+        "    a ceiling, not a recommended setting; assumes 30% of free users are active, they use 100% of the cap, and conversion doesn't change with the cap",
+        "  If conversion is different (AAJ's what-ifs):",
+        "    2% conversion -> 236 tasks per active free user a month",
+        "    6% conversion -> 743 tasks per active free user a month",
+        "  Your current cap of 40 tasks (the model's free cap): $0.1700 per free user a month, $12.75 of free-tier cost behind each converted free user.",
+        "    That is 0.7 months of their margin: within the 6 you allow.",
+        "  For comparison, the model above charges the same free tier as $8.50 a month to each paid account: the same cost, seen month by month instead of per converted user. Don't add the two.",
+        "  Seat plan: if a converted free user brings a whole account, enter marginPerConversion for the account instead.",
+        "",
+        "CHECKS",
+        "  !  The cost per task for \"a\" have no price-checked date. Provider prices change; record when you checked so you know when to re-check.",
+        "  -  No usage limit on the plan. Inference cost grows with every task while revenue stays flat; the usage break-even shows where an account stops paying."
       ],
       "stderr": []
     }
