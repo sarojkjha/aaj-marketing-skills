@@ -7,7 +7,7 @@ description: >-
   of 40, CAC payback, sales efficiency, capital efficiency, "what will
   investors ask", or "are we growing efficiently". Computes the four numbers
   from figures the founder already has, reads each against what its
-  originator actually wrote with the source linked, and says which to fix
+  source actually wrote, with the link, and says which to fix
   first.
 license: MIT
 metadata:
@@ -18,13 +18,13 @@ metadata:
   difficulty: Intermediate
   card: >-
     Magic number, burn multiple, Rule of 40 and CAC payback, each read against
-    its originator's own words.
+    its source's own words.
   version: 1.0.0
   topic: analytics-budget
   secondary_topics: [gtm-growth-planning, pricing-monetization]
   agents: [Claude Code, Cursor, OpenAI Codex, Windsurf, Cline]
   inputs: One quarter's recurring revenue and the quarter before, last quarter's sales and marketing expense, this quarter's net burn and net new ARR, gross margin, and the last 12 months' revenue growth and profit margin; optionally stage and customer segment
-  outputs: Magic number, burn multiple, Rule of 40 and CAC payback, each with its originator's reading and a link; which to fix first; which metrics could not be computed and what they need
+  outputs: Magic number, burn multiple, Rule of 40 and CAC payback, each with its source's reading and a link; which to fix first; which metrics could not be computed and what they need
   related_aaj:
     - https://aajconsult.com/tools/saas-growth-efficiency-calculator
     - https://aajconsult.com/tools/unit-economics-calculator
@@ -35,9 +35,9 @@ metadata:
 
 # SaaS Growth Efficiency
 
-Four numbers come up whenever an investor or a board asks whether a SaaS company is growing efficiently: the magic number, the burn multiple, the Rule of 40 and CAC payback. Each was coined by a named person or firm, and each has picked up thresholds along the way that its originator never wrote. The commonly quoted 0.75 magic number, for example, is not in Scale Venture Partners' original post.
+Four numbers come up whenever an investor or a board asks whether a SaaS company is growing efficiently: the magic number, the burn multiple, the Rule of 40 and CAC payback. Each has a named source, and each has picked up thresholds along the way that its source never wrote. The commonly quoted 0.75 magic number, for example, is not in Scale Venture Partners' original post.
 
-This skill computes all four from figures a founder already has. It reads each one against what its originator actually wrote, with the source linked, and says which to fix first. AAJ adds no thresholds of its own.
+This skill computes all four from figures a founder already has. It reads each one against what its source actually wrote, with the source linked, and says which to fix first. AAJ adds no thresholds of its own. The CAC payback formula and the fix-first order are AAJ's, and are labelled so.
 
 ## When to use
 
@@ -63,16 +63,18 @@ Rule of 40     revenue growth % + profit margin %, last 12 months
 CAC payback    last quarter's S&M x 12 / (net new ARR x gross margin), in months
 ```
 
+Bessemer defines CAC payback only in words: the months needed to repay sales and marketing spend on a gross-margin basis. The formula above is AAJ's construction of that definition.
+
 Net new ARR defaults to the quarter's revenue change times four. Enter the tracked figure when there is one. The engine flags a gap of more than 25% between the two, which is AAJ's rule.
 
-**The readings, in the originators' own terms.**
+**The readings, in the sources' own terms.**
 
-- **Magic number** (Rory O'Driscoll, Scale Venture Partners, "Magic Number Math", April 2010): above 1x is a compelling business investment. Below 0.5x, the company has not yet figured out its model. In between, it will probably reach success and break-even, but in a relatively capital-inefficient way.
-- **Burn multiple** (David Sacks, "The Burn Multiple", April 2020): about 2x is reasonable for an early-stage startup, about 3x at seed and about 2x after a Series A. At 3x or more, the company needs extraordinary investment and may have a product-market fit problem. 5x is terrible. Over time it should fall toward 0. The post's often-copied five-band table is an image. The engine uses only what the text says.
-- **Rule of 40** (Brad Feld, February 2015): growth rate plus profit should total at least 40%. Feld prefers EBITDA as the profit measure.
-- **CAC payback** (Bessemer Venture Partners, "10 Laws of Cloud", June 2019): about 6-18 months for SMB customers, and as long as 24-36 months for enterprise. Beyond 36 months, growth is often hard to fund unless customer lifetime value is exceptionally high.
+- **Magic number** (Rory O'Driscoll, Scale Venture Partners, "Magic Number Math", April 2010): above 1x is a compelling business investment. Below 0.5x, the company has not yet figured out its model. In between, it will probably reach success and cash-flow break-even, but in a relatively capital-inefficient way.
+- **Burn multiple** (David Sacks, "The Burn Multiple", April 2020): at 3x or more, the company needs extraordinary investment, and product-market fit may not be what it appears to be, or there is some other problem in the business. 5x is terrible. Over time it should fall toward 0. Sacks's worked examples are 2x for an early-stage startup, 3x for a seed-stage company and 2x after a Series A. These are examples, not cut-offs, and the engine says so. He gives no Series B number. The post's often-copied five-band table is an image. The engine uses only what the text says.
+- **Rule of 40** (popularised by Brad Feld, February 2015, who credits an unnamed late-stage investor): growth rate plus profit should total at least 40%. Feld prefers EBITDA as the profit measure.
+- **CAC payback** (Bessemer Venture Partners, "10 Laws of Cloud", June 2019): about 6-18 months for SMB customers, and as long as 24-36 months for enterprise. Beyond 36 months, growth is often hard to fund unless customer lifetime value is exceptionally high. Bessemer gives no mid-market range.
 
-**What to fix first (AAJ's view).** Fix go-to-market efficiency first, then burn, then the Rule of 40. If new revenue does not pay back sales and marketing spend (magic number below 0.5x, or payback beyond 36 months), spending more only raises the burn. If go-to-market works but the burn multiple is 3x or more, spending outside go-to-market is outrunning growth. The Rule of 40 is the outcome of the other two.
+**What to fix first (AAJ's view).** Fix go-to-market efficiency first, then burn, then the Rule of 40. If new revenue does not pay back sales and marketing spend (magic number below 0.5x, or payback beyond 36 months), spending more only raises the burn. If go-to-market works but the burn multiple is 3x or more, spending outside go-to-market is outrunning growth. The Rule of 40 is the outcome of the other two. If net new ARR is not positive while the company is not burning, the engine says to find out why growth stopped first. If nothing crosses a source's hard line but CAC payback is above Bessemer's range for the segment, or the burn multiple is above Sacks's example for the stage, the engine says to watch it.
 
 ## Workflow
 
@@ -80,7 +82,7 @@ Net new ARR defaults to the quarter's revenue change times four. Enter the track
 
 **Step 2 - Run the engine.** Give what you have; each metric computes when its inputs are present, and the output lists what the rest need.
 
-**Step 3 - Read each number against its source.** Use the originator's words, not a threshold from a blog.
+**Step 3 - Read each number against its source.** Use the source's words, not a threshold from a blog.
 
 **Step 4 - Check the trend.** Run the last four quarters. One quarter can mislead.
 
@@ -94,7 +96,7 @@ node resources/growth-efficiency.js '{"revenue":1200000,"revenuePrior":1050000,"
 node resources/growth-efficiency.js --help
 ```
 
-`run(config)` returns each computed metric with its value, level, the originator's reading and the source; net new ARR and where it came from; the fix-first line, labelled as AAJ's view; notes; and the metrics it could not compute with the inputs they need. It rejects unknown fields.
+`run(config)` returns each computed metric with its value, level, the source's reading and the source; net new ARR and where it came from; the fix-first line, labelled as AAJ's view; notes; and the metrics it could not compute with the inputs they need. It rejects unknown fields.
 
 ## Reference
 
@@ -133,4 +135,4 @@ The free browser version is at https://aajconsult.com/tools/saas-growth-efficien
 
 ## Credits
 
-Written by AAJ (aajconsult.com). MIT licensed. The four metrics and their readings are from their originators, cited above and in the engine: Rory O'Driscoll / Scale Venture Partners (magic number), David Sacks (burn multiple), Brad Feld (Rule of 40) and Bessemer Venture Partners (CAC payback).
+Written by AAJ (aajconsult.com). MIT licensed. The four metrics and their readings are from the sources cited above and in the engine: Rory O'Driscoll / Scale Venture Partners (magic number), David Sacks (burn multiple), Brad Feld (Rule of 40, which he popularised) and Bessemer Venture Partners (CAC payback).

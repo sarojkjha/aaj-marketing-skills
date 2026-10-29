@@ -7,7 +7,7 @@
 
 **Inputs:** One quarter's recurring revenue and the quarter before, last quarter's sales and marketing expense, this quarter's net burn and net new ARR, gross margin, and the last 12 months' revenue growth and profit margin; optionally stage and customer segment
 
-**Output:** Magic number, burn multiple, Rule of 40 and CAC payback, each with its originator's reading and a link; which to fix first; which metrics could not be computed and what they need
+**Output:** Magic number, burn multiple, Rule of 40 and CAC payback, each with its source's reading and a link; which to fix first; which metrics could not be computed and what they need
 
 **Setup:**
 - Install the skill: `npx skills add sarojkjha/aaj-marketing-skills --skill saas-growth-efficiency`
@@ -29,7 +29,7 @@ No engine needs customer names, emails or other personal data; leave them out.
 
 **Limitations:**
 - One quarter can mislead: a big renewal, a price change or a one-off deal moves every number. Read the trend over several quarters before acting on one.
-- The readings are the originators' own words, not AAJ thresholds. Each was written for a context (venture-backed SaaS, a stage, a segment); they are reference points, not pass marks.
+- The readings are the sources' own words, not AAJ thresholds. Each was written for a context (venture-backed SaaS, a stage, a segment); they are reference points, not pass marks.
 - Net new ARR defaults to this quarter's revenue change x 4. Enter your own net new ARR when you track it; the engine flags a gap of more than 25% between the two.
 - The fix-first order (go-to-market, then burn, then Rule of 40) is AAJ's view, not something the sources prescribe.
 
