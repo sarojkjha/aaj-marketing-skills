@@ -17,6 +17,7 @@ One page per engine: the decision it supports, its inputs and output, setup, whe
 | [Agent Readiness Audit](agent-readiness-audit.md) | Diagnose | Can an AI agent buying for a customer read, compare and transact with us today, and what blocks it first? |
 | [AI Inference Pricing](ai-inference-pricing.md) | Design | Does our AI plan's price cover inference at normal and spike usage, and what included usage and overage keep us at our target margin? |
 | [AI Marketing Governance](ai-marketing-governance.md) | Execute | Is our team ready to publish AI-drafted marketing work, and does each citation in a draft meet the rules before it ships? |
+| [Beachhead Segment Selection](beachhead-segment-selection.md) | Design | Which segment, industry or grade level should we win first, and is that choice settled or still resting on assumptions? |
 | [Brand Voice Definition](brand-voice-definition.md) | Design | What are the measurable rules of our brand voice, taken from writing we already agree sounds like us? |
 | [Brand Voice Governance](brand-voice-governance.md) | Execute | Does this content follow our brand's own written voice rules, and which blocks must be revised before it ships? |
 | [Buying Committee Map](buying-committee-map.md) | Design | Who has to say yes to this deal, what must each of them believe, and which conversation and asset come next? |

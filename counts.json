@@ -1,9 +1,9 @@
 {
   "$comment": "Generated from skills/ by platform/scripts/generate-readme.mjs (npm run counts). Do not edit by hand: CI fails when this file disagrees with skills/.",
-  "skills": 74,
-  "engines": 63,
+  "skills": 75,
+  "engines": 64,
   "skills_without_engine": 11,
-  "engine_scripts": 63,
+  "engine_scripts": 64,
   "categories": 10,
   "mcp_tools": 5,
   "agents": [
@@ -19,8 +19,8 @@
       "engines": 19
     },
     "Design": {
-      "skills": 24,
-      "engines": 20
+      "skills": 25,
+      "engines": 21
     },
     "Execute": {
       "skills": 30,
@@ -65,17 +65,17 @@
       "engines": 9
     },
     "Strategy & Positioning": {
-      "skills": 12,
-      "engines": 9
+      "skills": 13,
+      "engines": 10
     }
   },
   "phrases": {
-    "headline": "74 marketing skills for AI agents. 63 run real engines.",
-    "short": "74 marketing skills, 63 with runnable engines",
-    "github_about": "The math layer for marketing agents: 74 skills, 63 with deterministic engines that return numbers and a verdict. Keep your writing skills, add the arithmetic. MIT, no API key.",
+    "headline": "75 marketing skills for AI agents. 64 run real engines.",
+    "short": "75 marketing skills, 64 with runnable engines",
+    "github_about": "The math layer for marketing agents: 75 skills, 64 with deterministic engines that return numbers and a verdict. Keep your writing skills, add the arithmetic. MIT, no API key.",
     "product_hunt_tagline": "Marketing skills that do the math for your AI agent",
-    "product_hunt_description": "Open-source marketing skills for AI agents. 63 of the 74 run deterministic engines: LTV:CAC, pipeline coverage, A/B significance, budget splits. Same input, same answer, code you can read. MIT.",
-    "maker_bio": "Founder of AAJ. Marketing for Seed–Series B startups. I maintain 74 open-source marketing skills for AI agents; 63 of them do the math."
+    "product_hunt_description": "Open-source marketing skills for AI agents. 64 of the 75 run deterministic engines: LTV:CAC, pipeline coverage, A/B significance, budget splits. Same input, same answer, code you can read. MIT.",
+    "maker_bio": "Founder of AAJ. Marketing for Seed–Series B startups. I maintain 75 open-source marketing skills for AI agents; 64 of them do the math."
   },
   "catalog": [
     {
@@ -143,6 +143,12 @@
       "engine": true,
       "category": "Content & Copy",
       "phase": "Execute"
+    },
+    {
+      "slug": "beachhead-segment-selection",
+      "engine": true,
+      "category": "Strategy & Positioning",
+      "phase": "Design"
     },
     {
       "slug": "brand-product-context",
