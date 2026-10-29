@@ -66,7 +66,7 @@ To check whether the engines name the brand, use `geo-citation-tracker`. To make
 | DeepSeek | chat.deepseek.com | DeepSeek home page |
 | Grok | grok.com | Grok docs: "available on the web at grok.com" |
 
-The Perplexity page links to perplexity.ai without stating it in its text, and AAJ also counts chat.openai.com and copilot.microsoft.com. These three are the makers' own domains but are not quoted on the cited pages, so the engine marks them as added by AAJ. A row with medium `ai-assistant`, which GA4 sets for AI assistant visits, counts as "Other AI assistant" when its source is not on the list. Add any other assistant with `extra`.
+The Perplexity page links to perplexity.ai without stating it in its text, and AAJ also counts chat.openai.com and copilot.microsoft.com. These three are the makers' own domains but are not quoted on the cited pages, so the engine marks them as added by AAJ. A row with the medium "ai-assistant", which GA4 sets for AI assistant visits, counts as "Other AI assistant" when its source is not on the list. Add any other assistant with `extra`.
 
 **Is the difference real?** The engine compares the assistants with the rest of the site as a ratio of two rates, with an exact interval. It uses sessions with a key event when the export has Session key event rate, because each session then counts once. Otherwise it uses key events per session; one session can trigger several key events, which makes that interval somewhat too narrow, and the engine says so.
 

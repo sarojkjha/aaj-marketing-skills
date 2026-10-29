@@ -2,7 +2,7 @@
 
 [![Listed on mcpservers.org](https://mcpservers.org/badge.svg)](https://mcpservers.org/servers/sarojkjha/aaj-marketing-skills)
 
-<!-- aaj:n skills -->77<!-- aaj:/n --> marketing skills for AI agents, and **<!-- aaj:n engines -->66<!-- aaj:/n --> of them run real engines**. Each engine is a dependency-free Node script. It takes your numbers and returns a number and a verdict: LTV:CAC and payback, pipeline coverage, A/B significance, budget splits, price ladders, NRR, market size, inference cost.
+<!-- aaj:n skills -->81<!-- aaj:/n --> marketing skills for AI agents, and **<!-- aaj:n engines -->66<!-- aaj:/n --> of them run real engines**. Each engine is a dependency-free Node script. It takes your numbers and returns a number and a verdict: LTV:CAC and payback, pipeline coverage, A/B significance, budget splits, price ladders, NRR, market size, inference cost.
 
 Most marketing skills are writing instructions. They help an agent draft a page, an email or a plan, so keep them. These add the arithmetic underneath. The agent that drafts your pricing page can check whether the price still covers inference cost. The agent that writes the board update can compute the forecast instead of estimating it. Same input, same output, and code you can read.
 
@@ -25,16 +25,16 @@ Built by [Saroj Jha](https://github.com/sarojkjha) / [AAJ](https://aajconsult.co
 - [What a runnable engine means](#what-a-runnable-engine-means)
 - [The catalog](#the-catalog)
 <!-- aaj:begin catalog-contents -->
-  - [Strategy & Positioning](#strategy-positioning) — 13 skills, 10 engines
+  - [Strategy & Positioning](#strategy-positioning) — 15 skills, 10 engines
   - [Research & Personas](#research-personas) — 4 skills, 3 engines
   - [SEO, GEO & AEO](#seo-geo-aeo) — 10 skills, 9 engines
   - [Content & Copy](#content-copy) — 11 skills, 10 engines
-  - [Conversion & Web](#conversion-web) — 5 skills, 4 engines
+  - [Conversion & Web](#conversion-web) — 6 skills, 4 engines
   - [Paid Media & Budgeting](#paid-media-budgeting) — 5 skills, 5 engines
   - [Analytics & Experimentation](#analytics-experimentation) — 5 skills, 5 engines
   - [Sales & Pipeline](#sales-pipeline) — 12 skills, 9 engines
   - [Retention & Lifecycle](#retention-lifecycle) — 3 skills, 2 engines
-  - [Growth, Retention & RevOps](#growth-retention-revops) — 9 skills, 9 engines
+  - [Growth, Retention & RevOps](#growth-retention-revops) — 10 skills, 9 engines
 <!-- aaj:end catalog-contents -->
 - [Engines at a glance](#engines-at-a-glance)
 - [Methodology](#methodology)
@@ -114,7 +114,7 @@ codex plugin add aaj-marketing-skills@aaj
 
 ## Use it from an MCP client
 
-Instead of installing the skills into a project, you can expose all <!-- aaj:n skills -->77<!-- aaj:/n --> skills and
+Instead of installing the skills into a project, you can expose all <!-- aaj:n skills -->81<!-- aaj:/n --> skills and
 all <!-- aaj:n engines -->66<!-- aaj:/n --> engines to any MCP client — Claude Desktop, Claude Code, Cursor, Windsurf —
 as five tools:
 
@@ -209,12 +209,14 @@ Every engine accepts `--demo` (a worked example, no config), `--help` (the input
 |  | [`brand-product-context`](skills/brand-product-context) | Builds the shared brand brief every other skill reads first. | Diagnose |
 | **E** | [`campaign-orchestrator`](skills/campaign-orchestrator) | Diagnoses which play applies, then sequences the other skills in order. | Diagnose |
 | **E** | [`competitor-messaging-matrix`](skills/competitor-messaging-matrix) | Reads rival homepages side by side and says which claims are crowded, which are open, and whether your headline blends in. | Diagnose |
+|  | [`gtm-plan-for-investors`](skills/gtm-plan-for-investors) | Builds the GTM story an investor can check, from engine-run numbers. | Design |
 | **E** | [`market-sizing`](skills/market-sizing) | Sizes TAM, SAM and SOM bottom-up, with SOM set by capacity rather than a share of the market. | Diagnose |
 | **E** | [`marketing-maturity-assessment`](skills/marketing-maturity-assessment) | Scores marketing as a system across six dimensions, and names the weak links to fix first for your stage. | Diagnose |
 |  | [`messaging-framework`](skills/messaging-framework) | Structures the message hierarchy beneath the positioning. | Design |
 | **E** | [`positioning-statement`](skills/positioning-statement) | Produces a positioning statement pressure-tested against the competitive alternative. | Design |
 | **E** | [`pricing-and-packaging`](skills/pricing-and-packaging) | Designs tiers with an anchor check and a willingness-to-pay read. | Design |
 | **E** | [`pricing-page-teardown`](skills/pricing-page-teardown) | Scores a pricing page on 21 buyer checks, and says whether a price test can answer the question at your traffic. | Diagnose |
+|  | [`sales-led-vs-self-serve`](skills/sales-led-vs-self-serve) | Chooses self-serve, sales-led or a mix from the buyer and the unit economics, not from fashion. | Design |
 |  | [`value-proposition`](skills/value-proposition) | Sharpens the value proposition into something defensible. | Design |
 
 ### Research & Personas
@@ -264,6 +266,7 @@ Every engine accepts `--demo` (a worked example, no config), `--help` (the input
 |  | [`landing-page-brief`](skills/landing-page-brief) | Specs a landing page before anyone designs it. | Execute |
 | **E** | [`lead-magnet-and-free-tool-design`](skills/lead-magnet-and-free-tool-design) | Scores lead-magnet and free-tool ideas on the job they do against build effort, and judges live ones on qualified leads. | Design |
 | **E** | [`plg-upgrade-prompts`](skills/plg-upgrade-prompts) | Reads each upgrade prompt's funnel with honest intervals and names the prompt and stage to fix first. | Diagnose |
+|  | [`product-demo-strategy`](skills/product-demo-strategy) | Picks the demo format for each buying stage and keeps AI demos honest. | Design |
 | **E** | [`signup-flow-optimizer`](skills/signup-flow-optimizer) | Scores signup friction and ranks what to remove by what it's worth. | Execute |
 | **E** | [`website-conversion-audit`](skills/website-conversion-audit) | Audits a page for conversion friction and grades it. | Diagnose |
 
@@ -319,6 +322,7 @@ Every engine accepts `--demo` (a worked example, no config), `--help` (the input
 | **E** | [`aaj-marketing-loops`](skills/aaj-marketing-loops) | Computes the loop factor, finds the throttling stage, projects users over time. | Design |
 | **E** | [`community-and-dark-social`](skills/community-and-dark-social) | Maps where buyers already talk, decides whether to open your own community, and measures dark social by asking. | Execute |
 | **E** | [`creator-partnerships`](skills/creator-partnerships) | Pays creators for the buyers they reach, not their follower count, and judges the result on what it sold. | Execute |
+|  | [`developer-marketing`](skills/developer-marketing) | Treats docs and the first working call as the marketing, and measures it. | Design |
 | **E** | [`first-marketing-hire`](skills/first-marketing-hire) | Writes the first marketer's scorecard, then scores the panel's evidence and calls hire, no-hire or more evidence. | Design |
 | **E** | [`marketing-leadership-model`](skills/marketing-leadership-model) | Prices in-house, fractional and agency with ramp, search time and your own hours, and says which shape fits. | Diagnose |
 | **E** | [`partnerships-and-co-marketing`](skills/partnerships-and-co-marketing) | Scores partners on audience overlap rather than fame, and judges the result on pipeline. | Execute |
@@ -411,7 +415,7 @@ Every runnable engine, and the command to try it:
 Every skill is tagged to a phase, and the ordering is deliberate — the catalog refuses to let you execute before you have diagnosed.
 
 - **Diagnose** (<!-- aaj:n phase-diagnose -->22<!-- aaj:/n --> skills) — find out what is actually broken before choosing a fix.
-- **Design** (<!-- aaj:n phase-design -->25<!-- aaj:/n --> skills) — decide the approach, with the trade-offs stated.
+- **Design** (<!-- aaj:n phase-design -->29<!-- aaj:/n --> skills) — decide the approach, with the trade-offs stated.
 - **Execute** (<!-- aaj:n phase-execute -->30<!-- aaj:/n --> skills) — build and ship it.
 
 If you do not know where to start, `campaign-orchestrator` diagnoses which play applies and sequences the rest for you.
