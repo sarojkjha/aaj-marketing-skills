@@ -283,7 +283,7 @@ Every engine accepts `--demo` (a worked example, no config), `--help` (the input
 | **E** | [`ab-test-significance`](skills/ab-test-significance) | Checks whether an A/B result is significant, or sizes a test before you run it. | Execute |
 | **E** | [`incrementality-and-mmm`](skills/incrementality-and-mmm) | Designs and reads holdout tests honestly, including whether they could ever have answered. | Diagnose |
 | **E** | [`marketing-report`](skills/marketing-report) | Turns funnel, spend and pipeline numbers into a board-ready narrative. | Execute |
-| **E** | [`saas-growth-efficiency`](skills/saas-growth-efficiency) | Magic number, burn multiple, Rule of 40 and CAC payback, each read against its originator's own words. | Diagnose |
+| **E** | [`saas-growth-efficiency`](skills/saas-growth-efficiency) | Magic number, burn multiple, Rule of 40 and CAC payback, each read against its source's own words. | Diagnose |
 | **E** | [`unit-economics`](skills/unit-economics) | Computes LTV, CAC, payback and the ratio, then returns a verdict against named reference points. | Diagnose |
 
 ### Sales & Pipeline

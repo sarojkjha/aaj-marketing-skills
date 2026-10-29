@@ -5,7 +5,7 @@
  *
  * The four efficiency numbers investors and boards ask about - magic number,
  * burn multiple, Rule of 40 and CAC payback - from figures a founder already
- * has, each read against what its own originator wrote, with the source
+ * has, each read against what its own source wrote, with the source
  * linked. AAJ adds no thresholds of its own; where the popular version of a
  * rule differs from the original (the 0.75 magic number, the five-band burn
  * multiple table), the engine uses the original's text.
@@ -38,12 +38,15 @@
  *   Magic number   (revenue - revenuePrior) x 4 / smPrior
  *   Burn multiple  netBurn / netNewArr
  *   Rule of 40     growthYoY + profitMargin, in percentage points
- *   CAC payback    smPrior x 12 / (netNewArr x grossMargin), in months
+ *   CAC payback    smPrior x 12 / (netNewArr x grossMargin), in months. Bessemer
+ *                  defines payback only in words (months to repay S&M spend on a
+ *                  gross-margin basis); this construction is AAJ's.
  *
- * SOURCES (each metric is read against its originator's own words)
+ * SOURCES (each metric is read against its source's own words)
  *   Magic number   Rory O'Driscoll, Scale Venture Partners, "Magic Number Math", Apr 20, 2010
  *   Burn multiple  David Sacks, "The Burn Multiple", Apr 23, 2020
  *   Rule of 40     Brad Feld, "The Rule of 40% For a Healthy SaaS Company", Feb 3, 2015
+ *                  (Feld popularised it; he credits an unnamed late-stage investor)
  *   CAC payback    Bessemer Venture Partners, "10 Laws of Cloud", Jun 19, 2019
  */
 
@@ -63,7 +66,8 @@ process.argv = process.argv.map((a, i) =>
 'use strict';
 
 /* aaj:core:begin - copied verbatim into any AAJ tool that runs this engine */
-// Every reading below comes from the source named beside it. AAJ adds none of its own.
+// Every reading below comes from the source named beside it. AAJ adds no thresholds of its own;
+// the CAC payback formula and the fix-first order are AAJ's and are labelled so.
 var SOURCES = {
   magicNumber: { who: 'Scale Venture Partners (Rory O\'Driscoll)', title: 'Magic Number Math', date: '2010-04-20', url: 'https://www.scalevp.com/blog/magic-number-math' },
   burnMultiple: { who: 'David Sacks', title: 'The Burn Multiple', date: '2020-04-23', url: 'https://sacks.substack.com/p/the-burn-multiple-51a7e43cb200' },
@@ -72,8 +76,9 @@ var SOURCES = {
 };
 // Scale VP: above 1x compelling; below 0.5x the model is not figured out.
 var MAGIC_HIGH = 1, MAGIC_LOW = 0.5;
-// Sacks, in the post's text: about 2x reasonable early on (about 3x at seed);
-// 3x or more needs extraordinary investment; 5x is terrible.
+// Sacks, in the post's text: his worked examples are 2x for an early-stage startup,
+// 3x at seed and 2x after a Series A (examples, not cut-offs); 3x or more needs
+// extraordinary investment; 5x is terrible.
 var BURN_REF = { seed: 3, 'series-a': 2 }, BURN_EARLY = 2, BURN_HIGH = 3, BURN_TERRIBLE = 5;
 // Feld: growth plus profit of at least 40%.
 var RULE_OF_40 = 40;
@@ -86,6 +91,8 @@ var FIELDS = ['revenue', 'revenuePrior', 'smPrior', 'netNewArr', 'netBurn', 'gro
 var STAGES = ['seed', 'series-a', 'series-b-plus'], SEGMENTS = ['smb', 'mid-market', 'enterprise'], BASES = ['ebitda', 'fcf', 'operating'];
 
 function inputError(msg, hint) { var e = new Error(msg); e.hint = hint; e.isInputError = true; return e; }
+// Round off floating-point noise (39.99999999 -> 40) before any comparison with a source's threshold.
+function tidy(v) { return Math.round(v * 1e9) / 1e9; }
 function isNum(v) { return typeof v === 'number' && isFinite(v); }
 function num(cfg, k, lo, hi, label) {
   var v = cfg[k];
@@ -136,38 +143,39 @@ function run(cfg) {
 
   // Magic number
   if (s.revenue !== null && s.revenuePrior !== null && s.smPrior !== null) {
-    var mn = (s.revenue - s.revenuePrior) * 4 / s.smPrior;
+    var mn = tidy((s.revenue - s.revenuePrior) * 4 / s.smPrior);
     var mlevel = mn > MAGIC_HIGH ? 'strong' : mn < MAGIC_LOW ? 'weak' : 'middle';
     out.metrics.magicNumber = { value: mn, level: mlevel, source: 'magicNumber',
       reading: mlevel === 'strong' ? 'Above 1x: Scale Venture Partners calls this a compelling business investment.'
         : mlevel === 'weak' ? 'Below 0.5x: Scale Venture Partners says a company here has not yet figured out its model.'
-        : 'Between 0.5x and 1x: Scale Venture Partners says a company here will probably reach success and break-even, but in a relatively capital-inefficient way.' };
+        : 'Between 0.5x and 1x: Scale Venture Partners says a company here will probably reach success and cash-flow break-even, but in a relatively capital-inefficient way.' };
   } else out.missing.push({ metric: 'magicNumber', needs: ['revenue', 'revenuePrior', 'smPrior'] });
 
   // Burn multiple
   if (s.netBurn !== null && arr !== null) {
     var ref = s.stage && BURN_REF[s.stage] != null ? BURN_REF[s.stage] : BURN_EARLY;
     var bm = { source: 'burnMultiple', reference: s.stage === 'series-b-plus' ? null : ref };
-    if (s.netBurn <= 0) { bm.value = 0; bm.level = 'not-burning'; bm.reading = 'Not burning cash this quarter, so the burn multiple is zero or below: the long-run goal Sacks describes.'; }
+    if (s.netBurn <= 0 && arr > 0) { bm.value = null; bm.level = 'not-burning'; bm.reading = 'Not burning cash this quarter while adding net new ARR: the burn multiple is at or below 0, the direction Sacks says it should move over time.'; }
+    else if (s.netBurn <= 0) { bm.value = null; bm.level = 'not-burning-no-growth'; bm.reading = 'Not burning cash, but net new ARR is ' + (arr === 0 ? 'zero' : 'negative') + ': the burn multiple has no meaningful value, and not burning while revenue is flat or falling is not the efficiency Sacks describes.'; }
     else if (arr <= 0) { bm.value = null; bm.level = 'no-growth'; bm.reading = 'Burning cash while net new ARR is ' + (arr === 0 ? 'zero' : 'negative') + ': the burn multiple has no meaningful value, and it is the worst case it measures.'; }
     else {
-      bm.value = s.netBurn / arr;
-      bm.level = bm.value >= BURN_TERRIBLE ? 'terrible' : bm.value >= BURN_HIGH ? 'high' : (bm.reference != null && bm.value > bm.reference) ? 'above-reference' : 'within-reference';
-      var stageTxt = s.stage === 'seed' ? 'about 3x at seed' : s.stage === 'series-a' ? 'about 2x after a Series A' : s.stage === 'series-b-plus' ? 'lower than 2x after a Series B, falling toward 0' : 'about 2x for an early-stage startup';
+      bm.value = tidy(s.netBurn / arr);
+      bm.level = bm.value >= BURN_TERRIBLE ? 'terrible' : bm.value >= BURN_HIGH ? 'high' : (bm.reference != null && bm.value > bm.reference) ? 'above-example' : 'within-example';
+      var stageTxt = s.stage === 'seed' ? '3x for a seed-stage company' : s.stage === 'series-a' ? '2x after a Series A' : '2x for an early-stage startup';
       bm.reading = bm.level === 'terrible' ? '5x or more: Sacks calls this a terrible burn multiple.'
-        : bm.level === 'high' ? '3x or more: Sacks says this needs extraordinary investment and may signal a product-market fit problem.'
-        : bm.level === 'above-reference' ? 'Above Sacks\'s reference of ' + stageTxt + '.'
-        : (s.stage === 'series-b-plus' ? 'Below 3x. Sacks expects efficiency to keep improving after a Series B, toward 0 over time.' : 'Within Sacks\'s reference of ' + stageTxt + '.');
+        : bm.level === 'high' ? '3x or more: Sacks says this needs extraordinary investment and may mean product-market fit is not what it appears to be, or there is some other problem in the business.'
+        : bm.level === 'above-example' ? 'Below 3x, but above the ' + stageTxt + ' that Sacks uses as a worked example. His example is not a cut-off.'
+        : (s.stage === 'series-b-plus' ? 'Below 3x. Sacks expects efficiency to keep improving after a Series B, toward 0 over time; he gives no Series B number.' : 'Below 3x and at or under the ' + stageTxt + ' that Sacks uses as a worked example.');
     }
     out.metrics.burnMultiple = bm;
   } else out.missing.push({ metric: 'burnMultiple', needs: s.netBurn === null ? ['netBurn', 'netNewArr (or revenue and revenuePrior)'] : ['netNewArr (or revenue and revenuePrior)'] });
 
   // Rule of 40
   if (s.growthYoY !== null && s.profitMargin !== null) {
-    var r40 = (s.growthYoY + s.profitMargin) * 100;
+    var r40 = tidy((s.growthYoY + s.profitMargin) * 100);
     out.metrics.ruleOf40 = { value: r40, growth: s.growthYoY * 100, margin: s.profitMargin * 100, basis: s.marginBasis, source: 'ruleOf40',
-      level: r40 >= RULE_OF_40 ? 'meets' : 'below', shortfall: Math.max(0, RULE_OF_40 - r40),
-      reading: r40 >= RULE_OF_40 ? 'At or above 40: meets Feld\'s Rule of 40.' : Math.round(RULE_OF_40 - r40) + ' points short of Feld\'s Rule of 40.' +
+      level: r40 >= RULE_OF_40 ? 'meets' : 'below', shortfall: tidy(Math.max(0, RULE_OF_40 - r40)),
+      reading: r40 >= RULE_OF_40 ? 'At or above 40: meets Feld\'s Rule of 40.' : (Math.round((RULE_OF_40 - r40) * 10) / 10) + ' points short of Feld\'s Rule of 40.' +
         (s.marginBasis !== 'ebitda' ? ' Feld prefers EBITDA as the profit measure; you used ' + (s.marginBasis === 'fcf' ? 'free cash flow' : 'operating') + ' margin.' : '') };
   } else out.missing.push({ metric: 'ruleOf40', needs: ['growthYoY', 'profitMargin'] });
 
@@ -176,12 +184,12 @@ function run(cfg) {
     var cp = { source: 'cacPayback', segment: s.segment };
     if (arr <= 0) { cp.value = null; cp.level = 'never'; cp.reading = 'Net new ARR is not positive, so sales and marketing spend is not being paid back.'; }
     else {
-      cp.value = s.smPrior * 12 / (arr * s.grossMargin);
+      cp.value = tidy(s.smPrior * 12 / (arr * s.grossMargin));
       var band = s.segment ? PAYBACK[s.segment === 'mid-market' ? null : s.segment] : null;
       if (cp.value > PAYBACK_MAX) { cp.level = 'too-long'; cp.reading = 'Over 36 months: Bessemer says growth is often hard to fund here unless customer lifetime value is exceptionally high.'; }
       else if (band && cp.value > band[1]) { cp.level = 'above-range'; cp.reading = 'Longer than Bessemer\'s ' + band[0] + '-' + band[1] + ' month range for ' + (s.segment === 'smb' ? 'SMB' : 'enterprise') + ' customers.'; }
       else if (band) { cp.level = 'in-range'; cp.reading = 'Within or under Bessemer\'s ' + band[0] + '-' + band[1] + ' month range for ' + (s.segment === 'smb' ? 'SMB' : 'enterprise') + ' customers.'; }
-      else { cp.level = 'under-max'; cp.reading = 'Under 36 months. Bessemer gives about 6-18 months for SMB customers and as long as 24-36 for enterprise' + (s.segment === 'mid-market' ? '; mid-market sits between the two.' : '.'); }
+      else { cp.level = 'under-max'; cp.reading = '36 months or under. Bessemer gives about 6-18 months for SMB customers and as long as 24-36 for enterprise' + (s.segment === 'mid-market' ? '; it gives no range for mid-market.' : '.'); }
     }
     out.metrics.cacPayback = cp;
   } else out.missing.push({ metric: 'cacPayback', needs: ['smPrior', 'grossMargin', 'netNewArr (or revenue and revenuePrior)'] });
@@ -191,14 +199,21 @@ function run(cfg) {
   // AAJ's view of what to fix first: go-to-market efficiency before burn, burn before the Rule of 40,
   // because spending more on a go-to-market that does not pay back only raises the burn.
   var M = out.metrics, first = null;
-  if ((M.magicNumber && M.magicNumber.level === 'weak') || (M.cacPayback && (M.cacPayback.level === 'too-long' || M.cacPayback.level === 'never'))) {
+  if (M.burnMultiple && M.burnMultiple.level === 'not-burning-no-growth') {
+    first = { area: 'growth', text: 'Find out why net new ARR is not positive first: with revenue flat or falling, the efficiency numbers say little until growth returns.' };
+  } else if ((M.magicNumber && M.magicNumber.level === 'weak') || (M.cacPayback && (M.cacPayback.level === 'too-long' || M.cacPayback.level === 'never'))) {
     first = { area: 'go-to-market', text: 'Fix go-to-market efficiency first: new revenue is not yet paying back sales and marketing spend, so spending more would raise the burn without fixing it.' };
   } else if (M.burnMultiple && (M.burnMultiple.level === 'high' || M.burnMultiple.level === 'terrible' || M.burnMultiple.level === 'no-growth')) {
-    first = { area: 'burn', text: 'Bring the burn down relative to new ARR first: the go-to-market numbers are workable, but spending outside it is outrunning growth.' };
+    first = { area: 'burn', text: 'Bring the burn down relative to new ARR first: ' + (M.magicNumber || M.cacPayback
+      ? 'the go-to-market numbers are workable, but spending outside it is outrunning growth.'
+      : 'add revenue, revenuePrior, smPrior and grossMargin to check whether go-to-market or other spending is the cause.') };
   } else if (M.ruleOf40 && M.ruleOf40.level === 'below') {
-    first = { area: 'balance', text: 'Close the Rule of 40 gap: ' + (M.ruleOf40.margin < 0 && M.ruleOf40.growth >= RULE_OF_40 ? 'growth alone clears 40, so the gap is the loss margin.' : M.ruleOf40.growth < 20 ? 'growth is the larger lever at ' + Math.round(M.ruleOf40.growth) + '%.' : 'look at growth and margin together.') };
+    first = { area: 'balance', text: 'Close the Rule of 40 gap: ' + (M.ruleOf40.margin < 0 && M.ruleOf40.growth >= RULE_OF_40 ? 'growth alone clears 40, so the gap is the loss margin.' : 'look at growth and margin together.') };
+  } else if ((M.cacPayback && M.cacPayback.level === 'above-range') || (M.burnMultiple && M.burnMultiple.level === 'above-example')) {
+    first = { area: 'watch', text: 'Nothing crosses a source\'s hard line, but ' + (M.cacPayback && M.cacPayback.level === 'above-range'
+      ? 'CAC payback is longer than Bessemer\'s range for your segment' : 'the burn multiple is above Sacks\'s worked example for your stage') + '. Watch it over the next quarters.' };
   } else {
-    first = { area: 'none', text: 'Nothing stands out against the sources\' own readings. Keep tracking all four each quarter; a single quarter can mislead.' };
+    first = { area: 'none', text: 'Nothing stands out against the sources\' own readings. Keep tracking these numbers each quarter; a single quarter can mislead.' };
   }
   first.view = 'AAJ\'s view';
   out.fixFirst = first;
@@ -219,7 +234,7 @@ function render(r) {
     L.push(`  ${M.magicNumber.reading}`);
   }
   if (M.burnMultiple) {
-    L.push(`Burn multiple   ${M.burnMultiple.level === 'not-burning' ? 'not burning' : M.burnMultiple.value == null ? 'n/a' : M.burnMultiple.value.toFixed(2) + 'x'}`);
+    L.push(`Burn multiple   ${/^not-burning/.test(M.burnMultiple.level) ? 'not burning' : M.burnMultiple.value == null ? 'n/a' : M.burnMultiple.value.toFixed(2) + 'x'}`);
     L.push(`  ${M.burnMultiple.reading}`);
   }
   if (M.ruleOf40) {
