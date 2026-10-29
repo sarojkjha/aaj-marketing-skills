@@ -3244,12 +3244,12 @@
       "id": "structured-data-for-ai-search",
       "slug": "structured-data-for-ai-search",
       "title": "Structured Data for AI Search",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "phase": "Execute",
       "category": "SEO, GEO & AEO",
-      "decision": "Is the JSON-LD on this page valid, true to what the page shows, and complete for its type?",
+      "decision": "Is the JSON-LD on this page valid, true to what the page shows, and complete for its type, and if not, what should it be?",
       "inputs": "The site's key page types, and for each page its JSON-LD (or full HTML) plus the visible text",
-      "outputs": "A type-per-page map, a per-page check (fix, eligibility, improve, with the source for each), corrected JSON-LD, and a re-validation plan",
+      "outputs": "A type-per-page map, a per-page check (fix, eligibility, improve, with the source for each), corrected JSON-LD, and a re-validation plan; or generated JSON-LD, meta and Open Graph tags and an llms.txt, checked",
       "engine": "skills/structured-data-for-ai-search/resources/schema-check.js",
       "setup": {
         "install": "npx skills add sarojkjha/aaj-marketing-skills --skill structured-data-for-ai-search",
@@ -3289,7 +3289,7 @@
       "limitations": [
         "It compares markup with what readers see only when you pass html or visibleText. Without them the verdict is \"Valid markup, not checked against the page\", never \"Ready to publish\".",
         "It checks the markup you paste, not what a crawler receives. JSON-LD added by client-side JavaScript may never reach a crawler.",
-        "A clean check does not promise a rich result or any effect on AI answers. Google says no special schema is needed for its AI features.",
+        "A clean check does not promise a rich result or any effect on AI answers. Google says no special schema, and no AI text files such as llms.txt, are needed for its AI features.",
         "Its rules follow Google and schema.org pages opened on 2026-10-10. Google edits those pages; re-check the source each finding cites."
       ],
       "review": "Whoever owns the site confirms every price, rating, question and date in the markup appears on the live page, then re-validates the deployed URL with Google's Rich Results Test and checks the JSON-LD is in the server response."

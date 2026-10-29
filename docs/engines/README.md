@@ -66,7 +66,7 @@ One page per engine: the decision it supports, its inputs and output, setup, whe
 | [SEO Content Brief](seo-content-brief.md) | Design | What should this page answer, for which search intent, and is the brief complete enough to hand to a writer? |
 | [SEO GEO AEO Audit](seo-geo-aeo-audit.md) | Diagnose | How ready is this page to rank in search, be cited by AI engines and win direct answers, and what should we fix first? |
 | [Signup Flow Optimizer](signup-flow-optimizer.md) | Execute | Which parts of our signup flow cost us the most signups, and what should we remove or test first? |
-| [Structured Data for AI Search](structured-data-for-ai-search.md) | Execute | Is the JSON-LD on this page valid, true to what the page shows, and complete for its type? |
+| [Structured Data for AI Search](structured-data-for-ai-search.md) | Execute | Is the JSON-LD on this page valid, true to what the page shows, and complete for its type, and if not, what should it be? |
 | [Target Account List](target-account-list.md) | Design | Which accounts fit our ICP best, and which should the team work first? |
 | [Unit Economics](unit-economics.md) | Diagnose | Can we afford to spend more on acquisition, and what CAC can we not exceed? |
 | [Webinar & Event Programs](webinar-and-event-programs.md) | Execute | How many registrations does this event need to hit its pipeline target, and was the last one worth running again? |
