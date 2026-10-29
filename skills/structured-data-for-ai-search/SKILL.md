@@ -98,7 +98,7 @@ Input a page type and a JSON-LD blob, a JSON string, or HTML containing `<script
 - **An llms.txt** in the llmstxt.org format: an H1 name (the only required section), a blockquote summary, details, then H2 sections of links.
 - **The checker's findings** on what was generated, compared with the page text when given.
 
-It marks up only what is entered. A rating needs both a value and a count, or it is left out. A price must be a number. Dates must be ISO 8601. URLs must be absolute. It does not generate FAQPage or HowTo, because Google no longer shows those rich results. It flags WebSite markup that isn't on the domain's home page (Google: "The WebSite structured data must be on the home page of the site") and vague titles such as "Home" (Google's example).
+It marks up only what is entered. A rating needs both a value (1 to 5) and a count, or it is left out. A price must be a number and a currency a three-letter code. Dates must be ISO 8601, and a time without a time zone is flagged. Every URL, including llms.txt links, must be a full http(s) address with no user name or password; a #fragment is dropped from the canonical (Google: "Don't specify a URL fragment as canonical"). Where it fills a value you didn't enter (the Organization URL, the WebSite name, the llms.txt H1), it says so in a finding. Any JSON-LD already in the page `html` is left out of the checks and reported on its own line. It does not generate FAQPage or HowTo, because Google no longer shows those rich results. It flags WebSite markup that isn't on the home page of the domain or subdomain (Google: "The WebSite structured data must be on the home page of the site") and vague titles such as "Home" (Google's example).
 
 The engine also says plainly that llms.txt is optional. Google says: "You don't need to create new machine readable files, AI text files, or markup to appear in these features."
 
@@ -119,11 +119,23 @@ Sources opened on 2026-10-10 (re-check them; Google edits these pages):
 - Google, Search documentation updates (FAQ and How-to retirement): https://developers.google.com/search/updates
 - schema.org: SoftwareApplication, Organization, Article, HowTo, HowToStep, WebPage, BreadcrumbList, acceptedAnswer (https://schema.org/)
 
+Added for generate mode, opened on 2026-10-29:
+
+- Google, Site names (WebSite markup): https://developers.google.com/search/docs/appearance/site-names
+- Google, Title links: https://developers.google.com/search/docs/appearance/title-link
+- Google, Meta descriptions and snippets: https://developers.google.com/search/docs/appearance/snippet
+- Google, Canonical URLs: https://developers.google.com/search/docs/crawling-indexing/consolidate-duplicate-urls
+- The Open Graph protocol: https://ogp.me/
+- llms.txt proposal: https://llmstxt.org/
+
+The `twitter:card` tag is AAJ's addition; the engine labels it so.
+
 ## Present the result
 
 - **Type map:** each page, its primary type, and the shared types.
 - **Per page:** the verdict, then fixes in order (fix, eligibility, improve), each with its source.
 - **Corrected JSON-LD** for each page, built only from visible facts.
+- **In generate mode:** the verdict, then the JSON-LD, meta tags and llms.txt exactly as returned, then the findings. Name every value the engine filled in for the user.
 - **What not to expect:** no guaranteed rich result, and no promised effect on AI answers.
 
 **Show where it came from.** Open your answer with "AAJ `structured-data-for-ai-search` engine result:" and print the engine's output block exactly as it returned it, then add the line `Method: https://skills.aajconsult.com/skills/structured-data-for-ai-search`. Say the numbers come from the AAJ engine, not from the model. Put your interpretation under that block. Do not retype the figures from memory. If you could not run the engine, say so and label any numbers as your own estimate, not an AAJ result.

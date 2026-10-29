@@ -57,7 +57,10 @@
  * Sources are the pages opened on 2026-10-10: Google Search Central structured data
  * docs (software-app, product-snippet, review-snippet, organization, article,
  * breadcrumb, sd-policies, ai-features, documentation changelog) and schema.org type
- * pages. Google changes these pages; re-check the source URL each finding cites.
+ * pages. Generate mode adds pages opened on 2026-10-29: Google's site-names, title-link,
+ * snippet and consolidate-duplicate-urls docs, ogp.me and llmstxt.org. The twitter:card
+ * tag is AAJ's addition and is labelled so. Google changes these pages; re-check the
+ * source URL each finding cites.
  */
 
 // --- AAJ arg normalisation ---------------------------------------------------
@@ -466,107 +469,157 @@ const GEN_SUB = {
   article: ['headline', 'authorName', 'authorUrl', 'authorType', 'datePublished', 'dateModified', 'image', 'publisherName'],
   llms: ['name', 'summary', 'details', 'sections'],
 };
-const AVAILABILITY = ['InStock', 'OutOfStock', 'PreOrder', 'BackOrder', 'Discontinued', 'LimitedAvailability', 'OnlineOnly', 'InStoreOnly', 'SoldOut'];
-const absUrl = (v) => /^https?:\/\/[^\s/?#]+\.[^\s/?#]+/i.test(str(v));
+// Google's product snippet docs list these availability values.
+const AVAILABILITY = ['InStock', 'OutOfStock', 'PreOrder', 'PreSale', 'BackOrder', 'Discontinued', 'LimitedAvailability', 'OnlineOnly', 'InStoreOnly', 'SoldOut'];
+const MAX_TEXT = 5000;
+const LD_RE = /<script\b[^>]*type\s*=\s*["']?application\/ld\+json["']?[^>]*>[\s\S]*?<\/script>/gi;
 const escAttr = (v) => String(v).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 const escText = (v) => String(v).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-const mdText = (v) => String(v).replace(/[\r\n]+/g, ' ').trim();
+const oneLine = (v) => String(v).replace(/\s+/g, ' ').trim();
+const mdText = oneLine;
 
+function genText(v, label) {
+  if (v === undefined || v === null) return '';
+  if (typeof v !== 'string' && typeof v !== 'number') die(`"${label}" must be text.`);
+  const s = String(v).trim();
+  if (s.length > MAX_TEXT) die(`"${label}" is over ${MAX_TEXT} characters.`);
+  return s;
+}
 function genObj(v, label) {
   if (v === undefined || v === null) return null;
   if (!isObj(v)) die(`"generate.${label}" must be an object.`);
   Object.keys(v).forEach((k) => { if (!GEN_SUB[label].includes(k)) die(`Unknown field "generate.${label}.${k}".`, 'Allowed: ' + GEN_SUB[label].join(', ') + '.'); });
-  Object.keys(v).forEach((k) => {
-    const x = v[k];
-    if (k === 'sameAs' || k === 'sections') return;
-    if (x !== undefined && x !== null && typeof x !== 'string' && typeof x !== 'number') die(`"generate.${label}.${k}" must be text.`);
-  });
+  Object.keys(v).forEach((k) => { if (k !== 'sameAs' && k !== 'sections') genText(v[k], `generate.${label}.${k}`); });
   return v;
 }
-function genUrl(v, label, add, required) {
-  const u = str(v);
-  if (!u) { if (required) die(`Give ${label}.`, 'A full address such as https://example.com/pricing.'); return ''; }
-  if (!absUrl(u)) die(`${label} must be a full address starting with https:// (got "${u}").`, 'Google: "Use absolute paths rather than relative paths" for canonical URLs.');
-  return u;
+// A full http(s) address: parsed, no spaces or quotes, no user name or password, a dotted host.
+// Returns the normalised address (fragment kept; the page URL drops it separately).
+function genUrl(v, label, required, hint) {
+  if (v !== undefined && v !== null && typeof v !== 'string') die(`${label} must be text.`);
+  const raw = str(v);
+  if (!raw) { if (required) die(`Give ${label}.`, hint || 'A full address such as https://example.com/pricing.'); return ''; }
+  const bad = () => die(`${label} must be a full address starting with http:// or https:// (got "${raw}").`, hint || 'A full address such as https://example.com/page.');
+  if (/[\s"'<>\\`{}|^]/.test(raw)) bad();
+  let u;
+  try { u = new URL(raw); } catch (e) { bad(); }
+  if (!/^https?:$/.test(u.protocol) || !/^https?:\/\//i.test(raw) || !/\./.test(u.hostname) || /\.$/.test(u.hostname)) bad();
+  if (u.username || u.password) die(`${label} contains a user name or password; remove it before publishing.`);
+  return u.href;
 }
 function genPrice(v, label) {
-  const s = str(v).replace(/[$,\s]/g, '');
-  if (!s) return null;
-  if (!/^\d+(\.\d+)?$/.test(s)) die(`${label} must be a number such as 49 or 49.00 (got "${str(v)}").`);
-  return s;
+  if (v !== undefined && v !== null && typeof v !== 'string' && typeof v !== 'number') die(`"${label}" must be a number.`);
+  const raw = str(v).replace(/^\$/, '').replace(/\s/g, '');
+  if (!raw) return null;
+  if (!/^(\d+|\d{1,3}(,\d{3})+)(\.\d+)?$/.test(raw)) die(`${label} must be a number such as 49, 1,299 or 49.00 (got "${str(v)}").`);
+  return raw.replace(/,/g, '');
+}
+function genCurrency(v, label) {
+  const c = str(v).toUpperCase();
+  if (c && !/^[A-Z]{3}$/.test(c)) die(`${label} must be a three-letter currency code such as USD or EUR (got "${str(v)}").`, 'Google asks for the ISO 4217 currency code.');
+  return c;
 }
 function genRating(o, path, add, label) {
   const v = str(o.ratingValue), c = str(o.ratingCount);
   if (!v && !c) return null;
-  if (!v || !c) { add('fix', 'rating-incomplete', path, `Give both ratingValue and ratingCount, or neither. Google's review snippet docs require a value and a count; the rating was left out.`, SRC.review); return null; }
-  if (!/^\d+(\.\d+)?$/.test(v) || !/^\d+$/.test(c)) die(`${label}: ratingValue must be a number and ratingCount a whole number.`);
+  if (!v || !c) { add('improve', 'rating-incomplete', path, `Only half a rating was entered, so it was left out. Google's review snippet docs ask for a value and a count; give both, or neither.`, SRC.review); return null; }
+  if (!/^\d+(\.\d+)?$/.test(v) || +v < 1 || +v > 5) die(`${label}.ratingValue must be a number from 1 to 5 (got "${v}").`, 'Google assumes a 1 to 5 scale when no bestRating is given; this generator uses that scale.');
+  if (!/^\d+$/.test(c) || +c < 1) die(`${label}.ratingCount must be a whole number of 1 or more (got "${c}").`);
   add('info', 'rating-visible', path, `A rating of ${v} from ${c} ratings was included because you entered it. Google: "Don't mark up content that is not visible to readers of the page." Show the same rating and count on the page.`, SRC.policies);
   return { '@type': 'AggregateRating', ratingValue: v, ratingCount: c };
+}
+// YYYY-MM-DD, or a date and time in ISO 8601 (T separator, valid hours and minutes, optional zone).
+function genDate(v, label, path, add) {
+  const s = str(v);
+  const m = /^(\d{4}-\d{2}-\d{2})(?:T([01]\d|2[0-3]):([0-5]\d)(?::([0-5]\d)(?:\.\d+)?)?(Z|[+-](?:[01]\d|2[0-3]):?[0-5]\d)?)?$/.exec(s);
+  if (!m || !parseIsoDate(m[1])) die(`"${label}" must be an ISO 8601 date such as 2026-10-29 or 2026-10-29T09:00:00+01:00 (got "${s}").`);
+  if (m[2] !== undefined && !m[5]) add('improve', 'date-no-zone', path, `${label.replace(/^.*\./, '')} has a time but no time zone. Google: "We recommend that you provide timezone information".`, SRC.article);
+  return s;
 }
 function setIf(o, k, v) { if (has(v)) o[k] = typeof v === 'string' ? v.trim() : v; }
 
 function generate(cfg) {
   const extra = Object.keys(cfg).filter((k) => !['generate', 'today'].includes(k));
   if (extra.length) die(`With "generate", the only other field is "today" (got ${extra.map((k) => '"' + k + '"').join(', ')}).`);
+  if (cfg.today !== undefined && !parseIsoDate(cfg.today)) die('"today" must be a date as YYYY-MM-DD.');
   const g = cfg.generate;
   if (!isObj(g)) die('"generate" must be an object.');
   Object.keys(g).forEach((k) => { if (!GEN_FIELDS.includes(k)) die(`Unknown field "generate.${k}".`, 'Allowed: ' + GEN_FIELDS.join(', ') + '.'); });
+  if (g.pageType !== undefined && g.pageType !== null && typeof g.pageType !== 'string') die('"generate.pageType" must be text.');
   const type = str(g.pageType).toLowerCase() || 'other';
   if (!GEN_TYPES.includes(type)) die(`"generate.pageType" must be one of ${GEN_TYPES.join(', ')}.`, 'FAQ and HowTo are left out: Google no longer shows those rich results.');
-  ['title', 'description', 'siteName'].forEach((k) => { if (g[k] !== undefined && g[k] !== null && typeof g[k] !== 'string') die(`"generate.${k}" must be text.`); });
+  ['title', 'description', 'siteName'].forEach((k) => { if (g[k] !== undefined && g[k] !== null && typeof g[k] !== 'string') die(`"generate.${k}" must be text.`); genText(g[k], 'generate.' + k); });
+  ['html', 'visibleText'].forEach((k) => { if (g[k] !== undefined && g[k] !== null && typeof g[k] !== 'string') die(`"generate.${k}" must be text.`); });
   const findings = [];
   const add = (level, id, path, text, source) => findings.push({ level, id, path, text, source });
-  const url = genUrl(g.url, 'the page URL ("generate.url")', add, true);
-  const image = genUrl(g.image, 'the image URL ("generate.image")', add, false);
-  const origin = url.replace(/^(https?:\/\/[^/?#]+).*$/i, '$1');
+  const canonicalHint = 'Google: "Use absolute paths rather than relative paths" for canonical URLs.';
+  let url = genUrl(g.url, 'the page URL ("generate.url")', true, canonicalHint);
+  if (url.includes('#')) {
+    url = url.replace(/#.*$/, '');
+    add('info', 'fragment-removed', 'meta', `The #fragment was removed from the canonical and og:url. Google: "Don't specify a URL fragment as canonical."`, GSRC.canonical);
+  }
+  if (/[?&](utm_[a-z]+|gclid|fbclid|msclkid)=/i.test(url)) add('improve', 'tracking-in-canonical', 'meta', `The page URL carries tracking parameters (${url.replace(/^[^?]*/, '')}). Use the clean address as the canonical, so every tagged link points to one page.`, GSRC.canonical);
+  const image = genUrl(g.image, 'the image URL ("generate.image")', false);
+  const origin = new URL(url).origin;
   const nodes = [];
 
   // ---- the page's main entity
   if (type === 'home') {
     const o = genObj(g.organization, 'organization') || {};
     if (!str(o.name)) die('Give the organization\'s name ("generate.organization.name").', 'For the home page, the tool marks up your Organization and your WebSite.');
-    const org = { '@context': 'https://schema.org', '@type': 'Organization', name: str(o.name) };
-    setIf(org, 'url', genUrl(o.url, 'the organization URL', add, false) || origin + '/');
-    setIf(org, 'logo', genUrl(o.logo, 'the logo URL', add, false));
-    setIf(org, 'description', str(o.description));
-    if (o.sameAs !== undefined) {
+    const org = { '@context': 'https://schema.org', '@type': 'Organization', name: oneLine(o.name) };
+    const orgUrl = genUrl(o.url, 'the organization URL', false);
+    org.url = orgUrl || origin + '/';
+    if (!orgUrl) add('info', 'default-org-url', 'Organization', `Organization url was set to ${origin}/, this page's home page. Enter the organization URL if your main site is elsewhere.`, SRC.organization);
+    setIf(org, 'logo', genUrl(o.logo, 'the logo URL', false));
+    setIf(org, 'description', oneLine(str(o.description)));
+    if (o.sameAs !== undefined && o.sameAs !== null) {
       if (!Array.isArray(o.sameAs) || o.sameAs.length > 20) die('"generate.organization.sameAs" must be a list of up to 20 profile URLs.');
-      const same = o.sameAs.map((u, i) => genUrl(u, `sameAs[${i}]`, add, false)).filter(Boolean);
+      const same = o.sameAs.map((u, i) => { if (typeof u !== 'string') die(`sameAs[${i}] must be a profile URL.`); return genUrl(u, `sameAs[${i}]`, false); }).filter(Boolean);
       if (same.length) org.sameAs = same;
     }
     nodes.push(org);
-    const site = { '@context': 'https://schema.org', '@type': 'WebSite', name: str(g.siteName) || str(o.name), url: origin + '/' };
+    const site = { '@context': 'https://schema.org', '@type': 'WebSite', name: oneLine(str(g.siteName)) || org.name, url: origin + '/' };
+    if (!str(g.siteName)) add('info', 'default-site-name', 'WebSite', `WebSite name was set to the organization name, "${org.name}". Enter a site name if your site goes by another one.`, GSRC.siteNames);
     nodes.push(site);
     if (url.replace(/[?#].*$/, '').replace(/\/$/, '') !== origin) add('fix', 'website-not-home', 'WebSite', `WebSite markup belongs on the home page. Google: "The WebSite structured data must be on the home page of the site." Your URL is ${url}; use it on ${origin}/.`, GSRC.siteNames);
   } else if (type === 'software') {
     const s = genObj(g.software, 'software') || {};
     if (!str(s.name)) die('Give the software\'s name ("generate.software.name").');
-    const n = { '@context': 'https://schema.org', '@type': 'SoftwareApplication', name: str(s.name) };
-    setIf(n, 'description', str(s.description));
-    setIf(n, 'applicationCategory', str(s.applicationCategory));
-    setIf(n, 'operatingSystem', str(s.operatingSystem));
+    const n = { '@context': 'https://schema.org', '@type': 'SoftwareApplication', name: oneLine(s.name) };
+    setIf(n, 'description', oneLine(str(s.description)));
+    setIf(n, 'applicationCategory', oneLine(str(s.applicationCategory)));
+    setIf(n, 'operatingSystem', oneLine(str(s.operatingSystem)));
     const price = genPrice(s.price, 'software.price');
-    if (price !== null) { n.offers = { '@type': 'Offer', price }; setIf(n.offers, 'priceCurrency', str(s.priceCurrency).toUpperCase()); }
+    const cur = genCurrency(s.priceCurrency, 'software.priceCurrency');
+    if (price === null && cur) die('software.priceCurrency was given without software.price.');
+    if (price !== null) {
+      n.offers = { '@type': 'Offer', price };
+      if (cur) n.offers.priceCurrency = cur;
+      else if (+price > 0) add('improve', 'no-currency', 'SoftwareApplication', 'A price was given without a currency. Add priceCurrency, such as USD.', SRC.software);
+    }
     const r = genRating(s, 'SoftwareApplication', add, 'software');
     if (r) n.aggregateRating = r;
     nodes.push(n);
   } else if (type === 'product') {
     const s = genObj(g.product, 'product') || {};
     if (!str(s.name)) die('Give the product\'s name ("generate.product.name").');
-    const n = { '@context': 'https://schema.org', '@type': 'Product', name: str(s.name) };
-    setIf(n, 'description', str(s.description));
-    setIf(n, 'image', genUrl(s.image, 'the product image URL', add, false) || image);
-    if (has(s.brand)) n.brand = { '@type': 'Brand', name: str(s.brand) };
-    setIf(n, 'sku', str(s.sku));
+    const n = { '@context': 'https://schema.org', '@type': 'Product', name: oneLine(s.name) };
+    setIf(n, 'description', oneLine(str(s.description)));
+    setIf(n, 'image', genUrl(s.image, 'the product image URL', false));
+    if (has(s.brand)) n.brand = { '@type': 'Brand', name: oneLine(s.brand) };
+    setIf(n, 'sku', oneLine(str(s.sku)));
     const price = genPrice(s.price, 'product.price');
+    const cur = genCurrency(s.priceCurrency, 'product.priceCurrency');
+    let av = '';
+    if (has(s.availability)) {
+      av = str(s.availability).replace(/^https?:\/\/schema\.org\//, '');
+      if (!AVAILABILITY.includes(av)) die(`"product.availability" must be one of ${AVAILABILITY.join(', ')}.`);
+    }
+    if (price === null && (cur || av)) die('product.priceCurrency and product.availability go in the offer, so they need product.price.');
     if (price !== null) {
       n.offers = { '@type': 'Offer', price, url };
-      setIf(n.offers, 'priceCurrency', str(s.priceCurrency).toUpperCase());
-      if (has(s.availability)) {
-        const av = str(s.availability).replace(/^https?:\/\/schema\.org\//, '');
-        if (!AVAILABILITY.includes(av)) die(`"product.availability" must be one of ${AVAILABILITY.join(', ')}.`);
-        n.offers.availability = 'https://schema.org/' + av;
-      }
+      if (cur) n.offers.priceCurrency = cur;
+      if (av) n.offers.availability = 'https://schema.org/' + av;
     }
     const r = genRating(s, 'Product', add, 'product');
     if (r) n.aggregateRating = r;
@@ -574,20 +627,18 @@ function generate(cfg) {
   } else if (type === 'article') {
     const a = genObj(g.article, 'article') || {};
     if (!str(a.headline)) die('Give the article\'s headline ("generate.article.headline").');
-    const n = { '@context': 'https://schema.org', '@type': 'Article', headline: str(a.headline) };
-    setIf(n, 'image', genUrl(a.image, 'the article image URL', add, false) || image);
-    ['datePublished', 'dateModified'].forEach((k) => {
-      if (!has(a[k])) return;
-      if (!parseIsoDate(a[k])) die(`"article.${k}" must be an ISO 8601 date such as 2026-10-29 (got "${str(a[k])}").`);
-      n[k] = str(a[k]);
-    });
+    const n = { '@context': 'https://schema.org', '@type': 'Article', headline: oneLine(a.headline) };
+    setIf(n, 'image', genUrl(a.image, 'the article image URL', false));
+    ['datePublished', 'dateModified'].forEach((k) => { if (has(a[k])) n[k] = genDate(a[k], 'article.' + k, 'Article', add); });
+    if (!has(a.authorName) && (has(a.authorType) || has(a.authorUrl))) die('article.authorType and article.authorUrl need article.authorName.');
     if (has(a.authorName)) {
-      const t = str(a.authorType) || 'Person';
-      if (!['Person', 'Organization'].includes(t)) die('"article.authorType" must be Person or Organization.');
-      n.author = { '@type': t, name: str(a.authorName) };
-      setIf(n.author, 'url', genUrl(a.authorUrl, 'the author URL', add, false));
+      const tRaw = str(a.authorType).toLowerCase() || 'person';
+      const t = { person: 'Person', organization: 'Organization' }[tRaw];
+      if (!t) die('"article.authorType" must be Person or Organization.');
+      n.author = { '@type': t, name: oneLine(a.authorName) };
+      setIf(n.author, 'url', genUrl(a.authorUrl, 'the author URL', false));
     }
-    if (has(a.publisherName)) n.publisher = { '@type': 'Organization', name: str(a.publisherName) };
+    if (has(a.publisherName)) n.publisher = { '@type': 'Organization', name: oneLine(a.publisherName) };
     nodes.push(n);
   }
 
@@ -596,9 +647,9 @@ function generate(cfg) {
     if (!Array.isArray(g.breadcrumbs) || g.breadcrumbs.length > 10) die('"generate.breadcrumbs" must be a list of up to 10 { "name", "url" } items.');
     const items = g.breadcrumbs.map((b, i) => {
       if (!isObj(b) || Object.keys(b).some((k) => k !== 'name' && k !== 'url')) die(`breadcrumbs[${i}] must be { "name", "url" }.`);
-      if (!str(b.name)) die(`breadcrumbs[${i}] needs a name.`);
-      const it = { '@type': 'ListItem', position: i + 1, name: str(b.name) };
-      const u = genUrl(b.url, `breadcrumbs[${i}].url`, add, false);
+      if (!str(genText(b.name, `breadcrumbs[${i}].name`))) die(`breadcrumbs[${i}] needs a name.`);
+      const it = { '@type': 'ListItem', position: i + 1, name: oneLine(b.name) };
+      const u = genUrl(b.url, `breadcrumbs[${i}].url`, false);
       if (u) it.item = u;
       return it;
     });
@@ -607,7 +658,7 @@ function generate(cfg) {
   }
 
   // ---- meta tags
-  const title = str(g.title), desc = str(g.description), site = str(g.siteName);
+  const title = oneLine(str(g.title)), desc = oneLine(str(g.description)), site = oneLine(str(g.siteName));
   const ogType = type === 'article' ? 'article' : 'website';
   const meta = [];
   if (title) meta.push(`<title>${escText(title)}</title>`);
@@ -619,32 +670,47 @@ function generate(cfg) {
   meta.push(`<meta property="og:type" content="${ogType}">`);
   meta.push(`<meta property="og:url" content="${escAttr(url)}">`);
   if (image) meta.push(`<meta property="og:image" content="${escAttr(image)}">`);
-  else add('improve', 'no-og-image', 'meta', 'No image was given. The Open Graph protocol lists og:image as a required property: "An image URL which should represent your object within the graph."', GSRC.ogp);
+  else add('improve', 'no-og-image', 'meta', 'No share image was given, so links to this page will show without a picture. The Open Graph protocol counts og:image among its four required properties.', GSRC.ogp);
   if (desc) meta.push(`<meta property="og:description" content="${escAttr(desc)}">`);
   if (site) meta.push(`<meta property="og:site_name" content="${escAttr(site)}">`);
   meta.push(`<meta name="twitter:card" content="${image ? 'summary_large_image' : 'summary'}">`);
-  if (title && /^(home|profile)$/i.test(title)) add('fix', 'vague-title', 'meta', `"${title}" is a vague title. Google advises against vague descriptors such as "Home" or "Profile".`, GSRC.titleLinks);
+  add('info', 'twitter-card', 'meta', `The twitter:card tag is AAJ's addition, not from the sources cited here: it asks X for a ${image ? 'large-image' : 'small'} link card. Remove it if you don't need it.`, null);
+  if (title && /^(home|profile)$/i.test(title)) add('improve', 'vague-title', 'meta', `"${title}" is a vague title. Google advises against vague descriptors such as "Home" or "Profile".`, GSRC.titleLinks);
 
   // ---- llms.txt
   let llmsTxt = null;
   if (g.llms !== undefined && g.llms !== null) {
     const l = genObj(g.llms, 'llms');
-    const name = str(l.name) || site || (nodes[0] && str(nodes[0].name));
-    if (!name) die('Give the llms.txt name ("generate.llms.name"): its H1 is the only required section.', 'llmstxt.org: an H1 with the project or site name is "the only required section".');
+    let name = oneLine(str(l.name));
+    if (!name) {
+      name = site || (type === 'home' ? nodes[0].name : '');
+      if (!name) die('Give the llms.txt name ("generate.llms.name") or a site name: its H1 is the only required section.', 'llmstxt.org: an H1 with the project or site name is "the only required section".');
+      add('info', 'llms-default-name', 'llms.txt', `The llms.txt H1 was set to "${name}". It describes the whole site, so enter another name if that isn't right.`, GSRC.llms);
+    }
     const L = ['# ' + mdText(name)];
     if (has(l.summary)) L.push('', '> ' + mdText(l.summary));
-    if (has(l.details)) L.push('', String(l.details).trim());
-    if (l.sections !== undefined) {
+    if (has(l.details)) {
+      const d = String(l.details).trim();
+      if (/^\s*#/m.test(d)) die('llms.details can\'t contain headings (lines starting with #).', 'llmstxt.org: the details are "any type except headings"; put links in sections.');
+      L.push('', d);
+    }
+    if (l.sections !== undefined && l.sections !== null) {
       if (!Array.isArray(l.sections) || l.sections.length > 20) die('"generate.llms.sections" must be a list of up to 20 { "title", "links" } items.');
       l.sections.forEach((sec, i) => {
         if (!isObj(sec) || !str(sec.title) || !Array.isArray(sec.links)) die(`llms.sections[${i}] needs a "title" and a "links" list.`);
         if (Object.keys(sec).some((k) => k !== 'title' && k !== 'links')) die(`llms.sections[${i}] takes only "title" and "links".`);
+        if (!sec.links.length) die(`llms.sections[${i}] has no links.`);
+        if (sec.links.length > 100) die(`llms.sections[${i}] has over 100 links.`);
+        genText(sec.title, `llms.sections[${i}].title`);
         L.push('', '## ' + mdText(sec.title), '');
         sec.links.forEach((ln, j) => {
-          if (!isObj(ln) || !str(ln.title) || !str(ln.url)) die(`llms.sections[${i}].links[${j}] needs a "title" and a "url".`);
-          if (Object.keys(ln).some((k) => !['title', 'url', 'note'].includes(k))) die(`llms.sections[${i}].links[${j}] takes only "title", "url" and "note".`);
-          if (/[\s()]/.test(str(ln.url))) die(`llms.sections[${i}].links[${j}].url has a space or bracket, which breaks the markdown link.`);
-          L.push(`- [${mdText(ln.title).replace(/[\[\]]/g, '')}](${str(ln.url)})` + (has(ln.note) ? ': ' + mdText(ln.note) : ''));
+          const p = `llms.sections[${i}].links[${j}]`;
+          if (!isObj(ln) || !str(ln.title) || !str(ln.url)) die(`${p} needs a "title" and a "url".`);
+          if (Object.keys(ln).some((k) => !['title', 'url', 'note'].includes(k))) die(`${p} takes only "title", "url" and "note".`);
+          genText(ln.title, p + '.title'); genText(ln.note, p + '.note');
+          const u = genUrl(ln.url, p + '.url', true);
+          if (/[()]/.test(u)) die(`${p}.url has a bracket, which breaks the markdown link.`);
+          L.push(`- [${mdText(ln.title).replace(/[\[\]]/g, '')}](${u})` + (has(ln.note) ? ': ' + mdText(ln.note) : ''));
         });
       });
     }
@@ -653,13 +719,17 @@ function generate(cfg) {
     add('info', 'llms-google', 'llms.txt', 'Google says: "You don\'t need to create new machine readable files, AI text files, or markup to appear in these features" (AI Overviews and AI Mode). So llms.txt is optional, and not a lever for Google.', SRC.aiFeatures);
   }
 
-  // ---- check what was generated, against the page text when given
-  const htmlBlocks = nodes.map((n) => '<script type="application/ld+json">\n' + JSON.stringify(n, null, 2).replace(/</g, '\\u003c') + '\n</script>');
+  // ---- check what was generated, against the page text when given.
+  // The page's own JSON-LD is taken out first, so only the generated markup is checked.
+  const pageHtml = typeof g.html === 'string' && g.html.trim() ? g.html : '';
+  const existing = pageHtml ? (pageHtml.match(LD_RE) || []).length : 0;
+  if (existing) add('info', 'existing-jsonld', 'page', `The page already has ${existing} JSON-LD block${existing > 1 ? 's' : ''}. They were left out of these checks; replace them with the markup above, or check them on their own.`, SRC.policies);
+  const htmlBlocks = nodes.map((n) => '<script type="application/ld+json">\n' + JSON.stringify(n, null, 2).replace(/</g, '\\u003c') + '\n<\/script>');
   let checked = null;
   if (nodes.length) {
     const cc = { jsonld: htmlBlocks.join('\n') };
     if (cfg.today !== undefined) cc.today = cfg.today;
-    if (typeof g.html === 'string' && g.html.trim()) cc.html = g.html;
+    if (pageHtml) cc.html = pageHtml.replace(LD_RE, ' ');
     if (typeof g.visibleText === 'string' && g.visibleText.trim()) cc.visibleText = g.visibleText;
     if (type !== 'other') cc.pageType = type === 'home' ? 'organization' : type;
     checked = check(cc);
@@ -670,9 +740,10 @@ function generate(cfg) {
       findings.push(m && nodes[+m[1] - 1] ? Object.assign({}, f, { path: nodes[+m[1] - 1]['@type'] + m[2] }) : f);
     });
   } else if (type === 'other') add('info', 'no-entity', 'JSON-LD', 'No main entity for an "other" page; only breadcrumbs (if given) are marked up.', SRC.policies);
-  if (title && typeof (g.html || g.visibleText) === 'string' && (g.html || g.visibleText).trim()) {
-    const tn = norm(g.html ? htmlToText(g.html) : g.visibleText);
-    if (!visibleHas(tn, title.split(/\s[|\-–—:]\s/)[0])) add('improve', 'title-not-on-page', 'meta', `The start of the title ("${title.split(/\s[|\-–—:]\s/)[0]}") isn't in the page text. AAJ's view: a title that matches the page's main heading is less likely to be rewritten.`, GSRC.titleLinks);
+  const pageText = pageHtml ? htmlToText(pageHtml) : typeof g.visibleText === 'string' ? g.visibleText : '';
+  if (title && pageText.trim()) {
+    const head = title.split(/\s[|\-–—:]\s/)[0];
+    if (!visibleHas(norm(pageText), head)) add('improve', 'title-not-on-page', 'meta', `The start of the title ("${head}") isn't in the page text. AAJ's view: a title that matches the page's main heading is less likely to be rewritten.`, GSRC.titleLinks);
   }
   add('info', 'ai-features', '-', 'Google says there is "no special schema.org structured data" needed for AI Overviews or AI Mode, and lists "making sure your structured data matches the visible text on the page" among the fundamentals.', SRC.aiFeatures);
 
@@ -697,7 +768,7 @@ function renderGenerate(r) {
     const rows = r.findings.filter((f) => f.level === lvl);
     if (!rows.length) return;
     L.push('', title);
-    rows.forEach((f) => L.push(`  ${mark}  [${f.path}] ${f.text}\n       source: ${f.source}`));
+    rows.forEach((f) => L.push(`  ${mark}  [${f.path}] ${f.text}\n       source: ${f.source || "AAJ's view"}`));
   };
   sec('fix', 'FIX', '!');
   sec('eligibility', 'RICH-RESULT ELIGIBILITY (Google requirements)', '*');
