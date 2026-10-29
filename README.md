@@ -2,7 +2,7 @@
 
 [![Listed on mcpservers.org](https://mcpservers.org/badge.svg)](https://mcpservers.org/servers/sarojkjha/aaj-marketing-skills)
 
-<!-- aaj:n skills -->76<!-- aaj:/n --> marketing skills for AI agents, and **<!-- aaj:n engines -->65<!-- aaj:/n --> of them run real engines**. Each engine is a dependency-free Node script. It takes your numbers and returns a number and a verdict: LTV:CAC and payback, pipeline coverage, A/B significance, budget splits, price ladders, NRR, market size, inference cost.
+<!-- aaj:n skills -->77<!-- aaj:/n --> marketing skills for AI agents, and **<!-- aaj:n engines -->66<!-- aaj:/n --> of them run real engines**. Each engine is a dependency-free Node script. It takes your numbers and returns a number and a verdict: LTV:CAC and payback, pipeline coverage, A/B significance, budget splits, price ladders, NRR, market size, inference cost.
 
 Most marketing skills are writing instructions. They help an agent draft a page, an email or a plan, so keep them. These add the arithmetic underneath. The agent that drafts your pricing page can check whether the price still covers inference cost. The agent that writes the board update can compute the forecast instead of estimating it. Same input, same output, and code you can read.
 
@@ -27,7 +27,7 @@ Built by [Saroj Jha](https://github.com/sarojkjha) / [AAJ](https://aajconsult.co
 <!-- aaj:begin catalog-contents -->
   - [Strategy & Positioning](#strategy-positioning) — 13 skills, 10 engines
   - [Research & Personas](#research-personas) — 4 skills, 3 engines
-  - [SEO, GEO & AEO](#seo-geo-aeo) — 9 skills, 8 engines
+  - [SEO, GEO & AEO](#seo-geo-aeo) — 10 skills, 9 engines
   - [Content & Copy](#content-copy) — 11 skills, 10 engines
   - [Conversion & Web](#conversion-web) — 5 skills, 4 engines
   - [Paid Media & Budgeting](#paid-media-budgeting) — 5 skills, 5 engines
@@ -114,8 +114,8 @@ codex plugin add aaj-marketing-skills@aaj
 
 ## Use it from an MCP client
 
-Instead of installing the skills into a project, you can expose all <!-- aaj:n skills -->76<!-- aaj:/n --> skills and
-all <!-- aaj:n engines -->65<!-- aaj:/n --> engines to any MCP client — Claude Desktop, Claude Code, Cursor, Windsurf —
+Instead of installing the skills into a project, you can expose all <!-- aaj:n skills -->77<!-- aaj:/n --> skills and
+all <!-- aaj:n engines -->66<!-- aaj:/n --> engines to any MCP client — Claude Desktop, Claude Code, Cursor, Windsurf —
 as five tools:
 
 | Tool | What it does |
@@ -181,7 +181,7 @@ Vendor MCP servers bring the data; the engines turn it into a verdict. Each reci
 
 ## What a runnable engine means
 
-Most agent skills are instructions. These are too — but <!-- aaj:n engines -->65<!-- aaj:/n --> of them also ship a dependency-free Node script that does the arithmetic and returns a judgement.
+Most agent skills are instructions. These are too — but <!-- aaj:n engines -->66<!-- aaj:/n --> of them also ship a dependency-free Node script that does the arithmetic and returns a judgement.
 
 | | Instruction-only skill | Skill with an engine |
 |---|---|---|
@@ -232,6 +232,7 @@ Every engine accepts `--demo` (a worked example, no config), `--help` (the input
 |---|---|---|---|
 | **E** | [`aaj-programmatic-seo`](skills/aaj-programmatic-seo) | Models whether a template-page build pays back before anything gets written. | Design |
 | **E** | [`agent-readiness-audit`](skills/agent-readiness-audit) | Scores whether an AI agent buying for a customer can find, evaluate and transact with you. | Diagnose |
+| **E** | [`ai-referral-share`](skills/ai-referral-share) | Separates ChatGPT, Perplexity, Gemini and Copilot visits in a GA4 export, and says whether they really convert differently. | Diagnose |
 | **E** | [`content-decay`](skills/content-decay) | Sorts a Search Console export into decaying, demand-drop, snippet-loss, rising and stable pages, and ranks what to refresh by clicks lost. | Diagnose |
 | **E** | [`geo-citation-tracker`](skills/geo-citation-tracker) | Measures whether AI engines name and cite you, and refuses to report noise as movement. | Execute |
 |  | [`geo-content-optimization`](skills/geo-content-optimization) | Rewrites a page to maximise the chance an AI engine cites it. | Execute |
@@ -346,6 +347,7 @@ Every runnable engine, and the command to try it:
 | `agent-readiness-audit` | `node .agents/skills/agent-readiness-audit/resources/agent-readiness.js --demo` |
 | `ai-inference-pricing` | `node .agents/skills/ai-inference-pricing/resources/inference-pricing.js --demo` |
 | `ai-marketing-governance` | `node .agents/skills/ai-marketing-governance/resources/ai-governance.js --demo` |
+| `ai-referral-share` | `node .agents/skills/ai-referral-share/resources/ai-referral-share.js --demo` |
 | `beachhead-segment-selection` | `node .agents/skills/beachhead-segment-selection/resources/beachhead-score.js --demo` |
 | `brand-voice-definition` | `node .agents/skills/brand-voice-definition/resources/voice-derive.js --demo` |
 | `brand-voice-governance` | `node .agents/skills/brand-voice-governance/resources/voice-check.js --demo` |
@@ -408,7 +410,7 @@ Every runnable engine, and the command to try it:
 
 Every skill is tagged to a phase, and the ordering is deliberate — the catalog refuses to let you execute before you have diagnosed.
 
-- **Diagnose** (<!-- aaj:n phase-diagnose -->21<!-- aaj:/n --> skills) — find out what is actually broken before choosing a fix.
+- **Diagnose** (<!-- aaj:n phase-diagnose -->22<!-- aaj:/n --> skills) — find out what is actually broken before choosing a fix.
 - **Design** (<!-- aaj:n phase-design -->25<!-- aaj:/n --> skills) — decide the approach, with the trade-offs stated.
 - **Execute** (<!-- aaj:n phase-execute -->30<!-- aaj:/n --> skills) — build and ship it.
 

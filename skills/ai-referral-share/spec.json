@@ -1,0 +1,10 @@
+{
+  "decision": "How much of our traffic and key events come from AI assistants such as ChatGPT, and do those visits really convert differently from the rest?",
+  "limitations": [
+    "It counts only what GA4 attributed to an assistant. Visits from apps that pass no referrer, or links copied out of an answer, usually arrive as direct traffic and cannot be recovered here.",
+    "Clicks from Google's AI Overviews and AI Mode are reported as Google search, so they cannot be separated from organic search.",
+    "Assistants are recognised by web addresses their makers publish; a new assistant or a new address needs adding with extra.",
+    "Without Session key event rate, the comparison counts key events, which can repeat within a session, so the interval is somewhat too narrow. Small assistants rarely get a verdict: the engine says when it can't tell."
+  ],
+  "review": "The analytics owner confirms the export is session source / medium for one date range, unfiltered (or enters site totals), and that the key events counted are the ones that matter to the business."
+}

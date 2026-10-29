@@ -1,9 +1,9 @@
 {
   "$comment": "Generated from skills/ by platform/scripts/generate-readme.mjs (npm run counts). Do not edit by hand: CI fails when this file disagrees with skills/.",
-  "skills": 76,
-  "engines": 65,
+  "skills": 77,
+  "engines": 66,
   "skills_without_engine": 11,
-  "engine_scripts": 65,
+  "engine_scripts": 66,
   "categories": 10,
   "mcp_tools": 5,
   "agents": [
@@ -15,8 +15,8 @@
   ],
   "phases": {
     "Diagnose": {
-      "skills": 21,
-      "engines": 20
+      "skills": 22,
+      "engines": 21
     },
     "Design": {
       "skills": 25,
@@ -57,8 +57,8 @@
       "engines": 2
     },
     "SEO, GEO & AEO": {
-      "skills": 9,
-      "engines": 8
+      "skills": 10,
+      "engines": 9
     },
     "Sales & Pipeline": {
       "skills": 12,
@@ -70,12 +70,12 @@
     }
   },
   "phrases": {
-    "headline": "76 marketing skills for AI agents. 65 run real engines.",
-    "short": "76 marketing skills, 65 with runnable engines",
-    "github_about": "The math layer for marketing agents: 76 skills, 65 with deterministic engines that return numbers and a verdict. Keep your writing skills, add the arithmetic. MIT, no API key.",
+    "headline": "77 marketing skills for AI agents. 66 run real engines.",
+    "short": "77 marketing skills, 66 with runnable engines",
+    "github_about": "The math layer for marketing agents: 77 skills, 66 with deterministic engines that return numbers and a verdict. Keep your writing skills, add the arithmetic. MIT, no API key.",
     "product_hunt_tagline": "Marketing skills that do the math for your AI agent",
-    "product_hunt_description": "Open-source marketing skills for AI agents. 65 of the 76 run deterministic engines: LTV:CAC, pipeline coverage, A/B significance, budget splits. Same input, same answer, code you can read. MIT.",
-    "maker_bio": "Founder of AAJ. Marketing for Seed–Series B startups. I maintain 76 open-source marketing skills for AI agents; 65 of them do the math."
+    "product_hunt_description": "Open-source marketing skills for AI agents. 66 of the 77 run deterministic engines: LTV:CAC, pipeline coverage, A/B significance, budget splits. Same input, same answer, code you can read. MIT.",
+    "maker_bio": "Founder of AAJ. Marketing for Seed–Series B startups. I maintain 77 open-source marketing skills for AI agents; 66 of them do the math."
   },
   "catalog": [
     {
@@ -143,6 +143,12 @@
       "engine": true,
       "category": "Content & Copy",
       "phase": "Execute"
+    },
+    {
+      "slug": "ai-referral-share",
+      "engine": true,
+      "category": "SEO, GEO & AEO",
+      "phase": "Diagnose"
     },
     {
       "slug": "beachhead-segment-selection",
