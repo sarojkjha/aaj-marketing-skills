@@ -2918,6 +2918,60 @@
       "review": "Whoever owns positioning spot-checks ten word-list-coded reviews and confirms you are provably better before claiming an opportunity. Legal or the content owner confirms consent before any reviewer's words appear in marketing."
     },
     {
+      "id": "saas-growth-efficiency",
+      "slug": "saas-growth-efficiency",
+      "title": "Saas Growth Efficiency",
+      "version": "1.0.0",
+      "phase": "Diagnose",
+      "category": "Analytics & Experimentation",
+      "decision": "How efficiently is this SaaS company turning spend into growth, by the four numbers investors and boards ask about, and which should we fix first?",
+      "inputs": "One quarter's recurring revenue and the quarter before, last quarter's sales and marketing expense, this quarter's net burn and net new ARR, gross margin, and the last 12 months' revenue growth and profit margin; optionally stage and customer segment",
+      "outputs": "Magic number, burn multiple, Rule of 40 and CAC payback, each with its originator's reading and a link; which to fix first; which metrics could not be computed and what they need",
+      "engine": "skills/saas-growth-efficiency/resources/growth-efficiency.js",
+      "setup": {
+        "install": "npx skills add sarojkjha/aaj-marketing-skills --skill saas-growth-efficiency",
+        "hosted_mcp": "https://aaj-engines-mcp.sarojkjha10.workers.dev/mcp",
+        "local_mcp": "node platform/mcp/server.mjs (Node 18 or newer)",
+        "runtime": "Node 18 or newer for local runs; none for the hosted server",
+        "agents_listed": [
+          "Claude Code",
+          "Cursor",
+          "OpenAI Codex",
+          "Windsurf",
+          "Cline"
+        ],
+        "agents_tested": [
+          "Claude Code",
+          "OpenAI Codex (Windows, ab-test-significance only)"
+        ]
+      },
+      "acts": {
+        "analyzes_only": true,
+        "network_calls": false,
+        "writes_files": false,
+        "starts_processes": false,
+        "reads_a_file_you_name": false,
+        "agent_writes": null
+      },
+      "data_flow": [
+        {
+          "path": "Skill installed in your agent, or the local MCP server",
+          "where": "The engine runs on your machine and AAJ receives nothing. Your AI agent still sends what you give it to its model provider (Anthropic, OpenAI and so on), under your own account's terms."
+        },
+        {
+          "path": "Hosted MCP server",
+          "where": "Your agent's model provider, as above, plus AAJ's server on Cloudflare, which receives the engine inputs over HTTPS, runs them in memory and keeps no copy. Cloudflare keeps error logs (no inputs) for up to 7 days."
+        }
+      ],
+      "limitations": [
+        "One quarter can mislead: a big renewal, a price change or a one-off deal moves every number. Read the trend over several quarters before acting on one.",
+        "The readings are the originators' own words, not AAJ thresholds. Each was written for a context (venture-backed SaaS, a stage, a segment); they are reference points, not pass marks.",
+        "Net new ARR defaults to this quarter's revenue change x 4. Enter your own net new ARR when you track it; the engine flags a gap of more than 25% between the two.",
+        "The fix-first order (go-to-market, then burn, then Rule of 40) is AAJ's view, not something the sources prescribe."
+      ],
+      "review": "The finance lead confirms each input against the books for the same quarter, that net burn and net new ARR cover the same period, and which profit measure the Rule of 40 used."
+    },
+    {
       "id": "search-demand-reader",
       "slug": "search-demand-reader",
       "title": "Search Demand Reader",
