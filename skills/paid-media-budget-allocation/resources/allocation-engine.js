@@ -24,7 +24,12 @@
  *     "channels": [                    // optional: override defaults or add channels
  *       { "key": "google",   "cpc": 6,  "cvr": 8,  "l2c": 12, "cap": 30000 },
  *       { "key": "capterra", "model": "cpl", "cpl": 90, "l2c": 22, "cap": 8000 }
- *     ]
+ *     ],
+ *     "onlyListedChannels": true       // optional: use ONLY the channels listed, each with all
+ *                                      // its inputs, and none of the model's placeholder
+ *                                      // numbers (no preset channels, LTV, ACV or margin).
+ *                                      // LTV:CAC, ROAS and payback are shown only for the
+ *                                      // ltv / acv / margin you give.
  *   }
  *
  * Channel model:
@@ -169,12 +174,13 @@ function allocateGoal(chs, G, DR) {
 function buildChannels(cfg) {
   const preset = PRESETS[cfg.model] || PRESETS.saas;
   const map = {};
-  // Seed defaults from the preset.
-  preset.defaults.forEach(k => { map[k] = Object.assign({ key: k, model: 'funnel', placeholder: true }, preset.ch[k]); });
+  // Seed defaults from the preset (not when only the listed channels are wanted).
+  if (!cfg.onlyListedChannels) preset.defaults.forEach(k => { map[k] = Object.assign({ key: k, model: 'funnel', placeholder: true }, preset.ch[k]); });
   // Apply overrides / additions from cfg.channels. A channel counts as the
   // user's own data only when every economic input came from the config.
   (cfg.channels || []).forEach(o => {
-    const base = preset.ch[o.key] || {};
+    // Own-channels mode never borrows a preset's numbers or channel model (review, Oct 29).
+    const base = cfg.onlyListedChannels ? {} : (preset.ch[o.key] || {});
     const need = o.model === 'cpl' ? ['cpl', 'l2c', 'cap'] : ['cpc', 'cvr', 'l2c', 'cap'];
     const placeholder = need.some(f => o[f] == null);
     map[o.key] = Object.assign({ key: o.key, model: 'funnel' }, base, o, { placeholder });
@@ -187,7 +193,7 @@ function buildChannels(cfg) {
 function validate(c) {
   if (!c || typeof c !== 'object' || Array.isArray(c)) return ['The input must be a JSON object.'];
   const errs = [];
-  const known = ['model', 'mode', 'budget', 'cacTarget', 'customerGoal', 'diminishingReturns', 'ltv', 'acv', 'margin', 'channels'];
+  const known = ['model', 'mode', 'budget', 'cacTarget', 'customerGoal', 'diminishingReturns', 'ltv', 'acv', 'margin', 'channels', 'onlyListedChannels'];
   const unknown = Object.keys(c).filter(k => !known.includes(k));
   if (unknown.length) errs.push('Unrecognised field' + (unknown.length > 1 ? 's' : '') + ': ' + unknown.map(k => '"' + k + '"').join(', ') + '. Expected: ' + known.join(', ') + '.');
   if (c.model !== undefined && !PRESETS[c.model]) errs.push('"model" is one of: ' + Object.keys(PRESETS).join(', ') + '.');
@@ -196,6 +202,16 @@ function validate(c) {
   const need = { budget: 'budget', cac: 'cacTarget', goal: 'customerGoal' }[c.mode || 'budget'];
   if (need && !(typeof c[need] === 'number' && c[need] > 0)) errs.push('Mode "' + (c.mode || 'budget') + '" needs "' + need + '" as a number above 0.');
   for (const k of ['ltv', 'acv', 'margin']) if (c[k] !== undefined && !(typeof c[k] === 'number' && c[k] > 0)) errs.push('"' + k + '" must be a number above 0.');
+  if (c.onlyListedChannels !== undefined && typeof c.onlyListedChannels !== 'boolean') errs.push('"onlyListedChannels" is true or false.');
+  if (c.onlyListedChannels === true) {
+    if (!Array.isArray(c.channels) || !c.channels.length) errs.push('"onlyListedChannels" needs at least one channel in "channels".');
+    else c.channels.forEach((o, i) => {
+      if (!o || typeof o !== 'object') return;
+      const need = o.model === 'cpl' ? ['cpl', 'l2c', 'cap'] : ['cpc', 'cvr', 'l2c', 'cap'];
+      const miss = need.filter(f => o[f] == null);
+      if (miss.length) errs.push('channels[' + i + '] (' + o.key + ') needs ' + miss.join(', ') + ' with "onlyListedChannels": every input must be your own.');
+    });
+  }
   if (c.channels !== undefined) {
     if (!Array.isArray(c.channels)) errs.push('"channels" is a list of {key, cpc, cvr, l2c, cap}.');
     else c.channels.forEach((o, i) => {
@@ -215,9 +231,10 @@ function one(n) { return (Math.round(n * 10) / 10).toLocaleString(); }
 function run(cfg) {
   const preset = PRESETS[cfg.model] || PRESETS.saas;
   const DR = DR_MAP[cfg.diminishingReturns || 'moderate'];
-  const ltv = cfg.ltv != null ? cfg.ltv : preset.ltv;
-  const acv = cfg.acv != null ? cfg.acv : preset.acv;
-  const margin = cfg.margin != null ? cfg.margin : preset.margin;
+  const own = !!cfg.onlyListedChannels;
+  const ltv = cfg.ltv != null ? cfg.ltv : (own ? null : preset.ltv);
+  const acv = cfg.acv != null ? cfg.acv : (own ? null : preset.acv);
+  const margin = cfg.margin != null ? cfg.margin : (own ? null : preset.margin);
   const mode = cfg.mode || 'budget';
   const chs = buildChannels(cfg);
 
@@ -251,15 +268,15 @@ function run(cfg) {
     };
   });
   const blendedCAC = totCust > 0 ? totSpend / totCust : 0;
-  const ltvcac = blendedCAC > 0 ? ltv / blendedCAC : 0;
-  const roas = totSpend > 0 ? (totCust * acv) / totSpend : 0;
-  const payback = (acv * margin / 100 / 12) > 0 ? blendedCAC / (acv * margin / 100 / 12) : 0;
+  const ltvcac = ltv == null ? null : (blendedCAC > 0 ? ltv / blendedCAC : 0);
+  const roas = acv == null ? null : (totSpend > 0 ? (totCust * acv) / totSpend : 0);
+  const payback = acv == null || margin == null ? null : ((acv * margin / 100 / 12) > 0 ? blendedCAC / (acv * margin / 100 / 12) : 0);
 
   // ---- print ----
   const out = [];
   out.push('');
-  out.push(`AAJ Paid Media Budget Allocator — ${preset.label}`);
-  out.push(`Mode: ${mode}  ·  Diminishing returns: ${cfg.diminishingReturns || 'moderate'} (${DR})`);
+  out.push(own ? 'AAJ Paid Media Budget Allocator — your channels only' : `AAJ Paid Media Budget Allocator — ${preset.label}`);
+  out.push(`Mode: ${mode}  ·  Diminishing returns: ${cfg.diminishingReturns || 'moderate'} (${DR}${cfg.diminishingReturns ? '' : ", AAJ's default"})`);
   if (note) out.push('\n⚠ ' + note + '\n');
   out.push('');
   const pad = (s, n) => String(s).padEnd(n);
@@ -273,8 +290,14 @@ function run(cfg) {
   out.push('-'.repeat(69));
   out.push(pad('BLENDED', 14) + padl(money(totSpend), 10) + padl('100%', 6) + padl(one(totCust), 11) + padl(money(blendedCAC), 9));
   out.push('');
-  out.push(`LTV:CAC ${one(ltvcac)}:1   ·   ROAS ${one(roas)}x   ·   CAC payback ${one(payback)} mo`);
-  out.push(ltvcac >= 3 ? '✓ LTV:CAC is above 3:1, David Skok\'s SaaS reference point (paid-media CAC only).' : '▼ LTV:CAC is below 3:1, David Skok\'s SaaS reference point — lift LTV or cut CAC before scaling.');
+  const metrics = [];
+  if (ltvcac != null) metrics.push(`LTV:CAC ${one(ltvcac)}:1`);
+  if (roas != null) metrics.push(`ROAS ${one(roas)}x`);
+  if (payback != null) metrics.push(`CAC payback ${one(payback)} mo`);
+  if (metrics.length) out.push(metrics.join('   ·   '));
+  const skipped = [ltvcac == null && 'LTV:CAC (give ltv)', roas == null && 'ROAS (give acv)', payback == null && 'CAC payback (give acv and margin)'].filter(Boolean);
+  if (skipped.length) out.push('Not computed, because the input was not given: ' + skipped.join(', ') + '.');
+  if (ltvcac != null) out.push(ltvcac >= 3 ? '✓ LTV:CAC is above 3:1, David Skok\'s SaaS reference point (paid-media CAC only).' : '▼ LTV:CAC is below 3:1, David Skok\'s SaaS reference point — lift LTV or cut CAC before scaling.');
   const thin = rows.filter(r => r.spend > 0 && r.spend < 1500);
   if (thin.length >= 2) out.push(`⚠ ${thin.length} channels are funded under ~$1,500/mo (${thin.map(t => t.channel).join(', ')}) — this engine's rule of thumb for enough budget to learn from. Consider consolidating.`);
   const ph = rows.filter(r => r.placeholderInputs);
@@ -284,10 +307,10 @@ function run(cfg) {
   out.push('');
   out.push('--- JSON ---');
   out.push(JSON.stringify({
-    model: cfg.model || 'saas', mode, diminishingReturns: cfg.diminishingReturns || 'moderate',
+    model: own ? null : (cfg.model || 'saas'), onlyListedChannels: own, mode, diminishingReturns: cfg.diminishingReturns || 'moderate',
     totalSpend: Math.round(totSpend), customers: Math.round(totCust * 10) / 10,
-    blendedCAC: Math.round(blendedCAC), ltvCac: Math.round(ltvcac * 100) / 100,
-    roas: Math.round(roas * 100) / 100, cacPaybackMonths: Math.round(payback * 10) / 10,
+    blendedCAC: Math.round(blendedCAC), ltvCac: ltvcac == null ? null : Math.round(ltvcac * 100) / 100,
+    roas: roas == null ? null : Math.round(roas * 100) / 100, cacPaybackMonths: payback == null ? null : Math.round(payback * 10) / 10,
     placeholderChannels: rows.filter(r => r.placeholderInputs).map(r => r.channel),
     ltvCacReference: { figure: 'LTV:CAC above 3:1', source: 'David Skok, SaaS Metrics 2.0', url: 'https://www.forentrepreneurs.com/saas-metrics-2/' },
     allocation: rows

@@ -82,7 +82,8 @@ function design(o) {
   // baseline rate through other routes; what the holdout forgoes is the extra
   // conversions the treatment would have added.
   const withheld = controlDaily * days * (p2 - p1);
-  const holdoutCost = withheld * num(o.value);
+  // No value per conversion given: no money figure, rather than one built on the default.
+  const holdoutCost = o._noValue ? null : withheld * num(o.value);
 
   return { p1, p2, nPerGroup, totalN: nPerGroup * 2, controlDaily, treatDaily, days, holdoutCost, withheld };
 }
@@ -111,8 +112,8 @@ function readout(o) {
   // the control rate, subtracted from what it actually produced.
   const counterfactual = n2 * p1;
   const incremental = c2 - counterfactual;
-  const incrementalValue = incremental * num(o.value);
-  const iRoas = o.spend != null && num(o.spend) > 0 ? incrementalValue / num(o.spend) : null;
+  const incrementalValue = o._noValue ? null : incremental * num(o.value);
+  const iRoas = incrementalValue != null && o.spend != null && num(o.spend) > 0 ? incrementalValue / num(o.spend) : null;
   const iCac = incremental > 0 && o.spend != null ? num(o.spend) / incremental : null;
 
   // Was the test ever able to answer the question? The smallest relative lift
@@ -156,7 +157,7 @@ function reportDesign(o, r) {
   L.push("");
   L.push("COST OF THE HOLDOUT");
   L.push(`  Lift withheld           ~${int(r.withheld)} conversions (the extra ones the treatment would add)`);
-  L.push(`  Value forgone          ~${money(r.holdoutCost)}`);
+  L.push(r.holdoutCost == null ? "  Value forgone           not shown: no value per conversion was given (pass --value)" : `  Value forgone          ~${money(r.holdoutCost)}`);
   L.push("");
   if (r.days > 42) {
     L.push(`  ${r.days} days is long. Seasonality and competing changes will contaminate it.`);
@@ -176,7 +177,7 @@ function reportDesign(o, r) {
     baselineRate: +r.p1.toFixed(5), targetRate: +r.p2.toFixed(5),
     samplePerGroup: r.nPerGroup, totalSample: r.totalN,
     durationDays: r.days === Infinity ? null : r.days,
-    holdoutValueForgone: Math.round(r.holdoutCost)
+    holdoutValueForgone: r.holdoutCost == null ? null : Math.round(r.holdoutCost)
   }, null, 2));
   L.push("");
   return L.join("\n");
@@ -213,9 +214,13 @@ function reportReadout(o, r) {
   L.push(`  Expected at control rate ${int(r.counterfactual)} conversions`);
   L.push(`  Actually observed        ${int(num(o.treatConv))}`);
   L.push(`  Incremental              ${int(r.incremental)}`);
-  L.push(`  Incremental value        ${money(r.incrementalValue)}`);
-  if (r.iRoas != null) {
-    L.push(`  iROAS                    ${r.iRoas.toFixed(2)}x   (spend ${money(num(o.spend))})`);
+  if (r.incrementalValue == null) {
+    L.push("  Incremental value        not shown: no value per conversion was given (pass --value)");
+  } else {
+    L.push(`  Incremental value        ${money(r.incrementalValue)}`);
+  }
+  if (r.iRoas != null) L.push(`  iROAS                    ${r.iRoas.toFixed(2)}x   (spend ${money(num(o.spend))})`);
+  if (o.spend != null && num(o.spend) > 0) {
     L.push(`  Incremental CAC          ${r.iCac != null && r.iCac > 0 ? money(r.iCac) : "n/a"}`);
   }
   L.push("");
@@ -242,7 +247,7 @@ function reportReadout(o, r) {
     pValue: +r.pValue.toFixed(5), significant: sig, underpowered: r.underpowered,
     smallestDetectableLiftPct: +(r.detectableRel * 100).toFixed(2),
     incrementalConversions: Math.round(r.incremental),
-    incrementalValue: Math.round(r.incrementalValue),
+    incrementalValue: r.incrementalValue == null ? null : Math.round(r.incrementalValue),
     iRoas: r.iRoas != null ? +r.iRoas.toFixed(3) : null,
     incrementalCac: r.iCac != null ? Math.round(r.iCac) : null
   }, null, 2));
@@ -343,6 +348,7 @@ function main() {
   if (!Z_ALPHA[num(o.alpha)]) fail(`--alpha must be one of: ${Object.keys(Z_ALPHA).join(", ")}`);
   if (!Z_POWER[num(o.power)]) fail(`--power must be one of: ${Object.keys(Z_POWER).join(", ")}`);
   if (num(o.value) < 0) fail("--value cannot be negative.");
+  o._noValue = !demo && !has("value");
 
   if (isReadout) {
     const missing = ["controlN", "controlConv", "treatN", "treatConv"].filter(k => !has(k));
@@ -356,7 +362,7 @@ function main() {
     const r = readout(o);
     if (argv.includes("--json")) {
       const sig = r.pValue < num(o.alpha);
-      console.log(JSON.stringify({ mode: "readout", relativeLift: +(r.lift * 100).toFixed(2), pValue: +r.pValue.toFixed(5), significant: sig, underpowered: r.underpowered, smallestDetectableLiftPct: +(r.detectableRel * 100).toFixed(2), incrementalConversions: Math.round(r.incremental), incrementalValue: Math.round(r.incrementalValue), iRoas: r.iRoas != null ? +r.iRoas.toFixed(3) : null }, null, 2));
+      console.log(JSON.stringify({ mode: "readout", relativeLift: +(r.lift * 100).toFixed(2), pValue: +r.pValue.toFixed(5), significant: sig, underpowered: r.underpowered, smallestDetectableLiftPct: +(r.detectableRel * 100).toFixed(2), incrementalConversions: Math.round(r.incremental), incrementalValue: r.incrementalValue == null ? null : Math.round(r.incrementalValue), iRoas: r.iRoas != null ? +r.iRoas.toFixed(3) : null }, null, 2));
       return;
     }
     console.log(reportReadout(o, r));
@@ -369,11 +375,11 @@ function main() {
   if (num(o.split) <= 0 || num(o.split) >= 100) fail("--split is a percentage between 0 and 100.");
   if (num(o.daily) <= 0) fail("--daily must be greater than zero.");
   if (num(o.baseline) * (1 + num(o.mde) / 100) >= 100) fail("baseline x (1 + mde) must stay under 100%.");
-  o._assumed = demo ? [] : ["mde", "alpha", "power", "daily", "split", "value", "baseline"].filter(k => !has(k) && k !== "alpha" && k !== "power");
+  o._assumed = demo ? [] : ["mde", "alpha", "power", "daily", "split", "baseline"].filter(k => !has(k) && k !== "alpha" && k !== "power");
 
   const r = design(o);
   if (argv.includes("--json")) {
-    console.log(JSON.stringify({ mode: "design", samplePerGroup: r.nPerGroup, totalSample: r.totalN, durationDays: r.days === Infinity ? null : r.days, holdoutValueForgone: Math.round(r.holdoutCost) }, null, 2));
+    console.log(JSON.stringify({ mode: "design", samplePerGroup: r.nPerGroup, totalSample: r.totalN, durationDays: r.days === Infinity ? null : r.days, holdoutValueForgone: r.holdoutCost == null ? null : Math.round(r.holdoutCost) }, null, 2));
     return;
   }
   if (demo) console.log("\n(demo with built-in numbers — pass options or --help)");

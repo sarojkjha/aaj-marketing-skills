@@ -107,11 +107,12 @@ function plan(cfg, metric, alpha, power) {
   if (variants < 2) throw inputError('"plan.variants" counts the control too, so it must be at least 2.');
   var daily = p.dailyUnitsPerVariant;
   if (!isNum(daily) || daily <= 0) throw inputError('"plan.dailyUnitsPerVariant" must be the ' + METRICS[metric].unit + ' each variant gets per day.');
-  var maxDays = isNum(p.maxDays) && p.maxDays > 0 ? p.maxDays : MAX_DAYS_DEFAULT;
+  var maxDaysGiven = isNum(p.maxDays) && p.maxDays > 0;
+  var maxDays = maxDaysGiven ? p.maxDays : MAX_DAYS_DEFAULT;
   var comps = variants - 1;
   var n = sampleSize(p.baselineRate, p.minDetectableLift, alpha, power, comps);
   var days = Math.ceil(n / daily);
-  var out = { metric: metric, variants: variants, comparisons: comps, perVariant: n, total: n * variants, days: days, maxDays: maxDays,
+  var out = { metric: metric, variants: variants, comparisons: comps, perVariant: n, total: n * variants, days: days, maxDays: maxDays, maxDaysGiven: maxDaysGiven,
     alphaPerComparison: alpha / comps, feasible: days <= maxDays, options: [] };
   if (!out.feasible) {
     // What CAN this budget detect in maxDays? Search the smallest detectable lift.
@@ -215,7 +216,7 @@ function render(r) {
     L.push('PLAN - ' + METRICS[p.metric].label);
     L.push(`  ${p.variants} variants (${p.comparisons} comparison${p.comparisons > 1 ? 's' : ''} with the control), alpha per comparison ${p.alphaPerComparison.toFixed(4)}`);
     L.push(`  Needs ${p.perVariant.toLocaleString('en-US')} ${METRICS[p.metric].unit} per variant, ${p.total.toLocaleString('en-US')} in all: about ${p.days} days.`);
-    L.push(p.feasible ? `  Fits inside ${p.maxDays} days. Run it to the planned size before reading it.` : `  Longer than the ${p.maxDays} days you allowed. Options:`);
+    L.push(p.feasible ? `  Fits inside ${p.maxDays} days${p.maxDaysGiven ? '' : " (AAJ's default limit)"}. Run it to the planned size before reading it.` : (p.maxDaysGiven ? `  Longer than the ${p.maxDays} days you allowed. Options:` : `  Longer than ${p.maxDays} days (AAJ's default limit; give maxDays for yours). Options:`));
     p.options.forEach((o) => L.push('   - ' + o.text));
     L.push('');
   }

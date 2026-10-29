@@ -54,6 +54,25 @@
         "  i  2 challengers were compared with the control, so each one had to clear p < 0.0250 (Bonferroni) rather than 0.05, to keep the chance of a false winner at 0.05 overall."
       ],
       "stderr": []
+    },
+    {
+      "name": "plan without maxDays: the default limit is labelled",
+      "source": "Oct 29 review: no default shown as the user's",
+      "args": [
+        "{\"plan\":{\"baselineRate\":0.01,\"minDetectableLift\":0.05,\"variants\":3,\"dailyUnitsPerVariant\":5000}}"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "PLAN - conversions per impression",
+        "  3 variants (2 comparisons with the control), alpha per comparison 0.0250",
+        "  Needs 771,423 impressions per variant, 2,314,269 in all: about 155 days.",
+        "  Longer than 28 days (AAJ's default limit; give maxDays for yours). Options:",
+        "   - Test one challenger against the control instead of 2: 128 days.",
+        "   - In 28 days this traffic can only detect a lift of about 12%. Test a bigger idea, not a smaller tweak.",
+        "   - Judge on click-through rate first, then confirm the winner on cost per result in a second, smaller test. Clicks arrive faster than conversions, but a click winner is not always a cost winner.",
+        ""
+      ],
+      "stderr": []
     }
   ]
 }

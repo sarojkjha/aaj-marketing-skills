@@ -89,7 +89,7 @@ node .agents/skills/incrementality-and-mmm/resources/incrementality.js --json --
 node .agents/skills/incrementality-and-mmm/resources/incrementality.js --help
 ```
 
-Design mode returns sample per group, duration, and **the value you forgo by holding out** — which is the number that decides whether the test is worth running. Readout mode returns lift, p-value, confidence interval, incremental conversions against the counterfactual, iROAS, incremental CAC, and the smallest lift the test could actually detect.
+Without `--value` (or `"value"`), neither mode prints a money figure: incremental value, iROAS and value forgone are left out rather than built on a default. Design mode returns sample per group, duration, and **the value you forgo by holding out** — which is the number that decides whether the test is worth running. Readout mode returns lift, p-value, confidence interval, incremental conversions against the counterfactual, iROAS, incremental CAC, and the smallest lift the test could actually detect.
 
 ## Workflow
 

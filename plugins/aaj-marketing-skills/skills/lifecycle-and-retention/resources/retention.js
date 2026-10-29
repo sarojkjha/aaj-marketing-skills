@@ -92,7 +92,8 @@ function compute(c){
   const endBase = start + exp - contr - churned;
 
   const denom = contr + churned;
-  const quickRatio = denom > 0 ? (neu + exp) / denom : null;
+  // Without new business the quick ratio is not a quick ratio: leave it out rather than read new as 0.
+  const quickRatio = denom > 0 && c.newMRR != null ? (neu + exp) / denom : null;
 
   let logoChurn = null, logoRet = null;
   if (c.startCustomers > 0 && c.churnedCustomers != null){
@@ -114,11 +115,12 @@ function compute(c){
   let impact = null;
   if (churnForLife != null && churnForLife > 0){
     const cur = churnForLife;
-    const target = (c.targetChurnPct != null) ? c.targetChurnPct : Math.max(cur - 1, cur * 0.5);
+    const targetGiven = c.targetChurnPct != null;
+    const target = targetGiven ? c.targetChurnPct : Math.max(cur - 1, cur * 0.5);
     if (target > 0 && target < cur){
       const per = period === 'annual' ? 12 : 1;
       impact = {
-        fromPct: cur, toPct: target,
+        fromPct: cur, toPct: target, targetGiven,
         ltvLiftPct: (cur / target - 1) * 100,
         newLifetimeMonths: (1 / (target / 100)) * per,
         basis: logoChurn != null ? 'logo churn' : 'revenue churn'
@@ -126,7 +128,8 @@ function compute(c){
     }
   }
 
-  return { period, grossRevChurn, netRevChurn, grr, nrr, endBase, quickRatio,
+  const noExpansionData = c.expansionMRR == null && c.contractionMRR == null;
+  return { period, grossRevChurn, netRevChurn, grr, nrr, endBase, quickRatio, noExpansionData,
            logoChurn, logoRet, lifetimeMonths, impact, start };
 }
 
@@ -140,6 +143,7 @@ function verdict(r){
     else if (r.nrr >= 100) L.push(`\u2713 NRR ${pct(r.nrr)}${unit} \u2014 the base grows on its own, without new logos.`);
     else L.push(`\u25bc NRR ${pct(r.nrr)}${unit} \u2014 under 100%: the base is shrinking; fix retention before scaling acquisition.`);
   }
+  if (r.nrr != null && r.noExpansionData) L.push('\u2022 NRR counts no expansion or contraction, because neither was given.');
   if (r.grr != null){
     if (r.period !== 'annual') L.push(`\u2022 GRR ${pct(r.grr)}/mo \u2014 about ${pct(Math.pow(r.grr/100,12)*100)} a year if every month looked like this one. Published medians are annual; compare the annual figure.`);
     else if (r.grr >= 91) L.push(`\u2713 GRR ${pct(r.grr)} \u2014 at or above SaaS Capital's 2026 median of 91% for bootstrapped B2B SaaS ($3M\u2013$20M ARR).`);
@@ -155,7 +159,7 @@ function verdict(r){
     L.push(`\u2022 ~${one(r.lifetimeMonths)} mo average lifetime at current revenue churn.`);
   }
   if (r.impact){
-    L.push(`\u2197 Cutting ${r.impact.basis} ${pct(r.impact.fromPct)} \u2192 ${pct(r.impact.toPct)} lifts LTV ~${pct(r.impact.ltvLiftPct)} (lifetime \u2192 ~${one(r.impact.newLifetimeMonths)} mo). Retention is a direct LTV lever.`);
+    L.push(`\u2197 ${r.impact.targetGiven ? '' : 'What-if (an example step, not your target): '}Cutting ${r.impact.basis} ${pct(r.impact.fromPct)} \u2192 ${pct(r.impact.toPct)} lifts LTV ~${pct(r.impact.ltvLiftPct)} (lifetime \u2192 ~${one(r.impact.newLifetimeMonths)} mo). Retention is a direct LTV lever.`);
   }
   return L;
 }
