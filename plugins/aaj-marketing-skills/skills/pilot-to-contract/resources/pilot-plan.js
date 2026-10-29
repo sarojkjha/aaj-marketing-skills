@@ -174,6 +174,9 @@ function plan(cfg) {
   const procurementWeeks = weeks(cfg, 'procurementWeeks', undefined, 0, 104);
   const readoutWeeks = weeks(cfg, 'readoutWeeks', DEFAULT_READOUT_WEEKS, 0, 26);
   const decisionWeeks = weeks(cfg, 'decisionWeeks', DEFAULT_DECISION_WEEKS, 0, 26);
+  const assumedWeeks = [];
+  if (cfg.readoutWeeks === undefined || cfg.readoutWeeks === null || cfg.readoutWeeks === '') assumedWeeks.push(`${readoutWeeks} week${readoutWeeks === 1 ? '' : 's'} from pilot end to readout`);
+  if (cfg.decisionWeeks === undefined || cfg.decisionWeeks === null || cfg.decisionWeeks === '') assumedWeeks.push(`${decisionWeeks} weeks from readout to the buyer's decision`);
   const budget = optDate(cfg, 'budgetDecisionDate');
   const fy = optDate(cfg, 'fiscalYearStart');
   const todayIn = optDate(cfg, 'today');
@@ -301,10 +304,10 @@ function plan(cfg) {
   const t = terms(cfg.conversionTerms);
   const missingTerms = Object.keys(t).filter((k) => !t[k]);
   if (cfg.economicBuyerInvolved !== true) add('fix', 'no-economic-buyer', 'deal',
-    `No economic buyer involved. The champion can run the pilot, but ${B.signer} decides whether it becomes a contract.`,
+    `${cfg.economicBuyerInvolved === false ? 'No economic buyer involved.' : 'Economic buyer not stated: you did not say whether the budget owner is in the plan.'} The champion can run the pilot, but ${B.signer} decides whether it becomes a contract.`,
     'Get the person who owns the budget to agree the criteria and attend the readout.');
   if (cfg.championNamed !== true) add('fix', 'no-champion', 'deal',
-    'No named champion. Someone inside has to chase usage during the pilot and forward the results after it.',
+    (cfg.championNamed === false ? 'No named champion.' : 'Champion not stated: you did not say whether someone inside is named.') + ' Someone inside has to chase usage during the pilot and forward the results after it.',
     'Name the person who owns the problem and will speak for the pilot inside.');
   if (missingTerms.length === 3) {
     if (price === 'free') add('fix', 'free-no-terms', 'deal',
@@ -348,6 +351,7 @@ function plan(cfg) {
     deal: { championNamed: cfg.championNamed === true, economicBuyerInvolved: cfg.economicBuyerInvolved === true, terms: t },
     findings, topFixes: findings.slice(0, 3).map((f) => ({ id: f.id, text: f.action })),
     verdict, notes,
+    assumedWeeks,
     rules: { MAX_CRITERIA, DEFAULT_READOUT_WEEKS, DEFAULT_DECISION_WEEKS },
   };
 }
@@ -403,6 +407,7 @@ function render(r) {
   L.push(`  ${r.verdict.headline.toUpperCase()} - ${r.verdict.body}`);
   L.push('');
   L.push('TIMELINE');
+  if (r.assumedWeeks.length) L.push(`  Assumed (AAJ defaults, not your dates): ${r.assumedWeeks.join('; ')}. Give your own to change them.`);
   r.timeline.milestones.forEach((m) => L.push(`  ${m.date}  ${m.label.padEnd(48)}`));
   if (r.timeline.latestStart) L.push(`  Latest kickoff that lands the decision by ${r.timeline.bindingDeadline}: ${r.timeline.latestStart}` +
     (r.timeline.slackDays !== null ? `  (slack: ${r.timeline.slackDays} days)` : ''));

@@ -179,7 +179,8 @@ function buildChannels(cfg) {
   // Apply overrides / additions from cfg.channels. A channel counts as the
   // user's own data only when every economic input came from the config.
   (cfg.channels || []).forEach(o => {
-    const base = preset.ch[o.key] || {};
+    // Own-channels mode never borrows a preset's numbers or channel model (review, Oct 29).
+    const base = cfg.onlyListedChannels ? {} : (preset.ch[o.key] || {});
     const need = o.model === 'cpl' ? ['cpl', 'l2c', 'cap'] : ['cpc', 'cvr', 'l2c', 'cap'];
     const placeholder = need.some(f => o[f] == null);
     map[o.key] = Object.assign({ key: o.key, model: 'funnel' }, base, o, { placeholder });
@@ -275,7 +276,7 @@ function run(cfg) {
   const out = [];
   out.push('');
   out.push(own ? 'AAJ Paid Media Budget Allocator — your channels only' : `AAJ Paid Media Budget Allocator — ${preset.label}`);
-  out.push(`Mode: ${mode}  ·  Diminishing returns: ${cfg.diminishingReturns || 'moderate'} (${DR})`);
+  out.push(`Mode: ${mode}  ·  Diminishing returns: ${cfg.diminishingReturns || 'moderate'} (${DR}${cfg.diminishingReturns ? '' : ", AAJ's default"})`);
   if (note) out.push('\n⚠ ' + note + '\n');
   out.push('');
   const pad = (s, n) => String(s).padEnd(n);
@@ -306,7 +307,7 @@ function run(cfg) {
   out.push('');
   out.push('--- JSON ---');
   out.push(JSON.stringify({
-    model: cfg.model || 'saas', mode, diminishingReturns: cfg.diminishingReturns || 'moderate',
+    model: own ? null : (cfg.model || 'saas'), onlyListedChannels: own, mode, diminishingReturns: cfg.diminishingReturns || 'moderate',
     totalSpend: Math.round(totSpend), customers: Math.round(totCust * 10) / 10,
     blendedCAC: Math.round(blendedCAC), ltvCac: ltvcac == null ? null : Math.round(ltvcac * 100) / 100,
     roas: roas == null ? null : Math.round(roas * 100) / 100, cacPaybackMonths: payback == null ? null : Math.round(payback * 10) / 10,
