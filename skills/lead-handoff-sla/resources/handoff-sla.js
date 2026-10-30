@@ -500,14 +500,18 @@ function rateLine(r, label) {
   return `${label}: ${pct(r.rate)} (${r.num} of ${r.den}; 90% range ${pct(r.low)} to ${pct(r.high)})${r.directional ? ' - directional, n < ' + MIN_N : ''}`;
 }
 
-function render(r) {
+// cfg is the input as given: a compliance target the user did not set is labelled as the AAJ sheet's, not theirs.
+function render(r, cfg = {}) {
   const L = [];
   const R = r.response, A = r.acceptance;
+  const sla = (cfg && cfg.sla) || {};
+  const targetSet = sla.complianceTarget !== undefined && sla.complianceTarget !== null && sla.complianceTarget !== '';
   L.push('');
   L.push('AAJ - LEAD HANDOFF & SLA CHECK');
   L.push('-'.repeat(66));
   L.push(`  ${r.verdict.headline.toUpperCase()} - ${r.verdict.body}`);
   L.push(`  ${r.counts.leads} leads, ${r.counts.mqls} MQLs, ${r.counts.due} due for a first touch (as of ${r.asOf || '-'})`);
+  if (!targetSet) L.push(`  The ${pct(R.complianceTarget)} compliance goal is the AAJ sheet's starting value, not one you set (sla.complianceTarget).`);
   L.push('');
   L.push(`RESPONSE TIME (target ${fmtH(R.targetHours)}, calendar hours)`);
   L.push('  ' + rateLine(R.compliance, `Touched within target (goal ${pct(R.complianceTarget)})`));
@@ -653,7 +657,7 @@ function main() {
   }
   try {
     const r = analyze(cfg);
-    console.log(asJson ? JSON.stringify(r, null, 2) : render(r));
+    console.log(asJson ? JSON.stringify(r, null, 2) : render(r, cfg));
   } catch (e) {
     if (!e.isInputError) throw e;
     console.error('error: ' + e.message);

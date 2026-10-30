@@ -195,7 +195,7 @@
         "",
         "Loop factor k        1.200",
         "Seed users           100",
-        "Paid feed / period   0",
+        "Paid feed / period   0   (not stated, counted as 0)",
         "Periods              6",
         "",
         "CUMULATIVE USERS",

@@ -73,6 +73,7 @@
         "------------------------------------------------------------------",
         "  THE HANDOFF IS LEAKING - 1 MQL never touched; 50% touched within 4 h against a 90% target; 1 MQL waiting past the acceptance window; 1 MQLs a week against 2 promised. Directional: 4 due MQLs is fewer than 30 (AAJ's rule of thumb).",
         "  5 leads, 4 MQLs, 4 due for a first touch (as of 2026-10-05 09:00)",
+        "  The 90% compliance goal is the AAJ sheet's starting value, not one you set (sla.complianceTarget).",
         "",
         "RESPONSE TIME (target 4 h, calendar hours)",
         "  Touched within target (goal 90%): 50% (2 of 4; 90% range 18% to 82%) - directional, n < 30",

@@ -26,8 +26,9 @@
         "READOUT - on meetings and pipeline, not registrations",
         "  320 registered, 121 attended live (38%), 64 on demand; 14 meetings, 6 opportunities, 84,000 pipeline",
         "  Cost 7,300: 60 per attendee, 39 per person reached, 521 per meeting, 1,217 per opportunity; 11.5 of pipeline per 1 spent; expected revenue 21,000",
+        "  - No target return given: the verdict uses AAJ's default of 3x cost (an engine rule, not a benchmark). Set targetReturn to your own.",
         "  ! First follow-up went out 44 hours after the event. AAJ's rule is within 24 hours; the follow-up is the real event.",
-        "  CHANGE: Expected revenue (pipeline x win rate) is 2.9x cost: it pays for itself but misses your 3x target. Change the weakest step before running again."
+        "  CHANGE: Expected revenue (pipeline x win rate) is 2.9x cost: it pays for itself but misses AAJ's default 3x target. Change the weakest step before running again."
       ],
       "stderr": []
     },

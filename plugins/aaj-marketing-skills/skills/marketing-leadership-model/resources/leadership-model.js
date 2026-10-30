@@ -203,15 +203,29 @@ function run(cfg) {
 
 /* ─────────────────────────── render ─────────────────────────── */
 const money = (v) => v == null ? '-' : Math.round(v).toLocaleString('en-US');
-function render(r) {
+// The fields each option can take, in words, so a field left out is named rather than silently counted as 0.
+const FIELD_WORDS = {
+  inHouse: { loadPct: 'salary load (taxes, benefits)', recruitPct: 'recruiting fee', searchMonths: 'search time', rampMonths: 'ramp', mgmtHoursPerWeek: 'your management hours' },
+  fractional: { executionMonthly: 'execution cost', rampMonths: 'ramp', mgmtHoursPerWeek: 'your management hours', noticeMonths: 'notice period' },
+  agency: { setupFee: 'setup fee', rampMonths: 'ramp', mgmtHoursPerWeek: 'your management hours', minTermMonths: 'minimum term' },
+};
+const given = (o, k) => o && o[k] !== undefined && o[k] !== null && o[k] !== '';
+
+// cfg is the input as given: settings left out are labelled as not stated, not shown as the user's figures.
+function render(r, cfg = {}) {
   const L = [];
   if (r.compare) {
-    const c = r.compare;
-    L.push(`COMPARE - over ${c.horizonMonths} months, your time at ${money(c.ownHourly)} an hour. Nothing here is a benchmark.`);
+    const c = r.compare, cc = cfg.compare || {};
+    const horizon = given(cc, 'horizonMonths') ? `over ${c.horizonMonths} months` : `over ${c.horizonMonths} months (AAJ default; not stated)`;
+    const time = given(cc, 'ownHourly') ? `your time at ${money(c.ownHourly)} an hour` : 'your time not costed (hourly cost not stated)';
+    L.push(`COMPARE - ${horizon}, ${time}. Nothing here is a benchmark.`);
+    if (!given(cc, 'toolsMonthly')) L.push('  Tools not stated, counted as 0.');
     c.options.forEach((o) => {
       const lines = Object.keys(o.lines).filter((k) => o.lines[k]).map((k) => `${k} ${money(o.lines[k])}`).join(', ');
       L.push(`  ${o.name}${o.id === c.cheapest ? ' (cheapest)' : ''}: ${money(o.total)} total; starts ${o.startsIn ? 'in ' + o.startsIn + ' mo' : 'now'}; ${o.productiveMonths.toFixed(1)} productive months; ${money(o.costPerProductiveMonth)} per productive month; ${Math.round(o.yourHours)} of your hours`);
       L.push(`     ${lines}`);
+      const missing = Object.keys(FIELD_WORDS[o.id] || {}).filter((k) => !given(cc[o.id], k)).map((k) => FIELD_WORDS[o.id][k]);
+      if (missing.length) L.push(`     Not stated, counted as 0: ${missing.join(', ')}.`);
     });
     if (c.crossover) L.push(`  Crossover: ${c.crossover.text}`);
     L.push(`  If you stop at month ${c.exitAtMonth}:`);
@@ -222,6 +236,7 @@ function render(r) {
     const f = r.fit;
     L.push(`FIT - ${f.verdict.level.toUpperCase()}: ${f.verdict.text}`);
     f.notes.forEach((n) => L.push(`  - ${n}`));
+    if (!given(cfg.fit, 'executionInHouse')) L.push('  - Whether anyone in-house does the execution was not stated; counted as no.');
   }
   return L.join('\n');
 }
@@ -251,7 +266,7 @@ function main() {
     cfg = DEMO;
     console.log('(no config - demo: the three options on illustrative numbers over 12 months, and a fit check for a seed-stage team)\n');
   }
-  try { console.log(render(run(cfg))); }
+  try { console.log(render(run(cfg), cfg)); }
   catch (e) {
     if (!e.isInputError) throw e;
     console.error('error: ' + e.message);

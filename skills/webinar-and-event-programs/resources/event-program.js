@@ -140,21 +140,26 @@ function readout(r) {
   var cost = isNum(r.cost) && r.cost > 0 ? r.cost : null;
   if (!cost) throw inputError('"readout.cost" must be greater than 0. Include people time.');
   var win = isNum(r.winRate) && r.winRate > 0 && r.winRate <= 1 ? r.winRate : null;
-  var target = isNum(r.targetReturn) && r.targetReturn > 0 ? r.targetReturn : TARGET_RETURN_DEFAULT;
+  var targetGiven = isNum(r.targetReturn) && r.targetReturn > 0;
+  var target = targetGiven ? r.targetReturn : TARGET_RETURN_DEFAULT;
+  var targetWords = (targetGiven ? 'your ' : 'AAJ\'s default ') + target + 'x target';
   var findings = [];
+  if (!isNum(r.meetingsBooked)) findings.push({ level: 'fix', id: 'no-meetings', text: 'No meetings figure given, so it is counted as 0. Give meetingsBooked to read the event.' });
+  if (!isNum(r.pipelineCreated)) findings.push({ level: 'fix', id: 'no-pipeline', text: 'No pipeline figure given, so it is counted as 0. Give pipelineCreated to read the return.' });
+  if (!targetGiven) findings.push({ level: 'improve', id: 'default-target', text: 'No target return given: the verdict uses AAJ\'s default of ' + TARGET_RETURN_DEFAULT + 'x cost (an engine rule, not a benchmark). Set targetReturn to your own.' });
   var showRate = regs && att !== null ? att / regs : null;
   var reached = (att || 0) + (onDemand || 0);
   if (onDemand === null) findings.push({ level: 'improve', id: 'no-on-demand', text: 'No on-demand views given. If there is no recording page, the registrants who did not attend live were never reached.' });
   if (isNum(r.followUpHours) && r.followUpHours > FOLLOW_UP_HOURS_MAX) findings.push({ level: 'fix', id: 'slow-follow-up', text: 'First follow-up went out ' + r.followUpHours + ' hours after the event. AAJ\'s rule is within ' + FOLLOW_UP_HOURS_MAX + ' hours; the follow-up is the real event.' });
   else if (!isNum(r.followUpHours)) findings.push({ level: 'improve', id: 'follow-up-unknown', text: 'Say when the first follow-up went out; it is the step most programmes lose on.' });
-  if (!win) findings.push({ level: 'improve', id: 'no-win-rate', text: 'No win rate given, so pipeline cannot be turned into expected revenue. The verdict uses pipeline against cost at ' + target + 'x instead.' });
+  if (!win) findings.push({ level: 'improve', id: 'no-win-rate', text: 'No win rate given, so pipeline cannot be turned into expected revenue. The verdict uses pipeline against cost at ' + target + 'x instead' + (targetGiven ? '' : ' (AAJ\'s default target)') + '.' });
   var expectedRevenue = win ? pipe * win : null;
   var returnRatio = expectedRevenue !== null ? expectedRevenue / cost : pipe / cost;
   var basis = expectedRevenue !== null ? 'expected revenue (pipeline x win rate)' : 'pipeline';
   var verdict;
   if (meetings < MIN_MEETINGS) verdict = { level: 'too-early', text: meetings + ' meetings booked so far. Below ' + MIN_MEETINGS + ' this engine does not judge; finish the follow-up sequence and read again.' };
-  else if (returnRatio >= target) verdict = { level: 'repeat', text: basis.charAt(0).toUpperCase() + basis.slice(1) + ' is ' + returnRatio.toFixed(1) + 'x cost, at or above your ' + target + 'x target. Repeat, and test one change: topic, partner or offer.' };
-  else if (returnRatio >= 1) verdict = { level: 'change', text: basis.charAt(0).toUpperCase() + basis.slice(1) + ' is ' + returnRatio.toFixed(1) + 'x cost: it pays for itself but misses your ' + target + 'x target. Change the weakest step before running again.' };
+  else if (returnRatio >= target) verdict = { level: 'repeat', text: basis.charAt(0).toUpperCase() + basis.slice(1) + ' is ' + returnRatio.toFixed(1) + 'x cost, at or above ' + targetWords + '. Repeat, and test one change: topic, partner or offer.' };
+  else if (returnRatio >= 1) verdict = { level: 'change', text: basis.charAt(0).toUpperCase() + basis.slice(1) + ' is ' + returnRatio.toFixed(1) + 'x cost: it pays for itself but misses ' + targetWords + '. Change the weakest step before running again.' };
   else verdict = { level: 'stop', text: basis.charAt(0).toUpperCase() + basis.slice(1) + ' is ' + returnRatio.toFixed(1) + 'x cost. Stop this format for this audience unless the topic or the follow-up was clearly the failure.' };
   return { registrations: regs, attendees: att, onDemandViews: onDemand, reached: reached, showRate: showRate,
     meetingsBooked: meetings, opportunities: opps, pipelineCreated: pipe, cost: cost, winRate: win,
