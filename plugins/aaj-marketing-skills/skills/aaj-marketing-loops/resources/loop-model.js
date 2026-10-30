@@ -254,15 +254,17 @@ function renderScore(r) {
   return out.join('\n');
 }
 
-function renderProject(r) {
+// cfg is the input as given, so a setting left out is labelled as the engine's, not the user's.
+function renderProject(r, cfg = {}) {
   const out = [];
+  const unset = (k) => cfg[k] === undefined || cfg[k] === null;
   out.push('MARKETING LOOP — PROJECTION');
   out.push('═'.repeat(58));
   out.push('');
   out.push(`Loop factor k        ${r.k.toFixed(3)}`);
-  out.push(`Seed users           ${fmt(r.seed)}`);
-  out.push(`Paid feed / period   ${fmt(r.paid)}`);
-  out.push(`Periods              ${r.periods}`);
+  out.push(`Seed users           ${fmt(r.seed)}${unset('seed') ? '   (not stated, counted as 0)' : ''}`);
+  out.push(`Paid feed / period   ${fmt(r.paid)}${unset('paidPerPeriod') ? '   (not stated, counted as 0)' : ''}`);
+  out.push(`Periods              ${r.periods}${unset('periods') ? '   (AAJ default; not stated)' : ''}`);
   out.push('');
 
   const maxTotal = r.final;
@@ -376,7 +378,7 @@ function main() {
     const s = score(DEMO_SCORE).__score;
     console.log(renderScore(s));
     console.log('\n\n▸ DEMO 2 — project mode (compound it over 12 periods)\n');
-    console.log(renderProject(project(DEMO_PROJECT)));
+    console.log(renderProject(project(DEMO_PROJECT), DEMO_PROJECT));
     console.log('\n(Demo data. Replace with your real loop stages and paid feed.)');
     return;
   }
@@ -408,7 +410,7 @@ function main() {
 
   try {
     if (mode === 'score') console.log(renderScore(score(cfg).__score));
-    else if (mode === 'project') console.log(renderProject(project(cfg)));
+    else if (mode === 'project') console.log(renderProject(project(cfg), cfg));
     else die(`unknown mode "${mode}". Use score, project, --demo, or --help.`);
   } catch (e) {
     if (!e.isInputError) throw e;
