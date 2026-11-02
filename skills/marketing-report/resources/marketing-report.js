@@ -120,7 +120,9 @@ function compute(c){
            pipeToSpend: pipeToSpend, attainment: attainment, wins: wins };
 }
 
-function delta(cur, prior){ return (prior != null && prior !== 0) ? (cur - prior) / Math.abs(prior) * 100 : null; }
+// A change needs both numbers. Without the current one, a missing CAC read as -100% ("acquisition
+// got more efficient") and a missing spend as NaN%.
+function delta(cur, prior){ return (cur != null && prior != null && prior !== 0) ? (cur - prior) / Math.abs(prior) * 100 : null; }
 
 function deltas(c){
   if (!c.prior) return null;
