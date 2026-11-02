@@ -761,7 +761,7 @@
       "id": "brand-voice-governance",
       "slug": "brand-voice-governance",
       "title": "Brand Voice Governance",
-      "version": "1.0.1",
+      "version": "1.1.0",
       "phase": "Execute",
       "category": "Content & Copy",
       "decision": "Does this content follow our brand's own written voice rules, and which blocks must be revised before it ships?",

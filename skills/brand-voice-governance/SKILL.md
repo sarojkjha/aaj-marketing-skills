@@ -19,7 +19,7 @@ metadata:
   card: >-
     Checks content block by block against your own voice rules, with a pass/revise
     verdict.
-  version: 1.0.1
+  version: 1.1.0
   sprint: positioning-message
   topic: brand-voice
   secondary_topics: [content-seo]
@@ -30,6 +30,7 @@ metadata:
     - https://aajconsult.com/playbooks/brand-voice-playbook
     - https://aajconsult.com/resources/brand-voice-guide
     - https://aajconsult.com/playbooks/content-creation-playbook
+    - https://aajconsult.com/tools/brand-voice-checker
   tags: [brand-voice, governance, tone-consistency, content-review, guardrails, ai-content, compliance]
 ---
 
@@ -99,7 +100,8 @@ Never present a blocking finding as a suggestion or an advisory note as a failur
 - **Conformance is not quality.** This measures whether content matches the brand's stated voice, not whether it's good. Say so every time; pair with `aaj-copywriting` for quality.
 - **House defaults are a fallback, not a profile.** If no brand avoid-list is found, the check runs against AAJ generic defaults and flags that it did. Don't let a house-default pass read as a brand-conformance pass.
 - **Keep opinions out of the blocking tier.** Only rules the brand wrote for itself should fail content. Promoting a taste preference to a hard failure is how the tool loses editors' trust.
-- **Banned-word matching is literal and whole-word.** It catches "leverage" but not a paraphrase that means the same thing. It's a floor, not a substitute for a human read on tone.
+- **Banned-word matching is whole-word, with ordinary inflections.** A rule about "leverage" catches "leverages", "leveraged" and "leveraging", and hyphens and spaces inside a phrase match either. It does not catch a paraphrase that means the same thing. It's a floor, not a substitute for a human read on tone.
+- **Quoted mentions are listed, not counted.** A banned word inside quotation marks is usually being discussed ("we never say 'synergy'"), so it shows as a note and doesn't fail the block. Read those notes: sometimes the quote is the brand using the word.
 - **A brief with no words-to-avoid can't govern much.** If profile mode returns an empty avoid-list, the fix is upstream — capture the real rules in `brand-product-context`.
 - **The reading-grade ceiling is brand-specific.** Don't apply a grade-8 ceiling to copy written for a technical audience; set it from the brief.
 - **Don't run this instead of a human on flagship copy.** It scales review to catch the mechanical violations a person misses at volume; it doesn't replace the judgment a person brings to the pieces that matter most.
