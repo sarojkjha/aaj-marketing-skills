@@ -251,6 +251,93 @@
         "  ✗ blocks before publishing; the notes can wait."
       ],
       "stderr": []
+    },
+    {
+      "name": "'-ing' after a final e; short words match exactly",
+      "source": "batch-1 review Nov 2026, hand-checked",
+      "args": [
+        "check",
+        "{\"brand\": \"Example Co.\", \"content\": \"We are leveraging data and utilizing tools.\\n\\nThe news is new to us.\", \"profile\": {\"avoid\": [\"leverage\", \"utilize\", \"new\"], \"maxGrade\": 12}}"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "BRAND VOICE GOVERNANCE — Example Co.",
+        "════════════════════════════════════════════════════════",
+        "",
+        "VERDICT   REVISE",
+        "",
+        "  Conformance      0%  ······················   0/2 blocks clean",
+        "  Profile       brand profile",
+        "  Grade ceiling 12",
+        "",
+        "  2 to revise · 0 with notes · 0 pass",
+        "",
+        "BANNED TERMS FOUND",
+        "  \"leverage\"            1×",
+        "  \"utilize\"             1×",
+        "  \"new\"                 1×",
+        "",
+        "BY BLOCK",
+        "  ✗ REVISE  #1   We are leveraging data and utilizing tools.",
+        "        ✗ \"leveraging\" matches \"leverage\" on this brand's avoid list",
+        "        ✗ \"utilizing\" matches \"utilize\" on this brand's avoid list",
+        "  ✗ REVISE  #2   The news is new to us.",
+        "        ✗ \"new\" is on this brand's avoid list",
+        "",
+        "AUDIT TRAIL",
+        "  3 finding(s) across 2 block(s). Each is quoted above with its",
+        "  block number, so an editor or a compliance log can trace every flag to its",
+        "  source. Blocking findings (✗) violate a stated brand rule; notes (·) are",
+        "  advisory and do not fail the check; quoted mentions (~) are not counted.",
+        "",
+        "WHAT THIS MEANS",
+        "  Content violates the brand's own stated voice rules. These are not style",
+        "  opinions — they are the do/don't list the brand wrote for itself. Fix the",
+        "  ✗ blocks before publishing; the notes can wait."
+      ],
+      "stderr": []
+    },
+    {
+      "name": "an apostrophe never opens a quote; a single-quoted mention is not counted",
+      "source": "batch-1 review Nov 2026, hand-checked",
+      "args": [
+        "check",
+        "{\"brand\": \"Example Co.\", \"content\": \"It's time to leverage AI, as the \\\"experts\\\" say.\\n\\nWe never say 'synergy' in copy.\", \"profile\": {\"avoid\": [\"leverage\", \"synergy\"], \"maxGrade\": 12}}"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "BRAND VOICE GOVERNANCE — Example Co.",
+        "════════════════════════════════════════════════════════",
+        "",
+        "VERDICT   REVISE",
+        "",
+        "  Conformance     50%  ███████████···········   1/2 blocks clean",
+        "  Profile       brand profile",
+        "  Grade ceiling 12",
+        "",
+        "  1 to revise · 0 with notes · 1 pass",
+        "",
+        "BANNED TERMS FOUND",
+        "  \"leverage\"            1×",
+        "",
+        "BY BLOCK",
+        "  ✗ REVISE  #1   It's time to leverage AI, as the \"experts\" say.",
+        "        ✗ \"leverage\" is on this brand's avoid list",
+        "  ✓ PASS    #2   We never say 'synergy' in copy.",
+        "        ~ \"synergy\" is inside quotation marks, so possibly discussed rather than used; not counted",
+        "",
+        "AUDIT TRAIL",
+        "  2 finding(s) across 2 block(s). Each is quoted above with its",
+        "  block number, so an editor or a compliance log can trace every flag to its",
+        "  source. Blocking findings (✗) violate a stated brand rule; notes (·) are",
+        "  advisory and do not fail the check; quoted mentions (~) are not counted.",
+        "",
+        "WHAT THIS MEANS",
+        "  Content violates the brand's own stated voice rules. These are not style",
+        "  opinions — they are the do/don't list the brand wrote for itself. Fix the",
+        "  ✗ blocks before publishing; the notes can wait."
+      ],
+      "stderr": []
     }
   ]
 }

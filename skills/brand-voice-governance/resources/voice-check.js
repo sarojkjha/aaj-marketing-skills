@@ -87,31 +87,61 @@ function gradeLevel(text) {
   const wds = words(text);
   if (!sents.length || !wds.length) return 0;
   const syl = wds.reduce((a, w) => a + syllables(w), 0);
-  return 0.39 * (wds.length / sents.length) + 11.8 * (syl / wds.length) - 15.59;
+  // The formula goes below zero on very short, simple text; a grade below 0 means nothing, so floor it.
+  return Math.max(0, 0.39 * (wds.length / sents.length) + 11.8 * (syl / wds.length) - 15.59);
 }
 
 /* ─────────────────────────────  matchers  ───────────────────────────── */
 
 // Spans inside quotation marks: a word quoted is usually being discussed, not used.
+// Each mark closes only with its own partner. A straight single quote counts only
+// when no letter or digit touches it on the outside, so the apostrophe in "it's"
+// never opens a quote. (No lookbehind: older Safari can't run it.)
 function quotedRanges(text) {
   const out = [];
-  const re = /["“”'‘’][^"“”]{0,120}?["“”]/g;
+  const pairs = [/"[^"\n]{0,120}?"/g, /\u201c[^\u201d\n]{0,120}?\u201d/g, /\u2018[^\u2019\n]{0,120}?\u2019/g];
+  for (const re of pairs) {
+    let m;
+    while ((m = re.exec(text)) !== null) out.push([m.index, m.index + m[0].length]);
+  }
+  const single = /(^|[^A-Za-z0-9])'([^'\n]{1,120}?)'(?![A-Za-z0-9])/g;
   let m;
-  while ((m = re.exec(text)) !== null) out.push([m.index, m.index + m[0].length]);
+  while ((m = single.exec(text)) !== null) {
+    const start = m.index + m[1].length;
+    out.push([start, start + m[2].length + 2]);
+    single.lastIndex = start + m[2].length + 2;
+  }
   return out;
+}
+
+// The endings a rule's last word may take when inflect is on. Short words (under
+// four letters) match exactly, so "new" never catches "news". A word ending in a
+// consonant and "e" drops the "e" before "-ing" ("leverage" -> "leveraging");
+// "-es" follows only s, x, z, ch and sh; a consonant and "y" takes "-ies"/"-ied".
+function inflectTail(term) {
+  const w = (term.match(/[a-z0-9]+$/i) || [''])[0].toLowerCase();
+  if (w.length < 4 || !/[a-z]$/.test(w)) return { cut: 0, tail: '' };
+  if (/[^aeiou]e$/.test(w)) return { cut: 1, tail: '(?:e|es|ed|ing)' };
+  if (/[^aeiou]y$/.test(w)) return { cut: 1, tail: '(?:y|ies|ied|ying)' };
+  if (/(?:s|x|z|ch|sh)$/.test(w)) return { cut: 0, tail: '(?:es|ed|ing)?' };
+  return { cut: 0, tail: '(?:s|ed|ing)?' };
 }
 
 // Match a term as a whole word/phrase, case-insensitive; hyphens and spaces inside
 // it match either. With inflect, a rule about "leverage" also catches "leverages",
-// "leveraged" and "leveraging"; the word boundary still stops it running into an
-// unrelated word. Returns the matched surface forms with their positions and
-// whether each sits inside quotation marks, so the audit trail can quote them.
+// "leveraged" and "leveraging" (see inflectTail); the word boundary still stops it
+// running into an unrelated word. Returns the matched surface forms with their
+// positions and whether each sits inside quotation marks, so the audit trail can
+// quote them.
 function findTerm(block, term, opts) {
   const inflect = !!(opts && opts.inflect);
-  const t = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace(/[-\s]+/g, '[-\\s]+');
+  const wordEnd = /[a-z0-9]$/i.test(term);
+  const inf = inflect && wordEnd ? inflectTail(term) : { cut: 0, tail: '' };
+  const base = inf.cut ? term.slice(0, -inf.cut) : term;
+  const t = base.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace(/[-\s]+/g, '[-\\s]+');
   // \b fails against a term ending in punctuation, so guard only word-character edges.
   const pre = /^[a-z0-9]/i.test(term) ? '\\b' : '';
-  const post = /[a-z0-9]$/i.test(term) ? (inflect ? '(?:s|es|ed|d|ing)?\\b' : '\\b') : '';
+  const post = wordEnd ? inf.tail + '\\b' : '';
   const re = new RegExp(pre + t + post, 'gi');
   const quoted = quotedRanges(block);
   const hits = [];
@@ -236,7 +266,7 @@ function checkBlock(block, prof, idx) {
   }
 
   // longest sentence — a proxy the reading grade can miss on short blocks
-  const longest = Math.max(0, ...sentences(block).map((s) => words(s).length));
+  const longest = sentences(block).reduce((a, s) => Math.max(a, words(s).length), 0);
   if (longest > 30) {
     findings.push({ type: 'long-sentence', severity: 'warn', term: null,
       note: `${longest}-word sentence; consider splitting` });
