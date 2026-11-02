@@ -145,6 +145,9 @@ function allocateBudget(chs, B, DR) {
   if (!chs.length || B <= 0) return chs.map(() => 0);
   let lo = Math.min(...chs.map(c => c.baseCAC));
   let hi = Math.max(...chs.map(c => c.baseCAC)) * 60;
+  // Widen the search until the whole budget can be spent (returns diminish but never stop).
+  const spendAt = lam => chs.reduce((s, c) => s + spendForMarginal(lam, c.baseCAC, c.cap, DR), 0);
+  for (let k = 0; k < 200 && spendAt(hi) < B; k++) hi *= 2;
   for (let i = 0; i < 90; i++) {
     const mid = (lo + hi) / 2;
     const tot = chs.reduce((s, c) => s + spendForMarginal(mid, c.baseCAC, c.cap, DR), 0);
@@ -155,10 +158,19 @@ function allocateBudget(chs, B, DR) {
 }
 const allocateCAC = (chs, T, DR) => chs.map(c => spendForMarginal(T, c.baseCAC, c.cap, DR));
 
+// How far the goal search may go: the last customer at most this many times the dearest base CAC.
+const GOAL_SEARCH_LIMIT = 1e6;
+
 function allocateGoal(chs, G, DR) {
   if (!chs.length || G <= 0) return chs.map(() => 0);
   let lo = Math.min(...chs.map(c => c.baseCAC));
   let hi = Math.max(...chs.map(c => c.baseCAC)) * 90;
+  // Widen the search until the goal is reachable, up to the point where the last customer would
+  // cost GOAL_SEARCH_LIMIT times the dearest channel's base CAC. Past that the goal is out of
+  // reach, and the runner says so rather than printing a silent shortfall.
+  const limit = Math.max(...chs.map(c => c.baseCAC)) * GOAL_SEARCH_LIMIT;
+  const custAt = lam => chs.reduce((s, c) => s + custFromSpend(spendForMarginal(lam, c.baseCAC, c.cap, DR), c.baseCAC, c.cap, DR), 0);
+  while (hi < limit && custAt(hi) < G) hi = Math.min(limit, hi * 2);
   for (let i = 0; i < 90; i++) {
     const mid = (lo + hi) / 2;
     const cust = chs.reduce((s, c) => s + custFromSpend(spendForMarginal(mid, c.baseCAC, c.cap, DR), c.baseCAC, c.cap, DR), 0);
@@ -267,6 +279,11 @@ function run(cfg) {
       placeholderInputs: !!c.placeholder
     };
   });
+  const goalShortfall = mode === 'goal' && totCust < cfg.customerGoal * (1 - 1e-6) ? cfg.customerGoal - totCust : 0;
+  if (goalShortfall) {
+    const lastCost = Math.max(...rows.filter(r => r.spend > 0).map(r => r.marginalCAC));
+    note = `Goal out of reach with these channels: returns diminish as spend grows, and even at the most this engine will spend they deliver about ${one(totCust)} of the ${one(cfg.customerGoal)} customers, the last ones at ${money(lastCost)} each. Lower the goal, add channels, or raise their caps.`;
+  }
   const blendedCAC = totCust > 0 ? totSpend / totCust : 0;
   const ltvcac = ltv == null ? null : (blendedCAC > 0 ? ltv / blendedCAC : 0);
   const roas = acv == null ? null : (totSpend > 0 ? (totCust * acv) / totSpend : 0);
@@ -309,6 +326,7 @@ function run(cfg) {
   out.push(JSON.stringify({
     model: own ? null : (cfg.model || 'saas'), onlyListedChannels: own, mode, diminishingReturns: cfg.diminishingReturns || 'moderate',
     totalSpend: Math.round(totSpend), customers: Math.round(totCust * 10) / 10,
+    goalShortfall: mode === 'goal' ? Math.round(goalShortfall * 10) / 10 : undefined,
     blendedCAC: Math.round(blendedCAC), ltvCac: ltvcac == null ? null : Math.round(ltvcac * 100) / 100,
     roas: roas == null ? null : Math.round(roas * 100) / 100, cacPaybackMonths: payback == null ? null : Math.round(payback * 10) / 10,
     placeholderChannels: rows.filter(r => r.placeholderInputs).map(r => r.channel),
