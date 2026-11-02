@@ -153,7 +153,7 @@ The `twitter:card` tag is AAJ's addition; the engine labels it so.
 
 ## Related AAJ resources
 
-- Crawl-to-Citation Scorer: https://aajconsult.com/tools/seo-geo-readiness-scorer
+- SEO & GEO Readiness Scorer: https://aajconsult.com/tools/seo-geo-readiness-scorer
 - GEO & AEO Playbook: https://aajconsult.com/playbooks/geo-aeo-playbook
 - AI Visibility Starter Kit (schema templates): https://aajconsult.com/templates/ai-visibility-starter-kit
 - What Is GEO? (AAJ post): https://aajconsult.com/blog/what-is-geo-ai-citations
