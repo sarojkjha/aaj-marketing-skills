@@ -84,7 +84,7 @@ Document verdict:
 
 ```json
 {
-  "brand": "Northwind Analytics",
+  "brand": "Example Co.",
   "brief": "...markdown containing a '## Voice & tone' section...",
   "maxGrade": 9
 }
@@ -94,7 +94,7 @@ Document verdict:
 
 ```json
 {
-  "brand": "Northwind Analytics",
+  "brand": "Example Co.",
   "content": "the text to check, in markdown or plain paragraphs",
   "profile": { "avoid": ["synergy","leverage"], "prefer": ["plain"], "maxGrade": 9 },
   "brief": "...alternative to profile — re-parsed here...",
@@ -136,7 +136,7 @@ Opt out entirely with `"useHouseDefaults": false` — useful when you want to ch
 
 `node voice-check.js --demo` runs both modes on a fictional B2B analytics brand.
 
-Profile mode parses Northwind's Voice & tone section into an avoid-list of five words and a grade-9 ceiling. Check mode then runs four blocks of content against it:
+Profile mode parses Example Co.'s Voice & tone section into an avoid-list of five words and a grade-9 ceiling. Check mode then runs four blocks of content against it:
 
 - **Block 1** — "robust, best-in-class analytics platform" → REVISE, two banned words in one sentence.
 - **Block 2** — a 34-word sentence packing `leverage`, `seamless`, and `synergy` → REVISE on three banned words, plus advisory notes for reading at grade 19 against a grade-9 ceiling and for the sentence length.

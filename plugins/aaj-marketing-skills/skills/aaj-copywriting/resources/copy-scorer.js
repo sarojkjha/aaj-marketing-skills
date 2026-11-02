@@ -356,9 +356,9 @@ It cannot tell you whether the message is right — only whether it is
 clear, concrete, and defensible. Judge message-match separately.
 `;
 
-const DEMO = `Acme is the leading platform for modern teams. Our innovative, best-in-class
+const DEMO = `Example Co. is the leading platform for modern teams. Our innovative, best-in-class
 solutions empower organizations to unlock growth and streamline their workflows
-end-to-end. Designed to help you leverage cutting-edge capabilities, Acme's
+end-to-end. Designed to help you leverage cutting-edge capabilities, Example Co.'s
 robust ecosystem might be the game-changing partner your business needs to
 transform your outcomes and drive seamless, frictionless experiences at scale.`;
 

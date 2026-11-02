@@ -364,7 +364,7 @@ DESIGN — how many prompts before a change is detectable
 
 READOUT — score a completed run
   {
-    "brand": "Acme",
+    "brand": "Example Co.",
     "runDate": "2026-07-24",
     "engines": {
       "chatgpt": [

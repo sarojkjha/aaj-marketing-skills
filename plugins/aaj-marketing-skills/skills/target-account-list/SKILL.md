@@ -16,7 +16,7 @@ metadata:
   difficulty: Intermediate
   card: >-
     Scores and tiers accounts by ICP fit, showing the signals each matched.
-  version: 1.0.0
+  version: 1.0.1
   sprint: gtm-pipeline
   topic: sales-pipeline
   secondary_topics: [audience-research]
@@ -72,7 +72,7 @@ weights should reflect predictiveness of a good deal (win-loss evidence > gut)
 node .agents/skills/target-account-list/resources/score-accounts.js --input=accounts.json
 node .agents/skills/target-account-list/resources/score-accounts.js  # built-in demo
 ```
-Input JSON: `{ "weights": { "industryMatch": 30, ... }, "accounts": [ { "name": "Acme", "signals": { "industryMatch": true, ... } } ] }`. It prints each account's fit score, tier, and matched signals, plus the A/B/C tally. Use these exact scores and tiers — don't restate them from memory.
+Input JSON: `{ "weights": { "industryMatch": 30, ... }, "accounts": [ { "name": "Prospect A", "signals": { "industryMatch": true, ... } } ] }`. It prints each account's fit score, tier, and matched signals, plus the A/B/C tally. Use these exact scores and tiers — don't restate them from memory.
 
 ## Reference
 

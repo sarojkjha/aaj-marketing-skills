@@ -17,7 +17,7 @@ metadata:
   difficulty: Intermediate
   card: >-
     Scores a story before it is pitched, and aims it at twenty of the right people.
-  version: 1.0.0
+  version: 1.0.1
   topic: pr-partnerships-events
   secondary_topics: [brand-voice, gtm-growth-planning]
   agents: [Claude Code, Cursor, OpenAI Codex, Windsurf, Cline]

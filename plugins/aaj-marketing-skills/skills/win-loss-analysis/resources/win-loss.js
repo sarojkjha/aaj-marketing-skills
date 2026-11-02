@@ -260,7 +260,7 @@ if (require.main === module && process.argv.length > 2 && process.argv[2] !== "-
 if (require.main === module) {
   console.log("(no input, so this is the built-in demo. Run --help to see how to pass your own deals.)\n");
   const demo = [
-    { name: "Acme",        outcome: "won",  amount: 10000,  segment: "SMB" },
+    { name: "Alfa",        outcome: "won",  amount: 10000,  segment: "SMB" },
     { name: "Bravo",       outcome: "won",  amount: 12000,  segment: "SMB" },
     { name: "Cosmo",       outcome: "won",  amount: 40000,  segment: "Mid-Market", competitor: "Competitor A" },
     { name: "Delta",       outcome: "won",  amount: 50000,  segment: "Mid-Market" },
