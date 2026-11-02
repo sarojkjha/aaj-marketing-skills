@@ -2489,7 +2489,7 @@
       "id": "pipeline-and-forecast",
       "slug": "pipeline-and-forecast",
       "title": "Pipeline & Forecast",
-      "version": "1.0.1",
+      "version": "1.0.2",
       "phase": "Execute",
       "category": "Sales & Pipeline",
       "decision": "Is there enough pipeline to hit the target, and should we build pipeline, advance deals or improve conversion?",

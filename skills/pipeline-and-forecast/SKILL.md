@@ -17,7 +17,7 @@ metadata:
   difficulty: Intermediate
   card: >-
     Weights pipeline by stage and says whether coverage is real.
-  version: 1.0.1
+  version: 1.0.2
   sprint: unit-economics-retention
   topic: sales-pipeline
   secondary_topics: [analytics-budget]
@@ -77,7 +77,7 @@ commit = Σ amount for deals at prob ≥ 0.75   ·   best case = Σ amount (all 
 node .agents/skills/pipeline-and-forecast/resources/forecast.js --input=pipeline.json
 node .agents/skills/pipeline-and-forecast/resources/forecast.js  # built-in demo
 ```
-Input JSON: `{ "target": 500000, "winRate": 0.25, "stageProbabilities": { "Proposal": 0.5, ... }, "deals": [ { "name": "Acme", "amount": 60000, "stage": "Proposal" } ] }`. It prints the weighted forecast, commit vs best case, the early-stage share, coverage ratio with a healthy/thin flag, the gap, the new pipeline needed, and the recommended lever. Use these exact numbers — don't restate them from memory.
+Input JSON: `{ "target": 500000, "winRate": 0.25, "stageProbabilities": { "Proposal": 0.5, ... }, "deals": [ { "name": "Prospect A", "amount": 60000, "stage": "Proposal" } ] }`. It prints the weighted forecast, commit vs best case, the early-stage share, coverage ratio with a healthy/thin flag, the gap, the new pipeline needed, and the recommended lever. Use these exact numbers — don't restate them from memory.
 
 ## Reference
 
