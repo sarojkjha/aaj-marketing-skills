@@ -128,7 +128,7 @@ function analyzePricing(tiersInput) {
     }
   }
   if (summary.tierCount > 0 && summary.tierCount < 3) {
-    insights.push(`You have ${summary.tierCount} tier${summary.tierCount !== 1 ? "s" : ""}; with fewer than three there is no ladder to compare, so there is no middle tier to compare against.`);
+    insights.push(`You have ${summary.tierCount} tier${summary.tierCount !== 1 ? "s" : ""}; with fewer than three, buyers have no middle tier to compare against.`);
   } else if (summary.tierCount > 5) {
     insights.push(`You have ${summary.tierCount} tiers. In AAJ's view, more than four or five makes the choice harder to read; check where buyers stall before adding another.`);
   }
