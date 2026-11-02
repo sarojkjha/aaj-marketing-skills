@@ -213,7 +213,7 @@ for (const id of ["founder-led-content", "ai-marketing-governance", "partnership
   const worse = runInProcess(e, [JSON.stringify({ control: { visitors: 4000, conversions: 250 }, variant: { visitors: 4050, conversions: 200 }, tail: "one" })]);
   ok(/NOT significant/.test(worse.out), "one-tailed: a worse variant is not significant");
   const ninety = runInProcess(e, [JSON.stringify({ control: { visitors: 4000, conversions: 200 }, variant: { visitors: 4050, conversions: 250 }, confidence: 90 })]);
-  ok(/90% CI/.test(ninety.out) && !/95% CI/.test(ninety.out), "the interval label follows the confidence level");
+  ok(/90% interval/.test(ninety.out) && !/95% interval/.test(ninety.out), "the interval label follows the confidence level");
 }
 
 if (slow.length) console.log(`Demos over 50 ms of wall time (check CPU limits): ${slow.join(", ")}`);

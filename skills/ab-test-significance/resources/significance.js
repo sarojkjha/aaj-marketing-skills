@@ -59,6 +59,37 @@ function normInv(p){
   q=Math.sqrt(-2*Math.log(1-p));return -(((((c[0]*q+c[1])*q+c[2])*q+c[3])*q+c[4])*q+c[5])/((((d[0]*q+d[1])*q+d[2])*q+d[3])*q+1);
 }
 
+// Score interval on the difference pB − pA (Miettinen–Nurminen without the n/(n−1)
+// factor). At a difference of 0 its statistic is exactly the pooled z above, so the
+// interval excludes 0 exactly when the test is significant: the two never disagree,
+// which an unpooled Wald interval can (a "win" whose interval touches 0).
+function restrictedMle(x1, n1, x2, n2, d){
+  // Maximise the likelihood with pB = pA + d over pA in (max(0, −d), min(1, 1 − d)).
+  // The log-likelihood is concave in pA, so bisect on its derivative.
+  let lo = Math.max(0, -d), hi = Math.min(1, 1 - d);
+  const eps = 1e-12;
+  const grad = (p) => {
+    const q = p + d;
+    return (x1 ? x1 / Math.max(p, eps) : 0) - (n1 - x1 ? (n1 - x1) / Math.max(1 - p, eps) : 0)
+         + (x2 ? x2 / Math.max(q, eps) : 0) - (n2 - x2 ? (n2 - x2) / Math.max(1 - q, eps) : 0);
+  };
+  for (let i = 0; i < 200; i++){ const m = (lo + hi) / 2; if (grad(m) > 0) lo = m; else hi = m; }
+  const pA = (lo + hi) / 2;
+  return [pA, pA + d];
+}
+function scoreZ(x1, n1, x2, n2, d){
+  const [a, b] = restrictedMle(x1, n1, x2, n2, d);
+  const v = a * (1 - a) / n1 + b * (1 - b) / n2;
+  const diff = x2 / n2 - x1 / n1 - d;
+  return v > 0 ? diff / Math.sqrt(v) : (diff > 0 ? Infinity : diff < 0 ? -Infinity : 0);
+}
+function scoreInterval(x1, n1, x2, n2, zc){
+  const dHat = x2 / n2 - x1 / n1;
+  // scoreZ falls as d rises; find where it crosses +zc (lower bound) and −zc (upper bound).
+  const solve = (target, lo, hi) => { for (let i = 0; i < 200; i++){ const m = (lo + hi) / 2; if (scoreZ(x1, n1, x2, n2, m) > target) lo = m; else hi = m; } return (lo + hi) / 2; };
+  return [solve(zc, -1, dHat), solve(-zc, dHat, 1)];
+}
+
 function evaluate(c){
   const conf = c.confidence || 95;
   const tail = c.tail || 'two';
@@ -73,11 +104,12 @@ function evaluate(c){
   const alpha = (100 - conf) / 100;
   const significant = pValue < alpha;
   const relLift = pA > 0 ? (pB - pA) / pA : 0;
-  // CI on the difference
-  const seUn = Math.sqrt(pA*(1-pA)/a.visitors + pB*(1-pB)/b.visitors);
+  // Interval on the difference, consistent with the test (scoreInterval). One-tailed asks
+  // only whether the variant is better, so it has a lower bound and no upper bound.
   const zc = normInv(1 - alpha / (tail === 'one' ? 1 : 2));
+  const [ciLow, ciHigh] = scoreInterval(a.conversions, a.visitors, b.conversions, b.visitors, zc);
   return { pA, pB, relLift, absLift: pB - pA, z, pValue, significant, conf, tail,
-    ciLow: (pB - pA) - zc * seUn, ciHigh: (pB - pA) + zc * seUn,
+    ciLow, ciHigh: tail === 'one' ? null : ciHigh,
     winner: pB > pA ? 'variant' : (pB < pA ? 'control' : 'tie') };
 }
 
@@ -160,11 +192,12 @@ function render(c){
   out.push(`z = ${r.z.toFixed(2)}   p = ${r.pValue.toFixed(4)}   (${r.tail}-tailed${r.tail === 'one' ? ', variant better than control' : ''}, ${r.conf}% threshold)`);
   out.push('');
   out.push(r.significant
-    ? `✓ SIGNIFICANT at ${r.conf}% — ${r.winner} wins. ${r.conf}% CI on the difference: ${pct(r.ciLow)} to ${pct(r.ciHigh)}.`
+    ? `✓ SIGNIFICANT at ${r.conf}% — ${r.winner} wins. ${r.tail === 'one' ? `${r.conf}% one-sided interval on the difference: at least ${pct(r.ciLow)}.` : `${r.conf}% interval on the difference: ${pct(r.ciLow)} to ${pct(r.ciHigh)}.`}`
     : `✗ NOT significant at ${r.conf}% (p ${r.pValue.toFixed(3)} ≥ ${(100-r.conf)/100}). Keep running or treat as no detected difference.`);
   out.push('\n--- JSON ---');
   out.push(JSON.stringify({ controlRate: +r.pA.toFixed(4), variantRate: +r.pB.toFixed(4), relativeLift: +r.relLift.toFixed(4),
-    z: +r.z.toFixed(3), pValue: +r.pValue.toFixed(4), significant: r.significant, confidence: r.conf, winner: r.winner }, null, 2));
+    z: +r.z.toFixed(3), pValue: +r.pValue.toFixed(4), significant: r.significant, confidence: r.conf, winner: r.winner,
+    differenceInterval: { low: +r.ciLow.toFixed(5), high: r.ciHigh === null ? null : +r.ciHigh.toFixed(5), method: 'score (Miettinen-Nurminen), agrees with the pooled z-test' } }, null, 2));
   return out.join('\n');
 }
 
