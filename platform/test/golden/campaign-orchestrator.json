@@ -70,6 +70,60 @@
         "These rules are judgement, not benchmarks. Check them against your own numbers."
       ],
       "stderr": []
+    },
+    {
+      "name": "tools guide, basics in place: nothing new to set up",
+      "source": "Nov 2026 audit: the title read \"Set up next: nothing new: use what you have\"",
+      "args": [
+        "{\"guide\": \"stack\", \"answers\": {\"tracking\": \"yes\", \"crm\": \"yes\", \"email\": \"yes\", \"volume\": \"mid\", \"motion\": \"sales\"}}"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "Which marketing tools do we need now, and which can wait?",
+        "",
+        "Nothing new to set up: use what you already have",
+        "",
+        "1. Use what you already have",
+        "   The basics are in place. Before adding tools, check that the ones you pay for are fully used.",
+        "   - Marketing Technology Stack Landscape: https://aajconsult.com/reports/marketing-technology-stack-landscape-2025-2026",
+        "",
+        "Leave alone for now",
+        "  - Marketing mix modelling. It needs more volume and spend history than you have yet.",
+        "",
+        "These rules are judgement, not benchmarks. Check them against your own numbers."
+      ],
+      "stderr": []
+    },
+    {
+      "name": "tools guide, one gap: set it up, then use what you have",
+      "source": "Nov 2026 audit",
+      "args": [
+        "{\"guide\": \"stack\", \"answers\": {\"tracking\": \"no\", \"crm\": \"yes\", \"email\": \"yes\", \"volume\": \"low\", \"motion\": \"self\"}}"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "Which marketing tools do we need now, and which can wait?",
+        "",
+        "Set up next: tracking you can trust",
+        "Then use what you already have.",
+        "",
+        "1. Tracking you can trust",
+        "   Analytics with conversion events and campaign tags on every link, checked end to end. Every later tool depends on knowing where leads came from.",
+        "   - Analytics Playbook: https://aajconsult.com/playbooks/analytics-playbook",
+        "   - Website Conversion Audit: https://aajconsult.com/tools/website-grader",
+        "2. Use what you already have",
+        "   Beyond that, add nothing yet. Before adding tools, check that the ones you pay for are fully used.",
+        "   - Marketing Technology Stack Landscape: https://aajconsult.com/reports/marketing-technology-stack-landscape-2025-2026",
+        "",
+        "Leave alone for now",
+        "  - Marketing automation platforms and lead scoring. Under a hundred leads a month, a person can read every one.",
+        "  - Intent data and ABM platforms, until you have the accounts and the sales capacity to act on them.",
+        "  - Marketing mix modelling. It needs more volume and spend history than you have yet.",
+        "  - Any attribution tool, until the basic tracking is right. It will only automate the wrong answer.",
+        "",
+        "These rules are judgement, not benchmarks. Check them against your own numbers."
+      ],
+      "stderr": []
     }
   ]
 }

@@ -241,12 +241,14 @@ var STACK = {
     if (a.email === "no") steps.push({ head: "An email tool, with your domain authenticated", body: "Send from a proper tool with SPF, DKIM and DMARC set up, or your emails land in spam no matter how good they are.", links: [L("/tools/email-authentication-checker", "Email Authentication Checker")] });
     if (a.volume === "high" && steps.length < 3) steps.push({ head: "Automation and lead scoring", body: "At this volume, routing and scoring save real time. Score on fit first, behaviour second.", links: [L("/tools/icp-fit-scorer", "ICP Fit Scorer")] });
     if (a.volume === "high" && steps.length < 3) steps.push({ head: "A way to measure what spend actually causes", body: "With enough volume, a lightweight marketing mix model or holdout tests tell you which spend is incremental.", links: [L("/templates/mmm-lite-starter-kit", "MMM-Lite Starter Kit")] });
-    if (a.volume !== "high" && steps.length < 3) steps.push({ head: "Nothing new: use what you have", body: "The basics are in place. Before adding tools, check that the ones you pay for are fully used.", links: [L("/reports/marketing-technology-stack-landscape-2025-2026", "Marketing Technology Stack Landscape")] });
+    if (a.volume !== "high" && steps.length < 3) steps.push({ head: "Use what you already have", keep: true, body: (steps.length ? "Beyond that, add nothing yet." : "The basics are in place.") + " Before adding tools, check that the ones you pay for are fully used.", links: [L("/reports/marketing-technology-stack-landscape-2025-2026", "Marketing Technology Stack Landscape")] });
     if (a.volume === "low") { avoid.push("Marketing automation platforms and lead scoring. Under a hundred leads a month, a person can read every one."); avoid.push("Intent data and ABM platforms, until you have the accounts and the sales capacity to act on them."); }
     if (a.volume !== "high") avoid.push("Marketing mix modelling. It needs more volume and spend history than you have yet.");
     if (a.tracking !== "yes") avoid.push("Any attribution tool, until the basic tracking is right. It will only automate the wrong answer.");
     if (!avoid.length) avoid.push("Buying a tool to fix a process nobody owns. Name the owner first.");
-    return { title: "Set up next: " + steps[0].head.charAt(0).toLowerCase() + steps[0].head.slice(1), summary: steps.length > 1 ? "Then " + steps.slice(1).map(function (s) { return s.head.charAt(0).toLowerCase() + s.head.slice(1); }).join(", then ") + "." : "", steps: steps.slice(0, 3), avoid: avoid, why: [] };
+    // When the basics are in place, the answer is to set nothing up, so the title says that rather than "Set up next: ...".
+    var lower = function (h) { return h.charAt(0).toLowerCase() + h.slice(1); };
+    return { title: steps[0].keep ? "Nothing new to set up: use what you already have" : "Set up next: " + lower(steps[0].head), summary: steps.length > 1 ? "Then " + steps.slice(1).map(function (s) { return lower(s.head); }).join(", then ") + "." : "", steps: steps.slice(0, 3), avoid: avoid, why: [] };
   }
 };
 

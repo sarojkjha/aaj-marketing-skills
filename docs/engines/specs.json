@@ -869,7 +869,7 @@
       "id": "campaign-orchestrator",
       "slug": "campaign-orchestrator",
       "title": "Campaign Orchestrator",
-      "version": "1.1.0",
+      "version": "1.1.1",
       "phase": "Diagnose",
       "category": "Strategy & Positioning",
       "decision": "Which channel should we start with, do we need a marketing hire, and which marketing tools should we set up now?",
