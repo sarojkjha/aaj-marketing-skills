@@ -148,7 +148,7 @@ const TIERS = {
        gets: 'Customers and the relevant segment hear about it properly - email, in-app, a post, a sales brief - without a market-wide campaign. The Must and Should tasks, and the go/no-go gates.',
        priorities: ['Must', 'Should'] },
   3: { name: 'Tier 3 - release note',
-       gets: 'A changelog entry, an in-app note where it is used, and one adoption metric. No launch date and no readiness gate - holding it back for a moment wastes the team and trains the audience to ignore announcements.',
+       gets: 'A changelog entry, an in-app note where it is used, and one adoption metric. No launch date and no readiness gate - in AAJ\'s view, holding it back for a moment wastes the team and teaches the audience to ignore announcements.',
        priorities: [] },
 };
 
@@ -176,8 +176,8 @@ function tier(l) {
   }
 
   let mismatch = null;
-  if (l.plannedScale === 'big' && t === 3) mismatch = 'The team plans a big launch for a Tier 3 change. Spending a launch on a release note trains your audience to ignore the next announcement, including the one that matters.';
-  else if (l.plannedScale === 'quiet' && t === 1) mismatch = 'The team plans to launch a Tier 1 change quietly. A new product or market launched without a date and an announcement rarely gets a second first impression.';
+  if (l.plannedScale === 'big' && t === 3) mismatch = 'The team plans a big launch for a Tier 3 change. In AAJ\'s view, spending a launch on a release note teaches your audience to ignore the next announcement, including the one that matters.';
+  else if (l.plannedScale === 'quiet' && t === 1) mismatch = 'The team plans to launch a Tier 1 change quietly. A new product or market gets one first impression; launched without a date and an announcement, it spends it on no one.';
   else if (l.plannedScale === 'big' && t === 2) mismatch = 'The team plans a market-wide launch for a Tier 2 change. Check that the market, not just customers, has a reason to care.';
 
   return { tier: t, ...TIERS[t], reasons, mismatch };
