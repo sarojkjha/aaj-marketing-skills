@@ -103,7 +103,7 @@ function analyzePricing(tiersInput) {
     arpuVsEntry: entryPrice > 0 ? round(blendedARPU / entryPrice, 1) : null
   };
 
-  // No customers on any tier means no mix to read: no advice for an empty model.
+  // No customers on any tier means no mix to read: no advice at all for an empty model.
   const insights = [];
   if (totalCustomers > 0 && summary.arpuVsEntry) {
     insights.push(`Blended ARPU is $${round(blendedARPU, 2)} — ${summary.arpuVsEntry}x your entry price of $${entryPrice}. ` +
@@ -120,16 +120,16 @@ function analyzePricing(tiersInput) {
       insights.push(`${largestCustomerTier.customerShare}% of customers sit on your entry tier but it's only ${entryRevenueShare}% of revenue. In AAJ's view, that gap is where to look for expansion.`);
     }
   }
-  if (anchorMultiple !== null) {
+  if (totalCustomers > 0 && anchorMultiple !== null) {
     if (anchorMultiple < 1.5) {
       insights.push(`Your top tier is only ${anchorMultiple}x the tier below it, under the 1.5x this engine uses as its rule of thumb for an anchor. In AAJ's view, a higher top tier makes the middle tiers look more reasonable; test it rather than assume it.`);
     } else {
       insights.push(`Your top tier is ${anchorMultiple}x the tier below, at or above the 1.5x this engine uses as its rule of thumb for an anchor.`);
     }
   }
-  if (summary.tierCount > 0 && summary.tierCount < 3) {
+  if (totalCustomers > 0 && summary.tierCount > 0 && summary.tierCount < 3) {
     insights.push(`You have ${summary.tierCount} tier${summary.tierCount !== 1 ? "s" : ""}; with fewer than three, buyers have no middle tier to compare against.`);
-  } else if (summary.tierCount > 5) {
+  } else if (totalCustomers > 0 && summary.tierCount > 5) {
     insights.push(`You have ${summary.tierCount} tiers. In AAJ's view, more than four or five makes the choice harder to read; check where buyers stall before adding another.`);
   }
 
@@ -154,6 +154,7 @@ function validateTiers(cfg) {
     if (typeof t.name !== "string" || !t.name) errs.push(label + ': "name" is required.');
     for (const k of ["price", "customers"]) {
       if (typeof t[k] !== "number" || !Number.isFinite(t[k]) || t[k] < 0) errs.push(label + ": \"" + k + "\" must be a number, 0 or more.");
+      else if (k === "customers" && !Number.isInteger(t[k])) errs.push(label + ": \"customers\" must be a whole number.");
     }
   });
   return errs;
