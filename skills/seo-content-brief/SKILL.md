@@ -17,7 +17,7 @@ metadata:
   difficulty: Starter
   card: >-
     Produces a writer-ready brief: intent, answer block, entities, internal links.
-  version: 1.1.0
+  version: 1.1.1
   sprint: ai-visibility
   topic: content-seo
   secondary_topics: [ai-search]
