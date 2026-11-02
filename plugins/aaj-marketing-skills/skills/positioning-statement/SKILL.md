@@ -17,7 +17,7 @@ metadata:
   card: >-
     Produces a positioning statement pressure-tested against the competitive
     alternative.
-  version: 1.1.0
+  version: 1.1.1
   sprint: positioning-message
   topic: strategy-positioning
   agents: [Claude Code, Cursor, OpenAI Codex, Windsurf, Cline]
@@ -59,7 +59,7 @@ Strong positioning answers four questions without hedging: **for whom, in what c
 
 ```bash
 node resources/positioning.js --demo
-node resources/positioning.js '{"product":"LedgerPilot","customer":"seed-stage SaaS founders","need":"who lose hours each month reconciling revenue","category":"revenue accounting platform","benefit":"cuts the monthly close to one afternoon","alt":"a part-time bookkeeper plus spreadsheets","diff":"connects directly to billing data","proof":"","aud":"customer"}'
+node resources/positioning.js '{"product":"Example Co.","customer":"seed-stage SaaS founders","need":"who lose hours each month matching revenue across billing, bank and spreadsheet records","category":"automated revenue ledger","benefit":"cuts the monthly close down to a single review","alt":"a part-time bookkeeper plus three spreadsheets","diff":"reads billing data directly, so the numbers reconcile as each payment lands","proof":"","aud":"customer"}'
 node resources/positioning.js --help
 ```
 
@@ -67,7 +67,7 @@ node resources/positioning.js --help
 
 It is the same logic as the AAJ Positioning Statement Generator (https://aajconsult.com/tools/positioning-statement-generator), checked case by case against the page, so a founder who used the tool and an agent running this skill get the same text. Run it after step 1 of the workflow, then do the pressure-test in step 2 yourself. The linter checks wording (buzzwords, a customer that is everyone, a claim with no number behind it, a feature in place of a benefit, a differentiator that repeats the alternative), not whether the positioning is true or differentiated. A clean lint is the floor, not the verdict.
 
-Two limits to handle before presenting: the template fills slots literally, so read the output aloud and fix grammar it cannot ("a" before a vowel, a need that doesn't start with "who"); and the engine's three pitch audiences are not the three audience lenses in step 4, which you still write yourself.
+Two limits to handle before presenting: the template fills slots literally, so read the output aloud. It picks "a" or "an" from how the category's first word is said and adds "who" before a problem that lacks it, but it cannot fix a benefit or differentiator that is not a verb phrase following the product's name ("cuts the monthly close", not "faster closes"). And the engine's three pitch audiences are not the three audience lenses in step 4, which you still write yourself.
 
 ## Present the result
 
