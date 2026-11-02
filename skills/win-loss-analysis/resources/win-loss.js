@@ -43,6 +43,8 @@ process.argv = process.argv.map((a, i) =>
 // -----------------------------------------------------------------------------
 
 
+/* aaj:core:begin - the analysis and input checks. The free Win-Loss Analyzer on aajconsult.com
+   embeds this block verbatim; the site's verify script checks it byte for byte. */
 function round1(n) { return Math.round(n * 10) / 10; }
 function pct(part, whole) { return whole > 0 ? round1((part / whole) * 100) : 0; }
 function sum(arr, f) { return arr.reduce((t, x) => t + f(x), 0); }
@@ -167,7 +169,7 @@ function analyzeWinLoss(deals) {
     insights.push(`Single biggest fixable leak: ${biggestLeak.segment} deals lost to "${biggestLeak.reason}" — ${money(biggestLeak.lostRevenue)}. Start here.`);
   }
   if (noReasonRevenue > 0 && lostRevenue > 0) {
-    insights.push(`${pct(noReasonRevenue, lostRevenue)}% of lost revenue (${money(noReasonRevenue)}) has no usable reason ("No decision" or blank). That is a qualification or urgency question, not a fix list; interview these buyers before acting on the reasons above.`);
+    insights.push(`${pct(noReasonRevenue, lostRevenue)}% of lost revenue (${money(noReasonRevenue)}) has no usable reason ("No decision", "Unknown", "Other" or blank). That is a qualification or urgency question, not a fix list; interview these buyers before acting on the reasons above.`);
   }
   if (lostAtStage[0]) {
     insights.push(`Most lost revenue dies at "${lostAtStage[0].label}" (${money(lostAtStage[0].revenue)} across ${lostAtStage[0].count} deal${lostAtStage[0].count !== 1 ? "s" : ""}).`);
@@ -204,6 +206,8 @@ function validateDeals(input) {
   });
   return errs;
 }
+
+/* aaj:core:end */
 
 function printReport(r) {
   const P = (...a) => console.log(...a);
