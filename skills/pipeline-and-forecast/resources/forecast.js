@@ -21,7 +21,7 @@
  *     "target": 500000,
  *     "winRate": 0.25,
  *     "stageProbabilities": { "Discovery": 0.1, "Qualified": 0.25, "Proposal": 0.5, "Negotiation": 0.75, "Verbal": 0.9 },
- *     "deals": [ { "name": "Acme", "amount": 60000, "stage": "Proposal" }, ... ]
+ *     "deals": [ { "name": "Prospect A", "amount": 60000, "stage": "Proposal" }, ... ]
  *   }
  *
  * Recommended lever (first match wins):
@@ -61,13 +61,13 @@ const DEMO = {
   winRate: 0.25,
   stageProbabilities: { Discovery: 0.1, Qualified: 0.25, Proposal: 0.5, Negotiation: 0.75, Verbal: 0.9 },
   deals: [
-    { name: "Acme",        amount: 80000, stage: "Negotiation" },
-    { name: "Globex",      amount: 60000, stage: "Proposal" },
-    { name: "Initech",     amount: 45000, stage: "Proposal" },
-    { name: "Umbrella",    amount: 90000, stage: "Qualified" },
-    { name: "Hooli",       amount: 120000, stage: "Discovery" },
-    { name: "Stark",       amount: 70000, stage: "Verbal" },
-    { name: "Wayne",       amount: 55000, stage: "Qualified" },
+    { name: "Prospect A",  amount: 80000, stage: "Negotiation" },
+    { name: "Prospect B",  amount: 60000, stage: "Proposal" },
+    { name: "Prospect C",  amount: 45000, stage: "Proposal" },
+    { name: "Prospect D",  amount: 90000, stage: "Qualified" },
+    { name: "Prospect E",  amount: 120000, stage: "Discovery" },
+    { name: "Prospect F",  amount: 70000, stage: "Verbal" },
+    { name: "Prospect G",  amount: 55000, stage: "Qualified" },
   ],
 };
 
@@ -136,6 +136,12 @@ function main() {
   if (noAmount.length) {
     console.error(`${noAmount.length} deal(s) have no numeric amount: ${noAmount.slice(0, 10).map((d) => JSON.stringify(d.name || "(unnamed)")).join(", ")}${noAmount.length > 10 ? ", …" : ""}.`);
     console.error("Give each one an amount, or leave them out and report them separately.");
+    process.exit(1);
+  }
+  // A negative amount would shrink the pipeline instead of being a typo to fix.
+  const negative = deals.filter((d) => d.amount < 0);
+  if (negative.length) {
+    console.error(`${negative.length} deal(s) have a negative amount: ${negative.slice(0, 10).map((d) => JSON.stringify(d.name || "(unnamed)")).join(", ")}${negative.length > 10 ? ", …" : ""}. Amounts are 0 or more.`);
     process.exit(1);
   }
   if (!(winRate > 0 && winRate <= 1)) {

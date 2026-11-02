@@ -46,6 +46,8 @@ process.argv = process.argv.map((a, i) =>
 
 "use strict";
 
+/* aaj:core:begin - the pricing analysis and input checks. The free Pricing & ARPU Modeler on
+   aajconsult.com embeds this block verbatim; the site's verify script checks it byte for byte. */
 function round(n, d) { const f = Math.pow(10, d); return Math.round(n * f) / f; }
 function pct(part, whole) { return whole > 0 ? round((part / whole) * 100, 1) : 0; }
 function money(n) { if (!isFinite(n)) n = 0; return "$" + Math.round(n).toLocaleString("en-US"); }
@@ -101,33 +103,34 @@ function analyzePricing(tiersInput) {
     arpuVsEntry: entryPrice > 0 ? round(blendedARPU / entryPrice, 1) : null
   };
 
+  // No customers on any tier means no mix to read: no advice at all for an empty model.
   const insights = [];
-  if (summary.arpuVsEntry) {
+  if (totalCustomers > 0 && summary.arpuVsEntry) {
     insights.push(`Blended ARPU is $${round(blendedARPU, 2)} — ${summary.arpuVsEntry}x your entry price of $${entryPrice}. ` +
-      (summary.arpuVsEntry >= 1.6 ? `Your mix lifts revenue well above the entry tier.` : `That's barely above entry — most customers aren't moving up the ladder.`));
+      (summary.arpuVsEntry >= 1.6 ? `Your mix lifts revenue well above the entry tier.` : `That's barely above entry — most customers aren't moving up the ladder.`) + ` (1.6x is AAJ's rule of thumb, not a benchmark.)`);
   }
-  if (topRevenueDriver) {
+  if (totalCustomers > 0 && topRevenueDriver) {
     insights.push(`Your revenue engine is the "${topRevenueDriver.name}" tier at ${topRevenueDriver.revenueShare}% of revenue.`);
   }
-  if (enriched.length >= 2) {
+  if (totalCustomers > 0 && enriched.length >= 2) {
     const entryIsDriver = topRevenueDriver && topRevenueDriver.name === enriched[0].name;
     if (entryIsDriver) {
-      insights.push(`Most of your revenue comes from your cheapest tier (${entryRevenueShare}%) — your packaging is likely leaving money on the table. Look hard at the upgrade path and whether your value metric pushes customers up.`);
+      insights.push(`Most of your revenue comes from your cheapest tier (${entryRevenueShare}%) — few customers are moving up. In AAJ's view, look at the upgrade path and whether your value metric gives customers a reason to move up.`);
     } else if (largestCustomerTier && largestCustomerTier.name === enriched[0].name && entryRevenueShare < largestCustomerTier.customerShare) {
-      insights.push(`${largestCustomerTier.customerShare}% of customers sit on your entry tier but it's only ${entryRevenueShare}% of revenue — that gap is your expansion opportunity.`);
+      insights.push(`${largestCustomerTier.customerShare}% of customers sit on your entry tier but it's only ${entryRevenueShare}% of revenue. In AAJ's view, that gap is where to look for expansion.`);
     }
   }
-  if (anchorMultiple !== null) {
+  if (totalCustomers > 0 && anchorMultiple !== null) {
     if (anchorMultiple < 1.5) {
-      insights.push(`Your top tier is only ${anchorMultiple}x the tier below it — it isn't anchoring. A higher top tier makes your middle tiers look more reasonable and captures customers who'd happily pay more.`);
+      insights.push(`Your top tier is only ${anchorMultiple}x the tier below it, under the 1.5x this engine uses as its rule of thumb for an anchor. In AAJ's view, a higher top tier makes the middle tiers look more reasonable; test it rather than assume it.`);
     } else {
-      insights.push(`Your top tier anchors well at ${anchorMultiple}x the tier below — that reframes the middle tiers and lifts willingness to pay.`);
+      insights.push(`Your top tier is ${anchorMultiple}x the tier below, at or above the 1.5x this engine uses as its rule of thumb for an anchor.`);
     }
   }
-  if (summary.tierCount > 0 && summary.tierCount < 3) {
-    insights.push(`You have ${summary.tierCount} tier${summary.tierCount !== 1 ? "s" : ""}; with fewer than three there is no ladder to compare, so there is no middle tier to compare against.`);
-  } else if (summary.tierCount > 5) {
-    insights.push(`You have ${summary.tierCount} tiers; more than four or five can create decision paralysis and lower conversion.`);
+  if (totalCustomers > 0 && summary.tierCount > 0 && summary.tierCount < 3) {
+    insights.push(`You have ${summary.tierCount} tier${summary.tierCount !== 1 ? "s" : ""}; with fewer than three, buyers have no middle tier to compare against.`);
+  } else if (totalCustomers > 0 && summary.tierCount > 5) {
+    insights.push(`You have ${summary.tierCount} tiers. In AAJ's view, more than four or five makes the choice harder to read; check where buyers stall before adding another.`);
   }
 
   return {
@@ -138,6 +141,25 @@ function analyzePricing(tiersInput) {
     insights
   };
 }
+
+function validateTiers(cfg) {
+  const errs = [];
+  const unknown = Object.keys(cfg).filter((k) => k !== "tiers");
+  if (unknown.length) errs.push("Unrecognised field" + (unknown.length > 1 ? "s" : "") + ": " + unknown.map((k) => '"' + k + '"').join(", ") + '. Expected: tiers.');
+  cfg.tiers.forEach((t, i) => {
+    const label = t && typeof t.name === "string" && t.name ? '"' + t.name + '"' : "tier " + (i + 1);
+    if (!t || typeof t !== "object" || Array.isArray(t)) { errs.push(label + ' must be {"name", "price", "customers"}.'); return; }
+    const bad = Object.keys(t).filter((k) => !["name", "price", "customers"].includes(k));
+    if (bad.length) errs.push(label + ": unrecognised field " + bad.map((k) => '"' + k + '"').join(", ") + '. Expected: name, price, customers.');
+    if (typeof t.name !== "string" || !t.name) errs.push(label + ': "name" is required.');
+    for (const k of ["price", "customers"]) {
+      if (typeof t[k] !== "number" || !Number.isFinite(t[k]) || t[k] < 0) errs.push(label + ": \"" + k + "\" must be a number, 0 or more.");
+      else if (k === "customers" && !Number.isInteger(t[k])) errs.push(label + ": \"customers\" must be a whole number.");
+    }
+  });
+  return errs;
+}
+/* aaj:core:end */
 
 /* ----------------------------- CLI ----------------------------- */
 
@@ -201,22 +223,6 @@ function printResults(r, source) {
 
 // A misnamed tier field used to read as zero. Unknown fields and non-numbers now
 // stop the run and name the tier.
-function validateTiers(cfg) {
-  const errs = [];
-  const unknown = Object.keys(cfg).filter((k) => k !== "tiers");
-  if (unknown.length) errs.push("Unrecognised field" + (unknown.length > 1 ? "s" : "") + ": " + unknown.map((k) => '"' + k + '"').join(", ") + '. Expected: tiers.');
-  cfg.tiers.forEach((t, i) => {
-    const label = t && typeof t.name === "string" && t.name ? '"' + t.name + '"' : "tier " + (i + 1);
-    if (!t || typeof t !== "object" || Array.isArray(t)) { errs.push(label + ' must be {"name", "price", "customers"}.'); return; }
-    const bad = Object.keys(t).filter((k) => !["name", "price", "customers"].includes(k));
-    if (bad.length) errs.push(label + ": unrecognised field " + bad.map((k) => '"' + k + '"').join(", ") + '. Expected: name, price, customers.');
-    if (typeof t.name !== "string" || !t.name) errs.push(label + ': "name" is required.');
-    for (const k of ["price", "customers"]) {
-      if (typeof t[k] !== "number" || !Number.isFinite(t[k]) || t[k] < 0) errs.push(label + ": \"" + k + "\" must be a number, 0 or more.");
-    }
-  });
-  return errs;
-}
 
 function main() {
   const args = parseArgs(process.argv);

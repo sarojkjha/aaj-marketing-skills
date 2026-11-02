@@ -41,6 +41,12 @@
  *     leverage, empower.
  *   - A differentiator using better, faster, cheaper, easier, smarter,
  *     superior or "the best" with no digit in it is flagged as a claim.
+ *   - Grammar: "a" or "an" goes by how the category's first word is said
+ *     (acronyms letter by letter: "an AI copilot", "a CRM"), and "who" is added
+ *     before a problem that does not start with who/whose/that/which. The
+ *     benefit and differentiator are verb phrases that follow the product's name
+ *     ("cuts the monthly close"); the value proposition reads
+ *     "For <customer>, <product> <benefit> — because it <differentiator>."
  *   - The page lists at most six lint messages and shows none until one of the
  *     seven core fields has text; the engine returns all of them as well.
  *
@@ -84,15 +90,31 @@ function inputError(msg, hint) {
   return e;
 }
 
+// Lower-cases the first letter of a slot so it reads mid-sentence, unless the first
+// word has a capital after its first letter: an acronym or a name ("AI", "SaaS", "HubSpot").
 function lcFirst(s) {
   if (!s) return s;
-  if (s.length > 1 && s[1] === s[1].toUpperCase() && s[1] !== s[1].toLowerCase()) return s;
+  if (/^[^\s]+/.test(s) && /[A-Z]/.test(s.match(/^[^\s]+/)[0].slice(1))) return s;
   return s.charAt(0).toLowerCase() + s.slice(1);
 }
 function ucFirst(s) { return s ? s.charAt(0).toUpperCase() + s.slice(1) : s; }
 function clean(s) { return s.replace(/[.\s]+$/, ""); }
 function stripWho(s) { return clean(s).replace(/^who\s+/i, ""); }
 function noArt(s) { return s.replace(/^(a|an|the)\s+/i, ""); }
+// "a" or "an" for the word that follows, by how it is said: "an AI copilot", "a SaaS
+// tool", "an hourly plan", "a unified ledger". Acronyms are read letter by letter.
+function article(s) {
+  var w = (String(s).replace(/^[^A-Za-z0-9]+/, "").match(/^[A-Za-z0-9]+/) || [""])[0];
+  if (!w) return "a";
+  if (/^[A-Z]+$/.test(w) || w.length === 1) return /^[AEFHILMNORSX]/i.test(w) ? "an" : "a";
+  var l = w.toLowerCase();
+  if (/^[0-9]/.test(l)) return /^8/.test(l) || /^1[18]$/.test(l) ? "an" : "a";
+  if (/^(uni|use|usu|uti|ura|uro|eu|ewe|one|once)/.test(l)) return "a";
+  if (/^(hour|honest|honou?r|heir)/.test(l)) return "an";
+  return /^[aeiou]/.test(l) ? "an" : "a";
+}
+// The problem clause reads after the customer: "For founders who lose hours...".
+function whoClause(s) { return /^(who|whose|that|which)\b/i.test(s) ? s : "who " + s; }
 
 function normalise(input) {
   if (!input || typeof input !== "object" || Array.isArray(input)) throw inputError("Input must be a JSON object.");
@@ -113,6 +135,9 @@ function generate(input) {
   var n = normalise(input);
   var val = function (k) { return n[k]; };
   var txt = function (k, fallback) { var v = val(k); return v ? clean(v) : "[" + fallback + "]"; };
+  // The name keeps a closing full stop ("Example Co."); it never ends a sentence.
+  var name = function () { return val("product") || "[Product]"; };
+  var aCat = function (cat) { return article(cat) + " " + cat; };
 
   // ---- the linter
   var issues = [], flagged = [];
@@ -146,39 +171,41 @@ function generate(input) {
   };
 
   // ---- the five assets
+  // The benefit and differentiator are verb phrases that follow the product's name
+  // ("cuts the monthly close"), so each template puts them straight after a subject.
   var statement =
     "For " + txt("customer", "target customer") + " " +
-    (val("need") ? lcFirst(clean(val("need"))) : "[who have this problem]") + ", " +
-    txt("product", "Product") + " is a " + lcFirst(txt("category", "market category")) +
+    (val("need") ? whoClause(lcFirst(clean(val("need")))) : "[who have this problem]") + ", " +
+    name() + " is " + aCat(lcFirst(txt("category", "market category"))) +
     " that " + lcFirst(txt("benefit", "key benefit")) + ". Unlike " +
-    lcFirst(txt("alt", "the alternative")) + ", " + txt("product", "Product") + " " +
+    lcFirst(txt("alt", "the alternative")) + ", " + name() + " " +
     lcFirst(txt("diff", "key differentiator")) + ".";
 
   var valueProp =
-    txt("product", "Product") + " helps " + lcFirst(txt("customer", "your customer")) + " " +
-    (val("benefit") ? lcFirst(clean(val("benefit"))) : "[get the key benefit]") +
+    "For " + lcFirst(txt("customer", "your customer")) + ", " + name() + " " +
+    (val("benefit") ? lcFirst(clean(val("benefit"))) : "[delivers the key benefit]") +
     (val("diff") ? " — because it " + lcFirst(clean(val("diff"))) : "") + ".";
 
-  var p = txt("product", "Product");
+  var p = name();
   var cu = lcFirst(txt("customer", "our customer"));
   var ne = val("need") ? stripWho(val("need")) : "";
   var ca = lcFirst(txt("category", "category"));
   var be = val("benefit") ? lcFirst(clean(val("benefit"))) : "[benefit]";
   var al = lcFirst(txt("alt", "the status quo"));
   var di = val("diff") ? lcFirst(clean(val("diff"))) : "[differentiator]";
-  var pr = val("proof") ? ucFirst(clean(val("proof"))) + "." : "";
+  var pr = val("proof") ? " " + ucFirst(clean(val("proof"))) + "." : "";
   var pitch;
   if (n.aud === "investor") {
-    pitch = p + " is a " + ca + " for " + cu + (ne ? ", who today " + lcFirst(ne) : "") +
+    pitch = p + " is " + aCat(ca) + " for " + cu + (ne ? ", who today " + lcFirst(ne) : "") +
       ". Their current answer is " + al + " — and it fails them. We win because " + p + " " + di +
-      ". For customers, that means it " + be + ". " + pr;
+      ". For customers, that means it " + be + "." + pr;
   } else if (n.aud === "internal") {
     pitch = "We win when " + cu + (ne ? " who " + lcFirst(ne) : "") + " choose " + p + " over " + al +
-      ". They choose us because we " + di + ". Every feature, page, and campaign should reinforce one promise: " + be + ". " + pr;
+      ". They choose us because " + p + " " + di + ". Every feature, page, and campaign should reinforce one promise: " + p + " " + be + "." + pr;
   } else {
-    pitch = "If you’re one of the " + noArt(cu) + (ne ? " " + (val("need") ? lcFirst(clean(val("need"))) : "") : "") +
-      ", you’ve probably been making do with " + al + ". " + p + " is a " + ca +
-      " built for exactly this: it " + di + ". The result — it " + be + ". " + pr;
+    pitch = "If you’re one of the " + noArt(cu) + (ne ? " " + whoClause(lcFirst(clean(val("need")))) : "") +
+      ", you’ve probably been making do with " + al + ". " + p + " is " + aCat(ca) +
+      " built for exactly this: it " + di + ". The result — it " + be + "." + pr;
   }
 
   var heroHeadline = val("benefit") ? ucFirst(clean(val("benefit"))) : "[Your key benefit, stated as a headline]";
@@ -211,7 +238,7 @@ function generate(input) {
     statement: statement, valueProp: valueProp, pitch: pitch,
     hero: { headline: heroHeadline, sub: heroSub },
     canvas: canvas, lint: lint, shareLink: shareLink, doc: doc,
-    fileName: (val("product") || "positioning").toLowerCase().replace(/[^a-z0-9]+/g, "-") + "-positioning.md"
+    fileName: ((val("product") || "positioning").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "") || "positioning") + "-positioning.md"
   };
 }
 /* aaj:core:end */
@@ -277,4 +304,4 @@ function main() {
 
 if (require.main === module) main();
 
-module.exports = { generate, normalise, FIELDS, CORE, AUDIENCES, BUZZ, CLAIMS, BROAD, LINT_SHOWN, LINT_OK };
+module.exports = { generate, normalise, article, FIELDS, CORE, AUDIENCES, BUZZ, CLAIMS, BROAD, LINT_SHOWN, LINT_OK };

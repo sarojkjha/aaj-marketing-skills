@@ -17,7 +17,7 @@ metadata:
   difficulty: Starter
   card: >-
     Diagnoses which play applies, then sequences the other skills in order.
-  version: 1.1.0
+  version: 1.1.1
   sprint: gtm-pipeline
   topic: gtm-growth-planning
   secondary_topics: [strategy-positioning]

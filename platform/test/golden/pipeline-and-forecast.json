@@ -57,6 +57,18 @@
         "Recommended lever: BUILD PIPELINE — coverage is below what your win rate requires; add qualified pipeline. New pipeline closes on your full sales cycle, so most of it lands after this quarter."
       ],
       "stderr": []
+    },
+    {
+      "name": "a negative deal amount is refused",
+      "source": "Nov 2026 tools audit",
+      "args": [
+        "{\"target\":100000,\"winRate\":0.25,\"stageProbabilities\":{\"Proposal\":0.5},\"deals\":[{\"name\":\"Prospect A\",\"amount\":-5000,\"stage\":\"Proposal\"}]}"
+      ],
+      "exitCode": 1,
+      "stdout": [],
+      "stderr": [
+        "1 deal(s) have a negative amount: \"Prospect A\". Amounts are 0 or more."
+      ]
     }
   ]
 }

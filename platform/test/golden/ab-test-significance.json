@@ -19,7 +19,7 @@
         "Relative lift  +23.5%   (abs +1.2%)",
         "z = 2.29   p = 0.0220   (two-tailed, 95% threshold)",
         "",
-        "✓ SIGNIFICANT at 95% — variant wins. 95% CI on the difference: 0.2% to 2.2%.",
+        "✓ SIGNIFICANT at 95% — variant wins. 95% interval on the difference: 0.2% to 2.2%.",
         "",
         "--- JSON ---",
         "{",
@@ -30,7 +30,12 @@
         "  \"pValue\": 0.022,",
         "  \"significant\": true,",
         "  \"confidence\": 95,",
-        "  \"winner\": \"variant\"",
+        "  \"winner\": \"variant\",",
+        "  \"differenceInterval\": {",
+        "    \"low\": 0.0017,",
+        "    \"high\": 0.02182,",
+        "    \"method\": \"score (Miettinen-Nurminen), agrees with the pooled z-test\"",
+        "  }",
         "}"
       ],
       "stderr": []

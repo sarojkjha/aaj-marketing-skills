@@ -3,7 +3,7 @@
   "limitations": [
     "The linter checks wording only: a fixed buzzword list, a customer that is everyone, a comparative claim with no number, a feature in place of a benefit. A clean lint does not mean the positioning is true or differentiated.",
     "A differentiator passes the claim check if it contains any digit, whether or not the number is proven. Every number still needs a source.",
-    "It fills the template slots literally, and empty fields show as placeholders. Read the output aloud and fix the grammar it cannot, such as \"a\" before a vowel or a need that does not start with \"who\".",
+    "It fills slots literally; empty ones show as placeholders. It picks \"a\" or \"an\" and adds \"who\", but the benefit and differentiator must be verb phrases that follow the product name (\"cuts the close\"). Read it aloud.",
     "Its three pitch audiences (customer, investor, internal) are not the three audience lenses in the method; those variants are written separately."
   ],
   "review": "The founder or product marketing lead pressure-tests the statement against the template checklist and with customers, and confirms proof for every claim, before it goes on the homepage or in a deck."

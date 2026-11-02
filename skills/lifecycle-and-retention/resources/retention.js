@@ -74,6 +74,10 @@ function validate(c){
     if (typeof c[k] !== 'number' || !Number.isFinite(c[k]) || c[k] < 0) errs.push('"' + k + '" must be a number, 0 or more.');
   }
   if (typeof c.churnedCustomers === 'number' && typeof c.startCustomers === 'number' && c.churnedCustomers > c.startCustomers) errs.push('"churnedCustomers" cannot be more than "startCustomers".');
+  // Revenue lost from existing customers cannot exceed what they paid at the start
+  // (it gave an NRR of -45%).
+  const lost = (typeof c.contractionMRR === 'number' ? c.contractionMRR : 0) + (typeof c.churnedMRR === 'number' ? c.churnedMRR : 0);
+  if (typeof c.startMRR === 'number' && c.startMRR > 0 && lost > c.startMRR) errs.push('"contractionMRR" plus "churnedMRR" (' + lost.toLocaleString('en-US') + ') cannot be more than "startMRR" (' + c.startMRR.toLocaleString('en-US') + '): existing customers cannot lose more revenue than they started with.');
   return errs;
 }
 

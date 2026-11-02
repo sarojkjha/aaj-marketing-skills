@@ -6,7 +6,7 @@ description: >-
   business model — and split it across brand, demand gen, content, and tooling.
   Also use when the user mentions marketing budget, % of revenue on marketing,
   how much should we spend on marketing, or budget allocation across functions.
-  Produces a budget from AAJ's stage bands (labelled as AAJ's own estimates),
+  Produces a budget from AAJ's stage bands (labelled as AAJ's working ranges),
   published reference points (Gartner, SaaS Capital) and a function-level split.
 license: MIT
 metadata:
@@ -18,7 +18,7 @@ metadata:
   card: >-
     Sizes a marketing budget by stage, shows where each figure comes from, and
     splits it by function.
-  version: 1.1.0
+  version: 1.1.1
   sprint: unit-economics-retention
   topic: analytics-budget
   secondary_topics: [paid-media]
@@ -49,9 +49,9 @@ The user needs a total marketing budget or wants to check whether their current 
 
 ## Method
 
-For **B2B SaaS**, the engine uses AAJ's stage bands — AAJ's own estimates from client engagements (2023–2026), not third-party research — and says so in every output:
+For **B2B SaaS**, the engine uses AAJ's stage bands — AAJ's working ranges, not third-party research — and says so in every output:
 
-| Stage | AAJ band | Sized against |
+| Stage | AAJ's working range | Sized against |
 |---|---|---|
 | Pre-seed | 30–60% | quarterly burn (revenue isn't a useful base yet) |
 | Seed | 10–20% | funding raised |
@@ -81,7 +81,7 @@ It returns the planned share and where it comes from, the budget per period and 
 
 ## Interpret & connect
 
-- Treat the band as **AAJ's starting estimate**, not an industry benchmark, then adjust for runway, payback tolerance, and how much demand actually exists to capture. Always say which basis the engine used.
+- Treat the band as **AAJ's working range**, not an industry benchmark, then adjust for runway, payback tolerance, and how much demand actually exists to capture. Always say which basis the engine used.
 - The **demand-gen / paid slice flows straight into the `paid-media-budget-allocation` skill** for the channel split.
 - If LTV:CAC won't support the implied spend, fix economics or lower the budget before scaling.
 
@@ -93,8 +93,8 @@ Lead with the headline budget (share of the base, per period, per month) and its
 
 ## Guardrails & common mistakes
 
-- **Bands and averages aren't targets.** AAJ's bands are estimates and the published figures are averages across very different companies — demand and economics decide.
-- **Never present an AAJ band as third-party research.** Name it as AAJ's estimate, and cite the published figures by organisation and year.
+- **Bands and averages aren't targets.** AAJ's bands are working ranges and the published figures are averages across very different companies — demand and economics decide.
+- **Never present an AAJ band as third-party research.** Name it as AAJ's working range, and cite the published figures by organisation and year.
 - **Runway limits ambition (check it yourself; the engine does not).** Aggressive % with thin runway is a fast way to run out of money.
 - **Spend follows ability to absorb it.** Doubling budget overnight wastes money if the funnel and team can't scale with it.
 - **Total budget ≠ paid budget.** This sizes all marketing; only the demand-gen slice is paid media.

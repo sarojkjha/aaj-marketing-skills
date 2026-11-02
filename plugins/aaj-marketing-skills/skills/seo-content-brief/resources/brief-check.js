@@ -133,7 +133,15 @@ function readSerp(titles) {
   });
   var ranked = Object.keys(tally).map(function (k) { return [k, tally[k]]; })
     .sort(function (a, b) { return b[1] - a[1]; });
-  return { titles: titles.length, votes: votes, ranked: ranked, top: ranked[0] ? ranked[0][0] : null };
+  // The intent is the sum of its formats' votes. A tie for first calls nothing: an even split
+  // (say one title each for four formats) is not a reading of the results.
+  var byIntent = {};
+  ranked.forEach(function (r) { byIntent[INTENT_FOR[r[0]]] = (byIntent[INTENT_FOR[r[0]]] || 0) + r[1]; });
+  var intents = Object.keys(byIntent).map(function (k) { return [k, byIntent[k]]; })
+    .sort(function (a, b) { return b[1] - a[1]; });
+  var lead = function (list) { return list[0] && !(list[1] && list[1][1] === list[0][1]) ? list[0][0] : null; };
+  var intent = lead(intents);
+  return { titles: titles.length, votes: votes, ranked: ranked, top: lead(ranked), intents: intents, intent: intent, unclear: votes > 0 && !intent };
 }
 
 function build(input) {
@@ -160,9 +168,13 @@ function build(input) {
     add("warn", "The results disagree with your format",
       "What ranks looks like “" + FORMAT_LABEL[serp.top] + "”; you are planning “" + FORMAT_LABEL[format] + "”. Arguing with the SERP rarely works — do it deliberately or not at all.");
   }
-  if (serp && serp.top && intent && INTENT_FOR[serp.top] !== intent) {
+  if (serp && serp.intent && intent && serp.intent !== intent) {
     add("warn", "The results disagree with your intent",
-      "The ranking pages read as " + INTENT_LABEL[INTENT_FOR[serp.top]].toLowerCase() + "; you have chosen " + INTENT_LABEL[intent].toLowerCase() + ".");
+      "The ranking pages read as " + INTENT_LABEL[serp.intent].toLowerCase() + "; you have chosen " + INTENT_LABEL[intent].toLowerCase() + ".");
+  }
+  if (serp && serp.unclear) {
+    add("warn", "Intent unclear from the results",
+      "The titles that rank split evenly between " + serp.intents.filter(function (x) { return x[1] === serp.intents[0][1]; }).map(function (x) { return INTENT_LABEL[x[0]].toLowerCase(); }).join(" and ") + ". Look at the results again, or choose the intent deliberately and say why in the brief.");
   }
   if (!intent) add("block", "Intent not chosen", "Everything below this decision depends on it.");
   if (!format) add("warn", "Format not chosen", "One intent per page, one format per page.");
@@ -244,7 +256,8 @@ function briefText(input) {
   var s = readSerp(n.serp);
   out.push("## Intent evidence");
   out.push(s ? (s.titles + " ranking titles read as: " +
-    s.ranked.map(function (r) { return FORMAT_LABEL[r[0]] + " x" + r[1]; }).join(", "))
+    s.ranked.map(function (r) { return FORMAT_LABEL[r[0]] + " x" + r[1]; }).join(", ") +
+    (s.intent ? ". " + INTENT_LABEL[s.intent] + " intent." : s.unclear ? ". Intent unclear: the titles split evenly." : ""))
     : "No ranking results were pasted - intent is inferred, not read. Verify before writing.");
   out.push("");
   out.push("_Built with the AAJ Content Brief Builder - aajconsult.com/tools/content-brief-builder_");
@@ -264,7 +277,7 @@ function render(input) {
   if (b.serp) {
     const r = b.serp.ranked.map((x) => `${FORMAT_LABEL[x[0]]} x${x[1]}`).join(', ');
     L.push(`What ranks today: ${b.serp.titles} titles read as: ${r || 'no clear format signal'}` +
-      (b.serp.top ? `. That points to ${INTENT_LABEL[INTENT_FOR[b.serp.top]]} intent.` : '.'));
+      (b.serp.intent ? `. That points to ${INTENT_LABEL[b.serp.intent]} intent.` : b.serp.unclear ? '. Intent unclear: the titles split evenly.' : '.'));
   } else {
     L.push('Intent is inferred: nothing was pasted from the results page, so the intent is a guess rather than a reading.');
   }

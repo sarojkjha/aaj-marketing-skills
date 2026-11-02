@@ -18,7 +18,7 @@ metadata:
   difficulty: Intermediate
   card: >-
     Turns funnel, spend and pipeline numbers into a board-ready narrative.
-  version: 1.0.0
+  version: 1.0.1
   sprint: unit-economics-retention
   topic: analytics-budget
   agents: [Claude Code, Cursor, OpenAI Codex, Windsurf, Cline]
