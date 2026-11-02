@@ -19,13 +19,13 @@
         "     retainer 120,000, execution 36,000, tools 4,800, yourTime 15,588",
         "  Agency: 184,976 total; starts now; 11.0 productive months; 16,816 per productive month; 208 of your hours",
         "     retainer 144,000, setup 5,000, tools 4,800, yourTime 31,176",
-        "  Crossover: The in-house hire never becomes the cheaper option: once both are running it costs 6,500 more per month than the fractional leader, so the gap only widens. Check the salary load and the execution line; those are the two people usually get wrong.",
+        "  Crossover: The in-house hire never becomes the cheaper option: once both are running it costs $6,500 more per month than the fractional leader, so the gap only widens. If that looks wrong, check the salary load and the execution line first.",
         "  If you stop at month 6:",
         "     In-house hire: spent 115,600, still owed 0. Recruiting again, and the replacement ramps from zero. No severance assumed.",
         "     Fractional leader: spent 80,400, still owed 13,000. 1-month notice, then it stops.",
         "     Agency: spent 79,400, still owed 0. Minimum term already served.",
         "",
-        "FIT - FRACTIONAL-PLUS-EXECUTION: Judgement is part-time (10 hours) but execution is not (25 hours) and nobody in-house does it. A strategy-only retainer will not write the emails: pair a fractional leader with a contractor or a junior hire, and count both."
+        "FIT - FRACTIONAL-PLUS-EXECUTION: Judgement is part-time (10 hours) but execution is not (25 hours) and nobody in-house does it. In AAJ's view, pair a fractional leader with a contractor or a junior hire, and count both: a strategy-only retainer does not cover the execution."
       ],
       "stderr": []
     },
@@ -44,13 +44,13 @@
         "     retainer 120,000, execution 36,000, tools 4,800, yourTime 15,588",
         "  Agency: 184,976 total; starts now; 11.0 productive months; 16,816 per productive month; 208 of your hours",
         "     retainer 144,000, setup 5,000, tools 4,800, yourTime 31,176",
-        "  Crossover: The in-house hire never becomes the cheaper option: once both are running it costs 6,500 more per month than the fractional leader, so the gap only widens. Check the salary load and the execution line; those are the two people usually get wrong.",
+        "  Crossover: The in-house hire never becomes the cheaper option: once both are running it costs $6,500 more per month than the fractional leader, so the gap only widens. If that looks wrong, check the salary load and the execution line first.",
         "  If you stop at month 6:",
         "     In-house hire: spent 115,600, still owed 0. Recruiting again, and the replacement ramps from zero. No severance assumed.",
         "     Fractional leader: spent 80,400, still owed 13,000. 1-month notice, then it stops.",
         "     Agency: spent 79,400, still owed 0. Minimum term already served.",
         "",
-        "FIT - AGENCY: The work is mostly hands (25 hours a week) in channels you do not have (paid search). An agency or specialist contractors fit; add a fractional leader only if nobody is setting direction."
+        "FIT - AGENCY: The work is mostly hands (25 hours a week) in channels you do not have (paid search). In AAJ's view, an agency or specialist contractors fit; add a fractional leader only if nobody is setting direction."
       ],
       "stderr": []
     }

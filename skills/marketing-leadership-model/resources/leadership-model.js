@@ -143,7 +143,10 @@ function compare(c) {
     var month = crossover(byId.inHouse, other, H);
     cross = { against: other.name, month: month, insideHorizon: month !== null && month <= H,
       monthlyGap: byId.inHouse.monthly - other.monthly,
-      text: month === null ? 'The in-house hire never becomes the cheaper option: once both are running it costs ' + Math.round(byId.inHouse.monthly - other.monthly).toLocaleString('en-US') + ' more per month than the ' + other.name.toLowerCase() + ', so the gap only widens. Check the salary load and the execution line; those are the two people usually get wrong.'
+      text: month === null
+        ? (byId.inHouse.monthly - other.monthly > 0
+          ? 'The in-house hire never becomes the cheaper option: once both are running it costs $' + Math.round(byId.inHouse.monthly - other.monthly).toLocaleString('en-US') + ' more per month than the ' + other.name.toLowerCase() + ', so the gap only widens. If that looks wrong, check the salary load and the execution line first.'
+          : 'Once both are running, the in-house hire costs $' + Math.round(other.monthly - byId.inHouse.monthly).toLocaleString('en-US') + ' less per month than the ' + other.name.toLowerCase() + ', but its one-off costs (recruiting, and the months before it starts) are not recovered within ' + Math.max(H, CROSSOVER_LIMIT_MIN) + ' months.')
         : month <= H ? 'The in-house hire becomes the cheaper option in month ' + month + ', inside your ' + H + '-month horizon.'
         : 'The in-house hire becomes the cheaper option in month ' + month + ', beyond the ' + H + ' months you are deciding for.' };
   }
@@ -178,15 +181,15 @@ function fit(f) {
   var needsHands = exec >= EXECUTION_HEAVY && !execInHouse;
   var fullTimeLead = lead >= LEADERSHIP_FULL_TIME;
   var verdict;
-  if (fullTimeLead && needsHands) verdict = { level: 'in-house', text: lead + ' hours a week of leadership and ' + exec + ' of execution with nobody to do it is a full-time job plus hands. Hire the leader; buy or hire the execution.' };
-  else if (fullTimeLead) verdict = { level: 'in-house', text: lead + ' hours a week of leadership is a full-time role (AAJ treats ' + LEADERSHIP_FULL_TIME + '+ as full time). A fractional leader at that load costs more than a hire and holds less.' };
-  else if (needsHands && spec.length) verdict = { level: 'agency', text: 'The work is mostly hands (' + exec + ' hours a week) in channels you do not have (' + spec.join(', ') + '). An agency or specialist contractors fit; add a fractional leader only if nobody is setting direction.' };
-  else if (needsHands) verdict = { level: 'fractional-plus-execution', text: 'Judgement is part-time (' + lead + ' hours) but execution is not (' + exec + ' hours) and nobody in-house does it. A strategy-only retainer will not write the emails: pair a fractional leader with a contractor or a junior hire, and count both.' };
-  else if (lead > 0) verdict = { level: 'fractional', text: lead + ' hours a week of leadership, with execution covered. That is what a fractional arrangement is for; revisit when the leadership load passes ' + LEADERSHIP_FULL_TIME + ' hours or the horizon passes the crossover month.' };
+  if (fullTimeLead && needsHands) verdict = { level: 'in-house', text: lead + ' hours a week of leadership and ' + exec + ' of execution with nobody to do it. In AAJ\'s view, that is a full-time role plus hands: hire the leader, and buy or hire the execution.' };
+  else if (fullTimeLead) verdict = { level: 'in-house', text: lead + ' hours a week of leadership is a full-time role (AAJ treats ' + LEADERSHIP_FULL_TIME + '+ as full time). In AAJ\'s view, a fractional leader at that load costs more than a hire and holds less; the comparison shows the cost on your numbers.' };
+  else if (needsHands && spec.length) verdict = { level: 'agency', text: 'The work is mostly hands (' + exec + ' hours a week) in channels you do not have (' + spec.join(', ') + '). In AAJ\'s view, an agency or specialist contractors fit; add a fractional leader only if nobody is setting direction.' };
+  else if (needsHands) verdict = { level: 'fractional-plus-execution', text: 'Judgement is part-time (' + lead + ' hours) but execution is not (' + exec + ' hours) and nobody in-house does it. In AAJ\'s view, pair a fractional leader with a contractor or a junior hire, and count both: a strategy-only retainer does not cover the execution.' };
+  else if (lead > 0) verdict = { level: 'fractional', text: lead + ' hours a week of leadership, with execution covered. In AAJ\'s view, that is what a fractional arrangement is for; revisit when the leadership load passes ' + LEADERSHIP_FULL_TIME + ' hours or the horizon passes the crossover month.' };
   else verdict = { level: 'unclear', text: 'Say how many hours a week of leadership and execution the work is; the shape of help follows from that.' };
-  if (founder !== null && founder < 2) notes.push('With ' + founder + ' hour(s) a week to give, an agency is the hardest to run well: it usually needs the most of your time in briefs and reviews.');
-  if (spec.length && execInHouse) notes.push('Execution exists in-house but not in ' + spec.join(', ') + '. A specialist contractor for those channels is cheaper than either an agency retainer or a hire.');
-  if (months < 6) notes.push('Deciding for under six months: a hire is unlikely to be productive before the horizon ends (search plus ramp). Fractional or agency for now.');
+  if (founder !== null && founder < 2) notes.push('With ' + founder + ' hour(s) a week to give: in AAJ\'s view, an agency is the hardest of the three to run well, because briefs and reviews take your time.');
+  if (spec.length && execInHouse) notes.push('Execution exists in-house but not in ' + spec.join(', ') + '. In AAJ\'s view, a specialist contractor for those channels usually costs less than an agency retainer or a hire; check the quotes.');
+  if (months < 6) notes.push('Deciding for under six months: in AAJ\'s view, a hire is unlikely to be productive before the horizon ends (search plus ramp), so fractional or agency fits for now.');
   return { leadershipHoursPerWeek: lead, executionHoursPerWeek: exec, executionInHouse: execInHouse, channelSpecialism: spec, verdict: verdict, notes: notes };
 }
 
