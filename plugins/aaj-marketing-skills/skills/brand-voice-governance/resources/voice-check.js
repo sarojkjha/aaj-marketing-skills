@@ -39,6 +39,16 @@ process.argv = process.argv.map((a, i) =>
 
 'use strict';
 
+/* aaj:core:begin - the voice check. The free Brand Voice Checker on aajconsult.com
+   embeds this block verbatim; the site's verify script checks it byte for byte. */
+
+// Input problems throw; the CLI prints them, the browser tool shows them.
+function fail(msg) {
+  const e = new Error(msg);
+  e.isInputError = true;
+  throw e;
+}
+
 /* ─────────────────────────────  text utils  ───────────────────────────── */
 
 function splitBlocks(text) {
@@ -77,20 +87,68 @@ function gradeLevel(text) {
   const wds = words(text);
   if (!sents.length || !wds.length) return 0;
   const syl = wds.reduce((a, w) => a + syllables(w), 0);
-  return 0.39 * (wds.length / sents.length) + 11.8 * (syl / wds.length) - 15.59;
+  // The formula goes below zero on very short, simple text; a grade below 0 means nothing, so floor it.
+  return Math.max(0, 0.39 * (wds.length / sents.length) + 11.8 * (syl / wds.length) - 15.59);
 }
 
 /* ─────────────────────────────  matchers  ───────────────────────────── */
 
-// Match a banned term as a whole word/phrase, case-insensitive. Returns the
-// matched surface forms with their positions so the audit trail can quote them.
-function findTerm(block, term) {
-  const escaped = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-  const re = new RegExp(`\\b${escaped}\\b`, 'gi');
+// Spans inside quotation marks: a word quoted is usually being discussed, not used.
+// Each mark closes only with its own partner. A straight single quote counts only
+// when no letter or digit touches it on the outside, so the apostrophe in "it's"
+// never opens a quote. (No lookbehind: older Safari can't run it.)
+function quotedRanges(text) {
+  const out = [];
+  const pairs = [/"[^"\n]{0,120}?"/g, /\u201c[^\u201d\n]{0,120}?\u201d/g, /\u2018[^\u2019\n]{0,120}?\u2019/g];
+  for (const re of pairs) {
+    let m;
+    while ((m = re.exec(text)) !== null) out.push([m.index, m.index + m[0].length]);
+  }
+  const single = /(^|[^A-Za-z0-9])'([^'\n]{1,120}?)'(?![A-Za-z0-9])/g;
+  let m;
+  while ((m = single.exec(text)) !== null) {
+    const start = m.index + m[1].length;
+    out.push([start, start + m[2].length + 2]);
+    single.lastIndex = start + m[2].length + 2;
+  }
+  return out;
+}
+
+// The endings a rule's last word may take when inflect is on. Short words (under
+// four letters) match exactly, so "new" never catches "news". A word ending in a
+// consonant and "e" drops the "e" before "-ing" ("leverage" -> "leveraging");
+// "-es" follows only s, x, z, ch and sh; a consonant and "y" takes "-ies"/"-ied".
+function inflectTail(term) {
+  const w = (term.match(/[a-z0-9]+$/i) || [''])[0].toLowerCase();
+  if (w.length < 4 || !/[a-z]$/.test(w)) return { cut: 0, tail: '' };
+  if (/[^aeiou]e$/.test(w)) return { cut: 1, tail: '(?:e|es|ed|ing)' };
+  if (/[^aeiou]y$/.test(w)) return { cut: 1, tail: '(?:y|ies|ied|ying)' };
+  if (/(?:s|x|z|ch|sh)$/.test(w)) return { cut: 0, tail: '(?:es|ed|ing)?' };
+  return { cut: 0, tail: '(?:s|ed|ing)?' };
+}
+
+// Match a term as a whole word/phrase, case-insensitive; hyphens and spaces inside
+// it match either. With inflect, a rule about "leverage" also catches "leverages",
+// "leveraged" and "leveraging" (see inflectTail); the word boundary still stops it
+// running into an unrelated word. Returns the matched surface forms with their
+// positions and whether each sits inside quotation marks, so the audit trail can
+// quote them.
+function findTerm(block, term, opts) {
+  const inflect = !!(opts && opts.inflect);
+  const wordEnd = /[a-z0-9]$/i.test(term);
+  const inf = inflect && wordEnd ? inflectTail(term) : { cut: 0, tail: '' };
+  const base = inf.cut ? term.slice(0, -inf.cut) : term;
+  const t = base.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace(/[-\s]+/g, '[-\\s]+');
+  // \b fails against a term ending in punctuation, so guard only word-character edges.
+  const pre = /^[a-z0-9]/i.test(term) ? '\\b' : '';
+  const post = wordEnd ? inf.tail + '\\b' : '';
+  const re = new RegExp(pre + t + post, 'gi');
+  const quoted = quotedRanges(block);
   const hits = [];
   let m;
   while ((m = re.exec(block)) !== null) {
-    hits.push({ surface: m[0], index: m.index });
+    const at = m.index;
+    hits.push({ surface: m[0], index: at, inQuote: quoted.some((r) => at >= r[0] && at < r[1]) });
     if (m.index === re.lastIndex) re.lastIndex++;
   }
   return hits;
@@ -109,7 +167,7 @@ const HEDGES = ['very', 'really', 'quite', 'basically', 'actually', 'just', 'som
 // section. Deterministic parse — no inference, so the profile is auditable.
 function profile(cfg) {
   const brief = cfg.brief || '';
-  if (!brief.trim()) die('profile mode needs a "brief" field containing the brand-context markdown');
+  if (!brief.trim()) fail('profile mode needs a "brief" field containing the brand-context markdown');
 
   const out = {
     brand: cfg.brand || null,
@@ -181,9 +239,14 @@ function checkBlock(block, prof, idx) {
   const findings = [];
 
   for (const term of prof.avoid) {
-    for (const hit of findTerm(block, term)) {
-      findings.push({ type: 'banned', severity: 'block', term: hit.surface,
-        note: `"${hit.surface}" is on this brand's avoid list` });
+    for (const hit of findTerm(block, term, { inflect: true })) {
+      if (hit.inQuote) {
+        findings.push({ type: 'banned-quoted', severity: 'info', term: hit.surface, rule: term, index: hit.index,
+          note: `"${hit.surface}" is inside quotation marks, so possibly discussed rather than used; not counted` });
+      } else {
+        findings.push({ type: 'banned', severity: 'block', term: hit.surface, rule: term, index: hit.index,
+          note: hit.surface.toLowerCase() === term ? `"${hit.surface}" is on this brand's avoid list` : `"${hit.surface}" matches "${term}" on this brand's avoid list` });
+      }
     }
   }
 
@@ -203,26 +266,28 @@ function checkBlock(block, prof, idx) {
   }
 
   // longest sentence — a proxy the reading grade can miss on short blocks
-  const longest = Math.max(0, ...sentences(block).map((s) => words(s).length));
+  const longest = sentences(block).reduce((a, s) => Math.max(a, words(s).length), 0);
   if (longest > 30) {
     findings.push({ type: 'long-sentence', severity: 'warn', term: null,
       note: `${longest}-word sentence; consider splitting` });
   }
 
   const blockingCount = findings.filter((f) => f.severity === 'block').length;
+  const warnCount = findings.filter((f) => f.severity === 'warn').length;
   return {
     idx,
+    text: block,
     excerpt: block.length > 90 ? block.slice(0, 87) + '...' : block,
     grade: Number(grade.toFixed(1)),
     findings,
-    verdict: blockingCount > 0 ? 'REVISE' : (findings.length ? 'WARN' : 'PASS'),
+    verdict: blockingCount > 0 ? 'REVISE' : (warnCount ? 'WARN' : 'PASS'),
   };
 }
 
 function check(cfg) {
   const text = cfg.file != null ? cfg.file : cfg.content;
   if (typeof text !== 'string' || !text.trim()) {
-    die('check mode needs "content" (the text to check) or "file" (its contents)');
+    fail('check mode needs "content" (the text to check) or "file" (its contents)');
   }
   const prof = resolveProfile(cfg);
   const blocks = splitBlocks(text).map((b, i) => checkBlock(b, prof, i + 1));
@@ -236,7 +301,9 @@ function check(cfg) {
   const allFindings = blocks.flatMap((b) => b.findings.map((f) => ({ ...f, block: b.idx })));
   const bannedHits = allFindings.filter((f) => f.type === 'banned');
   const bannedByTerm = {};
-  for (const f of bannedHits) bannedByTerm[f.term.toLowerCase()] = (bannedByTerm[f.term.toLowerCase()] || 0) + 1;
+  for (const f of bannedHits) bannedByTerm[f.rule] = (bannedByTerm[f.rule] || 0) + 1;
+  // Words the brand wants to see: which of them the content uses, quoted or not.
+  const preferUsed = prof.prefer.filter((w) => findTerm(text, w, { inflect: true }).length > 0);
 
   return {
     __check: {
@@ -248,10 +315,13 @@ function check(cfg) {
       verdict: revise > 0 ? 'REVISE' : (warn > 0 ? 'PASS WITH NOTES' : 'PASS'),
       blocks,
       bannedByTerm,
+      prefer: prof.prefer,
+      preferUsed,
       allFindings,
     },
   };
 }
+/* aaj:core:end */
 
 /* ─────────────────────────────  rendering  ───────────────────────────── */
 
@@ -300,6 +370,11 @@ function renderCheck(r) {
   out.push(`  ${r.revise} to revise · ${r.warn} with notes · ${r.pass} pass`);
   out.push('');
 
+  if (r.prefer.length) {
+    out.push(`  Words to prefer used: ${r.preferUsed.length} of ${r.prefer.length}${r.preferUsed.length ? ' (' + r.preferUsed.join(', ') + ')' : ''}`);
+    out.push('');
+  }
+
   if (Object.keys(r.bannedByTerm).length) {
     out.push('BANNED TERMS FOUND');
     for (const [term, n] of Object.entries(r.bannedByTerm).sort((a, b) => b[1] - a[1])) {
@@ -313,7 +388,7 @@ function renderCheck(r) {
     const tag = b.verdict === 'REVISE' ? '✗ REVISE' : b.verdict === 'WARN' ? '! NOTES ' : '✓ PASS  ';
     out.push(`  ${tag}  #${pad(b.idx, 3)} ${b.excerpt}`);
     for (const f of b.findings) {
-      const mark = f.severity === 'block' ? '        ✗' : '        ·';
+      const mark = f.severity === 'block' ? '        ✗' : f.severity === 'info' ? '        ~' : '        ·';
       out.push(`${mark} ${f.note}`);
     }
   }
@@ -323,7 +398,7 @@ function renderCheck(r) {
   out.push(`  ${r.allFindings.length} finding(s) across ${r.totalBlocks} block(s). Each is quoted above with its`);
   out.push('  block number, so an editor or a compliance log can trace every flag to its');
   out.push('  source. Blocking findings (✗) violate a stated brand rule; notes (·) are');
-  out.push('  advisory and do not fail the check.');
+  out.push('  advisory and do not fail the check; quoted mentions (~) are not counted.');
   out.push('');
 
   out.push('WHAT THIS MEANS');
@@ -455,15 +530,20 @@ function main() {
     catch (e) { die(`could not parse JSON — ${e.message}`); }
   }
 
-  if (mode === 'check') console.log(renderCheck(check(cfg).__check));
-  else if (mode === 'profile') console.log(renderProfile(profile(cfg).__profile));
-  else die(`unknown mode "${mode}". Use check, profile, --demo, or --help.`);
+  try {
+    if (mode === 'check') console.log(renderCheck(check(cfg).__check));
+    else if (mode === 'profile') console.log(renderProfile(profile(cfg).__profile));
+    else die(`unknown mode "${mode}". Use check, profile, --demo, or --help.`);
+  } catch (e) {
+    if (e && e.isInputError) die(e.message);
+    throw e;
+  }
 }
 
 if (require.main === module) main();
 
 module.exports = {
   check, profile, checkBlock, resolveProfile,
-  splitBlocks, gradeLevel, findTerm, syllables,
+  splitBlocks, gradeLevel, findTerm, quotedRanges, syllables,
   HOUSE_DEFAULT_AVOID, HEDGES,
 };
