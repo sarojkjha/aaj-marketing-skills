@@ -169,7 +169,7 @@ function analyzeWinLoss(deals) {
     insights.push(`Single biggest fixable leak: ${biggestLeak.segment} deals lost to "${biggestLeak.reason}" — ${money(biggestLeak.lostRevenue)}. Start here.`);
   }
   if (noReasonRevenue > 0 && lostRevenue > 0) {
-    insights.push(`${pct(noReasonRevenue, lostRevenue)}% of lost revenue (${money(noReasonRevenue)}) has no usable reason ("No decision" or blank). That is a qualification or urgency question, not a fix list; interview these buyers before acting on the reasons above.`);
+    insights.push(`${pct(noReasonRevenue, lostRevenue)}% of lost revenue (${money(noReasonRevenue)}) has no usable reason ("No decision", "Unknown", "Other" or blank). That is a qualification or urgency question, not a fix list; interview these buyers before acting on the reasons above.`);
   }
   if (lostAtStage[0]) {
     insights.push(`Most lost revenue dies at "${lostAtStage[0].label}" (${money(lostAtStage[0].revenue)} across ${lostAtStage[0].count} deal${lostAtStage[0].count !== 1 ? "s" : ""}).`);
