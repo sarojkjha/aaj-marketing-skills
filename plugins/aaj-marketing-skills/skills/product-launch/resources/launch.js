@@ -172,7 +172,7 @@ function tier(l) {
     if (l.pricingChange) reasons.push('It changes pricing, which every affected customer has to hear from you first.');
     if (l.behaviourChange) reasons.push('Existing customers have to change how they work.');
   } else {
-    t = 3; reasons.push('A ' + l.what.replace('-', ' ') + ' that changes nothing a customer has to learn or pay for.');
+    t = 3; reasons.push((l.what === 'improvement' ? 'An ' : 'A ') + l.what.replace('-', ' ') + ' that changes nothing a customer has to learn or pay for.');
   }
 
   let mismatch = null;
@@ -281,7 +281,7 @@ function run(cfg) {
     const overdueMust = out.plan.filter((p) => p.overdue && p.priority === 'Must');
     if (out.days < 0) out.findings.push('The launch date has passed.');
     else if (overdueMust.length) out.findings.push(`${overdueMust.length} Must task${overdueMust.length > 1 ? 's are' : ' is'} past due for this date and not marked done (set "done" for finished tasks). Either do them this week or move the date - a launch date with overdue foundations is the Building phase with a deadline attached.`);
-    if (out.readiness && out.readiness.pct < CLOSE) out.findings.push('A date is set while readiness is in the Building phase. Most launches that slip were dated before the gate was clear.');
+    if (out.readiness && out.readiness.pct < CLOSE) out.findings.push('A date is set while readiness is in the Building phase. In AAJ\'s view, a date set before the gate is clear is the one most likely to slip.');
   }
   return out;
 }
