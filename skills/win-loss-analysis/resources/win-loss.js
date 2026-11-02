@@ -43,6 +43,8 @@ process.argv = process.argv.map((a, i) =>
 // -----------------------------------------------------------------------------
 
 
+/* aaj:core:begin - the analysis and input checks. The free Win-Loss Analyzer on aajconsult.com
+   embeds this block verbatim; the site's verify script checks it byte for byte. */
 function round1(n) { return Math.round(n * 10) / 10; }
 function pct(part, whole) { return whole > 0 ? round1((part / whole) * 100) : 0; }
 function sum(arr, f) { return arr.reduce((t, x) => t + f(x), 0); }
@@ -204,6 +206,8 @@ function validateDeals(input) {
   });
   return errs;
 }
+
+/* aaj:core:end */
 
 function printReport(r) {
   const P = (...a) => console.log(...a);
