@@ -17,7 +17,7 @@
  * CONFIG (JSON) — one or both keys:
  *
  *   { "study": {
- *       "customer":     "Northwind Logistics" | null,
+ *       "customer":     "Customer A (logistics)" | null,
  *       "descriptor":   "a 40-person freight broker in the Midwest",
  *       "problem":      "quotes took three days, so buyers went elsewhere",
  *       "beforeValue":  72, "afterValue": 4, "metric": "hours to quote",
@@ -261,7 +261,7 @@ function renderPermission(p) {
 
 const DEMO = {
   study: {
-    customer: 'Northwind Logistics',
+    customer: 'Customer A (logistics)',
     descriptor: 'a 40-person freight broker in the Midwest',
     problem: 'quoting took three days, so buyers booked with whoever answered first',
     beforeValue: 72, afterValue: 4, metric: 'hours to quote',

@@ -23,7 +23,7 @@
         "  Competitor X battlecard [battlecard, evaluation] owner PMM, updated 8 mo ago, used by 17% of reps - fix",
         "     ! Last updated 8 months ago. This engine treats anything over 6 months as stale; for a battlecard or pricing objection that is a liability.",
         "     ! 17% of reps use it. Below 33% (this engine's rule) either reps do not know it exists, or it does not help; ask before rebuilding.",
-        "  Acme case study [case-study, evaluation] owner Marketing, updated 3 mo ago, used by 67% of reps - ok",
+        "  Customer A case study [case-study, evaluation] owner Marketing, updated 3 mo ago, used by 67% of reps - ok",
         "  Standard demo flow [demo-script, evaluation] owner -, updated 11 mo ago, used by 100% of reps - fix",
         "     ! No owner. An asset nobody owns is never updated.",
         "     ! Last updated 11 months ago. This engine treats anything over 6 months as stale; for a battlecard or pricing objection that is a liability.",

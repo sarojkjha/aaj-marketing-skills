@@ -190,7 +190,7 @@ if (require.main === module && (process.argv.includes("--demo") || process.argv.
 
   P("=== A. THE ANNOUNCEMENT (what most founders send) ===");
   show(scoreStory({
-    headline: "Acme raises $4M to reinvent employee onboarding",
+    headline: "Example Co. raises $4M to reinvent employee onboarding",
     type: "timing",
     audience: "",
     outlets: ["a national business title"],
@@ -215,7 +215,7 @@ if (require.main === module && (process.argv.includes("--demo") || process.argv.
   const pitch = checkPitch({
     subject: "HR teams are quietly rebuilding onboarding around the first 30 days",
     body: "Hi Priya - your piece on manager overload in March stayed with me. We work with about forty mid-market HR teams and most have moved onboarding from ninety days to thirty. Two will talk on record, and I can share the anonymised programme data. Worth fifteen minutes?",
-    companyName: "Acme", recipientName: "Priya", recentPieceReferenced: true,
+    companyName: "Example Co.", recipientName: "Priya", recentPieceReferenced: true,
     hasAttachment: false, offer: "data + two customers on record", sentToCount: 1,
   });
   P("\n=== PITCH CHECK (Step 5) ===");

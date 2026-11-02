@@ -366,7 +366,7 @@ copy", this one asks "does this sound like THIS brand".
 
 CHECK — score content against a voice profile
   {
-    "brand": "Northwind",
+    "brand": "Example Co.",
     "content": "the text to check, in markdown or plain paragraphs",
     "profile": {                     // optional — omit to parse from "brief"
       "avoid": ["synergy","leverage","robust"],
@@ -381,7 +381,7 @@ CHECK — score content against a voice profile
 
 PROFILE — extract a checkable profile from a brand-context brief
   {
-    "brand": "Northwind",
+    "brand": "Example Co.",
     "brief": "...markdown containing a 'Voice & tone' section...",
     "maxGrade": 9                    // optional override
   }
@@ -393,7 +393,7 @@ Severities:  ✗ block  = violates a stated brand rule (fails the check)
              ·  note   = advisory (hedge, long sentence, over grade ceiling)
 `;
 
-const DEMO_BRIEF = `# Brand & Product Context — Northwind Analytics
+const DEMO_BRIEF = `# Brand & Product Context — Example Co.
 
 ## Voice & tone
 - Defining adjectives: plain-spoken, practical, a little irreverent.
@@ -403,7 +403,7 @@ const DEMO_BRIEF = `# Brand & Product Context — Northwind Analytics
 - Grade ceiling: 9
 `;
 
-const DEMO_CONTENT = `Northwind is a robust, best-in-class analytics platform.
+const DEMO_CONTENT = `Example Co. is a robust, best-in-class analytics platform.
 
 We help you leverage seamless data synergy across your entire organization, unlocking actionable insights that drive real, measurable outcomes for teams who are serious about growth and want to move fast without the overhead.
 
@@ -421,10 +421,10 @@ function main() {
 
   if (argv.includes('--demo')) {
     console.log('▸ DEMO 1 — profile mode (extract rules from a brief)\n');
-    const p = profile({ brief: DEMO_BRIEF, brand: 'Northwind Analytics' }).__profile;
+    const p = profile({ brief: DEMO_BRIEF, brand: 'Example Co.' }).__profile;
     console.log(renderProfile(p));
     console.log('\n\n▸ DEMO 2 — check mode (content against those rules)\n');
-    const r = check({ brand: 'Northwind Analytics', content: DEMO_CONTENT, profile: p }).__check;
+    const r = check({ brand: 'Example Co.', content: DEMO_CONTENT, profile: p }).__check;
     console.log(renderCheck(r));
     console.log('\n(Demo data. Replace with a real brief and real content.)');
     return;

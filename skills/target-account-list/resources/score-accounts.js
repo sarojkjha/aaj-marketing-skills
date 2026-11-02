@@ -13,7 +13,7 @@
  * Input JSON shape:
  *   {
  *     "weights": { "industryMatch": 30, "sizeBand": 25, ... },   // optional; demo weights used if omitted
- *     "accounts": [ { "name": "Acme", "signals": { "industryMatch": true, ... } }, ... ]
+ *     "accounts": [ { "name": "Prospect A", "signals": { "industryMatch": true, ... } }, ... ]
  *   }
  *
  * Deterministic. No external dependencies.
@@ -47,12 +47,12 @@ const DEMO_WEIGHTS = {
 };
 
 const DEMO_ACCOUNTS = [
-  { name: "Northwind SaaS",   signals: { industryMatch: true,  sizeBand: true,  usesComplementaryTool: true,  recentFunding: true,  hiringSignal: true } },
-  { name: "Globex Software",  signals: { industryMatch: true,  sizeBand: true,  usesComplementaryTool: true,  recentFunding: false, hiringSignal: true } },
-  { name: "Initech",          signals: { industryMatch: true,  sizeBand: true,  usesComplementaryTool: false, recentFunding: false, hiringSignal: false } },
-  { name: "Umbrella Retail",  signals: { industryMatch: false, sizeBand: true,  usesComplementaryTool: false, recentFunding: true,  hiringSignal: false } },
-  { name: "Hooli Enterprise", signals: { industryMatch: true,  sizeBand: false, usesComplementaryTool: true,  recentFunding: false, hiringSignal: false } },
-  { name: "Stark SMB",        signals: { industryMatch: false, sizeBand: false, usesComplementaryTool: false, recentFunding: false, hiringSignal: true } },
+  { name: "Prospect A (SaaS)", signals: { industryMatch: true,  sizeBand: true,  usesComplementaryTool: true,  recentFunding: true,  hiringSignal: true } },
+  { name: "Prospect B (software)", signals: { industryMatch: true,  sizeBand: true,  usesComplementaryTool: true,  recentFunding: false, hiringSignal: true } },
+  { name: "Prospect C",      signals: { industryMatch: true,  sizeBand: true,  usesComplementaryTool: false, recentFunding: false, hiringSignal: false } },
+  { name: "Prospect D (retail)", signals: { industryMatch: false, sizeBand: true,  usesComplementaryTool: false, recentFunding: true,  hiringSignal: false } },
+  { name: "Prospect E (enterprise)", signals: { industryMatch: true,  sizeBand: false, usesComplementaryTool: true,  recentFunding: false, hiringSignal: false } },
+  { name: "Prospect F (SMB)", signals: { industryMatch: false, sizeBand: false, usesComplementaryTool: false, recentFunding: false, hiringSignal: true } },
 ];
 
 function parseArgs(argv) {

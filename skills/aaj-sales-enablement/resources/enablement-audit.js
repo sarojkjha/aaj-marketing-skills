@@ -208,7 +208,7 @@ const DEMO = {
     { name: 'Company one-pager', type: 'one-pager', owner: 'Marketing', lastUpdated: '2026-08-01', usedByReps: 6 },
     { name: 'Discovery question bank', type: 'discovery-guide', owner: 'Head of Sales', lastUpdated: '2026-06-15', usedByReps: 5 },
     { name: 'Competitor X battlecard', type: 'battlecard', owner: 'PMM', lastUpdated: '2026-01-20', usedByReps: 1 },
-    { name: 'Acme case study', type: 'case-study', owner: 'Marketing', lastUpdated: '2026-07-10', usedByReps: 4 },
+    { name: 'Customer A case study', type: 'case-study', owner: 'Marketing', lastUpdated: '2026-07-10', usedByReps: 4 },
     { name: 'Standard demo flow', type: 'demo-script', owner: '', lastUpdated: '2025-11-02', usedByReps: 6 },
     { name: 'Security questionnaire answers', type: 'security-legal-pack', owner: 'CTO', lastUpdated: '2026-09-01', usedByReps: 3 },
   ],
