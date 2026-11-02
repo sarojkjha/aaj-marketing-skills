@@ -6,8 +6,8 @@
  * Sizes a total marketing budget, then splits it across functions.
  *
  * WHERE THE NUMBERS COME FROM
- *   B2B SaaS stage bands are AAJ's own estimates from client engagements
- *   (2023-2026), not third-party research:
+ *   B2B SaaS stage bands are AAJ's working ranges: AAJ's planning view,
+ *   not third-party research and not a survey of companies:
  *     pre-seed   30-60% of quarterly burn (revenue is not yet a useful base)
  *     seed       10-20% of funding raised
  *     series A   20-30% of ARR
@@ -63,7 +63,7 @@ process.argv = process.argv.map((a, i) =>
 
 'use strict';
 
-// AAJ stage bands for B2B SaaS (AAJ's own estimates — see header).
+// AAJ stage bands for B2B SaaS (AAJ's working ranges — see header).
 const SAAS_BANDS = {
   pre_seed: { lo: 30, hi: 60, base: 'quarterlyBurn', baseLabel: 'of quarterly burn' },
   seed:     { lo: 10, hi: 20, base: 'fundingRaised', baseLabel: 'of funding raised' },
@@ -155,7 +155,7 @@ function run(c){
     lo = b.lo; hi = b.hi; pct = r1(lo + (hi - lo) * pos);
     baseKey = b.base; baseLabel = b.baseLabel;
     periodLabel = baseKey === 'quarterlyBurn' ? 'qtr' : baseKey === 'fundingRaised' ? 'round' : 'yr';
-    basis = `AAJ stage band ${lo}–${hi}% ${b.baseLabel} (AAJ's own estimate from client work, not third-party research)`;
+    basis = `AAJ stage band ${lo}–${hi}% ${b.baseLabel} (AAJ's working range, not third-party research)`;
   } else {
     pct = GARTNER_PCT; baseKey = 'annualRevenue'; baseLabel = 'of revenue'; periodLabel = 'yr';
     basis = `Gartner 2026 cross-industry average (${GARTNER_PCT}% of revenue)`;
@@ -200,7 +200,7 @@ function run(c){
   out.push('\n--- JSON ---');
   out.push(JSON.stringify({
     model, stage, pct, basis: c.pctOfRevenue !== undefined ? 'user' : model === 'b2b_saas' ? 'aaj-stage-band' : 'gartner-2026-average',
-    band: lo != null ? { lo, hi, of: baseLabel, source: 'AAJ estimate from client engagements, 2023-2026 (not third-party research)' } : null,
+    band: lo != null ? { lo, hi, of: baseLabel, source: "AAJ's working range (not third-party research)" } : null,
     base: { field: baseKey, amount: baseAmount }, budget: Math.round(budget), period: periodLabel,
     monthlyBudget: monthly != null ? Math.round(monthly) : null,
     splitSource: c.split ? 'user' : 'aaj-default-assumption',
