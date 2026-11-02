@@ -115,9 +115,9 @@ function analyzePricing(tiersInput) {
   if (totalCustomers > 0 && enriched.length >= 2) {
     const entryIsDriver = topRevenueDriver && topRevenueDriver.name === enriched[0].name;
     if (entryIsDriver) {
-      insights.push(`Most of your revenue comes from your cheapest tier (${entryRevenueShare}%) — your packaging is likely leaving money on the table. Look hard at the upgrade path and whether your value metric pushes customers up.`);
+      insights.push(`Most of your revenue comes from your cheapest tier (${entryRevenueShare}%) — few customers are moving up. In AAJ's view, look at the upgrade path and whether your value metric gives customers a reason to move up.`);
     } else if (largestCustomerTier && largestCustomerTier.name === enriched[0].name && entryRevenueShare < largestCustomerTier.customerShare) {
-      insights.push(`${largestCustomerTier.customerShare}% of customers sit on your entry tier but it's only ${entryRevenueShare}% of revenue — that gap is your expansion opportunity.`);
+      insights.push(`${largestCustomerTier.customerShare}% of customers sit on your entry tier but it's only ${entryRevenueShare}% of revenue. In AAJ's view, that gap is where to look for expansion.`);
     }
   }
   if (anchorMultiple !== null) {
