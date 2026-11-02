@@ -238,7 +238,7 @@ function generate(input) {
     statement: statement, valueProp: valueProp, pitch: pitch,
     hero: { headline: heroHeadline, sub: heroSub },
     canvas: canvas, lint: lint, shareLink: shareLink, doc: doc,
-    fileName: (val("product") || "positioning").toLowerCase().replace(/[^a-z0-9]+/g, "-") + "-positioning.md"
+    fileName: ((val("product") || "positioning").toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "") || "positioning") + "-positioning.md"
   };
 }
 /* aaj:core:end */
