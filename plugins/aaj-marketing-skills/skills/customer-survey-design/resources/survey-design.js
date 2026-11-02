@@ -48,10 +48,12 @@ process.argv = process.argv.map((a, i) =>
 
 'use strict';
 
+/* aaj:core:begin */
 const Z = { 90: 1.645, 95: 1.960, 99: 2.576 };
 
 function pct(v) {
-  // Accept 20 or 0.2 for "20%".
+  // Accept 20 or 0.2 for "20%". A value of 1 or less is a fraction, so 1 means 100%;
+  // write 1% as 0.01.
   if (v == null || isNaN(v)) return null;
   return v > 1 ? v / 100 : v;
 }
@@ -61,7 +63,7 @@ function sampleSize(cfg) {
   const z = Z[conf];
   if (!z) throw new Error(`confidence must be 90, 95 or 99 (got ${cfg.confidence})`);
   const e = pct(cfg.marginOfError);
-  if (!e || e <= 0 || e >= 0.5) throw new Error('marginOfError must be a positive ± in points, e.g. 5');
+  if (!e || e <= 0 || e >= 0.5) throw new Error('marginOfError must be a positive ± in points, e.g. 5 (a value of 1 or less is read as a fraction: for ±1 point write 0.01)');
   const p = pct(cfg.expectedProportion != null ? cfg.expectedProportion : 50);
   if (p <= 0 || p >= 1) throw new Error('expectedProportion must be between 0 and 100 (exclusive)');
 
@@ -110,6 +112,7 @@ function segments(cfg) {
   });
   return { conf, z, n, rows, shareSum };
 }
+/* aaj:core:end */
 
 /* ---------- rendering ---------- */
 
@@ -184,7 +187,7 @@ MODES
 SCHEMA
   sample:   { "marginOfError": 5, "confidence": 95, "expectedProportion": 50,
               "population": 2000, "responseRate": 20 }
-            population and responseRate optional; percents accept 20 or 0.2.
+            population and responseRate optional; percents accept 20 or 0.2 (1 or less is a fraction: write 1% as 0.01).
   segments: { "completes": 400, "confidence": 95,
               "segments": [ { "name": "SMB", "share": 55 }, ... ] }
 
