@@ -18,7 +18,7 @@ metadata:
   card: >-
     Tiers a launch, scores readiness on a twelve-item gate, and builds the dated
     work-back plan.
-  version: 1.0.1
+  version: 1.0.2
   topic: gtm-growth-planning
   secondary_topics: [pr-partnerships-events, strategy-positioning]
   agents: [Claude Code, Cursor, OpenAI Codex, Windsurf, Cline]

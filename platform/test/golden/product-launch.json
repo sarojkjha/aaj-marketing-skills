@@ -90,7 +90,7 @@
         "  [ ] Team: Owners are online and know the runbook",
         "",
         "FINDINGS",
-        "  -  A date is set while readiness is in the Building phase. Most launches that slip were dated before the gate was clear."
+        "  -  A date is set while readiness is in the Building phase. In AAJ's view, a date set before the gate is clear is the one most likely to slip."
       ],
       "stderr": []
     },

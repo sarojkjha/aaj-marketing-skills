@@ -9,11 +9,12 @@
  *   readiness(gate)    is it ready to set a date?
  *   plan(date, tier)   what has to happen on which day?
  *
- * The readiness gate, its 85 / 60 thresholds, the work-back tasks and the
- * launch-day go/no-go gates are the same ones the AAJ Launch Readiness Planner
- * (aajconsult.com/tools/launch-readiness-planner) and the Launch Plan Checklist
- * use. If one changes, change all three - a tool that disagrees with its own
- * method is worse than no tool.
+ * The readiness gate, its 85 / 60 thresholds (AAJ's cut-offs, not a published
+ * standard), the work-back tasks and the launch-day go/no-go gates are shared:
+ * the AAJ Launch Readiness Planner (aajconsult.com/tools/launch-readiness-planner)
+ * embeds the block between the aaj:core markers verbatim, and the Launch Plan
+ * Checklist uses the same gate. If one changes, change all three - a tool that
+ * disagrees with its own method is worse than no tool.
  *
  * USAGE
  *   node launch.js                    # demo
@@ -58,6 +59,8 @@ process.argv = process.argv.map((a, i) =>
 
 'use strict';
 
+/* aaj:core:begin - tiering, the readiness gate and the work-back plan. The free Launch Readiness
+   Planner on aajconsult.com embeds this block verbatim; the site's verify script checks it byte for byte. */
 function die(msg, hint) {
   const e = new Error(msg);
   e.hint = hint;
@@ -72,7 +75,7 @@ const ITEMS = [
   { id: "positioning-hook", dim: "Positioning", text: "You have a single, sticky launch hook you are confident in.", why: "The hook does more for reach than any channel tactic." },
   { id: "product-stable", dim: "Product", text: "The thing you are launching is stable - the core flow works without hand-holding.", why: "A launch spike onto a broken flow burns the audience you worked to earn." },
   { id: "product-first-run", dim: "Product", text: "The first-run experience is smooth for a brand-new user.", why: "Launch traffic is mostly first-timers. Activation happens here or not at all." },
-  { id: "audience-list", dim: "Audience", text: "You have a warm list or audience to activate on day one.", why: "Launching to nobody is the most common launch failure. Attention must be pre-built." },
+  { id: "audience-list", dim: "Audience", text: "You have a warm list or audience to activate on day one.", why: "A launch to an audience you have not built has no one to reach. Attention must be pre-built." },
   { id: "audience-supporters", dim: "Audience", text: "You have named supporters lined up to amplify early.", why: "Early momentum compounds; a flat first hour is hard to recover." },
   { id: "assets-page", dim: "Assets", text: "A launch landing page is built and QA'd.", why: "The click has to land somewhere that converts, with working links and tracking." },
   { id: "assets-creative", dim: "Assets", text: "Core creative is ready: demo, screenshots, graphics, copy.", why: "Making assets on launch day guarantees a rushed, weaker launch." },
@@ -145,7 +148,7 @@ const TIERS = {
        gets: 'Customers and the relevant segment hear about it properly - email, in-app, a post, a sales brief - without a market-wide campaign. The Must and Should tasks, and the go/no-go gates.',
        priorities: ['Must', 'Should'] },
   3: { name: 'Tier 3 - release note',
-       gets: 'A changelog entry, an in-app note where it is used, and one adoption metric. No launch date and no readiness gate - holding it back for a moment wastes the team and trains the audience to ignore announcements.',
+       gets: 'A changelog entry, an in-app note where it is used, and one adoption metric. No launch date and no readiness gate - in AAJ\'s view, holding it back for a moment wastes the team and teaches the audience to ignore announcements.',
        priorities: [] },
 };
 
@@ -169,12 +172,12 @@ function tier(l) {
     if (l.pricingChange) reasons.push('It changes pricing, which every affected customer has to hear from you first.');
     if (l.behaviourChange) reasons.push('Existing customers have to change how they work.');
   } else {
-    t = 3; reasons.push('A ' + l.what.replace('-', ' ') + ' that changes nothing a customer has to learn or pay for.');
+    t = 3; reasons.push((l.what === 'improvement' ? 'An ' : 'A ') + l.what.replace('-', ' ') + ' that changes nothing a customer has to learn or pay for.');
   }
 
   let mismatch = null;
-  if (l.plannedScale === 'big' && t === 3) mismatch = 'The team plans a big launch for a Tier 3 change. Spending a launch on a release note trains your audience to ignore the next announcement, including the one that matters.';
-  else if (l.plannedScale === 'quiet' && t === 1) mismatch = 'The team plans to launch a Tier 1 change quietly. A new product or market launched without a date and an announcement rarely gets a second first impression.';
+  if (l.plannedScale === 'big' && t === 3) mismatch = 'The team plans a big launch for a Tier 3 change. In AAJ\'s view, spending a launch on a release note teaches your audience to ignore the next announcement, including the one that matters.';
+  else if (l.plannedScale === 'quiet' && t === 1) mismatch = 'The team plans to launch a Tier 1 change quietly. A new product or market gets one first impression; launched without a date and an announcement, it spends it on no one.';
   else if (l.plannedScale === 'big' && t === 2) mismatch = 'The team plans a market-wide launch for a Tier 2 change. Check that the market, not just customers, has a reason to care.';
 
   return { tier: t, ...TIERS[t], reasons, mismatch };
@@ -278,10 +281,11 @@ function run(cfg) {
     const overdueMust = out.plan.filter((p) => p.overdue && p.priority === 'Must');
     if (out.days < 0) out.findings.push('The launch date has passed.');
     else if (overdueMust.length) out.findings.push(`${overdueMust.length} Must task${overdueMust.length > 1 ? 's are' : ' is'} past due for this date and not marked done (set "done" for finished tasks). Either do them this week or move the date - a launch date with overdue foundations is the Building phase with a deadline attached.`);
-    if (out.readiness && out.readiness.pct < CLOSE) out.findings.push('A date is set while readiness is in the Building phase. Most launches that slip were dated before the gate was clear.');
+    if (out.readiness && out.readiness.pct < CLOSE) out.findings.push('A date is set while readiness is in the Building phase. In AAJ\'s view, a date set before the gate is clear is the one most likely to slip.');
   }
   return out;
 }
+/* aaj:core:end */
 
 /* ─────────────────────────── rendering ─────────────────────────── */
 
