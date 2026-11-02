@@ -90,9 +90,11 @@ function inputError(msg, hint) {
   return e;
 }
 
+// Lower-cases the first letter of a slot so it reads mid-sentence, unless the first
+// word has a capital after its first letter: an acronym or a name ("AI", "SaaS", "HubSpot").
 function lcFirst(s) {
   if (!s) return s;
-  if (s.length > 1 && s[1] === s[1].toUpperCase() && s[1] !== s[1].toLowerCase()) return s;
+  if (/^[^\s]+/.test(s) && /[A-Z]/.test(s.match(/^[^\s]+/)[0].slice(1))) return s;
   return s.charAt(0).toLowerCase() + s.slice(1);
 }
 function ucFirst(s) { return s ? s.charAt(0).toUpperCase() + s.slice(1) : s; }
@@ -104,7 +106,7 @@ function noArt(s) { return s.replace(/^(a|an|the)\s+/i, ""); }
 function article(s) {
   var w = (String(s).replace(/^[^A-Za-z0-9]+/, "").match(/^[A-Za-z0-9]+/) || [""])[0];
   if (!w) return "a";
-  if (/^[A-Z]+$/.test(w)) return /^[AEFHILMNORSX]/.test(w) ? "an" : "a";
+  if (/^[A-Z]+$/.test(w) || w.length === 1) return /^[AEFHILMNORSX]/i.test(w) ? "an" : "a";
   var l = w.toLowerCase();
   if (/^[0-9]/.test(l)) return /^8/.test(l) || /^1[18]$/.test(l) ? "an" : "a";
   if (/^(uni|use|usu|uti|ura|uro|eu|ewe|one|once)/.test(l)) return "a";
