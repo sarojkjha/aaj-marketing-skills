@@ -125,6 +125,19 @@
         "}"
       ],
       "stderr": []
+    },
+    {
+      "name": "lost revenue above the starting base is refused",
+      "source": "Nov 2026 tools audit: -45% NRR",
+      "args": [
+        "{\"startMRR\":1000,\"contractionMRR\":800,\"churnedMRR\":650}"
+      ],
+      "exitCode": 1,
+      "stdout": [],
+      "stderr": [
+        "\"contractionMRR\" plus \"churnedMRR\" (1,450) cannot be more than \"startMRR\" (1,000): existing customers cannot lose more revenue than they started with.",
+        "Run --help for the input shape."
+      ]
     }
   ]
 }

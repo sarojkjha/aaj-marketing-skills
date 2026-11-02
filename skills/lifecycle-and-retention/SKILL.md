@@ -17,7 +17,7 @@ metadata:
   difficulty: Intermediate
   card: >-
     Computes churn, NRR, GRR and quick ratio, then diagnoses which one to fix.
-  version: 1.0.1
+  version: 1.0.2
   sprint: unit-economics-retention
   topic: retention-expansion
   agents: [Claude Code, Cursor, OpenAI Codex, Windsurf, Cline]
