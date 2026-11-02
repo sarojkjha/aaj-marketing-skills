@@ -9,11 +9,12 @@
  *   readiness(gate)    is it ready to set a date?
  *   plan(date, tier)   what has to happen on which day?
  *
- * The readiness gate, its 85 / 60 thresholds, the work-back tasks and the
- * launch-day go/no-go gates are the same ones the AAJ Launch Readiness Planner
- * (aajconsult.com/tools/launch-readiness-planner) and the Launch Plan Checklist
- * use. If one changes, change all three - a tool that disagrees with its own
- * method is worse than no tool.
+ * The readiness gate, its 85 / 60 thresholds (AAJ's cut-offs, not a published
+ * standard), the work-back tasks and the launch-day go/no-go gates are shared:
+ * the AAJ Launch Readiness Planner (aajconsult.com/tools/launch-readiness-planner)
+ * embeds the block between the aaj:core markers verbatim, and the Launch Plan
+ * Checklist uses the same gate. If one changes, change all three - a tool that
+ * disagrees with its own method is worse than no tool.
  *
  * USAGE
  *   node launch.js                    # demo
@@ -58,6 +59,8 @@ process.argv = process.argv.map((a, i) =>
 
 'use strict';
 
+/* aaj:core:begin - tiering, the readiness gate and the work-back plan. The free Launch Readiness
+   Planner on aajconsult.com embeds this block verbatim; the site's verify script checks it byte for byte. */
 function die(msg, hint) {
   const e = new Error(msg);
   e.hint = hint;
@@ -72,7 +75,7 @@ const ITEMS = [
   { id: "positioning-hook", dim: "Positioning", text: "You have a single, sticky launch hook you are confident in.", why: "The hook does more for reach than any channel tactic." },
   { id: "product-stable", dim: "Product", text: "The thing you are launching is stable - the core flow works without hand-holding.", why: "A launch spike onto a broken flow burns the audience you worked to earn." },
   { id: "product-first-run", dim: "Product", text: "The first-run experience is smooth for a brand-new user.", why: "Launch traffic is mostly first-timers. Activation happens here or not at all." },
-  { id: "audience-list", dim: "Audience", text: "You have a warm list or audience to activate on day one.", why: "Launching to nobody is the most common launch failure. Attention must be pre-built." },
+  { id: "audience-list", dim: "Audience", text: "You have a warm list or audience to activate on day one.", why: "A launch to an audience you have not built has no one to reach. Attention must be pre-built." },
   { id: "audience-supporters", dim: "Audience", text: "You have named supporters lined up to amplify early.", why: "Early momentum compounds; a flat first hour is hard to recover." },
   { id: "assets-page", dim: "Assets", text: "A launch landing page is built and QA'd.", why: "The click has to land somewhere that converts, with working links and tracking." },
   { id: "assets-creative", dim: "Assets", text: "Core creative is ready: demo, screenshots, graphics, copy.", why: "Making assets on launch day guarantees a rushed, weaker launch." },
@@ -282,6 +285,7 @@ function run(cfg) {
   }
   return out;
 }
+/* aaj:core:end */
 
 /* ─────────────────────────── rendering ─────────────────────────── */
 
