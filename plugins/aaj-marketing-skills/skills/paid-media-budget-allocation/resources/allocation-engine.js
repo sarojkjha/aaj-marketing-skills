@@ -285,6 +285,9 @@ function run(cfg) {
     note = `Goal out of reach with these channels: returns diminish as spend grows, and even at the most this engine will spend they deliver about ${one(totCust)} of the ${one(cfg.customerGoal)} customers, the last ones at ${money(lastCost)} each. Lower the goal, add channels, or raise their caps.`;
   }
   const blendedCAC = totCust > 0 ? totSpend / totCust : 0;
+  // The cost of the last customer bought: the highest marginal CAC among funded channels.
+  const lastCustomerCost = rows.filter(r => r.spend > 0).reduce((a, r) => Math.max(a, r.marginalCAC), 0);
+  const lastAboveLtv = ltv != null && lastCustomerCost > ltv;
   const ltvcac = ltv == null ? null : (blendedCAC > 0 ? ltv / blendedCAC : 0);
   const roas = acv == null ? null : (totSpend > 0 ? (totCust * acv) / totSpend : 0);
   const payback = acv == null || margin == null ? null : ((acv * margin / 100 / 12) > 0 ? blendedCAC / (acv * margin / 100 / 12) : 0);
@@ -315,6 +318,7 @@ function run(cfg) {
   const skipped = [ltvcac == null && 'LTV:CAC (give ltv)', roas == null && 'ROAS (give acv)', payback == null && 'CAC payback (give acv and margin)'].filter(Boolean);
   if (skipped.length) out.push('Not computed, because the input was not given: ' + skipped.join(', ') + '.');
   if (ltvcac != null) out.push(ltvcac >= 3 ? '✓ LTV:CAC is above 3:1, David Skok\'s SaaS reference point (paid-media CAC only).' : '▼ LTV:CAC is below 3:1, David Skok\'s SaaS reference point — lift LTV or cut CAC before scaling.');
+  if (lastAboveLtv) out.push(`⚠ The last customers in this plan cost ${money(lastCustomerCost)} each, more than the ${money(ltv)} LTV they are worth. Past that point extra spend loses money; ${mode === 'goal' ? 'lower the goal or add cheaper channels' : 'cut the budget until the last customer costs less than LTV'}.`);
   const thin = rows.filter(r => r.spend > 0 && r.spend < 1500);
   if (thin.length >= 2) out.push(`⚠ ${thin.length} channels are funded under ~$1,500/mo (${thin.map(t => t.channel).join(', ')}) — this engine's rule of thumb for enough budget to learn from. Consider consolidating.`);
   const ph = rows.filter(r => r.placeholderInputs);
@@ -327,6 +331,7 @@ function run(cfg) {
     model: own ? null : (cfg.model || 'saas'), onlyListedChannels: own, mode, diminishingReturns: cfg.diminishingReturns || 'moderate',
     totalSpend: Math.round(totSpend), customers: Math.round(totCust * 10) / 10,
     goalShortfall: mode === 'goal' ? Math.round(goalShortfall * 10) / 10 : undefined,
+    lastCustomerCost: Math.round(lastCustomerCost), lastCustomerAboveLtv: ltv == null ? null : lastAboveLtv,
     blendedCAC: Math.round(blendedCAC), ltvCac: ltvcac == null ? null : Math.round(ltvcac * 100) / 100,
     roas: roas == null ? null : Math.round(roas * 100) / 100, cacPaybackMonths: payback == null ? null : Math.round(payback * 10) / 10,
     placeholderChannels: rows.filter(r => r.placeholderInputs).map(r => r.channel),
