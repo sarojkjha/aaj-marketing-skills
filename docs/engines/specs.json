@@ -3406,7 +3406,7 @@
       "id": "webinar-and-event-programs",
       "slug": "webinar-and-event-programs",
       "title": "Webinar & Event Programs",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "phase": "Execute",
       "category": "Growth, Retention & RevOps",
       "decision": "How many registrations does this event need to hit its pipeline target, and was the last one worth running again?",

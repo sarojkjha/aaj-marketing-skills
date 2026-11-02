@@ -63,10 +63,10 @@ var FOLLOW_UP_HOURS_MAX = 24;    // first follow-up later than this is flagged (
 var FEASIBLE_RATIO = 1;          // reachable / needed registrations at or above this: feasible
 var STRETCH_RATIO = 0.5;         // ... at or above this: stretch; below: not feasible (engine rule)
 var RUN_OF_SHOW = [
-  { id: 'topicIsBuyerProblem', label: 'Topic is a buyer problem, not a product tour', why: 'People give an hour to a problem they have this quarter, not to a demo.' },
+  { id: 'topicIsBuyerProblem', label: 'Topic is a buyer problem, not a product tour', why: 'In AAJ\'s view, people give an hour to a problem they have this quarter, not to a demo.' },
   { id: 'promotionLive14DaysOut', label: 'Promotion live at least two weeks out', why: 'Registrations come from repeated invitations across your list, partners and the speakers\' own audiences.' },
   { id: 'dryRun', label: 'Dry run done on the real platform', why: 'Audio, screen share, polls and the handoff between speakers, tested once.' },
-  { id: 'recordingAndOnDemandPage', label: 'Recording and on-demand page planned', why: 'Most registrants do not attend live; the recording is the event for them.' },
+  { id: 'recordingAndOnDemandPage', label: 'Recording and on-demand page planned', why: 'Registrants who do not attend live are reached only through the recording.' },
   { id: 'followUpSequenceWritten', label: 'Follow-up sequence written before the event', why: 'Attendees, no-shows and on-demand viewers each get a different first email within a day.' },
   { id: 'salesHandoffAgreed', label: 'Sales handoff agreed', why: 'Who calls whom, within what time, on what signal (question asked, poll answer, stayed to the end).' },
   { id: 'questionOrPollPlanned', label: 'A question or poll that qualifies', why: 'One question whose answer tells sales who to call first.' },
@@ -150,8 +150,8 @@ function readout(r) {
   var showRate = regs && att !== null ? att / regs : null;
   var reached = (att || 0) + (onDemand || 0);
   if (onDemand === null) findings.push({ level: 'improve', id: 'no-on-demand', text: 'No on-demand views given. If there is no recording page, the registrants who did not attend live were never reached.' });
-  if (isNum(r.followUpHours) && r.followUpHours > FOLLOW_UP_HOURS_MAX) findings.push({ level: 'fix', id: 'slow-follow-up', text: 'First follow-up went out ' + r.followUpHours + ' hours after the event. AAJ\'s rule is within ' + FOLLOW_UP_HOURS_MAX + ' hours; the follow-up is the real event.' });
-  else if (!isNum(r.followUpHours)) findings.push({ level: 'improve', id: 'follow-up-unknown', text: 'Say when the first follow-up went out; it is the step most programmes lose on.' });
+  if (isNum(r.followUpHours) && r.followUpHours > FOLLOW_UP_HOURS_MAX) findings.push({ level: 'fix', id: 'slow-follow-up', text: 'First follow-up went out ' + r.followUpHours + ' hours after the event. AAJ\'s rule is within ' + FOLLOW_UP_HOURS_MAX + ' hours: in AAJ\'s view, the follow-up is the real event.' });
+  else if (!isNum(r.followUpHours)) findings.push({ level: 'improve', id: 'follow-up-unknown', text: 'Say when the first follow-up went out; in AAJ\'s view, it is the step programmes most often lose on.' });
   if (!win) findings.push({ level: 'improve', id: 'no-win-rate', text: 'No win rate given, so pipeline cannot be turned into expected revenue. The verdict uses pipeline against cost at ' + target + 'x instead' + (targetGiven ? '' : ' (AAJ\'s default target)') + '.' });
   var expectedRevenue = win ? pipe * win : null;
   var returnRatio = expectedRevenue !== null ? expectedRevenue / cost : pipe / cost;
