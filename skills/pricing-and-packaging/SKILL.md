@@ -16,7 +16,7 @@ metadata:
   difficulty: Advanced
   card: >-
     Designs tiers with an anchor check and a willingness-to-pay read.
-  version: 1.1.1
+  version: 1.1.2
   sprint: unit-economics-retention
   topic: pricing-monetization
   agents: [Claude Code, Cursor, OpenAI Codex, Windsurf, Cline]
