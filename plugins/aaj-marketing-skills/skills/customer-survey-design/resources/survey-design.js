@@ -48,6 +48,7 @@ process.argv = process.argv.map((a, i) =>
 
 'use strict';
 
+/* aaj:core:begin */
 const Z = { 90: 1.645, 95: 1.960, 99: 2.576 };
 
 function pct(v) {
@@ -110,6 +111,7 @@ function segments(cfg) {
   });
   return { conf, z, n, rows, shareSum };
 }
+/* aaj:core:end */
 
 /* ---------- rendering ---------- */
 
