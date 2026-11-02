@@ -187,6 +187,35 @@ const current = readFileSync(README, "utf8");
 const eol = current.includes("\r\n") ? "\r\n" : "\n";
 const next = render(current.replace(/\r\n/g, "\n"), build(skills)).replace(/\n/g, eol);
 
+// docs/install.md is fetched and rendered by skills.aajconsult.com/install, whose
+// Markdown renderer would show <!-- aaj:n --> markers as text. So its counts are
+// kept current by phrase: each phrase below must appear (rewording it fails the
+// run, so a count can't drift unnoticed), and its numbers are rewritten. On Nov 2
+// the guide still said 73 skills and 62 engines.
+const nWithout = skills.length - skills.filter((s) => s.hasEngine).length;
+const DOC_PHRASES = {
+  "docs/install.md": [
+    [/(AAJ has )\d+( skills, and )\d+( of them have an engine)/g, (_m, a, b, c) => `${a}${skills.length}${b}${skills.length - nWithout}${c}`],
+    [/(The )\d+( skills without an engine)/g, (_m, a, b) => `${a}${nWithout}${b}`],
+    [/(Install all )\d+( skills)/g, (_m, a, b) => `${a}${skills.length}${b}`],
+    [/(adds all )\d+( skills)/g, (_m, a, b) => `${a}${skills.length}${b}`],
+  ],
+};
+const docUpdates = Object.entries(DOC_PHRASES).map(([rel, rules]) => {
+  const path = join(REPO_ROOT, rel);
+  const text = readFileSync(path, "utf8");
+  let out = text;
+  for (const [re, fn] of rules) {
+    if (!re.test(out)) fail(`${rel} no longer contains the phrase ${re}; update DOC_PHRASES in generate-readme.mjs`);
+    re.lastIndex = 0;
+    out = out.replace(re, fn);
+  }
+  // What the scan for hand-typed counts should not flag: the managed phrases.
+  const unmanaged = rules.reduce((s, [re]) => s.replace(re, ""), out);
+  return { rel, path, stale: out !== text, out, unmanaged };
+});
+const docsStale = docUpdates.filter((d) => d.stale);
+
 // skills.sh.json: how skills.sh groups this repo's page. Derived, so it is never stale.
 const SKILLS_SH = join(REPO_ROOT, "skills.sh.json");
 const slugSet = new Set(skills.map((x) => x.slug));
@@ -237,9 +266,10 @@ const walkMd = (dir) => (existsSync(dir) ? readdirSync(dir).flatMap((f) => {
   return statSync(p).isDirectory() ? walkMd(p) : /\.(md|json)$/.test(f) ? [p] : [];
 }) : []);
 const typed = [];
-for (const rel of [...authored.map((f) => join(REPO_ROOT, f)), ...walkMd(join(REPO_ROOT, "recipes"))]) {
+for (const rel of [...authored.map((f) => join(REPO_ROOT, f)), ...walkMd(join(REPO_ROOT, "recipes")), ...walkMd(join(REPO_ROOT, "docs"))]) {
   if (!existsSync(rel)) continue;
-  const text = rel.endsWith("README.md") && rel === README ? stripGenerated(next) : readFileSync(rel, "utf8");
+  const managed = docUpdates.find((d) => d.path === rel);
+  const text = rel === README ? stripGenerated(next) : managed ? managed.unmanaged : readFileSync(rel, "utf8");
   for (const m of text.matchAll(TYPED_COUNT)) typed.push(`${rel.slice(REPO_ROOT.length + 1)}: "${m[0]}"`);
 }
 
@@ -287,7 +317,7 @@ if (typed.length) {
   process.exit(1);
 }
 
-if (next === current && !pkgStale && !countsStale && !skillsShStale) {
+if (next === current && !pkgStale && !countsStale && !skillsShStale && !docsStale.length) {
   console.log(`README.md, package.json, counts.json and skills.sh.json up to date — ${nSkills} skills, ${nEngines} engines`);
   if (mode !== "--check") about();
   process.exit(0);
@@ -297,6 +327,7 @@ if (mode === "--check") {
   if (countsStale) console.error(`counts.json is out of date: skills/ has ${nSkills} skills and ${nEngines} engines. Run: npm run counts\n`);
   if (skillsShStale) console.error(`skills.sh.json is out of date with skills/. Run: npm run counts\n`);
   if (pkgStale) console.error(`package.json description is out of date: it should say "${phrase}". Run: npm run counts\n`);
+  for (const d of docsStale) console.error(`${d.rel} states an out-of-date skill or engine count. Run: npm run counts\n`);
   if (next !== current) {
     const a = current.replace(/\r\n/g, "\n").split("\n");
     const b = next.replace(/\r\n/g, "\n").split("\n");
@@ -317,5 +348,6 @@ if (next !== current) writeFileSync(README, next);
 if (pkgStale) writeFileSync(PACKAGE, pkgNext);
 if (countsStale) writeFileSync(COUNTS, countsNext);
 if (skillsShStale) writeFileSync(SKILLS_SH, skillsShNext);
-console.log(`${[next !== current && "README.md", pkgStale && "package.json", countsStale && "counts.json", skillsShStale && "skills.sh.json"].filter(Boolean).join(", ")} written — ${nSkills} skills, ${nEngines} engines`);
+for (const d of docsStale) writeFileSync(d.path, d.out);
+console.log(`${[next !== current && "README.md", pkgStale && "package.json", countsStale && "counts.json", skillsShStale && "skills.sh.json", ...docsStale.map((d) => d.rel)].filter(Boolean).join(", ")} written — ${nSkills} skills, ${nEngines} engines`);
 about();
