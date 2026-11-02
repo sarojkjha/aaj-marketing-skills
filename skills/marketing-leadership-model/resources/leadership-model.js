@@ -143,7 +143,10 @@ function compare(c) {
     var month = crossover(byId.inHouse, other, H);
     cross = { against: other.name, month: month, insideHorizon: month !== null && month <= H,
       monthlyGap: byId.inHouse.monthly - other.monthly,
-      text: month === null ? 'The in-house hire never becomes the cheaper option: once both are running it costs ' + Math.round(byId.inHouse.monthly - other.monthly).toLocaleString('en-US') + ' more per month than the ' + other.name.toLowerCase() + ', so the gap only widens. If that looks wrong, check the salary load and the execution line first.'
+      text: month === null
+        ? (byId.inHouse.monthly - other.monthly > 0
+          ? 'The in-house hire never becomes the cheaper option: once both are running it costs $' + Math.round(byId.inHouse.monthly - other.monthly).toLocaleString('en-US') + ' more per month than the ' + other.name.toLowerCase() + ', so the gap only widens. If that looks wrong, check the salary load and the execution line first.'
+          : 'Once both are running, the in-house hire costs $' + Math.round(other.monthly - byId.inHouse.monthly).toLocaleString('en-US') + ' less per month than the ' + other.name.toLowerCase() + ', but its one-off costs (recruiting, and the months before it starts) are not recovered within ' + Math.max(H, CROSSOVER_LIMIT_MIN) + ' months.')
         : month <= H ? 'The in-house hire becomes the cheaper option in month ' + month + ', inside your ' + H + '-month horizon.'
         : 'The in-house hire becomes the cheaper option in month ' + month + ', beyond the ' + H + ' months you are deciding for.' };
   }
