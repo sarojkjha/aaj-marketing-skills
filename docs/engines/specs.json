@@ -1895,7 +1895,7 @@
       "id": "lifecycle-and-retention",
       "slug": "lifecycle-and-retention",
       "title": "Lifecycle & Retention",
-      "version": "1.0.1",
+      "version": "1.0.2",
       "phase": "Design",
       "category": "Retention & Lifecycle",
       "decision": "How fast is our existing customer base leaking or growing, and which retention move should we fund first?",
