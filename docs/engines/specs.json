@@ -275,7 +275,7 @@
       "id": "ab-test-significance",
       "slug": "ab-test-significance",
       "title": "AB Test Significance",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "phase": "Execute",
       "category": "Analytics & Experimentation",
       "decision": "Is the difference between control and variant real or noise, and how many visitors do we need before we can call the test?",
