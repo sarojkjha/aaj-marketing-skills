@@ -56,7 +56,7 @@
       "name": "complete positioning inputs, investor pitch",
       "source": "input written from the engine header schema",
       "args": [
-        "{\"product\":\"Fieldnote\",\"customer\":\"US home-inspection firms with 1-10 inspectors\",\"need\":\"who spend an evening typing up every inspection\",\"category\":\"reporting app for home inspectors\",\"benefit\":\"finish the report before leaving the site\",\"alt\":\"notes on paper, typed up at night\",\"diff\":\"drafts the report from photos and tapped findings on site\",\"proof\":\"1,200 inspectors cut report time from 70 to 12 minutes\",\"aud\":\"investor\"}"
+        "{\"product\":\"Fieldnote\",\"customer\":\"US home-inspection firms with 1-10 inspectors\",\"need\":\"who spend an evening typing up every inspection\",\"category\":\"reporting app for home inspectors\",\"benefit\":\"finishes the report before leaving the site\",\"alt\":\"notes on paper, typed up at night\",\"diff\":\"drafts the report from photos and tapped findings on site\",\"proof\":\"1,200 inspectors cut report time from 70 to 12 minutes\",\"aud\":\"investor\"}"
       ],
       "exitCode": 0,
       "stdout": [
@@ -68,29 +68,29 @@
         "# Fieldnote — Positioning System",
         "",
         "## Positioning statement",
-        "For US home-inspection firms with 1-10 inspectors who spend an evening typing up every inspection, Fieldnote is a reporting app for home inspectors that finish the report before leaving the site. Unlike notes on paper, typed up at night, Fieldnote drafts the report from photos and tapped findings on site.",
+        "For US home-inspection firms with 1-10 inspectors who spend an evening typing up every inspection, Fieldnote is a reporting app for home inspectors that finishes the report before leaving the site. Unlike notes on paper, typed up at night, Fieldnote drafts the report from photos and tapped findings on site.",
         "",
         "## One-line value proposition",
-        "For US home-inspection firms with 1-10 inspectors, Fieldnote finish the report before leaving the site — because it drafts the report from photos and tapped findings on site.",
+        "For US home-inspection firms with 1-10 inspectors, Fieldnote finishes the report before leaving the site — because it drafts the report from photos and tapped findings on site.",
         "",
         "## Elevator pitch (investor)",
-        "Fieldnote is a reporting app for home inspectors for US home-inspection firms with 1-10 inspectors, who today spend an evening typing up every inspection. Their current answer is notes on paper, typed up at night — and it fails them. We win because Fieldnote drafts the report from photos and tapped findings on site. For customers, that means it finish the report before leaving the site. 1,200 inspectors cut report time from 70 to 12 minutes.",
+        "Fieldnote is a reporting app for home inspectors for US home-inspection firms with 1-10 inspectors, who today spend an evening typing up every inspection. Their current answer is notes on paper, typed up at night — and it fails them. We win because Fieldnote drafts the report from photos and tapped findings on site. For customers, that means it finishes the report before leaving the site. 1,200 inspectors cut report time from 70 to 12 minutes.",
         "",
         "## Homepage hero",
-        "**Finish the report before leaving the site**",
+        "**Finishes the report before leaving the site**",
         "The reporting app for home inspectors for US home-inspection firms with 1-10 inspectors. Drafts the report from photos and tapped findings on site. No more notes on paper, typed up at night.",
         "",
         "## Positioning canvas",
         "Target customer: US home-inspection firms with 1-10 inspectors",
         "Problem: who spend an evening typing up every inspection",
         "Category: reporting app for home inspectors",
-        "Key benefit: finish the report before leaving the site",
+        "Key benefit: finishes the report before leaving the site",
         "Real alternative: notes on paper, typed up at night",
         "Differentiator: drafts the report from photos and tapped findings on site",
         "Proof: 1,200 inspectors cut report time from 70 to 12 minutes",
         "",
         "---",
-        "Generated with AAJ’s free Positioning Statement Generator — https://aajconsult.com/tools/positioning-statement-generator?product=Fieldnote&customer=US+home-inspection+firms+with+1-10+inspectors&need=who+spend+an+evening+typing+up+every+inspection&category=reporting+app+for+home+inspectors&benefit=finish+the+report+before+leaving+the+site&alt=notes+on+paper%2C+typed+up+at+night&diff=drafts+the+report+from+photos+and+tapped+findings+on+site&proof=1%2C200+inspectors+cut+report+time+from+70+to+12+minutes&aud=investor"
+        "Generated with AAJ’s free Positioning Statement Generator — https://aajconsult.com/tools/positioning-statement-generator?product=Fieldnote&customer=US+home-inspection+firms+with+1-10+inspectors&need=who+spend+an+evening+typing+up+every+inspection&category=reporting+app+for+home+inspectors&benefit=finishes+the+report+before+leaving+the+site&alt=notes+on+paper%2C+typed+up+at+night&diff=drafts+the+report+from+photos+and+tapped+findings+on+site&proof=1%2C200+inspectors+cut+report+time+from+70+to+12+minutes&aud=investor"
       ],
       "stderr": []
     }
