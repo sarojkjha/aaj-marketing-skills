@@ -11,6 +11,7 @@ description: >-
   the result on what it sold, tracked and self-reported.
 license: MIT
 metadata:
+  search_description: "Work with creators and influencers: compare them on the buyers they actually reach, write terms with disclosure, and judge a sponsorship on what it sold."
   publisher: AAJ
   slug: creator-partnerships
   category: Growth, Retention & RevOps

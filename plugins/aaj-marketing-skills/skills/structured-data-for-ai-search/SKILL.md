@@ -13,6 +13,7 @@ description: >-
   from the user's own facts and checks them.
 license: MIT
 metadata:
+  search_description: "Add or fix JSON-LD so search and AI engines read your pages correctly: a type map per page, a check against Google's required properties, and the exact fixes."
   publisher: AAJ
   slug: structured-data-for-ai-search
   category: SEO, GEO & AEO

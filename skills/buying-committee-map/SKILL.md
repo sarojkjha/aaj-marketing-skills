@@ -11,6 +11,7 @@ description: >-
   holes in it, the next conversations in order, and the assets to build.
 license: MIT
 metadata:
+  search_description: "Map everyone who must say yes to a B2B deal, from champion to procurement: what each must believe, whether you can reach them, and the next conversations."
   publisher: AAJ
   slug: buying-committee-map
   category: Sales & Pipeline

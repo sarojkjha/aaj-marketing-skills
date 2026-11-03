@@ -11,6 +11,7 @@ description: >-
   reads the dark side of the funnel by trend rather than attribution.
 license: MIT
 metadata:
+  search_description: "Market where analytics cannot see: Slack groups, private communities, podcasts and forwarded email. Map where buyers talk and decide whether to start one."
   publisher: AAJ
   slug: community-and-dark-social
   category: Growth, Retention & RevOps

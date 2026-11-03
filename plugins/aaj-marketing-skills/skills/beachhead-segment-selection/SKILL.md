@@ -12,6 +12,7 @@ description: >-
   its own assumptions.
 license: MIT
 metadata:
+  search_description: "Choose the first market to win: score each segment on pain, reach, budget, competition and proof, see why the runner-up lost, and test whether the pick holds."
   publisher: AAJ
   slug: beachhead-segment-selection
   category: Strategy & Positioning

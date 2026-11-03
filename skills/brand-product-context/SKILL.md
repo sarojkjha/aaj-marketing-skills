@@ -10,6 +10,7 @@ description: >-
   every other AAJ skill reads first.
 license: MIT
 metadata:
+  search_description: "Set up the brand and product brief every AAJ skill reads first: company, product, ICP, positioning, value, voice, goals, funnel and competitors."
   publisher: AAJ
   slug: brand-product-context
   category: Strategy & Positioning

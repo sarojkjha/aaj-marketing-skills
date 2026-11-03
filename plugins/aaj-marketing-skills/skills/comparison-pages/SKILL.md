@@ -11,6 +11,7 @@ description: >-
   and a pre-publish fairness check.
 license: MIT
 metadata:
+  search_description: "Write or audit an X vs Y or alternatives page buyers and AI answers will trust: a sourced, dated comparison table, honest copy and a pre-publish fairness check."
   publisher: AAJ
   slug: comparison-pages
   category: Content & Copy

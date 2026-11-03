@@ -10,6 +10,7 @@ description: >-
   and specifies the fixes in cost order.
 license: MIT
 metadata:
+  search_description: "Check whether AI agents buying for a customer can find, evaluate and act on your product: five scored dimensions, the blockers, and fixes in cost order."
   publisher: AAJ
   slug: agent-readiness-audit
   category: SEO, GEO & AEO

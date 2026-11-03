@@ -10,6 +10,7 @@ description: >-
   is needed.
 license: MIT
 metadata:
+  search_description: "Forecast sales and check pipeline health: a weighted forecast, coverage against your target, the gap, and how much new pipeline you need."
   publisher: AAJ
   slug: pipeline-and-forecast
   category: Sales & Pipeline

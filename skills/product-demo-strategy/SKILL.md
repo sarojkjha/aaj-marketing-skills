@@ -9,6 +9,7 @@ description: >-
   Produces a demo plan by buying stage, with honesty checks for AI demos.
 license: MIT
 metadata:
+  search_description: "Decide what kind of product demo to make, or fix one that isn't turning viewers into signups or meetings: a demo plan by buying stage, with honesty checks."
   publisher: AAJ
   slug: product-demo-strategy
   category: Conversion & Web

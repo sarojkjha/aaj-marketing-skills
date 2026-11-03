@@ -10,6 +10,7 @@ description: >-
   qualification framework.
 license: MIT
 metadata:
+  search_description: "Design or fix your sales process: stage-by-stage entry triggers, verifiable exit criteria, owner actions, and a qualification framework that fits."
   publisher: AAJ
   slug: sales-process-design
   category: Sales & Pipeline

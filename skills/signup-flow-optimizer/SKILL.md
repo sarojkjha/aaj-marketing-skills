@@ -9,6 +9,7 @@ description: >-
   worth, and specifies the rebuilt flow.
 license: MIT
 metadata:
+  search_description: "Improve a signup, trial or checkout flow: score its friction, rank what to remove by what it's worth, and specify the rebuilt flow."
   publisher: AAJ
   slug: signup-flow-optimizer
   category: Conversion & Web

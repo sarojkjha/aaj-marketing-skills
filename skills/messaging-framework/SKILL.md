@@ -9,6 +9,7 @@ description: >-
   with proof, audience variants, and what to keep off-message.
 license: MIT
 metadata:
+  search_description: "Build a messaging framework: one core message, three or four pillars with proof, variants by audience, and what to keep off-message."
   publisher: AAJ
   slug: messaging-framework
   category: Strategy & Positioning

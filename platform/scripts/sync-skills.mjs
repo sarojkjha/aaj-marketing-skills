@@ -160,6 +160,9 @@ async function main() {
       // renders as "Ab Test Significance".
       name: data.title || (/^#\s+(.+)$/m.exec(content || '')?.[1] || '').trim() || data.name,
       summary: (data.description || '').trim(),
+      // Written for search results; the skill page uses it as its meta description.
+      // A database without the column syncs without it (see the retry below).
+      search_description: m.search_description ? String(m.search_description).trim() : null,
       category_id: catByName[m.category] || null,
       phase: m.phase || null,
       difficulty: m.difficulty || null,

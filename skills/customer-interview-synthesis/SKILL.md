@@ -12,6 +12,7 @@ description: >-
   anecdotes, and says whether the programme has saturated.
 license: MIT
 metadata:
+  search_description: "Turn customer interview notes into themes counted across interviews, weighted by what the problem costs, and see whether you have done enough interviews."
   publisher: AAJ
   slug: customer-interview-synthesis
   category: Research & Personas

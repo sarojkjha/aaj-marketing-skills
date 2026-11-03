@@ -12,6 +12,7 @@ description: >-
   clicks they lost and finds page-one pages below the site's own CTR median.
 license: MIT
 metadata:
+  search_description: "Find which pages are losing search traffic and refresh the right ones first, from a Search Console export comparing two periods, ranked by the clicks they lost."
   publisher: AAJ
   slug: content-decay
   category: SEO, GEO & AEO

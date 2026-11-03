@@ -9,6 +9,7 @@ description: >-
   writes the sequences that are missing.
 license: MIT
 metadata:
+  search_description: "Build or fix lifecycle email: map the welcome, onboarding, nurture, win-back and expansion sequences you have, check send fatigue, and write the missing ones."
   publisher: AAJ
   slug: email-lifecycle-sequence
   category: Retention & Lifecycle

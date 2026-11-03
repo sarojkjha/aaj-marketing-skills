@@ -11,6 +11,7 @@ description: >-
   from a runnable engine.
 license: MIT
 metadata:
+  search_description: "Design a customer or market survey with unbiased questions mapped to decisions, plus computed sample size, invite numbers and how many segments you can read."
   publisher: AAJ
   slug: customer-survey-design
   category: Research & Personas

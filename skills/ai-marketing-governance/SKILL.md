@@ -11,6 +11,7 @@ description: >-
   and a per-claim citation check applied before anything publishes.
 license: MIT
 metadata:
+  search_description: "Set rules for AI in marketing: approved tools, what never goes in a prompt, who reviews before publish, and a claim check, with a policy and a named owner."
   publisher: AAJ
   slug: ai-marketing-governance
   category: Content & Copy

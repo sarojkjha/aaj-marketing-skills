@@ -12,6 +12,7 @@ description: >-
   reached.
 license: MIT
 metadata:
+  search_description: "Turn G2, Capterra, app store and Reddit reviews into customer research: complaints, praise, competitor weak spots, switching reasons and your customers' words."
   publisher: AAJ
   slug: review-mining
   category: Research & Personas

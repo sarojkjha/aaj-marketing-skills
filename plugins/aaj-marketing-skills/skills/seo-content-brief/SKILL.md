@@ -10,6 +10,7 @@ description: >-
   targets, and the cannibalisation check.
 license: MIT
 metadata:
+  search_description: "Plan a piece of content before writing it: search intent, an answer block, headings, entities, sources to cite, internal links and a cannibalisation check."
   publisher: AAJ
   slug: seo-content-brief
   category: SEO, GEO & AEO

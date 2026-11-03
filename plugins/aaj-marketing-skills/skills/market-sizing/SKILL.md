@@ -10,6 +10,7 @@ description: >-
   share of the market, and flags every link in the chain nobody sourced.
 license: MIT
 metadata:
+  search_description: "Size TAM, SAM and SOM bottom-up from counted accounts and sourced assumptions, with SOM set by your team's real capacity and every unsourced link flagged."
   publisher: AAJ
   slug: market-sizing
   category: Strategy & Positioning

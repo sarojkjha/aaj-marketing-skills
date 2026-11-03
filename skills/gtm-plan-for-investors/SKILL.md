@@ -9,6 +9,7 @@ description: >-
   number comes from an AAJ engine or the founder's own data.
 license: MIT
 metadata:
+  search_description: "Build the go-to-market part of a pitch: a one-page GTM plan, the GTM slide, and a metrics appendix where every number comes from an engine or your own data."
   publisher: AAJ
   slug: gtm-plan-for-investors
   category: Strategy & Positioning

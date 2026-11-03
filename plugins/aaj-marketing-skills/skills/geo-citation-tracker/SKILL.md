@@ -11,6 +11,7 @@ description: >-
   runs is signal or noise.
 license: MIT
 metadata:
+  search_description: "Measure whether AI answer engines name and cite your brand over time: design the prompt set, score each run, and see whether a change is signal or noise."
   publisher: AAJ
   slug: geo-citation-tracker
   category: SEO, GEO & AEO

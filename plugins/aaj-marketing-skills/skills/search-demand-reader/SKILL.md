@@ -12,6 +12,7 @@ description: >-
   write next". Never estimates a search volume it cannot see.
 license: MIT
 metadata:
+  search_description: "Read your Search Console queries by intent and topic: page-two topics, queries split across your pages, branded share and rival-brand searches you appear in."
   publisher: AAJ
   slug: search-demand-reader
   category: SEO, GEO & AEO

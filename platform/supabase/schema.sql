@@ -52,6 +52,9 @@ create index if not exists skills_phase_idx on public.skills(phase);
 -- platform/scripts/generate-engine-specs.mjs into docs/engines/specs.json and synced
 -- here by sync-skills.mjs. Null for skills without an engine.
 alter table public.skills add column if not exists spec jsonb;
+-- Meta description for the skill page, written for search results (metadata.search_description).
+-- The summary stays the agent trigger. Safe to run on an existing database.
+alter table public.skills add column if not exists search_description text;
 
 -- Full-text search column, maintained by a trigger (see FIX 1).
 alter table public.skills add column if not exists search tsvector;

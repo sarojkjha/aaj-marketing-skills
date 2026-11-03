@@ -10,6 +10,7 @@ description: >-
   including whether it was ever powerful enough to answer the question.
 license: MIT
 metadata:
+  search_description: "Find out whether marketing spend caused conversions: design and size a holdout or geo test, read iROAS, and check whether the test could answer the question."
   publisher: AAJ
   slug: incrementality-and-mmm
   category: Analytics & Experimentation

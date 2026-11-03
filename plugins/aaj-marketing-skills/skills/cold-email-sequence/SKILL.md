@@ -10,6 +10,7 @@ description: >-
   prospect's pain.
 license: MIT
 metadata:
+  search_description: "Write a 4 to 6 touch cold email sequence with subject lines, send timing and one clear ask per email, grounded in the prospect's pain."
   publisher: AAJ
   slug: cold-email-sequence
   category: Sales & Pipeline

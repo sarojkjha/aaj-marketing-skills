@@ -13,6 +13,7 @@ description: >-
   benchmark against other companies.
 license: MIT
 metadata:
+  search_description: "Assess how mature your marketing is: 18 statements across six dimensions, the weak links for your stage, and a comparison with your last run. Not a benchmark."
   publisher: AAJ
   slug: marketing-maturity-assessment
   category: Strategy & Positioning

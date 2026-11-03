@@ -10,6 +10,7 @@ description: >-
   and the top three fixes, as a Markdown or CSV plan.
 license: MIT
 metadata:
+  search_description: "Plan a pilot that turns into a paid contract: a dated work-back timeline, a success-criteria check, risk flags, a readiness verdict and the top three fixes."
   publisher: AAJ
   slug: pilot-to-contract
   category: Sales & Pipeline

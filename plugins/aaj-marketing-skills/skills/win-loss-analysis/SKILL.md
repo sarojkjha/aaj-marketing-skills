@@ -10,6 +10,7 @@ description: >-
   pitch, and process.
 license: MIT
 metadata:
+  search_description: "Find out why deals are won or lost: top reasons, patterns by segment and competitor, the no-decision rate, and fixes for product, pitch and process."
   publisher: AAJ
   slug: win-loss-analysis
   category: Sales & Pipeline

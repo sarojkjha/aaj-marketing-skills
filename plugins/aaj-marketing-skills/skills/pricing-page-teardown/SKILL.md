@@ -12,6 +12,7 @@ description: >-
   test against its planned size.
 license: MIT
 metadata:
+  search_description: "Review a pricing page on 21 checks a buyer would notice, rank fixes against competitors, and see before launch whether a price test can answer the question."
   publisher: AAJ
   slug: pricing-page-teardown
   category: Strategy & Positioning

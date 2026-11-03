@@ -11,6 +11,7 @@ description: >-
   three fixes.
 license: MIT
 metadata:
+  search_description: "Check the marketing-to-sales lead handoff: SLA compliance, acceptance and conversion rates with honest intervals, an MQL threshold check, and three fixes."
   publisher: AAJ
   slug: lead-handoff-sla
   category: Sales & Pipeline

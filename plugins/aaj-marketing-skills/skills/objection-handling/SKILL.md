@@ -10,6 +10,7 @@ description: >-
   with grounded, non-defensive responses and honest competitive comparisons.
 license: MIT
 metadata:
+  search_description: "Handle sales objections and build competitor battlecards: the top objections with grounded, non-defensive responses and honest competitive comparisons."
   publisher: AAJ
   slug: objection-handling
   category: Sales & Pipeline

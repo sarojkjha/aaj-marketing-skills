@@ -11,6 +11,7 @@ description: >-
   trail.
 license: MIT
 metadata:
+  search_description: "Check whether content sounds like your brand: copy is checked block by block against your own voice rules, with a pass or revise verdict and an audit trail."
   publisher: AAJ
   slug: brand-voice-governance
   category: Content & Copy

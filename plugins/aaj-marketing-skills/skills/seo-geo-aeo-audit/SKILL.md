@@ -9,6 +9,7 @@ description: >-
   0–100 score across 5 weighted categories, a grade, and prioritized fixes.
 license: MIT
 metadata:
+  search_description: "Audit a page or site for SEO, GEO and AEO: a 0 to 100 score across five weighted categories, a grade, and prioritized fixes for search and AI citation."
   publisher: AAJ
   slug: seo-geo-aeo-audit
   category: SEO, GEO & AEO
