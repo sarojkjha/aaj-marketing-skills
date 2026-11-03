@@ -12,6 +12,7 @@ description: >-
   landing pages, with fixes ranked by the spend they touch.
 license: MIT
 metadata:
+  search_description: "Audit a Google Ads or Microsoft Ads search account against its own target: tracking, wasted spend, starved winners and landing pages, fixes ranked by spend."
   publisher: AAJ
   slug: paid-search-account-audit
   category: Paid Media & Budgeting

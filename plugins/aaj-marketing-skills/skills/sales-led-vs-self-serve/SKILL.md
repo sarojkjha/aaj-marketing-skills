@@ -10,6 +10,7 @@ description: >-
   economics, with handoff rules for a mix.
 license: MIT
 metadata:
+  search_description: "Choose how customers buy: self-serve, sales-led or a mix, decided from your buyer and your own unit economics, with handoff rules for a mix."
   publisher: AAJ
   slug: sales-led-vs-self-serve
   category: Strategy & Positioning

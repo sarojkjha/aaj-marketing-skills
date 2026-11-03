@@ -13,6 +13,7 @@ description: >-
   the text the agent reads to decide whether to load the skill. ≤ ~90 words.)
 license: MIT
 metadata:
+  search_description: "[One plain sentence for search results, 70-160 characters: what it does and what you get. Not the agent trigger above.]"
   publisher: AAJ
   slug: [kebab-case-slug]        # same as name
   category: [one of: Strategy & Positioning | Research & Personas | SEO, GEO & AEO | Conversion & Web | Content & Copy | Paid Media & Budgeting | Analytics & Experimentation | Growth, Retention & RevOps]

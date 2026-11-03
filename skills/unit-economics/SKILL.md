@@ -9,6 +9,7 @@ description: >-
   plus a verdict against named reference points (Skok, Bessemer) and what to fix.
 license: MIT
 metadata:
+  search_description: "Calculate LTV, CAC, the LTV:CAC ratio and CAC payback for a subscription, ecommerce or services business, with a verdict against named reference points."
   publisher: AAJ
   slug: unit-economics
   category: Analytics & Experimentation

@@ -9,6 +9,7 @@ description: >-
   one-line value proposition, with variants by audience lens.
 license: MIT
 metadata:
+  search_description: "Write or pressure-test a positioning statement: a defensible statement, supporting proof points and a one-line value proposition, with variants by audience."
   publisher: AAJ
   slug: positioning-statement
   category: Strategy & Positioning

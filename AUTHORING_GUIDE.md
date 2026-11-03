@@ -25,6 +25,7 @@ skills/<slug>/
 Required by the Agent Skills spec:
 - **`name`** — kebab-case, ≤ 64 chars, matches the folder. Before you pick one, search [skills.sh](https://skills.sh) for it: if a popular library already publishes a skill under that name, prefix yours with `aaj-` so both install side by side (the five renamed on Oct 11, 2026 are listed in `platform/lib/renamed.mjs`). If you ever rename a published skill, add the old name to that file rather than deleting it.
 - **`description`** — the trigger. Write it as *"Use when the user wants to X, or Y. Also use when the user mentions [keywords] or '[natural phrase]'. Produces [output]."* This is the single most important line: it decides whether the agent loads the skill. Keep it ≤ ~90 words and keyword-rich without keyword-stuffing.
+- **`metadata.search_description`**: the skill page's meta description, written for a person reading search results: one plain sentence, 70 to 160 characters, saying what the skill does and what you get. Not the trigger: no "Use when the user". `check-frontmatter.mjs` fails without it.
 
 AAJ additions (under `metadata:`, read by the catalog sync — this is the **single source of truth**, so the platform never re-types it):
 - `publisher` (AAJ), `slug`, `category` (one of the categories in the README catalog), `phase` (Diagnose/Design/Execute), `difficulty`, `version` (semver), `agents`, `inputs`, `outputs`, `tags`.
@@ -60,6 +61,7 @@ This repo is MIT. The Agent Skills spec and Corey Haines' `coreyhaines31/marketi
 ## Pre-ship checklist
 
 - [ ] `name` matches the folder, and no popular library on skills.sh uses it; `description` is trigger-focused with keywords.
+- [ ] `metadata.search_description` is one plain sentence for search results (70 to 160 characters).
 - [ ] `npm run counts` has been run, so README.md, package.json, counts.json and skills.sh.json include the new skill. Never type a skill or engine count anywhere: CI rejects it.
 - [ ] `metadata` complete (category, phase, difficulty, version, agents, inputs, outputs, tags); `related_aaj` set or intentionally empty.
 - [ ] Body has all required sections; large data/code lives in `resources/`.

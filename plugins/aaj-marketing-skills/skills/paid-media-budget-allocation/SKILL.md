@@ -10,6 +10,7 @@ description: >-
   customers, blended CAC, LTV:CAC, payback, and pacing.
 license: MIT
 metadata:
+  search_description: "Split a paid ad budget across Google, LinkedIn, Meta and more to hit a CAC target or customer goal, with projected customers, blended CAC and payback."
   publisher: AAJ
   slug: paid-media-budget-allocation
   category: Paid Media & Budgeting

@@ -12,6 +12,7 @@ description: >-
   check against the rules.
 license: MIT
 metadata:
+  search_description: "Run a founder's LinkedIn as a go-to-market channel: a readiness check, three themes only you can own, a post bank from your material, and a cadence that lasts."
   publisher: AAJ
   slug: founder-led-content
   category: Content & Copy

@@ -10,6 +10,7 @@ description: >-
   what form, and gives the anonymised fallback when permission is missing.
 license: MIT
 metadata:
+  search_description: "Turn a customer result into proof you can publish: score whether it would convince a sceptic, check whether it may be published, and get an anonymised fallback."
   publisher: AAJ
   slug: case-study-and-proof
   category: Content & Copy

@@ -9,6 +9,7 @@ description: >-
   clarity, concreteness, and claim-defensibility.
 license: MIT
 metadata:
+  search_description: "Write or rewrite marketing copy for a homepage, landing page, ad, email or CTA that ladders to your positioning, scored on clarity and defensible claims."
   publisher: AAJ
   slug: aaj-copywriting
   category: Content & Copy

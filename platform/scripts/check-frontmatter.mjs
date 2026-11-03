@@ -30,6 +30,15 @@ for (const slug of readdirSync(dir).sort()) {
     if (!m) errors.push(`${slug}: missing metadata.${field}`);
     else if (!values.includes(m[1])) errors.push(`${slug}: ${field} "${m[1]}" is not one of ${values.join(", ")}`);
   }
+  // The skill page's meta description: written for a person reading search results,
+  // not the agent trigger in `description`. Search results show about 160 characters.
+  const sd = front.match(/^\s+search_description:\s*"(.*)"\s*$/m);
+  if (!sd) errors.push(`${slug}: missing metadata.search_description (one plain sentence for search results)`);
+  else {
+    const text = JSON.parse(`"${sd[1]}"`);
+    if (text.length < 70 || text.length > 160) errors.push(`${slug}: search_description is ${text.length} characters; keep it 70 to 160`);
+    if (/^Use when\b/i.test(text)) errors.push(`${slug}: search_description repeats the agent trigger; write it for a person`);
+  }
 }
 if (errors.length) { console.error(errors.join("\n")); process.exit(1); }
-console.log(`Front matter OK: phase and difficulty match the site schema in every skill.`);
+console.log(`Front matter OK: phase and difficulty match the site schema, and every skill has a search description.`);

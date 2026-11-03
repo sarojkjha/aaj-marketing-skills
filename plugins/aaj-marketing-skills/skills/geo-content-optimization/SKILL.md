@@ -9,6 +9,7 @@ description: >-
   rank in AI answers." Rewrites/augments a page to maximize citation likelihood.
 license: MIT
 metadata:
+  search_description: "Optimize a page to be cited by ChatGPT, Perplexity, Claude and Google AI Overviews and to win answer snippets: a rewrite built for GEO and AEO."
   publisher: AAJ
   slug: geo-content-optimization
   category: SEO, GEO & AEO

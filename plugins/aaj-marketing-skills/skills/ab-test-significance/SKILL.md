@@ -9,6 +9,7 @@ description: >-
   sample size.
 license: MIT
 metadata:
+  search_description: "Check whether an A/B test result is statistically significant, or size a test before you run it: lift, p-value, a significance verdict and the sample needed."
   publisher: AAJ
   slug: ab-test-significance
   category: Analytics & Experimentation

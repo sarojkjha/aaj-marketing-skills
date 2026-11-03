@@ -11,6 +11,7 @@ description: >-
   result on meetings and pipeline against cost, never on registrations.
 license: MIT
 metadata:
+  search_description: "Plan a webinar or event backwards from a pipeline target using your own conversion rates, check the run-of-show, and judge it on meetings and pipeline."
   publisher: AAJ
   slug: webinar-and-event-programs
   category: Growth, Retention & RevOps

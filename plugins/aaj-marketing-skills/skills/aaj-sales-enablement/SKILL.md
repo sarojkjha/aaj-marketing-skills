@@ -12,6 +12,7 @@ description: >-
   the revenue being lost for want of it.
 license: MIT
 metadata:
+  search_description: "Audit sales content against what each deal stage needs, check whether reps use it and whether it is current, and rank what to build next by revenue at stake."
   publisher: AAJ
   slug: aaj-sales-enablement
   category: Sales & Pipeline

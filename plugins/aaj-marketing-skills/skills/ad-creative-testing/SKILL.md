@@ -11,6 +11,7 @@ description: >-
   variants accounted for.
 license: MIT
 metadata:
+  search_description: "Test ad creative on Meta, LinkedIn, Google or TikTok: size the test first, then read the winner honestly on the metric that pays, with early stopping covered."
   publisher: AAJ
   slug: ad-creative-testing
   category: Paid Media & Budgeting

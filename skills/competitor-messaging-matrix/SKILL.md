@@ -12,6 +12,7 @@ description: >-
   distinctiveness read of your headline, and the open claims no rival makes.
 license: MIT
 metadata:
+  search_description: "Compare what every competitor's homepage claims, side by side: claim types, audiences, proof, the words the category has used up, and the claims no rival makes."
   publisher: AAJ
   slug: competitor-messaging-matrix
   category: Strategy & Positioning

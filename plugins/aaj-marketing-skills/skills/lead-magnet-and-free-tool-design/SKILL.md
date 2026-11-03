@@ -11,6 +11,7 @@ description: >-
   tools", and reads a live magnet on qualified leads, not sign-ups.
 license: MIT
 metadata:
+  search_description: "Design a lead magnet or free tool that brings in buyers: score ideas on the job they do against build effort, and judge a live one on qualified leads."
   publisher: AAJ
   slug: lead-magnet-and-free-tool-design
   category: Conversion & Web

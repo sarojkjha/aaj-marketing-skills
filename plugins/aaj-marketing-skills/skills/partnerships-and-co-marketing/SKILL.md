@@ -10,6 +10,7 @@ description: >-
   work starts, and reads the result out on pipeline rather than sign-ups.
 license: MIT
 metadata:
+  search_description: "Choose co-marketing partners on audience overlap, agree terms before work starts, and judge a joint webinar, guide or launch on pipeline, not sign-ups."
   publisher: AAJ
   slug: partnerships-and-co-marketing
   category: Growth, Retention & RevOps

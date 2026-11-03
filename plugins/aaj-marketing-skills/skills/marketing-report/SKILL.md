@@ -11,6 +11,7 @@ description: >-
   attainment) with period-over-period deltas and a decision-focused narrative.
 license: MIT
 metadata:
+  search_description: "Build a board-ready marketing report: stage conversion, CAC, efficiency and attainment with period-over-period deltas, and a narrative leadership can act on."
   publisher: AAJ
   slug: marketing-report
   category: Analytics & Experimentation

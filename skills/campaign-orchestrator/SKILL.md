@@ -10,6 +10,7 @@ description: >-
   refusing to skip ahead.
 license: MIT
 metadata:
+  search_description: "Not sure which skill to use? Describe the marketing goal or problem, and it picks the play and runs Diagnose, Design and Execute with the right skills in order."
   publisher: AAJ
   slug: campaign-orchestrator
   category: Strategy & Positioning

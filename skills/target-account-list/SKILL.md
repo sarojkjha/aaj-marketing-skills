@@ -9,6 +9,7 @@ description: >-
   rationale and the signals each account matched.
 license: MIT
 metadata:
+  search_description: "Build a target account list scored by fit: accounts tiered A, B and C, with the scoring rationale and the signals each account matched."
   publisher: AAJ
   slug: target-account-list
   category: Sales & Pipeline

@@ -10,6 +10,7 @@ description: >-
   dated work-back plan and launch-day go/no-go.
 license: MIT
 metadata:
+  search_description: "Plan a launch: tier it first, score readiness on a twelve-item gate, and build the dated work-back plan and the launch-day go or no-go."
   publisher: AAJ
   slug: product-launch
   category: Growth, Retention & RevOps

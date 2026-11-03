@@ -11,6 +11,7 @@ description: >-
   projects users over time.
 license: MIT
 metadata:
+  search_description: "Build or diagnose a referral, viral, content or paid growth loop: compute the loop factor and effective CAC, find the stage that throttles it, project users."
   publisher: AAJ
   slug: aaj-marketing-loops
   category: Growth, Retention & RevOps

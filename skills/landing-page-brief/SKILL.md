@@ -8,6 +8,7 @@ description: >-
   builder. Produces a section-by-section brief with copy direction and CTAs.
 license: MIT
 metadata:
+  search_description: "Plan a landing page before it is built: a section-by-section brief with structure, copy direction, conversion elements and calls to action."
   publisher: AAJ
   slug: landing-page-brief
   category: Conversion & Web

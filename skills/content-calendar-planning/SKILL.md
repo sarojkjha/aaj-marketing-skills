@@ -9,6 +9,7 @@ description: >-
   a repurposing flow.
 license: MIT
 metadata:
+  search_description: "Plan a content calendar: topic clusters, cadence, formats and a repurposing flow across channels, laid out as a structured schedule."
   publisher: AAJ
   slug: content-calendar-planning
   category: Content & Copy

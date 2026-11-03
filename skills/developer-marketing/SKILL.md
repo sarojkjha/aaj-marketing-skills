@@ -10,6 +10,7 @@ description: >-
   first working call, with docs, channels and one activation metric.
 license: MIT
 metadata:
+  search_description: "Market to developers selling an API, SDK or developer tool: a plan from first visit to first working call, with docs, channels and one activation metric."
   publisher: AAJ
   slug: developer-marketing
   category: Growth, Retention & RevOps

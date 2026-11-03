@@ -11,6 +11,7 @@ description: >-
   rule worked out before the money is spent.
 license: MIT
 metadata:
+  search_description: "Pick the first acquisition channel to test and size the test from your own cost per click and conversion rates, with a stop rule set before you spend."
   publisher: AAJ
   slug: channel-selection-and-testing
   category: Paid Media & Budgeting

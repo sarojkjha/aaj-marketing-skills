@@ -10,6 +10,7 @@ description: >-
   address it — with an explicit line between persuasion and manipulation.
 license: MIT
 metadata:
+  search_description: "Apply behavioral science to pricing pages, landing pages, onboarding and offers: find the friction blocking the buyer, with a clear line against manipulation."
   publisher: AAJ
   slug: aaj-marketing-psychology
   category: Strategy & Positioning

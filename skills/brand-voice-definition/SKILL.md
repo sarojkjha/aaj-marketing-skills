@@ -12,6 +12,7 @@ description: >-
   checkable profile for the brand-voice-governance engine.
 license: MIT
 metadata:
+  search_description: "Define your brand voice from writing you already have: measure reading grade, sentence length, hedges and buzzwords, and get a profile to check copy against."
   publisher: AAJ
   slug: brand-voice-definition
   category: Content & Copy

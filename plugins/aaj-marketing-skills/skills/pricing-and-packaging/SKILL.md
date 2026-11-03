@@ -9,6 +9,7 @@ description: >-
   modeled blended ARPU and revenue mix.
 license: MIT
 metadata:
+  search_description: "Design pricing and packaging: tiers and what goes in each, price points with rationale, and a modeled blended ARPU and revenue mix."
   publisher: AAJ
   slug: pricing-and-packaging
   category: Strategy & Positioning

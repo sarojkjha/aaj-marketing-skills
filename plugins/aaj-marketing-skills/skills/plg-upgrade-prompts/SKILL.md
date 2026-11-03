@@ -10,6 +10,7 @@ description: >-
   event plan, and a funnel readout naming the prompt and stage to fix first.
 license: MIT
 metadata:
+  search_description: "Design upgrade prompts and paywalls in a freemium or trial product: which limits to set, where prompts appear, what they say, and which stage to fix first."
   publisher: AAJ
   slug: plg-upgrade-prompts
   category: Conversion & Web

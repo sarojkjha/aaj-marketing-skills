@@ -12,6 +12,7 @@ description: >-
   source actually says, never inventing facts or figures.
 license: MIT
 metadata:
+  search_description: "Turn one report, post, webinar or case study into LinkedIn carousels, threads, a newsletter, stat cards and a video script, using only what the source says."
   publisher: AAJ
   slug: content-repurposing
   category: Content & Copy

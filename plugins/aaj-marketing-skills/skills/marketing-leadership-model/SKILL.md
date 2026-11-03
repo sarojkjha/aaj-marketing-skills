@@ -12,6 +12,7 @@ description: >-
   which shape of help fits the work that actually exists.
 license: MIT
 metadata:
+  search_description: "Compare a head of marketing, a fractional CMO and an agency on your own numbers, including ramp, recruiting and your own hours, and see which fits the work."
   publisher: AAJ
   slug: marketing-leadership-model
   category: Growth, Retention & RevOps

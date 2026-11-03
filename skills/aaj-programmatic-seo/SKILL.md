@@ -9,6 +9,7 @@ description: >-
   then specs the template and the quality bar.
 license: MIT
 metadata:
+  search_description: "Plan programmatic SEO pages from a template and a dataset: model whether the build pays back before anything is written, then spec the template and quality bar."
   publisher: AAJ
   slug: aaj-programmatic-seo
   category: SEO, GEO & AEO

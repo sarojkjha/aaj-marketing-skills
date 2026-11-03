@@ -10,6 +10,7 @@ description: >-
   the two is the binding constraint.
 license: MIT
 metadata:
+  search_description: "Set up or fix an account-based marketing program: how many accounts, how to tier them, touches per tier, and whether capacity or coverage limits the plan."
   publisher: AAJ
   slug: abm-program-design
   category: Sales & Pipeline

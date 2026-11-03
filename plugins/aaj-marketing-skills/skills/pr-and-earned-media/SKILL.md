@@ -10,6 +10,7 @@ description: >-
   rules, and the materials you must have ready before sending.
 license: MIT
 metadata:
+  search_description: "Get press coverage without an agency: a scored story verdict, a short targeted media list, a pitch draft checked against the rules, and what to have ready."
   publisher: AAJ
   slug: pr-and-earned-media
   category: Content & Copy

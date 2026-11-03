@@ -11,6 +11,7 @@ description: >-
   pointers to the disclosure and healthcare rules to check.
 license: MIT
 metadata:
+  search_description: "Design a customer referral program: who to ask, when, and what reward, with referral CAC, break-even reward, payback, k-factor and the rules to check."
   publisher: AAJ
   slug: referral-program-design
   category: Growth, Retention & RevOps

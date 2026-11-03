@@ -11,6 +11,7 @@ description: >-
   first.
 license: MIT
 metadata:
+  search_description: "Compute magic number, burn multiple, Rule of 40 and CAC payback from figures you already have, each read against what its source wrote, and see what to fix."
   publisher: AAJ
   slug: saas-growth-efficiency
   category: Analytics & Experimentation

@@ -8,6 +8,7 @@ description: >-
   proposition plus supporting proof points, with variants by audience.
 license: MIT
 metadata:
+  search_description: "Write or sharpen a value proposition: a one-line promise for a specific audience, supporting proof points, and variants by audience."
   publisher: AAJ
   slug: value-proposition
   category: Strategy & Positioning

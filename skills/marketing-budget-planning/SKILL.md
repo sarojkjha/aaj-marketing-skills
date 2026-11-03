@@ -10,6 +10,7 @@ description: >-
   published reference points (Gartner, SaaS Capital) and a function-level split.
 license: MIT
 metadata:
+  search_description: "Set a total marketing budget by stage and business model from AAJ's working ranges and published reference points, then split it across functions."
   publisher: AAJ
   slug: marketing-budget-planning
   category: Paid Media & Budgeting

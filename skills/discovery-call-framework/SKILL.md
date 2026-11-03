@@ -9,6 +9,7 @@ description: >-
   bank, qualification checks, and next-step language that advances the deal.
 license: MIT
 metadata:
+  search_description: "Run a first sales call that qualifies and uncovers real pain: a call flow, a prioritized question bank, qualification checks and next-step language."
   publisher: AAJ
   slug: discovery-call-framework
   category: Sales & Pipeline

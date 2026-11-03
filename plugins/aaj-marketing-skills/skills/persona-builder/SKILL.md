@@ -8,6 +8,7 @@ description: >-
   structured personas grounded in real signals, not demographic guesswork.
 license: MIT
 metadata:
+  search_description: "Build buyer personas or an ICP grounded in real signals: goals, pains, buying triggers, objections and where your buyers research."
   publisher: AAJ
   slug: persona-builder
   category: Research & Personas

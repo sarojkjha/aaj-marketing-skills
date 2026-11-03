@@ -11,6 +11,7 @@ description: >-
   whether they really convert differently from the rest of the site.
 license: MIT
 metadata:
+  search_description: "See how much traffic and how many key events ChatGPT, Perplexity, Gemini, Copilot and Claude send you, from a GA4 export, and whether they convert differently."
   publisher: AAJ
   slug: ai-referral-share
   category: SEO, GEO & AEO

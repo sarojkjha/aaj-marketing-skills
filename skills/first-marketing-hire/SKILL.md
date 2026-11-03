@@ -11,6 +11,7 @@ description: >-
   competencies, a 90-day plan, and a hire, no-hire or more-evidence call.
 license: MIT
 metadata:
+  search_description: "Hire your first marketer on evidence: a weighted role scorecard, a paid take-home and rubric, interview questions, a 90-day plan, and a clear hire call."
   publisher: AAJ
   slug: first-marketing-hire
   category: Growth, Retention & RevOps

@@ -10,6 +10,7 @@ description: >-
   evidence or consent to keep on file and the regulator's own guidance.
 license: MIT
 metadata:
+  search_description: "Check a landing page, ad, email or deck for claims that need proof or permission, sentence by sentence, with what to keep on file and the regulator's guidance."
   publisher: AAJ
   slug: claims-and-proof-check
   category: Content & Copy

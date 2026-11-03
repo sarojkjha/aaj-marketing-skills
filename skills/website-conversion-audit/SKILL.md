@@ -9,6 +9,7 @@ description: >-
   prioritized fixes.
 license: MIT
 metadata:
+  search_description: "Audit a landing page or website for conversion: clarity, calls to action, trust, friction, speed and tracking, with a 0 to 100 score and prioritized fixes."
   publisher: AAJ
   slug: website-conversion-audit
   category: Conversion & Web

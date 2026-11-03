@@ -12,6 +12,7 @@ description: >-
   own conversion rate and margin allowance can afford.
 license: MIT
 metadata:
+  search_description: "Check whether your AI product's price covers inference cost: cost per task and user, margin at normal and spike usage, break-even price and free-tier limits."
   publisher: AAJ
   slug: ai-inference-pricing
   category: Strategy & Positioning

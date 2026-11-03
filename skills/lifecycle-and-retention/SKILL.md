@@ -10,6 +10,7 @@ description: >-
   prioritized retention plan across onboarding, churn drivers, and expansion.
 license: MIT
 metadata:
+  search_description: "Reduce churn and grow NRR: churn, NRR, GRR, quick ratio and lifetime math, a diagnosis, and a retention plan across onboarding, churn drivers and expansion."
   publisher: AAJ
   slug: lifecycle-and-retention
   category: Retention & Lifecycle

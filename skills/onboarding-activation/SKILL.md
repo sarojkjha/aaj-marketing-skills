@@ -9,6 +9,7 @@ description: >-
   data, finds where new users stall, and specifies the fix.
 license: MIT
 metadata:
+  search_description: "Improve onboarding and activation: define the activation moment from your data, find where new signups stall, and specify the fix."
   publisher: AAJ
   slug: onboarding-activation
   category: Retention & Lifecycle
