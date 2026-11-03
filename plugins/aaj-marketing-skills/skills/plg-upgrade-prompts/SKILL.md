@@ -27,6 +27,7 @@ metadata:
   inputs: The free plan's limits and gates, the activation moment, and per prompt the unique users who hit the limit, saw the prompt, clicked, and upgraded in one period
   outputs: A limit and prompt map, prompt copy, an event plan, and a readout with conversion per prompt (Wilson intervals), significance between prompts, and the prompt and stage to fix first
   related_aaj:
+    - https://aajconsult.com/tools/upgrade-prompt-readout
     - https://aajconsult.com/playbooks/product-led-growth-playbook
     - https://aajconsult.com/blog/free-trial-freemium-or-demo
     - https://aajconsult.com/playbooks/pricing-packaging-playbook

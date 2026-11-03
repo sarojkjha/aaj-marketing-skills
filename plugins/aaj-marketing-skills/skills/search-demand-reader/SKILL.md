@@ -27,6 +27,7 @@ metadata:
   inputs: A Search Console Queries export (query, clicks, impressions, average position, and the page where available), your brand words, and optionally rival brand words
   outputs: Impressions and clicks by intent; topics grouped by their most common word with position and pages; the gaps you already appear for past position 10; queries split across two of your pages; the branded share of clicks; rival-brand searches you appear in; findings and a verdict naming the first topic to build or refresh
   related_aaj:
+    - https://aajconsult.com/tools/search-console-query-reader
     - https://aajconsult.com/tools/content-brief-builder
     - https://aajconsult.com/tools/bottom-up-market-sizer
     - https://aajconsult.com/playbooks/market-research-playbook
