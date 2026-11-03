@@ -93,7 +93,9 @@ function wilson(k, n) {
   var p = k / n, z2 = Z * Z, d = 1 + z2 / n, c = p + z2 / (2 * n), m = Z * Math.sqrt(p * (1 - p) / n + z2 / (4 * n * n));
   return { low: Math.max(0, (c - m) / d), high: Math.min(1, (c + m) / d) };
 }
-function sentences(text) { return String(text || '').replace(/\s+/g, ' ').split(/(?<=[.!?])\s+/).map(function (s) { return s.trim(); }).filter(Boolean); }
+// No regex lookbehind: the core also runs in browsers (Safari before 16.4 cannot parse one).
+// Whitespace is already single spaces, so the end of a sentence is marked with a NUL and split on it.
+function sentences(text) { return String(text || '').replace(/\s+/g, ' ').replace(/([.!?]) /g, '$1\u0000').split('\u0000').map(function (s) { return s.trim(); }).filter(Boolean); }
 function escapeRe(s) { return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
 
 function buildLexicon(extra) {
