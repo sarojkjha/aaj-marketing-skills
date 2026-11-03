@@ -27,6 +27,7 @@ metadata:
   inputs: A Search Console Pages report comparing two periods of equal length - page, clicks and impressions for both periods, and average position where available
   outputs: Every page with a status and the reason; the refresh list ranked by clicks lost with the likely cause for each; title-and-snippet test candidates measured against your own site's CTR median by position band; rising pages and demand drops; site totals and concentration; findings and a verdict
   related_aaj:
+    - https://aajconsult.com/tools/content-decay-finder
     - https://aajconsult.com/tools/content-brief-builder
     - https://aajconsult.com/tools/seo-geo-readiness-scorer
     - https://aajconsult.com/templates/content-calendar-repurposing-tracker

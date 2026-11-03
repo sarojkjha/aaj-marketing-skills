@@ -27,6 +27,7 @@ metadata:
   inputs: Your target cost per conversion; nine setup checks (conversion tracking verified, CRM outcomes imported, brand separated, and so on); per campaign, type, spend, clicks, impressions, conversions, bid strategy and impression share lost to budget and rank; the search terms report with spend, clicks, conversions and whether each is a keyword; regex patterns for terms that can never convert for you; and per landing page, spend, clicks, conversions, message match and mobile usability
   outputs: Account, brand and non-brand CPA; the share of spend in campaigns and terms that produced nothing; every campaign's findings (no conversions, starved winner, far over target, thin automated bidding); the terms to negate and the winners to add as keywords; the pages that do not convert or do not match the ad; a single fix list ranked blocking-first then by spend; and a verdict - foundations, waste, scale, fix or healthy
   related_aaj:
+    - https://aajconsult.com/tools/google-ads-account-audit
     - https://aajconsult.com/playbooks/digital-advertising-playbook
     - https://aajconsult.com/playbooks/paid-media-budget-allocation-playbook
     - https://aajconsult.com/tools/paid-media-budget-allocator

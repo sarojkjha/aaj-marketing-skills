@@ -27,6 +27,7 @@ metadata:
   inputs: The control's current rate on the metric you judge by, the smallest lift worth detecting, how many variants, and the daily impressions each gets; afterwards the impressions, clicks, conversions and spend for each variant, and what each one changed
   outputs: A test plan with the sample and days it needs (or what it can detect if that is too long), and a read-out with a verdict, each variant's rate with its range, lift and p-value, and every reason the read is not clean
   related_aaj:
+    - https://aajconsult.com/tools/ad-creative-test-calculator
     - https://aajconsult.com/tools/ab-test-significance-calculator
     - https://aajconsult.com/tools/paid-media-budget-allocator
     - https://aajconsult.com/playbooks/digital-advertising-playbook

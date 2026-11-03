@@ -27,6 +27,7 @@ metadata:
   inputs: Reviews of your product and one or more competitors, each with the product name, the star rating, the text and optionally the source, the date and your own theme coding
   outputs: Per product, each theme's share of reviews with a 95% interval and its praise and complaint counts; the opportunities where a rival is complained about and you are not; the theme to fix first; every switching sentence and feature ask; the phrases happy reviewers use; coverage of the coding; and a verdict
   related_aaj:
+    - https://aajconsult.com/tools/review-theme-miner
     - https://aajconsult.com/tools/persona-builder
     - https://aajconsult.com/tools/battlecard-builder
     - https://aajconsult.com/templates/competitor-research-grid

@@ -28,6 +28,7 @@ metadata:
   inputs: Active customer count, the signals that mark an engaged customer (NPS, usage, renewals), your own or assumed ask and conversion rates, reward cost per side, LTV, and the CAC of the channel referral would replace
   outputs: A referral program design (who, when, reward, mechanics, tracking) with referral CAC, break-even reward, payback, LTV:CAC, k-factor, findings, and compliance pointers to check with counsel
   related_aaj:
+    - https://aajconsult.com/tools/referral-program-calculator
     - https://aajconsult.com/blog/referral-programs-for-startups
     - https://aajconsult.com/tools/unit-economics-calculator
     - https://aajconsult.com/playbooks/customer-onboarding-retention-playbook
