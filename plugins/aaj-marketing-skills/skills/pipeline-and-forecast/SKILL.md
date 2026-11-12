@@ -106,7 +106,7 @@ The forecast engine and its input shape live in `resources/forecast.js`. Stage p
 
 ## Related skills
 
-`sales-process-design` · `target-account-list` · `unit-economics` · `marketing-budget-planning` · `revenue-to-pipeline`
+`sales-process-design` · `target-account-list` · `unit-economics` · `marketing-budget-planning` · `revenue-to-pipeline` · `funnel-leak-finder`
 
 ## Credits
 

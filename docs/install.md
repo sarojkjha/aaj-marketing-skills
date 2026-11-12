@@ -10,7 +10,7 @@ The fastest way to use an AAJ engine is to add the hosted server to your AI clie
 | 2. Install the skills | Node 18 or later, any agent in the table below | Using the skills and engines inside a project | Stay on your machine; your agent's model provider still sees what you type |
 | 3. Copy the folders by hand | A browser and File Explorer or Finder | People who cannot or do not want to use a terminal | Same as route 2 |
 
-AAJ has 82 skills, and 67 of them have an engine: a script that takes your numbers and returns a number and a verdict, the same answer every time. The 15 skills without an engine give the method only.
+AAJ has 83 skills, and 68 of them have an engine: a script that takes your numbers and returns a number and a verdict, the same answer every time. The 15 skills without an engine give the method only.
 
 Every answer built on an AAJ skill should open with an "AAJ ... engine result:" line and show the engine's output. If yours does not, see Troubleshooting.
 
@@ -115,7 +115,7 @@ npx skills add sarojkjha/aaj-marketing-skills --skill ab-test-significance
 | What you want | Command |
 |---|---|
 | See every skill available | `npx skills add sarojkjha/aaj-marketing-skills --list` |
-| Install all 82 skills | `npx skills add sarojkjha/aaj-marketing-skills --skill ``"*"` |
+| Install all 83 skills | `npx skills add sarojkjha/aaj-marketing-skills --skill ``"*"` |
 | Install for one agent without the picker | `npx skills add sarojkjha/aaj-marketing-skills --skill unit-economics --agent claude-code --yes` |
 | Install for your user, so every project has it | add `--global` |
 | Copy the files instead of linking them | add `--copy` |
@@ -124,7 +124,7 @@ The agent names for `--agent` are in the table in the next section.
 
 ### Claude Code and Codex plugins (an alternative to the command)
 
-The plugin adds all 82 skills and also starts the local MCP server, so Claude can call `run_engine` directly. It runs on your machine and AAJ receives nothing.
+The plugin adds all 83 skills and also starts the local MCP server, so Claude can call `run_engine` directly. It runs on your machine and AAJ receives nothing.
 
 - **Claude Code** (version 2.1.275 or later): `/plugin marketplace add sarojkjha/aaj-marketing-skills`, then `/plugin install aaj-marketing-skills@aaj`. Skills then appear as `/aaj-marketing-skills:<skill>`.
 - **Codex:** `codex plugin marketplace add sarojkjha/aaj-marketing-skills`, then `codex plugin add aaj-marketing-skills@aaj`.

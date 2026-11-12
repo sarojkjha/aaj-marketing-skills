@@ -106,6 +106,7 @@
       "title": "Analytics & Experimentation",
       "description": "Whether a result is real: significance, incrementality and board-ready reporting.",
       "skills": [
+        "funnel-leak-finder",
         "incrementality-and-mmm",
         "marketing-report",
         "saas-growth-efficiency"

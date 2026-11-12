@@ -37,6 +37,7 @@ One page per engine: the decision it supports, its inputs and output, setup, whe
 | [Email Lifecycle Sequence](email-lifecycle-sequence.md) | Execute | Which lifecycle email sequences are we missing, in what order should we build them, and are new users getting too many emails? |
 | [First Marketing Hire](first-marketing-hire.md) | Design | Should we hire this candidate as our first marketer, turn them down, or gather more evidence first? |
 | [Founder Led Content](founder-led-content.md) | Execute | Is this founder ready to start posting, and does each draft stay inside themes only they can own? |
+| [Funnel Leak Finder](funnel-leak-finder.md) | Diagnose | Which funnel stage cost us the most wins this period, against last period or our own targets, and is that change real or noise? |
 | [GEO Citation Tracker](geo-citation-tracker.md) | Execute | Are AI answer engines actually naming and citing our brand, and is the change since the last run real or noise? |
 | [Incrementality & MMM](incrementality-and-mmm.md) | Diagnose | Did this channel's spend cause conversions that would not have happened anyway, and is our holdout test big enough to tell? |
 | [Lead Handoff SLA](lead-handoff-sla.md) | Execute | Is sales working our MQLs within the SLA, accepting what marketing sends, and is the MQL threshold in the right place? |
