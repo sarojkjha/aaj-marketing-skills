@@ -62,7 +62,7 @@ When two Plays both look plausible, these separate them:
 
 **Execute**
 7. Ship it
-8. `ab-testing` — prove the change did something
+8. `ab-test-significance` — prove the change did something
 
 *Exit when:* shipped, instrumented, review date set.
 
@@ -188,7 +188,7 @@ This Play jumps the queue when there are no numbers at all — everything else i
 
 **Design**
 4. `paid-media-budget-allocation` — reallocate on incremental performance, not attributed
-5. `ab-testing` — the tests that resolve the remaining unknowns
+5. `ab-test-significance` — the tests that resolve the remaining unknowns
 
 *Exit when:* the reallocation is specified with the reasoning attached.
 
