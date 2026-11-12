@@ -37,6 +37,7 @@ One page per engine: the decision it supports, its inputs and output, setup, whe
 | [Email Lifecycle Sequence](email-lifecycle-sequence.md) | Execute | Which lifecycle email sequences are we missing, in what order should we build them, and are new users getting too many emails? |
 | [First Marketing Hire](first-marketing-hire.md) | Design | Should we hire this candidate as our first marketer, turn them down, or gather more evidence first? |
 | [Founder Led Content](founder-led-content.md) | Execute | Is this founder ready to start posting, and does each draft stay inside themes only they can own? |
+| [Funnel Leak Finder](funnel-leak-finder.md) | Diagnose | Which funnel stage cost us the most wins this period, against last period or our own targets, and is that change real or noise? |
 | [GEO Citation Tracker](geo-citation-tracker.md) | Execute | Are AI answer engines actually naming and citing our brand, and is the change since the last run real or noise? |
 | [Incrementality & MMM](incrementality-and-mmm.md) | Diagnose | Did this channel's spend cause conversions that would not have happened anyway, and is our holdout test big enough to tell? |
 | [Lead Handoff SLA](lead-handoff-sla.md) | Execute | Is sales working our MQLs within the SLA, accepting what marketing sends, and is the MQL threshold in the right place? |
@@ -60,6 +61,7 @@ One page per engine: the decision it supports, its inputs and output, setup, whe
 | [Pricing Page Teardown](pricing-page-teardown.md) | Diagnose | Where does our pricing page lose buyers, and can a live price test answer our question in the time we have? |
 | [Product Launch](product-launch.md) | Execute | How big a launch does this change deserve, is it ready for a date, and what has to happen on which day? |
 | [Referral Program Design](referral-program-design.md) | Design | Would a referral program bring in customers more cheaply than the channel it replaces, and what is the most we can pay in rewards? |
+| [Revenue to Pipeline](revenue-to-pipeline.md) | Design | How many wins, opportunities, SQLs, MQLs and leads does this period's revenue target take per month, at our own rates, and which stage is furthest short? |
 | [Review Mining](review-mining.md) | Diagnose | What do buyers praise and complain about in our reviews and our rivals', and where can we claim an advantage with proof? |
 | [Saas Growth Efficiency](saas-growth-efficiency.md) | Diagnose | How efficiently is this SaaS company turning spend into growth, by the four numbers investors and boards ask about, and which should we fix first? |
 | [Search Demand Reader](search-demand-reader.md) | Diagnose | Which topics are people already finding us for where better content would win more clicks? |

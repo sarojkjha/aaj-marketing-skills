@@ -1,0 +1,480 @@
+{
+  "engine": "funnel-leak-finder",
+  "file": "skills/funnel-leak-finder/resources/funnel-leak.js",
+  "cases": [
+    {
+      "name": "built-in worked example",
+      "source": "the engine's --demo",
+      "args": [
+        "--demo"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "(no config - demo: Example Co., a fictional company, with invented numbers)",
+        "",
+        "FUNNEL LEAK FINDER - Q3 2026",
+        "══════════════════════════════════════════════════════════",
+        "Baseline: Q2 2026",
+        "",
+        "STAGES",
+        "  Sessions:          120,000   (prior 110,000)",
+        "  Leads:               3,000   (prior 2,860)",
+        "  MQLs:                1,050   (prior 1,001)",
+        "  SQLs:                  252   (prior 320)",
+        "  Opportunities:         126   (prior 150)",
+        "  Wins:                   28   (prior 36)",
+        "",
+        "TRANSITIONS",
+        "  Sessions -> Leads             2.5% vs    2.6%  -0.10 pts (-3.8%)",
+        "      1.1 wins lost, $20,160  #3 [z -1.52, may be noise]",
+        "  Leads -> MQLs                35.0% vs   35.0%  0.0 pts (0.0%)",
+        "      holding [z 0.00]",
+        "  MQLs -> SQLs                 24.0% vs   32.0%  -8.0 pts (-24.9%)",
+        "      9.3 wins lost, $167,329  #1 [z -4.02]",
+        "  SQLs -> Opportunities        50.0% vs   46.9%  +3.1 pts (+6.7%)",
+        "      holding [z 0.74]",
+        "  Opportunities -> Wins        22.2% vs   24.0%  -1.8 pts (-7.4%)",
+        "      2.2 wins lost, $40,320  #2 [z -0.35, may be noise]",
+        "",
+        "Sessions (volume, not ranked): 120,000 vs 110,000 (+9.1%)",
+        "",
+        "RESULT: Leak: MQLs to SQLs",
+        "  MQLs to SQLs converted at 24.0% against 32.0% in Q2 2026. At the baseline rate, with every other stage as it is, this period would have had 9.3 more wins ($167,329).",
+        "",
+        "NOTES",
+        "  - Each stage's figure holds the other stages at this period's rates, so the figures do not add up to the total change.",
+        "",
+        "AAJ'S VIEW",
+        "  - In AAJ's view, fix the named leak before adding volume at the top: more volume through a stage that is below baseline buys fewer wins per unit of spend than it did at baseline.",
+        "  - The noise check uses 95% (two-sided) and needs at least 5 conversions and 5 non-conversions in each period; those cut-offs are AAJ's choice.",
+        "",
+        "NOISE CHECK SOURCE",
+        "  NIST/SEMATECH e-Handbook of Statistical Methods, \"7.3.3. How can we determine whether two processes produce the same proportion of defectives?\": https://www.itl.nist.gov/div898/handbook/prc/section3/prc33.htm"
+      ],
+      "stderr": []
+    },
+    {
+      "name": "no baseline names no leak",
+      "source": "rates only; nothing else computed",
+      "args": [
+        "{\"period\": \"Q3 2026\", \"sessions\": 120000, \"leads\": 3000, \"mqls\": 1050, \"sqls\": 252, \"opps\": 126, \"wins\": 28}"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "FUNNEL LEAK FINDER - Q3 2026",
+        "══════════════════════════════════════════════════════════",
+        "Baseline: none",
+        "",
+        "STAGES",
+        "  Sessions:          120,000",
+        "  Leads:               3,000",
+        "  MQLs:                1,050",
+        "  SQLs:                  252",
+        "  Opportunities:         126",
+        "  Wins:                   28",
+        "",
+        "TRANSITIONS",
+        "  Sessions -> Leads             2.5%   no baseline",
+        "  Leads -> MQLs                35.0%   no baseline",
+        "  MQLs -> SQLs                 24.0%   no baseline",
+        "  SQLs -> Opportunities        50.0%   no baseline",
+        "  Opportunities -> Wins        22.2%   no baseline",
+        "",
+        "RESULT: No leak named",
+        "  No leak can be named without a baseline. Raw drop-off cannot name one: each stage's rate has its own scale, and a 10% relative lift at any stage gives the same 10% more wins. Add last period's counts (\"prior\") or your target rates (\"targets\") to see which stage cost you wins."
+      ],
+      "stderr": []
+    },
+    {
+      "name": "targets with a named source, one stage without a target",
+      "source": "one-proportion test; unjudged stage noted",
+      "args": [
+        "{\"period\": \"October 2026\", \"leads\": 800, \"mqls\": 300, \"sqls\": 90, \"opps\": 40, \"wins\": 9, \"revenuePerWin\": 24000, \"targets\": {\"leadsToMqls\": 0.35, \"mqlsToSqls\": 0.3, \"sqlsToOpps\": 0.5}, \"targetSource\": \"2026 plan\"}"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "FUNNEL LEAK FINDER - October 2026",
+        "══════════════════════════════════════════════════════════",
+        "Baseline: your targets (2026 plan)",
+        "",
+        "STAGES",
+        "  Leads:                 800",
+        "  MQLs:                  300",
+        "  SQLs:                   90",
+        "  Opportunities:          40",
+        "  Wins:                    9",
+        "",
+        "TRANSITIONS",
+        "  Leads -> MQLs                37.5% vs   35.0%  +2.5 pts (+7.1%)",
+        "      holding [z 1.48]",
+        "  MQLs -> SQLs                 30.0% vs   30.0%  0.0 pts (0.0%)",
+        "      holding [z 0.00]",
+        "  SQLs -> Opportunities        44.4% vs   50.0%  -5.6 pts (-11.1%)",
+        "      1.1 wins lost, $27,000  #1 [z -1.05, may be noise]",
+        "  Opportunities -> Wins        22.5%   no baseline",
+        "",
+        "RESULT: Leak: SQLs to Opportunities",
+        "  SQLs to Opportunities converted at 44.4% against your target of 50.0% (2026 plan). At the baseline rate, with every other stage as it is, this period would have had 1.1 more wins ($27,000). The change may be noise (not significant at 95%): confirm it next period before acting.",
+        "",
+        "NOTES",
+        "  - No target for oppsToWins: that stage is shown but not judged, so it cannot be named as the leak.",
+        "",
+        "AAJ'S VIEW",
+        "  - In AAJ's view, fix the named leak before adding volume at the top: more volume through a stage that is below baseline buys fewer wins per unit of spend than it did at baseline.",
+        "  - The noise check uses 95% (two-sided) and needs the stage count times the target, and times one minus the target, to be at least 5 (NIST 7.2.4); the 95% level is AAJ's choice.",
+        "",
+        "NOISE CHECK SOURCE",
+        "  NIST/SEMATECH e-Handbook of Statistical Methods, \"7.2.4. Does the proportion of defectives meet requirements?\": https://www.itl.nist.gov/div898/handbook/prc/section2/prc24.htm"
+      ],
+      "stderr": []
+    },
+    {
+      "name": "every stage holding against prior",
+      "source": "no leak when all stages are at or above baseline",
+      "args": [
+        "{\"leads\": 1000, \"mqls\": 400, \"sqls\": 150, \"opps\": 70, \"wins\": 20, \"prior\": {\"leads\": 900, \"mqls\": 330, \"sqls\": 120, \"opps\": 55, \"wins\": 15}}"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "FUNNEL LEAK FINDER",
+        "══════════════════════════════════════════════════════════",
+        "Baseline: the prior period",
+        "",
+        "STAGES",
+        "  Leads:               1,000   (prior 900)",
+        "  MQLs:                  400   (prior 330)",
+        "  SQLs:                  150   (prior 120)",
+        "  Opportunities:          70   (prior 55)",
+        "  Wins:                   20   (prior 15)",
+        "",
+        "TRANSITIONS",
+        "  Leads -> MQLs                40.0% vs   36.7%  +3.3 pts (+9.1%)",
+        "      holding [z 1.49]",
+        "  MQLs -> SQLs                 37.5% vs   36.4%  +1.1 pts (+3.1%)",
+        "      holding [z 0.32]",
+        "  SQLs -> Opportunities        46.7% vs   45.8%  +0.83 pts (+1.8%)",
+        "      holding [z 0.14]",
+        "  Opportunities -> Wins        28.6% vs   27.3%  +1.3 pts (+4.8%)",
+        "      holding [z 0.16]",
+        "",
+        "Leads (volume, not ranked): 1,000 vs 900 (+11.1%)",
+        "",
+        "RESULT: No leak",
+        "  Every stage you gave a baseline for is at or above the prior period.",
+        "",
+        "AAJ'S VIEW",
+        "  - The noise check uses 95% (two-sided) and needs at least 5 conversions and 5 non-conversions in each period; those cut-offs are AAJ's choice.",
+        "",
+        "NOISE CHECK SOURCE",
+        "  NIST/SEMATECH e-Handbook of Statistical Methods, \"7.3.3. How can we determine whether two processes produce the same proportion of defectives?\": https://www.itl.nist.gov/div898/handbook/prc/section3/prc33.htm"
+      ],
+      "stderr": []
+    },
+    {
+      "name": "top leak may be noise, a firm one is named",
+      "source": "small late-stage counts; largest shortfall that clears the check",
+      "args": [
+        "{\"sessions\": 200000, \"leads\": 4000, \"mqls\": 1600, \"sqls\": 400, \"opps\": 30, \"wins\": 6, \"prior\": {\"sessions\": 200000, \"leads\": 4000, \"mqls\": 1600, \"sqls\": 480, \"opps\": 40, \"wins\": 12}}"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "FUNNEL LEAK FINDER",
+        "══════════════════════════════════════════════════════════",
+        "Baseline: the prior period",
+        "",
+        "STAGES",
+        "  Sessions:          200,000   (prior 200,000)",
+        "  Leads:               4,000   (prior 4,000)",
+        "  MQLs:                1,600   (prior 1,600)",
+        "  SQLs:                  400   (prior 480)",
+        "  Opportunities:          30   (prior 40)",
+        "  Wins:                    6   (prior 12)",
+        "",
+        "TRANSITIONS",
+        "  Sessions -> Leads             2.0% vs    2.0%  0.0 pts (0.0%)",
+        "      holding [z 0.00]",
+        "  Leads -> MQLs                40.0% vs   40.0%  0.0 pts (0.0%)",
+        "      holding [z 0.00]",
+        "  MQLs -> SQLs                 25.0% vs   30.0%  -5.0 pts (-16.7%)",
+        "      1.2 wins lost  #2 [z -3.17]",
+        "  SQLs -> Opportunities         7.5% vs    8.3%  -0.83 pts (-10.0%)",
+        "      0.7 wins lost  #3 [z -0.45, may be noise]",
+        "  Opportunities -> Wins        20.0% vs   30.0%  -10.0 pts (-33.3%)",
+        "      3 wins lost  #1 [z -0.95, may be noise]",
+        "",
+        "Sessions (volume, not ranked): 200,000 vs 200,000 (0.0%)",
+        "",
+        "RESULT: Leak: Opportunities to Wins",
+        "  Opportunities to Wins converted at 20.0% against 30.0% in the prior period. At the baseline rate, with every other stage as it is, this period would have had 3 more wins. The change may be noise (not significant at 95%): confirm it next period before acting. The largest shortfall that clears the noise check is MQLs to SQLs (1.2 wins).",
+        "",
+        "NOTES",
+        "  - Each stage's figure holds the other stages at this period's rates, so the figures do not add up to the total change.",
+        "",
+        "AAJ'S VIEW",
+        "  - In AAJ's view, fix the named leak before adding volume at the top: more volume through a stage that is below baseline buys fewer wins per unit of spend than it did at baseline.",
+        "  - The noise check uses 95% (two-sided) and needs at least 5 conversions and 5 non-conversions in each period; those cut-offs are AAJ's choice.",
+        "",
+        "NOISE CHECK SOURCE",
+        "  NIST/SEMATECH e-Handbook of Statistical Methods, \"7.3.3. How can we determine whether two processes produce the same proportion of defectives?\": https://www.itl.nist.gov/div898/handbook/prc/section3/prc33.htm"
+      ],
+      "stderr": []
+    },
+    {
+      "name": "zero wins",
+      "source": "a stage at 0 costs everything downstream; too few to test",
+      "args": [
+        "{\"mqls\": 200, \"sqls\": 60, \"opps\": 20, \"wins\": 0, \"prior\": {\"mqls\": 180, \"sqls\": 50, \"opps\": 15, \"wins\": 4}}"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "FUNNEL LEAK FINDER",
+        "══════════════════════════════════════════════════════════",
+        "Baseline: the prior period",
+        "",
+        "STAGES",
+        "  MQLs:                  200   (prior 180)",
+        "  SQLs:                   60   (prior 50)",
+        "  Opportunities:          20   (prior 15)",
+        "  Wins:                    0   (prior 4)",
+        "",
+        "TRANSITIONS",
+        "  MQLs -> SQLs                 30.0% vs   27.8%  +2.2 pts (+8.0%)",
+        "      holding [z 0.48]",
+        "  SQLs -> Opportunities        33.3% vs   30.0%  +3.3 pts (+11.1%)",
+        "      holding [z 0.37]",
+        "  Opportunities -> Wins         0.0% vs   26.7%  -26.7 pts (-100.0%)",
+        "      5.3 wins lost  #1 [too few to test]",
+        "",
+        "MQLs (volume, not ranked): 200 vs 180 (+11.1%)",
+        "",
+        "RESULT: Leak: Opportunities to Wins",
+        "  Opportunities to Wins converted at 0.0% against 26.7% in the prior period. At the baseline rate, with every other stage as it is, this period would have had 5.3 more wins. The change may be noise (too few to test): confirm it next period before acting.",
+        "",
+        "AAJ'S VIEW",
+        "  - In AAJ's view, fix the named leak before adding volume at the top: more volume through a stage that is below baseline buys fewer wins per unit of spend than it did at baseline.",
+        "  - The noise check uses 95% (two-sided) and needs at least 5 conversions and 5 non-conversions in each period; those cut-offs are AAJ's choice.",
+        "",
+        "NOISE CHECK SOURCE",
+        "  NIST/SEMATECH e-Handbook of Statistical Methods, \"7.3.3. How can we determine whether two processes produce the same proportion of defectives?\": https://www.itl.nist.gov/div898/handbook/prc/section3/prc33.htm"
+      ],
+      "stderr": []
+    },
+    {
+      "name": "top of funnel fell: volume, not a leak",
+      "source": "volume change reported separately, not ranked",
+      "args": [
+        "{\"sessions\": 80000, \"leads\": 2400, \"mqls\": 800, \"prior\": {\"sessions\": 100000, \"leads\": 3000, \"mqls\": 1000}}"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "FUNNEL LEAK FINDER",
+        "══════════════════════════════════════════════════════════",
+        "Baseline: the prior period",
+        "",
+        "STAGES",
+        "  Sessions:           80,000   (prior 100,000)",
+        "  Leads:               2,400   (prior 3,000)",
+        "  MQLs:                  800   (prior 1,000)",
+        "",
+        "TRANSITIONS",
+        "  Sessions -> Leads             3.0% vs    3.0%  0.0 pts (0.0%)",
+        "      holding [z 0.00]",
+        "  Leads -> MQLs                33.3% vs   33.3%  0.0 pts (0.0%)",
+        "      holding [z 0.00]",
+        "",
+        "Sessions (volume, not ranked): 80,000 vs 100,000 (-20.0%)",
+        "",
+        "RESULT: No leak",
+        "  Every stage you gave a baseline for is at or above the prior period.",
+        "",
+        "NOTES",
+        "  - Sessions fell from 100,000 to 80,000: at this period's rates that is 200 fewer MQLs. That is volume, not conversion, so it is not ranked as a leak.",
+        "",
+        "AAJ'S VIEW",
+        "  - The noise check uses 95% (two-sided) and needs at least 5 conversions and 5 non-conversions in each period; those cut-offs are AAJ's choice.",
+        "",
+        "NOISE CHECK SOURCE",
+        "  NIST/SEMATECH e-Handbook of Statistical Methods, \"7.3.3. How can we determine whether two processes produce the same proportion of defectives?\": https://www.itl.nist.gov/div898/handbook/prc/section3/prc33.htm"
+      ],
+      "stderr": []
+    },
+    {
+      "name": "last stage is not wins",
+      "source": "loss counted in the last stage given",
+      "args": [
+        "{\"sessions\": 50000, \"leads\": 1000, \"mqls\": 250, \"targets\": {\"sessionsToLeads\": 0.025, \"leadsToMqls\": 0.3}}"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "FUNNEL LEAK FINDER",
+        "══════════════════════════════════════════════════════════",
+        "Baseline: your targets",
+        "",
+        "STAGES",
+        "  Sessions:           50,000",
+        "  Leads:               1,000",
+        "  MQLs:                  250",
+        "",
+        "TRANSITIONS",
+        "  Sessions -> Leads             2.0% vs    2.5%  -0.50 pts (-20.0%)",
+        "      62.5 MQLs lost  #1 [z -7.16]",
+        "  Leads -> MQLs                25.0% vs   30.0%  -5.0 pts (-16.7%)",
+        "      50 MQLs lost  #2 [z -3.45]",
+        "",
+        "RESULT: Leak: Sessions to Leads",
+        "  Sessions to Leads converted at 2.0% against your target of 2.5%. At the baseline rate, with every other stage as it is, this period would have had 62.5 more MQLs.",
+        "",
+        "NOTES",
+        "  - Each stage's figure holds the other stages at this period's rates, so the figures do not add up to the total change.",
+        "",
+        "AAJ'S VIEW",
+        "  - In AAJ's view, fix the named leak before adding volume at the top: more volume through a stage that is below baseline buys fewer MQLs per unit of spend than it did at baseline.",
+        "  - The noise check uses 95% (two-sided) and needs the stage count times the target, and times one minus the target, to be at least 5 (NIST 7.2.4); the 95% level is AAJ's choice.",
+        "",
+        "NOISE CHECK SOURCE",
+        "  NIST/SEMATECH e-Handbook of Statistical Methods, \"7.2.4. Does the proportion of defectives meet requirements?\": https://www.itl.nist.gov/div898/handbook/prc/section2/prc24.htm"
+      ],
+      "stderr": []
+    },
+    {
+      "name": "below target but a later stage converted none",
+      "source": "no wins: a shortfall upstream costs nothing on its own, so no leak is ranked",
+      "args": [
+        "{\"mqls\": 200, \"sqls\": 40, \"opps\": 20, \"wins\": 0, \"targets\": {\"mqlsToSqls\": 0.3}}"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "FUNNEL LEAK FINDER",
+        "══════════════════════════════════════════════════════════",
+        "Baseline: your targets",
+        "",
+        "STAGES",
+        "  MQLs:                  200",
+        "  SQLs:                   40",
+        "  Opportunities:          20",
+        "  Wins:                    0",
+        "",
+        "TRANSITIONS",
+        "  MQLs -> SQLs                 20.0% vs   30.0%  -10.0 pts (-33.3%)",
+        "      below baseline, 0 wins lost: a later stage converted none [z -3.09]",
+        "  SQLs -> Opportunities        50.0%   no baseline",
+        "  Opportunities -> Wins         0.0%   no baseline",
+        "",
+        "RESULT: No leak ranked",
+        "  MQLs to SQLs is below baseline, but a later stage converted none, so raising it alone would add no wins. Look at the stage that converted none first.",
+        "",
+        "NOTES",
+        "  - No target for sqlsToOpps, oppsToWins: those stages are shown but not judged, so they cannot be named as the leak.",
+        "",
+        "AAJ'S VIEW",
+        "  - The noise check uses 95% (two-sided) and needs the stage count times the target, and times one minus the target, to be at least 5 (NIST 7.2.4); the 95% level is AAJ's choice.",
+        "",
+        "NOISE CHECK SOURCE",
+        "  NIST/SEMATECH e-Handbook of Statistical Methods, \"7.2.4. Does the proportion of defectives meet requirements?\": https://www.itl.nist.gov/div898/handbook/prc/section2/prc24.htm"
+      ],
+      "stderr": []
+    },
+    {
+      "name": "rejects a gap between stages",
+      "source": "stages must be consecutive",
+      "args": [
+        "{\"leads\": 800, \"sqls\": 90, \"opps\": 40}"
+      ],
+      "exitCode": 1,
+      "stdout": [],
+      "stderr": [
+        "error: Stages must be consecutive: \"leads\" is followed by \"sqls\" but \"mqls\" is missing.",
+        "       Stages, in order: sessions, leads, mqls, sqls, opps, wins. Give a run of them with no gaps.",
+        "",
+        "Run --help for the schema, or --demo for a worked example."
+      ]
+    },
+    {
+      "name": "rejects a target written as a whole percentage",
+      "source": "rates are fractions",
+      "args": [
+        "{\"leads\": 800, \"mqls\": 300, \"sqls\": 90, \"targets\": {\"leadsToMqls\": 35}}"
+      ],
+      "exitCode": 1,
+      "stdout": [],
+      "stderr": [
+        "error: targets: \"leadsToMqls\" must be a rate above 0 and up to 1 (got 35).",
+        "       Write 30% as 0.3.",
+        "",
+        "Run --help for the schema, or --demo for a worked example."
+      ]
+    },
+    {
+      "name": "rejects an unknown field",
+      "source": "strict inputs",
+      "args": [
+        "{\"leads\": 800, \"mqls\": 300, \"sqls\": 90, \"MQLs\": 300}"
+      ],
+      "exitCode": 1,
+      "stdout": [],
+      "stderr": [
+        "error: Unknown field \"MQLs\".",
+        "       Allowed: period, sessions, leads, mqls, sqls, opps, wins, revenuePerWin, currency, prior, targets, targetSource.",
+        "",
+        "Run --help for the schema, or --demo for a worked example."
+      ]
+    },
+    {
+      "name": "rejects a stage count that is not a number",
+      "source": "strict inputs",
+      "args": [
+        "{\"leads\": \"800\", \"mqls\": 300, \"sqls\": 90}"
+      ],
+      "exitCode": 1,
+      "stdout": [],
+      "stderr": [
+        "error: \"leads\" must be a number (got \"800\").",
+        "",
+        "Run --help for the schema, or --demo for a worked example."
+      ]
+    },
+    {
+      "name": "rejects both baselines at once",
+      "source": "one baseline per run",
+      "args": [
+        "{\"leads\": 800, \"mqls\": 300, \"sqls\": 90, \"prior\": {\"leads\": 700, \"mqls\": 300, \"sqls\": 80}, \"targets\": {\"leadsToMqls\": 0.3}}"
+      ],
+      "exitCode": 1,
+      "stdout": [],
+      "stderr": [
+        "error: Give one baseline: \"prior\" or \"targets\", not both.",
+        "       Run the engine twice to compare against each.",
+        "",
+        "Run --help for the schema, or --demo for a worked example."
+      ]
+    },
+    {
+      "name": "rejects a stage larger than the one before",
+      "source": "a funnel cannot grow downstream",
+      "args": [
+        "{\"leads\": 800, \"mqls\": 900, \"sqls\": 90}"
+      ],
+      "exitCode": 1,
+      "stdout": [],
+      "stderr": [
+        "error: MQLs (900) is more than Leads (800); each stage must be no larger than the one before it.",
+        "",
+        "Run --help for the schema, or --demo for a worked example."
+      ]
+    },
+    {
+      "name": "rejects prior with different stages",
+      "source": "prior must give the same stages",
+      "args": [
+        "{\"leads\": 800, \"mqls\": 300, \"sqls\": 90, \"opps\": 30, \"prior\": {\"leads\": 700, \"mqls\": 250, \"sqls\": 80}}"
+      ],
+      "exitCode": 1,
+      "stdout": [],
+      "stderr": [
+        "error: prior: give the same stages as this period (leads, mqls, sqls, opps); got leads, mqls, sqls.",
+        "",
+        "Run --help for the schema, or --demo for a worked example."
+      ]
+    }
+  ]
+}

@@ -1676,6 +1676,60 @@
       "review": "The founder approves the three themes and every draft, and checks each figure has its source in the post. Any customer result needs written permission, confirmed by whoever owns that customer relationship, before it is posted."
     },
     {
+      "id": "funnel-leak-finder",
+      "slug": "funnel-leak-finder",
+      "title": "Funnel Leak Finder",
+      "version": "1.0.0",
+      "phase": "Diagnose",
+      "category": "Analytics & Experimentation",
+      "decision": "Which funnel stage cost us the most wins this period, against last period or our own targets, and is that change real or noise?",
+      "inputs": "This period's funnel counts (sessions, leads, MQLs, SQLs, opportunities, wins; at least 3 consecutive stages), and a baseline - last period's counts or your target rate per stage, with where the targets come from; optionally revenue per win",
+      "outputs": "Each stage's rate against its baseline in points and relative terms, the wins (and revenue) each shortfall cost, the stages ranked, the leak named, a noise check per stage, and a plain statement when no baseline was given",
+      "engine": "skills/funnel-leak-finder/resources/funnel-leak.js",
+      "setup": {
+        "install": "npx skills add sarojkjha/aaj-marketing-skills --skill funnel-leak-finder",
+        "hosted_mcp": "https://aaj-engines-mcp.sarojkjha10.workers.dev/mcp",
+        "local_mcp": "node platform/mcp/server.mjs (Node 18 or newer)",
+        "runtime": "Node 18 or newer for local runs; none for the hosted server",
+        "agents_listed": [
+          "Claude Code",
+          "Cursor",
+          "OpenAI Codex",
+          "Windsurf",
+          "Cline"
+        ],
+        "agents_tested": [
+          "Claude Code",
+          "OpenAI Codex (Windows, ab-test-significance only)"
+        ]
+      },
+      "acts": {
+        "analyzes_only": true,
+        "network_calls": false,
+        "writes_files": false,
+        "starts_processes": false,
+        "reads_a_file_you_name": false,
+        "agent_writes": null
+      },
+      "data_flow": [
+        {
+          "path": "Skill installed in your agent, or the local MCP server",
+          "where": "The engine runs on your machine and AAJ receives nothing. Your AI agent still sends what you give it to its model provider (Anthropic, OpenAI and so on), under your own account's terms."
+        },
+        {
+          "path": "Hosted MCP server",
+          "where": "Your agent's model provider, as above, plus AAJ's server on Cloudflare, which receives the engine inputs over HTTPS, runs them in memory and keeps no copy. Cloudflare keeps error logs (no inputs) for up to 7 days."
+        }
+      ],
+      "limitations": [
+        "No baseline, no leak: without last period's counts or your own target rates the engine shows the stage rates and names nothing, because raw drop-off cannot say where wins were lost.",
+        "Each stage's wins lost holds the other stages at this period's rates, so the figures do not add up to the total change in wins.",
+        "Counts in one period are not one cohort: wins this quarter partly come from opportunities created earlier. With a long sales cycle, compare longer or lagged periods.",
+        "The noise check treats each count as an independent trial. Sessions are not people, so for sessions to leads it overstates certainty. The 95% level and the 5-count minimum are AAJ's choices."
+      ],
+      "review": "The marketing and sales leads confirm that the stage definitions (what counts as an MQL, SQL and opportunity) were the same in both periods, and that any target rates come from a plan or source they can name."
+    },
+    {
       "id": "geo-citation-tracker",
       "slug": "geo-citation-tracker",
       "title": "GEO Citation Tracker",
@@ -2916,6 +2970,60 @@
         "Compliance flags print pointers to rules (FTC, Anti-Kickback, HIPAA); they are not a legal check. The research is mostly consumer, with no peer-reviewed B2B cash-reward study."
       ],
       "review": "The founder or finance lead confirms LTV, the CAC being replaced and which rates are assumptions. Counsel reviews any reward involving public posts, reviews or healthcare providers before launch."
+    },
+    {
+      "id": "revenue-to-pipeline",
+      "slug": "revenue-to-pipeline",
+      "title": "Revenue to Pipeline",
+      "version": "1.0.0",
+      "phase": "Design",
+      "category": "Sales & Pipeline",
+      "decision": "How many wins, opportunities, SQLs, MQLs and leads does this period's revenue target take per month, at our own rates, and which stage is furthest short?",
+      "inputs": "A revenue target for a period, the average deal size, the period length in months, and either stage-to-stage conversion rates or last period's counts at each stage; optionally revenue already expected from open pipeline, the sales cycle in days and current monthly volumes",
+      "outputs": "Wins, opportunities, SQLs, MQLs and leads needed, exact and rounded up, per period and per month; the monthly gap at each stage against current volume and the stage furthest short; when the top of the funnel has to be created",
+      "engine": "skills/revenue-to-pipeline/resources/pipeline-plan.js",
+      "setup": {
+        "install": "npx skills add sarojkjha/aaj-marketing-skills --skill revenue-to-pipeline",
+        "hosted_mcp": "https://aaj-engines-mcp.sarojkjha10.workers.dev/mcp",
+        "local_mcp": "node platform/mcp/server.mjs (Node 18 or newer)",
+        "runtime": "Node 18 or newer for local runs; none for the hosted server",
+        "agents_listed": [
+          "Claude Code",
+          "Cursor",
+          "OpenAI Codex",
+          "Windsurf",
+          "Cline"
+        ],
+        "agents_tested": [
+          "Claude Code",
+          "OpenAI Codex (Windows, ab-test-significance only)"
+        ]
+      },
+      "acts": {
+        "analyzes_only": true,
+        "network_calls": false,
+        "writes_files": false,
+        "starts_processes": false,
+        "reads_a_file_you_name": false,
+        "agent_writes": null
+      },
+      "data_flow": [
+        {
+          "path": "Skill installed in your agent, or the local MCP server",
+          "where": "The engine runs on your machine and AAJ receives nothing. Your AI agent still sends what you give it to its model provider (Anthropic, OpenAI and so on), under your own account's terms."
+        },
+        {
+          "path": "Hosted MCP server",
+          "where": "Your agent's model provider, as above, plus AAJ's server on Cloudflare, which receives the engine inputs over HTTPS, runs them in memory and keeps no copy. Cloudflare keeps error logs (no inputs) for up to 7 days."
+        }
+      ],
+      "limitations": [
+        "The plan is only as good as the rates, and the engine holds none of its own. Rates from one quarter can be noisy; use rates the team has held for two quarters where it can.",
+        "Rates derived from last period's counts compare stages within the same period. Deals that crossed periods make them approximate; a cohort view is more exact.",
+        "Revenue expected from open pipeline is the user's own figure and is subtracted as given. It should be a weighted forecast, not the full value of open deals.",
+        "The lead time treats every deal as taking the same number of days. Real sales cycles vary."
+      ],
+      "review": "The revenue or sales lead confirms the rates against the CRM for the same stage definitions, that the target and deal size are both new revenue, and that the expected figure from open pipeline is weighted."
     },
     {
       "id": "review-mining",

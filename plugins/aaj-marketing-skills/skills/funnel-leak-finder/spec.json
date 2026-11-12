@@ -1,0 +1,10 @@
+{
+  "decision": "Which funnel stage cost us the most wins this period, against last period or our own targets, and is that change real or noise?",
+  "limitations": [
+    "No baseline, no leak: without last period's counts or your own target rates the engine shows the stage rates and names nothing, because raw drop-off cannot say where wins were lost.",
+    "Each stage's wins lost holds the other stages at this period's rates, so the figures do not add up to the total change in wins.",
+    "Counts in one period are not one cohort: wins this quarter partly come from opportunities created earlier. With a long sales cycle, compare longer or lagged periods.",
+    "The noise check treats each count as an independent trial. Sessions are not people, so for sessions to leads it overstates certainty. The 95% level and the 5-count minimum are AAJ's choices."
+  ],
+  "review": "The marketing and sales leads confirm that the stage definitions (what counts as an MQL, SQL and opportunity) were the same in both periods, and that any target rates come from a plan or source they can name."
+}
