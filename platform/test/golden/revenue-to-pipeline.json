@@ -1,0 +1,402 @@
+{
+  "engine": "revenue-to-pipeline",
+  "file": "skills/revenue-to-pipeline/resources/pipeline-plan.js",
+  "cases": [
+    {
+      "name": "built-in worked example",
+      "source": "the engine's --demo",
+      "args": [
+        "--demo"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "(no config - demo: Example Co., a fictional company, with invented numbers)",
+        "",
+        "REVENUE-TO-PIPELINE PLAN",
+        "══════════════════════════════════════════════════════════",
+        "Period                       Q1 2027, 3 months",
+        "Revenue target               $600,000",
+        "Expected from open pipeline  $120,000 (your figure)",
+        "New revenue still to win     $480,000",
+        "Average deal size            $25,000",
+        "Rates                        from last period's counts",
+        "",
+        "STAGE            RATE ON       EXACT    NEEDED  PER MONTH",
+        "Leads              35.0%     1,536.0     1,600      533.3",
+        "MQLs               35.7%       537.6       560      186.7",
+        "SQLs               40.0%       192.0       200       66.7",
+        "Opportunities      25.0%        76.8        80       26.7",
+        "Wins                   -        19.2        20        6.7",
+        "",
+        "  RATE ON is the rate from each stage to the next one listed.",
+        "  Counts round up at each stage, from the whole number below it:",
+        "  you cannot win 0.4 of a deal. EXACT is before rounding.",
+        "  PER MONTH is the rounded count spread evenly over the period.",
+        "",
+        "LAST PERIOD",
+        "  Leads 2,400 > MQLs 840 > SQLs 300 > Opportunities 120 > Wins 30",
+        "",
+        "MONTHLY GAP (need per month vs what you produce per month now)",
+        "  Leads          need 533.3, have 450: short 83.3 (15.6% of need)",
+        "  MQLs           need 186.7, have 160: short 26.7 (14.3% of need)",
+        "  SQLs           need 66.7, have 70: covered",
+        "  Opportunities  need 26.7, have 20: short 6.7 (25.0% of need)",
+        "  Largest gap for its size: Opportunities (25.0% short)",
+        "",
+        "LEAD TIME",
+        "  At a 75-day cycle from a new lead to a win, the leads behind this",
+        "  period's wins have to be created between 75 days before the period",
+        "  starts and 75 days before it ends (the period is about 91 days,",
+        "  counting a month as 365/12 days). Leads created in the last 75 days of",
+        "  the period close after it ends. This treats every deal as taking the",
+        "  same 75 days; real cycles vary.",
+        "",
+        "NOTES",
+        "  - Revenue expected from open pipeline is your own figure and is",
+        "    subtracted as given. If it is the full value of open deals rather than",
+        "    a weighted forecast, the plan understates what is needed.",
+        "  - Rates come from last period's counts at each stage. Deals that crossed",
+        "    from one period into the next make these rates approximate; a cohort",
+        "    view (what share of a period's leads became wins, however long it",
+        "    took) is more exact when you have it.",
+        "  - Rounded up to whole wins, 20 wins at the average deal size bring in",
+        "    $500,000, more than the $480,000 still to win."
+      ],
+      "stderr": []
+    },
+    {
+      "name": "typed rates, no MQL stage, rounding up",
+      "source": "3.33 wins round up to 4; each stage rounds up from the whole number below it",
+      "args": [
+        "{\"target\": 100000, \"dealSize\": 30000, \"periodMonths\": 1, \"rates\": {\"leadsToSqls\": 0.1, \"sqlsToOpps\": 0.5, \"oppsToWins\": 0.3}}"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "REVENUE-TO-PIPELINE PLAN",
+        "══════════════════════════════════════════════════════════",
+        "Period                       1 month",
+        "Revenue target               $100,000",
+        "New revenue still to win     $100,000",
+        "Average deal size            $30,000",
+        "Rates                        as you entered them",
+        "",
+        "STAGE            RATE ON       EXACT    NEEDED  PER MONTH",
+        "Leads              10.0%       222.2       280      280.0",
+        "SQLs               50.0%        22.2        28       28.0",
+        "Opportunities      30.0%        11.1        14       14.0",
+        "Wins                   -         3.3         4        4.0",
+        "",
+        "  RATE ON is the rate from each stage to the next one listed.",
+        "  Counts round up at each stage, from the whole number below it:",
+        "  you cannot win 0.4 of a deal. EXACT is before rounding.",
+        "  PER MONTH is the rounded count spread evenly over the period.",
+        "",
+        "NOTES",
+        "  - Rounded up to whole wins, 4 wins at the average deal size bring in",
+        "    $120,000, more than the $100,000 still to win."
+      ],
+      "stderr": []
+    },
+    {
+      "name": "exact whole numbers stay exact",
+      "source": "no rounding when every stage divides evenly; floating-point noise does not round 80 up to 81",
+      "args": [
+        "{\"target\": 480000, \"dealSize\": 24000, \"periodMonths\": 4, \"rates\": {\"mqlsToSqls\": 0.25, \"sqlsToOpps\": 0.5, \"oppsToWins\": 0.25}, \"currency\": \"€\", \"period\": \"H1 2027\"}"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "REVENUE-TO-PIPELINE PLAN",
+        "══════════════════════════════════════════════════════════",
+        "Period                       H1 2027, 4 months",
+        "Revenue target               €480,000",
+        "New revenue still to win     €480,000",
+        "Average deal size            €24,000",
+        "Rates                        as you entered them",
+        "",
+        "STAGE            RATE ON       EXACT    NEEDED  PER MONTH",
+        "MQLs               25.0%       640.0       640      160.0",
+        "SQLs               50.0%       160.0       160       40.0",
+        "Opportunities      25.0%        80.0        80       20.0",
+        "Wins                   -        20.0        20        5.0",
+        "",
+        "  RATE ON is the rate from each stage to the next one listed.",
+        "  Counts round up at each stage, from the whole number below it:",
+        "  you cannot win 0.4 of a deal. EXACT is before rounding.",
+        "  PER MONTH is the rounded count spread evenly over the period."
+      ],
+      "stderr": []
+    },
+    {
+      "name": "open pipeline covers the target",
+      "source": "expected above target: nothing new needed, every stage covered",
+      "args": [
+        "{\"target\": 100000, \"dealSize\": 10000, \"periodMonths\": 3, \"expected\": 150000, \"rates\": {\"oppsToWins\": 0.25}, \"current\": {\"opps\": 5}}"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "REVENUE-TO-PIPELINE PLAN",
+        "══════════════════════════════════════════════════════════",
+        "Period                       3 months",
+        "Revenue target               $100,000",
+        "Expected from open pipeline  $150,000 (your figure)",
+        "New revenue still to win     $0",
+        "Average deal size            $10,000",
+        "Rates                        as you entered them",
+        "",
+        "STAGE            RATE ON       EXACT    NEEDED  PER MONTH",
+        "Opportunities      25.0%         0.0         0        0.0",
+        "Wins                   -         0.0         0        0.0",
+        "",
+        "  RATE ON is the rate from each stage to the next one listed.",
+        "  Counts round up at each stage, from the whole number below it:",
+        "  you cannot win 0.4 of a deal. EXACT is before rounding.",
+        "  PER MONTH is the rounded count spread evenly over the period.",
+        "",
+        "MONTHLY GAP (need per month vs what you produce per month now)",
+        "  Opportunities  need 0, have 5: covered",
+        "  Every stage you gave meets or beats its monthly need.",
+        "",
+        "NOTES",
+        "  - The revenue you expect from open pipeline ($150,000) meets the target,",
+        "    so on these numbers no new pipeline is needed this period. Check that",
+        "    the expected figure is weighted, not the full value of every open",
+        "    deal."
+      ],
+      "stderr": []
+    },
+    {
+      "name": "cycle longer than the period, all stages covered",
+      "source": "lead time when the cycle is 120 days and the period about 61",
+      "args": [
+        "{\"target\": 100000, \"dealSize\": 10000, \"periodMonths\": 2, \"salesCycleDays\": 120, \"rates\": {\"sqlsToOpps\": 0.5, \"oppsToWins\": 0.25}, \"current\": {\"sqls\": 50, \"opps\": 30}}"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "REVENUE-TO-PIPELINE PLAN",
+        "══════════════════════════════════════════════════════════",
+        "Period                       2 months",
+        "Revenue target               $100,000",
+        "New revenue still to win     $100,000",
+        "Average deal size            $10,000",
+        "Rates                        as you entered them",
+        "",
+        "STAGE            RATE ON       EXACT    NEEDED  PER MONTH",
+        "SQLs               50.0%        80.0        80       40.0",
+        "Opportunities      25.0%        40.0        40       20.0",
+        "Wins                   -        10.0        10        5.0",
+        "",
+        "  RATE ON is the rate from each stage to the next one listed.",
+        "  Counts round up at each stage, from the whole number below it:",
+        "  you cannot win 0.4 of a deal. EXACT is before rounding.",
+        "  PER MONTH is the rounded count spread evenly over the period.",
+        "",
+        "MONTHLY GAP (need per month vs what you produce per month now)",
+        "  SQLs           need 40, have 50: covered",
+        "  Opportunities  need 20, have 30: covered",
+        "  Every stage you gave meets or beats its monthly need.",
+        "",
+        "LEAD TIME",
+        "  At a 120-day cycle from a new SQL to a win, the SQLs behind this",
+        "  period's wins have to be created between 120 days before the period",
+        "  starts and 120 days before it ends (the period is about 61 days,",
+        "  counting a month as 365/12 days). The cycle is as long as the period",
+        "  or longer, so all of them have to be created before the period starts.",
+        "  This treats every deal as taking the same 120 days; real cycles vary."
+      ],
+      "stderr": []
+    },
+    {
+      "name": "tied largest gap",
+      "source": "two stages equally short as a share of need are both named",
+      "args": [
+        "{\"target\": 200000, \"dealSize\": 10000, \"periodMonths\": 1, \"rates\": {\"sqlsToOpps\": 0.5, \"oppsToWins\": 0.5}, \"current\": {\"sqls\": 40, \"opps\": 20}}"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "REVENUE-TO-PIPELINE PLAN",
+        "══════════════════════════════════════════════════════════",
+        "Period                       1 month",
+        "Revenue target               $200,000",
+        "New revenue still to win     $200,000",
+        "Average deal size            $10,000",
+        "Rates                        as you entered them",
+        "",
+        "STAGE            RATE ON       EXACT    NEEDED  PER MONTH",
+        "SQLs               50.0%        80.0        80       80.0",
+        "Opportunities      50.0%        40.0        40       40.0",
+        "Wins                   -        20.0        20       20.0",
+        "",
+        "  RATE ON is the rate from each stage to the next one listed.",
+        "  Counts round up at each stage, from the whole number below it:",
+        "  you cannot win 0.4 of a deal. EXACT is before rounding.",
+        "  PER MONTH is the rounded count spread evenly over the period.",
+        "",
+        "MONTHLY GAP (need per month vs what you produce per month now)",
+        "  SQLs           need 80, have 40: short 40 (50.0% of need)",
+        "  Opportunities  need 40, have 20: short 20 (50.0% of need)",
+        "  Largest gap for its size: SQLs and Opportunities (50.0% short)"
+      ],
+      "stderr": []
+    },
+    {
+      "name": "rates from two stages of counts",
+      "source": "opps and wins only; whole-number counts give a 1/3 win rate",
+      "args": [
+        "{\"target\": 250000, \"dealSize\": 50000, \"periodMonths\": 12, \"last\": {\"opps\": 9, \"wins\": 3}, \"salesCycleDays\": 30}"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "REVENUE-TO-PIPELINE PLAN",
+        "══════════════════════════════════════════════════════════",
+        "Period                       12 months",
+        "Revenue target               $250,000",
+        "New revenue still to win     $250,000",
+        "Average deal size            $50,000",
+        "Rates                        from last period's counts",
+        "",
+        "STAGE            RATE ON       EXACT    NEEDED  PER MONTH",
+        "Opportunities      33.3%        15.0        15        1.3",
+        "Wins                   -         5.0         5        0.4",
+        "",
+        "  RATE ON is the rate from each stage to the next one listed.",
+        "  Counts round up at each stage, from the whole number below it:",
+        "  you cannot win 0.4 of a deal. EXACT is before rounding.",
+        "  PER MONTH is the rounded count spread evenly over the period.",
+        "",
+        "LAST PERIOD",
+        "  Opportunities 9 > Wins 3",
+        "",
+        "LEAD TIME",
+        "  At a 30-day cycle from a new opportunity to a win, the opportunities",
+        "  behind this period's wins have to be created between 30 days before",
+        "  the period starts and 30 days before it ends (the period is about 365",
+        "  days, counting a month as 365/12 days). Opportunities created in the",
+        "  last 30 days of the period close after it ends. This treats every deal",
+        "  as taking the same 30 days; real cycles vary.",
+        "",
+        "NOTES",
+        "  - Rates come from last period's counts at each stage. Deals that crossed",
+        "    from one period into the next make these rates approximate; a cohort",
+        "    view (what share of a period's leads became wins, however long it",
+        "    took) is more exact when you have it."
+      ],
+      "stderr": []
+    },
+    {
+      "name": "bad input: several errors named at once",
+      "source": "unknown field, text for a number, zero deal size, part month, rate above 1",
+      "args": [
+        "{\"target\": \"abc\", \"dealSize\": 0, \"periodMonths\": 2.5, \"rates\": {\"oppsToWins\": 1.5}, \"foo\": 1}"
+      ],
+      "exitCode": 1,
+      "stdout": [],
+      "stderr": [
+        "error: Unknown field \"foo\". Allowed: target, dealSize, periodMonths, expected, rates, last, current, salesCycleDays, period, currency.",
+        "error: \"target\" must be a number (got \"abc\").",
+        "error: \"dealSize\" must be above 0 (got 0).",
+        "error: \"periodMonths\" must be a whole number from 1 to 36 (got 2.5).",
+        "error: Rate \"oppsToWins\" must be above 0 and at most 1 (got 1.5). Write 35% as 0.35.",
+        "",
+        "Run --help for the schema, or --demo for a worked example."
+      ]
+    },
+    {
+      "name": "bad input: broken chain of rates",
+      "source": "leadsToMqls then sqlsToOpps leaves a hole at MQLs to SQLs",
+      "args": [
+        "{\"target\": 1, \"dealSize\": 1, \"periodMonths\": 1, \"rates\": {\"leadsToMqls\": 0.3, \"sqlsToOpps\": 0.5, \"oppsToWins\": 0.3}}"
+      ],
+      "exitCode": 1,
+      "stdout": [],
+      "stderr": [
+        "error: The rates must form one chain: \"leadsToMqls\" ends at MQLs, but the next rate, \"sqlsToOpps\", starts at SQLs.",
+        "",
+        "Run --help for the schema, or --demo for a worked example."
+      ]
+    },
+    {
+      "name": "bad input: chain does not reach wins",
+      "source": "the last rate must end at wins",
+      "args": [
+        "{\"target\": 1, \"dealSize\": 1, \"periodMonths\": 1, \"rates\": {\"leadsToMqls\": 0.3, \"mqlsToSqls\": 0.5}}"
+      ],
+      "exitCode": 1,
+      "stdout": [],
+      "stderr": [
+        "error: The chain must end at wins: the last rate, \"mqlsToSqls\", ends at SQLs. Add the rates from SQLs down to wins, such as \"sqlsToOpps\" and \"oppsToWins\".",
+        "",
+        "Run --help for the schema, or --demo for a worked example."
+      ]
+    },
+    {
+      "name": "bad input: counts grow down the funnel",
+      "source": "wins above opps last period",
+      "args": [
+        "{\"target\": 1, \"dealSize\": 1, \"periodMonths\": 1, \"last\": {\"opps\": 10, \"wins\": 12}}"
+      ],
+      "exitCode": 1,
+      "stdout": [],
+      "stderr": [
+        "error: Wins (12) is more than Opportunities (10) last period; each stage should be no larger than the one above it.",
+        "",
+        "Run --help for the schema, or --demo for a worked example."
+      ]
+    },
+    {
+      "name": "bad input: rates and counts both given",
+      "source": "the engine will not choose between them",
+      "args": [
+        "{\"target\": 100, \"dealSize\": 10, \"periodMonths\": 1, \"last\": {\"opps\": 10, \"wins\": 5}, \"rates\": {\"oppsToWins\": 0.5}}"
+      ],
+      "exitCode": 1,
+      "stdout": [],
+      "stderr": [
+        "error: Give \"rates\" or \"last\", not both: the engine would not know which to plan from.",
+        "",
+        "Run --help for the schema, or --demo for a worked example."
+      ]
+    },
+    {
+      "name": "bad input: no rates at all",
+      "source": "the engine has no rates of its own",
+      "args": [
+        "{\"target\": 100, \"dealSize\": 10, \"periodMonths\": 1}"
+      ],
+      "exitCode": 1,
+      "stdout": [],
+      "stderr": [
+        "error: Give your conversion rates: either \"rates\" (typed) or \"last\" (last period's counts). The engine has no rates of its own.",
+        "",
+        "Run --help for the schema, or --demo for a worked example."
+      ]
+    },
+    {
+      "name": "bad input: current volume for a stage not in the plan",
+      "source": "leads given but the rates start at opps",
+      "args": [
+        "{\"target\": 100000, \"dealSize\": 10000, \"periodMonths\": 3, \"rates\": {\"oppsToWins\": 0.25}, \"current\": {\"leads\": 5}}"
+      ],
+      "exitCode": 1,
+      "stdout": [],
+      "stderr": [
+        "error: \"current.leads\" is not a stage in your rates (opps, wins).",
+        "",
+        "Run --help for the schema, or --demo for a worked example."
+      ]
+    },
+    {
+      "name": "bad input: no wins last period",
+      "source": "a zero win count gives no rate to plan from",
+      "args": [
+        "{\"target\": 100, \"dealSize\": 10, \"periodMonths\": 1, \"last\": {\"leads\": 100, \"wins\": 0}}"
+      ],
+      "exitCode": 1,
+      "stdout": [],
+      "stderr": [
+        "error: \"last.wins\" is 0: with no wins last period there is no win rate to plan from.",
+        "",
+        "Run --help for the schema, or --demo for a worked example."
+      ]
+    }
+  ]
+}

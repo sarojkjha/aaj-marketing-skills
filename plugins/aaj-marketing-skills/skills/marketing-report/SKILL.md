@@ -29,7 +29,7 @@ metadata:
     - https://aajconsult.com/tools/marketing-kpi-report
     - https://aajconsult.com/resources/marketing-kpi-board-report
     - https://aajconsult.com/tools/pipeline-forecast-calculator
-  related: [unit-economics, pipeline-and-forecast, paid-media-budget-allocation]
+  related: [unit-economics, pipeline-and-forecast, paid-media-budget-allocation, revenue-to-pipeline]
   tags: [marketing-report, kpi-dashboard, reporting, board-deck, funnel, cac, attribution, metrics]
 ---
 
@@ -116,7 +116,7 @@ A one-screen snapshot (the KPI table + funnel), then three to five bullets: what
 
 ## Related skills
 
-`unit-economics` (the CAC and LTV this report tracks) · `pipeline-and-forecast` (the pipeline and coverage feeding it) · `paid-media-budget-allocation` (where the efficiency read drives reallocation).
+`unit-economics` (the CAC and LTV this report tracks) · `pipeline-and-forecast` (the pipeline and coverage feeding it) · `paid-media-budget-allocation` (where the efficiency read drives reallocation) · `revenue-to-pipeline` (next period's plan, from this period's stage rates).
 
 ## Credits
 

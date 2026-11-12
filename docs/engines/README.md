@@ -60,6 +60,7 @@ One page per engine: the decision it supports, its inputs and output, setup, whe
 | [Pricing Page Teardown](pricing-page-teardown.md) | Diagnose | Where does our pricing page lose buyers, and can a live price test answer our question in the time we have? |
 | [Product Launch](product-launch.md) | Execute | How big a launch does this change deserve, is it ready for a date, and what has to happen on which day? |
 | [Referral Program Design](referral-program-design.md) | Design | Would a referral program bring in customers more cheaply than the channel it replaces, and what is the most we can pay in rewards? |
+| [Revenue to Pipeline](revenue-to-pipeline.md) | Design | How many wins, opportunities, SQLs, MQLs and leads does this period's revenue target take per month, at our own rates, and which stage is furthest short? |
 | [Review Mining](review-mining.md) | Diagnose | What do buyers praise and complain about in our reviews and our rivals', and where can we claim an advantage with proof? |
 | [Saas Growth Efficiency](saas-growth-efficiency.md) | Diagnose | How efficiently is this SaaS company turning spend into growth, by the four numbers investors and boards ask about, and which should we fix first? |
 | [Search Demand Reader](search-demand-reader.md) | Diagnose | Which topics are people already finding us for where better content would win more clicks? |

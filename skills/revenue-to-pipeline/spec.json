@@ -1,0 +1,10 @@
+{
+  "decision": "How many wins, opportunities, SQLs, MQLs and leads does this period's revenue target take per month, at our own rates, and which stage is furthest short?",
+  "limitations": [
+    "The plan is only as good as the rates, and the engine holds none of its own. Rates from one quarter can be noisy; use rates the team has held for two quarters where it can.",
+    "Rates derived from last period's counts compare stages within the same period. Deals that crossed periods make them approximate; a cohort view is more exact.",
+    "Revenue expected from open pipeline is the user's own figure and is subtracted as given. It should be a weighted forecast, not the full value of open deals.",
+    "The lead time treats every deal as taking the same number of days. Real sales cycles vary."
+  ],
+  "review": "The revenue or sales lead confirms the rates against the CRM for the same stage definitions, that the target and deal size are both new revenue, and that the expected figure from open pipeline is weighted."
+}

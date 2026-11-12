@@ -2,7 +2,7 @@
 
 [![Listed on mcpservers.org](https://mcpservers.org/badge.svg)](https://mcpservers.org/servers/sarojkjha/aaj-marketing-skills)
 
-<!-- aaj:n skills -->81<!-- aaj:/n --> marketing skills for AI agents, and **<!-- aaj:n engines -->66<!-- aaj:/n --> of them run real engines**. Each engine is a dependency-free Node script. It takes your numbers and returns a number and a verdict: LTV:CAC and payback, pipeline coverage, A/B significance, budget splits, price ladders, NRR, market size, inference cost.
+<!-- aaj:n skills -->82<!-- aaj:/n --> marketing skills for AI agents, and **<!-- aaj:n engines -->67<!-- aaj:/n --> of them run real engines**. Each engine is a dependency-free Node script. It takes your numbers and returns a number and a verdict: LTV:CAC and payback, pipeline coverage, A/B significance, budget splits, price ladders, NRR, market size, inference cost.
 
 Most marketing skills are writing instructions. They help an agent draft a page, an email or a plan, so keep them. These add the arithmetic underneath. The agent that drafts your pricing page can check whether the price still covers inference cost. The agent that writes the board update can compute the forecast instead of estimating it. Same input, same output, and code you can read.
 
@@ -32,7 +32,7 @@ Built by [Saroj Jha](https://github.com/sarojkjha) / [AAJ](https://aajconsult.co
   - [Conversion & Web](#conversion-web) — 6 skills, 4 engines
   - [Paid Media & Budgeting](#paid-media-budgeting) — 5 skills, 5 engines
   - [Analytics & Experimentation](#analytics-experimentation) — 5 skills, 5 engines
-  - [Sales & Pipeline](#sales-pipeline) — 12 skills, 9 engines
+  - [Sales & Pipeline](#sales-pipeline) — 13 skills, 10 engines
   - [Retention & Lifecycle](#retention-lifecycle) — 3 skills, 2 engines
   - [Growth, Retention & RevOps](#growth-retention-revops) — 10 skills, 9 engines
 <!-- aaj:end catalog-contents -->
@@ -114,8 +114,8 @@ codex plugin add aaj-marketing-skills@aaj
 
 ## Use it from an MCP client
 
-Instead of installing the skills into a project, you can expose all <!-- aaj:n skills -->81<!-- aaj:/n --> skills and
-all <!-- aaj:n engines -->66<!-- aaj:/n --> engines to any MCP client — Claude Desktop, Claude Code, Cursor, Windsurf —
+Instead of installing the skills into a project, you can expose all <!-- aaj:n skills -->82<!-- aaj:/n --> skills and
+all <!-- aaj:n engines -->67<!-- aaj:/n --> engines to any MCP client — Claude Desktop, Claude Code, Cursor, Windsurf —
 as five tools:
 
 | Tool | What it does |
@@ -181,7 +181,7 @@ Vendor MCP servers bring the data; the engines turn it into a verdict. Each reci
 
 ## What a runnable engine means
 
-Most agent skills are instructions. These are too — but <!-- aaj:n engines -->66<!-- aaj:/n --> of them also ship a dependency-free Node script that does the arithmetic and returns a judgement.
+Most agent skills are instructions. These are too — but <!-- aaj:n engines -->67<!-- aaj:/n --> of them also ship a dependency-free Node script that does the arithmetic and returns a judgement.
 
 | | Instruction-only skill | Skill with an engine |
 |---|---|---|
@@ -303,6 +303,7 @@ Every engine accepts `--demo` (a worked example, no config), `--help` (the input
 | **E** | [`objection-handling`](skills/objection-handling) | Builds responses to the objections that lose deals, and checks the battlecard before reps use it. | Design |
 | **E** | [`pilot-to-contract`](skills/pilot-to-contract) | Plans a pilot backwards from the buyer's budget date, so a pilot that works becomes a contract. | Design |
 | **E** | [`pipeline-and-forecast`](skills/pipeline-and-forecast) | Weights pipeline by stage and says whether coverage is real. | Execute |
+| **E** | [`revenue-to-pipeline`](skills/revenue-to-pipeline) | Turns a revenue target into the leads, MQLs, SQLs, opportunities and wins it takes, from your own rates. | Design |
 |  | [`sales-process-design`](skills/sales-process-design) | Designs the stages and exit criteria a forecast can rely on. | Design |
 | **E** | [`target-account-list`](skills/target-account-list) | Scores and tiers accounts by ICP fit, showing the signals each matched. | Design |
 | **E** | [`win-loss-analysis`](skills/win-loss-analysis) | Finds the Pareto of why deals are actually lost, by revenue. | Diagnose |
@@ -394,6 +395,7 @@ Every runnable engine, and the command to try it:
 | `pricing-page-teardown` | `node .agents/skills/pricing-page-teardown/resources/pricing-teardown.js --demo` |
 | `product-launch` | `node .agents/skills/product-launch/resources/launch.js --demo` |
 | `referral-program-design` | `node .agents/skills/referral-program-design/resources/referral-economics.js --demo` |
+| `revenue-to-pipeline` | `node .agents/skills/revenue-to-pipeline/resources/pipeline-plan.js --demo` |
 | `review-mining` | `node .agents/skills/review-mining/resources/review-miner.js --demo` |
 | `saas-growth-efficiency` | `node .agents/skills/saas-growth-efficiency/resources/growth-efficiency.js --demo` |
 | `search-demand-reader` | `node .agents/skills/search-demand-reader/resources/search-demand.js --demo` |
@@ -415,7 +417,7 @@ Every runnable engine, and the command to try it:
 Every skill is tagged to a phase, and the ordering is deliberate — the catalog refuses to let you execute before you have diagnosed.
 
 - **Diagnose** (<!-- aaj:n phase-diagnose -->22<!-- aaj:/n --> skills) — find out what is actually broken before choosing a fix.
-- **Design** (<!-- aaj:n phase-design -->29<!-- aaj:/n --> skills) — decide the approach, with the trade-offs stated.
+- **Design** (<!-- aaj:n phase-design -->30<!-- aaj:/n --> skills) — decide the approach, with the trade-offs stated.
 - **Execute** (<!-- aaj:n phase-execute -->30<!-- aaj:/n --> skills) — build and ship it.
 
 If you do not know where to start, `campaign-orchestrator` diagnoses which play applies and sequences the rest for you.
