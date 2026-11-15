@@ -19,7 +19,7 @@ Every answer built on an AAJ skill should open with an "AAJ ... engine result:" 
 The server address is the same for every client:
 
 ```
-https://aaj-engines-mcp.sarojkjha10.workers.dev/mcp
+https://mcp.aajconsult.com/mcp
 ```
 
 It needs no sign-in and gives your agent five tools: `list_engines`, `describe_engine`, `run_engine`, `search_skills` and `get_skill`. It runs the engines in memory and keeps no copy of what you send.
@@ -33,7 +33,7 @@ It needs no sign-in and gives your agent five tools: `list_engines`, `describe_e
 
 ### Claude Code
 
-1. In a terminal, run: `claude mcp add --transport http aaj-engines https://aaj-engines-mcp.sarojkjha10.workers.dev/mcp`
+1. In a terminal, run: `claude mcp add --transport http aaj-engines https://mcp.aajconsult.com/mcp`
 2. Start Claude Code and run `/mcp` to confirm `aaj-engines` is connected.
 3. Ask the same question as above.
 

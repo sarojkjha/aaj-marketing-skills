@@ -11,7 +11,7 @@
 
 **Setup:**
 - Install the skill: `npx skills add sarojkjha/aaj-marketing-skills --skill first-marketing-hire`
-- Or connect the hosted MCP server, no install: `https://aaj-engines-mcp.sarojkjha10.workers.dev/mcp`
+- Or connect the hosted MCP server, no install: `https://mcp.aajconsult.com/mcp`
 - Or run the local MCP server: node platform/mcp/server.mjs (Node 18 or newer)
 - Input schema: the comment at the top of `skills/first-marketing-hire/resources/hire-scorecard.js` (the MCP server's describe_engine shows it). Worked example: `node skills/first-marketing-hire/resources/hire-scorecard.js --demo`.
 - Agents listed: Claude Code, Cursor, OpenAI Codex, Windsurf, Cline. Tested and recorded: Claude Code, OpenAI Codex (Windows, ab-test-significance only).

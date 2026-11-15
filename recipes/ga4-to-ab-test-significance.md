@@ -22,7 +22,7 @@ Google's docs cover Gemini CLI, Gemini Code Assist and Claude Code. Other client
 
 ## 2. Add the AAJ engines
 
-- **Hosted, no install:** add `https://aaj-engines-mcp.sarojkjha10.workers.dev/mcp` as a custom connector. The engine is `ab-test-significance`.
+- **Hosted, no install:** add `https://mcp.aajconsult.com/mcp` as a custom connector. The engine is `ab-test-significance`.
 - **In a coding agent:** `npx skills add sarojkjha/aaj-marketing-skills --skill ab-test-significance`.
 
 ## 3. Make sure GA4 knows the variant

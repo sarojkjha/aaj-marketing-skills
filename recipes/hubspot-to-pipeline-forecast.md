@@ -18,7 +18,7 @@ The server can also write to your CRM; HubSpot asks you to confirm each write. T
 
 Either one works:
 
-- **Hosted, no install:** add `https://aaj-engines-mcp.sarojkjha10.workers.dev/mcp` as a custom connector. The engine is `pipeline-and-forecast`.
+- **Hosted, no install:** add `https://mcp.aajconsult.com/mcp` as a custom connector. The engine is `pipeline-and-forecast`.
 - **In a coding agent:** `npx skills add sarojkjha/aaj-marketing-skills --skill pipeline-and-forecast`.
 
 ## 3. Give your agent this prompt
