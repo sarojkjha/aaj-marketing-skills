@@ -18,7 +18,7 @@ metadata:
   card: >-
     Produces a positioning statement pressure-tested against the competitive
     alternative.
-  version: 1.1.1
+  version: 1.2.0
   sprint: positioning-message
   topic: strategy-positioning
   agents: [Claude Code, Cursor, OpenAI Codex, Windsurf, Cline]
