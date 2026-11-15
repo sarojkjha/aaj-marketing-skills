@@ -20,7 +20,7 @@
  *     "measure": "customers",        // "customers" (default) or "revenue"
  *     "period": "month",             // "month" (default), "week" or "quarter"; only used for labels
  *     "unit": "count",               // "count" (default) or "percent" of the starting cohort
- *     "flatPts": 2,                  // optional: levels off when each later period loses less
+ *     "flatPts": 2,                  // optional: levels off when each later period moves less
  *                                    //   than this many points of the starting cohort (tool rule)
  *     "comparePeriod": 6,            // optional: the period for newer vs older (else chosen for you)
  *
@@ -62,7 +62,7 @@
  * TOOL RULES (AAJ's choices, not benchmarks)
  *   MIN_COHORTS = 3     a period is reliable when at least 3 cohorts reached it
  *   FLAT_PTS = 2        levels off from period F when every later reliable period
- *                       loses less than 2 points of the starting cohort
+ *                       moves less than 2 points of the starting cohort, up or down
  *   FLAT_MIN_AFTER = 2  judged over at least 2 later periods
  */
 
@@ -103,8 +103,8 @@ process.argv = process.argv.map((a, i) =>
  * Tool rules, labelled as such on the page (AAJ's choices, not benchmarks):
  *   MIN_COHORTS     a period is "reliable" when at least 3 cohorts have reached it
  *   FLAT_PTS        the curve has levelled off from period F when every later
- *                   reliable period loses less than 2 percentage points of the
- *                   starting cohort (user can change it; FLAT_PTS_DEFAULT)
+ *                   reliable period moves less than 2 percentage points of the
+ *                   starting cohort, up or down (user can change it; FLAT_PTS_DEFAULT)
  *   FLAT_MIN_AFTER  judged over at least 2 later periods
  *
  * Newer against older cohorts: a pooled two-proportion z-test (NIST/SEMATECH
@@ -576,7 +576,7 @@ function run(cfg) {
   } else if (cfg.asOf != null) throw inputError("\"asOf\" is only for a customer list (\"customers\").");
   var flatPts = FLAT_PTS_DEFAULT;
   if (cfg.flatPts != null) {
-    if (!isNum(cfg.flatPts) || cfg.flatPts <= 0 || cfg.flatPts >= 100) throw inputError("\"flatPts\" must be a number of percentage points above 0 and below 100 (got " + JSON.stringify(cfg.flatPts) + ").", "2 means a period that loses less than 2 points of the starting cohort counts as flat.");
+    if (!isNum(cfg.flatPts) || cfg.flatPts <= 0 || cfg.flatPts >= 100) throw inputError("\"flatPts\" must be a number of percentage points above 0 and below 100 (got " + JSON.stringify(cfg.flatPts) + ").", "2 means a period that moves less than 2 points of the starting cohort counts as flat.");
     flatPts = cfg.flatPts;
   }
   var opts = { measure: measure, flatPts: flatPts };
@@ -604,7 +604,7 @@ function run(cfg) {
   r.sources = SOURCES;
   r.rules = RULES;
   r.view = [];
-  if (r.flattening) r.view.push("In AAJ's view, a curve that levels off is a base to build on: from " + r.period + " " + r.flattening.period + " each " + r.period + " loses less than " + flatPts + " points of the starting cohort, so what you acquire adds to a base that keeps.");
+  if (r.flattening) r.view.push("In AAJ's view, a curve that levels off is a base to build on: from " + r.period + " " + r.flattening.period + " each " + r.period + " moves less than " + flatPts + " points of the starting cohort, so what you acquire adds to a base that keeps.");
   else if (r.lastReliable >= FLAT_MIN_AFTER + 1 && r.curve[r.lastReliable] < r.curve[r.lastReliable - 1]) r.view.push("In AAJ's view, fix retention before buying more acquisition: while the curve keeps falling, more customers in only fills a leaking bucket faster.");
   r.view.push("The levelling-off threshold (" + flatPts + " points per " + r.period + "), the " + MIN_COHORTS + "-cohort minimum and the " + FLAT_MIN_AFTER + " later " + r.period + "s it is judged over are tool rules, AAJ's choices, not benchmarks.");
   return r;

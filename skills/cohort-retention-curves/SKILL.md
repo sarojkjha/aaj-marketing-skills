@@ -69,13 +69,15 @@ For customer counts this is the product-limit estimator for grouped data (E. L. 
 
 **Reliable periods.** A period is reliable when at least 3 cohorts have reached it (MIN_COHORTS, a tool rule). Later periods are shown but not used to judge the shape.
 
-**Levelling off.** The curve levels off from period F when every later reliable period loses less than 2 percentage points of the starting cohort (FLAT_PTS, a tool rule the user can change), judged over at least 2 later periods (FLAT_MIN_AFTER, a tool rule). The level is the average of the curve from F to the last reliable period.
+**Levelling off.** The curve levels off from period F when every later reliable period moves less than 2 percentage points of the starting cohort, up or down (FLAT_PTS, a tool rule the user can change), judged over at least 2 later periods (FLAT_MIN_AFTER, a tool rule). The level is the average of the curve from F to the last reliable period.
 
-**Newer against older.** At one period, the engine pools the older half and the newer half of the cohorts that reached it and compares their retention. For customers, with cohort sizes, it runs a pooled two-proportion z-test (NIST/SEMATECH e-Handbook of Statistical Methods, section 7.3.3), with the p-value from Abramowitz and Stegun's formula 26.2.17. The period is the latest one, up to 12, that at least 4 cohorts and at least half of them have reached, unless the user sets it.
+**Newer against older.** At one period, the engine pools the older half and the newer half of the cohorts that reached it and compares their retention. For customers, with cohort sizes, it runs a pooled two-proportion z-test (NIST/SEMATECH e-Handbook of Statistical Methods, section 7.3.3), with the p-value from Abramowitz and Stegun's formula 26.2.17. The period is the latest one, up to 12, that at least 4 cohorts, and at least half of all cohorts, have reached, unless the user sets it.
 
 **A customer list.** Customers are grouped by the month they started. A customer counts as retained in month k when they had not ended before the first day of the k-th month after the start month. Month k counts for a cohort only once its first day is on or before the as-of date.
 
 The three tool rules are AAJ's choices, not benchmarks.
+
+**What to do with it (AAJ's view).** A curve that levels off is a base to build on: what you acquire adds to customers who stay. While the curve keeps falling, fix retention before buying more acquisition, because more customers in only fills a leaking bucket faster.
 
 ## Workflow
 
