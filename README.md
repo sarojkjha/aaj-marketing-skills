@@ -2,7 +2,7 @@
 
 [![Listed on mcpservers.org](https://mcpservers.org/badge.svg)](https://mcpservers.org/servers/sarojkjha/aaj-marketing-skills)
 
-<!-- aaj:n skills -->83<!-- aaj:/n --> marketing skills for AI agents, and **<!-- aaj:n engines -->68<!-- aaj:/n --> of them run real engines**. Each engine is a dependency-free Node script. It takes your numbers and returns a number and a verdict: LTV:CAC and payback, pipeline coverage, A/B significance, budget splits, price ladders, NRR, market size, inference cost.
+<!-- aaj:n skills -->84<!-- aaj:/n --> marketing skills for AI agents, and **<!-- aaj:n engines -->69<!-- aaj:/n --> of them run real engines**. Each engine is a dependency-free Node script. It takes your numbers and returns a number and a verdict: LTV:CAC and payback, pipeline coverage, A/B significance, budget splits, price ladders, NRR, market size, inference cost.
 
 Most marketing skills are writing instructions. They help an agent draft a page, an email or a plan, so keep them. These add the arithmetic underneath. The agent that drafts your pricing page can check whether the price still covers inference cost. The agent that writes the board update can compute the forecast instead of estimating it. Same input, same output, and code you can read.
 
@@ -33,7 +33,7 @@ Built by [Saroj Jha](https://github.com/sarojkjha) / [AAJ](https://aajconsult.co
   - [Paid Media & Budgeting](#paid-media-budgeting) — 5 skills, 5 engines
   - [Analytics & Experimentation](#analytics-experimentation) — 6 skills, 6 engines
   - [Sales & Pipeline](#sales-pipeline) — 13 skills, 10 engines
-  - [Retention & Lifecycle](#retention-lifecycle) — 3 skills, 2 engines
+  - [Retention & Lifecycle](#retention-lifecycle) — 4 skills, 3 engines
   - [Growth, Retention & RevOps](#growth-retention-revops) — 10 skills, 9 engines
 <!-- aaj:end catalog-contents -->
 - [Engines at a glance](#engines-at-a-glance)
@@ -114,8 +114,8 @@ codex plugin add aaj-marketing-skills@aaj
 
 ## Use it from an MCP client
 
-Instead of installing the skills into a project, you can expose all <!-- aaj:n skills -->83<!-- aaj:/n --> skills and
-all <!-- aaj:n engines -->68<!-- aaj:/n --> engines to any MCP client — Claude Desktop, Claude Code, Cursor, Windsurf —
+Instead of installing the skills into a project, you can expose all <!-- aaj:n skills -->84<!-- aaj:/n --> skills and
+all <!-- aaj:n engines -->69<!-- aaj:/n --> engines to any MCP client — Claude Desktop, Claude Code, Cursor, Windsurf —
 as five tools:
 
 | Tool | What it does |
@@ -181,7 +181,7 @@ Vendor MCP servers bring the data; the engines turn it into a verdict. Each reci
 
 ## What a runnable engine means
 
-Most agent skills are instructions. These are too — but <!-- aaj:n engines -->68<!-- aaj:/n --> of them also ship a dependency-free Node script that does the arithmetic and returns a judgement.
+Most agent skills are instructions. These are too — but <!-- aaj:n engines -->69<!-- aaj:/n --> of them also ship a dependency-free Node script that does the arithmetic and returns a judgement.
 
 | | Instruction-only skill | Skill with an engine |
 |---|---|---|
@@ -313,6 +313,7 @@ Every engine accepts `--demo` (a worked example, no config), `--help` (the input
 
 | | Skill | What it does | Phase |
 |---|---|---|---|
+| **E** | [`cohort-retention-curves`](skills/cohort-retention-curves) | Chains cohorts of different ages into one retention curve, finds where it levels off and tests newer cohorts against older ones. | Diagnose |
 | **E** | [`email-lifecycle-sequence`](skills/email-lifecycle-sequence) | Maps which lifecycle sequences exist, checks send load, writes the missing ones. | Execute |
 | **E** | [`lifecycle-and-retention`](skills/lifecycle-and-retention) | Computes churn, NRR, GRR and quick ratio, then diagnoses which one to fix. | Design |
 |  | [`onboarding-activation`](skills/onboarding-activation) | Defines the activation moment from data and finds where new users stall. | Execute |
@@ -362,6 +363,7 @@ Every runnable engine, and the command to try it:
 | `case-study-and-proof` | `node .agents/skills/case-study-and-proof/resources/proof-check.js --demo` |
 | `channel-selection-and-testing` | `node .agents/skills/channel-selection-and-testing/resources/channel-test.js --demo` |
 | `claims-and-proof-check` | `node .agents/skills/claims-and-proof-check/resources/claims-check.js --demo` |
+| `cohort-retention-curves` | `node .agents/skills/cohort-retention-curves/resources/cohort-curve.js --demo` |
 | `community-and-dark-social` | `node .agents/skills/community-and-dark-social/resources/dark-social-read.js --demo` |
 | `comparison-pages` | `node .agents/skills/comparison-pages/resources/comparison-check.js --demo` |
 | `competitor-messaging-matrix` | `node .agents/skills/competitor-messaging-matrix/resources/messaging-matrix.js --demo` |
@@ -418,7 +420,7 @@ Every runnable engine, and the command to try it:
 
 Every skill is tagged to a phase, and the ordering is deliberate — the catalog refuses to let you execute before you have diagnosed.
 
-- **Diagnose** (<!-- aaj:n phase-diagnose -->23<!-- aaj:/n --> skills) — find out what is actually broken before choosing a fix.
+- **Diagnose** (<!-- aaj:n phase-diagnose -->24<!-- aaj:/n --> skills) — find out what is actually broken before choosing a fix.
 - **Design** (<!-- aaj:n phase-design -->30<!-- aaj:/n --> skills) — decide the approach, with the trade-offs stated.
 - **Execute** (<!-- aaj:n phase-execute -->30<!-- aaj:/n --> skills) — build and ship it.
 

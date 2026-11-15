@@ -28,7 +28,7 @@ metadata:
     - https://aajconsult.com/tools/churn-nrr-calculator
     - https://aajconsult.com/resources/retention-nrr-workbook
     - https://aajconsult.com/playbooks/customer-onboarding-retention-playbook
-  related: [unit-economics, pricing-and-packaging, customer-survey-design]
+  related: [unit-economics, pricing-and-packaging, customer-survey-design, cohort-retention-curves]
   tags: [retention, churn, nrr, grr, net-revenue-retention, onboarding, lifecycle, expansion, saas-metrics]
 ---
 
@@ -119,7 +119,7 @@ Lead with the three numbers (NRR, GRR, quick ratio) and the verdict, then the **
 
 ## Related skills
 
-`unit-economics` (the LTV this retention drives) · `pricing-and-packaging` (expansion and packaging for NRR) · `customer-survey-design` (churn-reason and activation research).
+`unit-economics` (the LTV this retention drives) · `pricing-and-packaging` (expansion and packaging for NRR) · `customer-survey-design` (churn-reason and activation research) · `cohort-retention-curves` (whether retention levels off across cohorts, and whether newer cohorts retain better).
 
 ## Credits
 
