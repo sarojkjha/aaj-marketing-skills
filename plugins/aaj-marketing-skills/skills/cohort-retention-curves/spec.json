@@ -1,0 +1,10 @@
+{
+  "decision": "Does our retention level off, at what level, and do newer cohorts retain better or worse than older ones?",
+  "limitations": [
+    "The curve shows what happened, not why: a cohort that retains worse may come from a different channel, plan or an outage. Split the data and run it again to find out.",
+    "Periods reached by fewer than 3 cohorts are shown but not judged, so the reliable part of the curve is only as long as the third-oldest cohort. A curve that has levelled off in the data may still drift later.",
+    "The 95% band and the significance test need customer counts with cohort sizes; revenue and unweighted percentages get neither.",
+    "The 3-cohort minimum, the 2-point levelling-off threshold and the 2 later periods it is judged over are AAJ's tool rules, not benchmarks."
+  ],
+  "review": "The person who owns the customer data confirms that every cohort uses the same period length and the same definition of an active customer, and that cohorts are listed oldest first."
+}

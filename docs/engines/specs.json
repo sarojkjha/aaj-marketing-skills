@@ -1082,6 +1082,60 @@
       "review": "Legal counsel decides whether each flagged claim can run. The founder or marketer confirms the evidence or signed consent is actually on file, and a reviewer checks the visuals and implied claims the engine cannot see."
     },
     {
+      "id": "cohort-retention-curves",
+      "slug": "cohort-retention-curves",
+      "title": "Cohort Retention Curves",
+      "version": "1.0.0",
+      "phase": "Diagnose",
+      "category": "Retention & Lifecycle",
+      "decision": "Does our retention level off, at what level, and do newer cohorts retain better or worse than older ones?",
+      "inputs": "A cohort table (one row per cohort, oldest first, customers or revenue retained in each period from period 0, as counts or percent of the start) or one row per customer with a start date and an end date; optionally the levelling-off threshold",
+      "outputs": "The chained average retention curve with a 95% band for customer counts, the period it levels off from and the level, period-1 and last-reliable-period retention, newer against older cohorts with a significance test, and findings on the data",
+      "engine": "skills/cohort-retention-curves/resources/cohort-curve.js",
+      "setup": {
+        "install": "npx skills add sarojkjha/aaj-marketing-skills --skill cohort-retention-curves",
+        "hosted_mcp": "https://mcp.aajconsult.com/mcp",
+        "local_mcp": "node platform/mcp/server.mjs (Node 18 or newer)",
+        "runtime": "Node 18 or newer for local runs; none for the hosted server",
+        "agents_listed": [
+          "Claude Code",
+          "Cursor",
+          "OpenAI Codex",
+          "Windsurf",
+          "Cline"
+        ],
+        "agents_tested": [
+          "Claude Code",
+          "OpenAI Codex (Windows, ab-test-significance only)"
+        ]
+      },
+      "acts": {
+        "analyzes_only": true,
+        "network_calls": false,
+        "writes_files": false,
+        "starts_processes": false,
+        "reads_a_file_you_name": false,
+        "agent_writes": null
+      },
+      "data_flow": [
+        {
+          "path": "Skill installed in your agent, or the local MCP server",
+          "where": "The engine runs on your machine and AAJ receives nothing. Your AI agent still sends what you give it to its model provider (Anthropic, OpenAI and so on), under your own account's terms."
+        },
+        {
+          "path": "Hosted MCP server",
+          "where": "Your agent's model provider, as above, plus AAJ's server on Cloudflare, which receives the engine inputs over HTTPS, runs them in memory and keeps no copy. Cloudflare keeps error logs (no inputs) for up to 7 days."
+        }
+      ],
+      "limitations": [
+        "The curve shows what happened, not why: a cohort that retains worse may come from a different channel, plan or an outage. Split the data and run it again to find out.",
+        "Periods reached by fewer than 3 cohorts are shown but not judged, so the reliable part of the curve is only as long as the third-oldest cohort. A curve that has levelled off in the data may still drift later.",
+        "The 95% band and the significance test need customer counts with cohort sizes; revenue and unweighted percentages get neither.",
+        "The 3-cohort minimum, the 2-point levelling-off threshold and the 2 later periods it is judged over are AAJ's tool rules, not benchmarks."
+      ],
+      "review": "The person who owns the customer data confirms that every cohort uses the same period length and the same definition of an active customer, and that cohorts are listed oldest first."
+    },
+    {
       "id": "community-and-dark-social",
       "slug": "community-and-dark-social",
       "title": "Community & Dark Social",

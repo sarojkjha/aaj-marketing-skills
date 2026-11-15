@@ -132,6 +132,7 @@
       "title": "Retention & Lifecycle",
       "description": "Churn, NRR and the lifecycle email that keeps customers.",
       "skills": [
+        "cohort-retention-curves",
         "email-lifecycle-sequence",
         "onboarding-activation"
       ]

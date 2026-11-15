@@ -26,6 +26,7 @@ One page per engine: the decision it supports, its inputs and output, setup, whe
 | [Case Study & Proof](case-study-and-proof.md) | Execute | Would this customer result convince a sceptical buyer, and what are we actually allowed to publish? |
 | [Channel Selection & Testing](channel-selection-and-testing.md) | Design | How much should we spend, and for how long, before judging a new channel; when should we stop early; and which channel should we test first? |
 | [Claims & Proof Check](claims-and-proof-check.md) | Execute | Which claims in this copy need proof, consent or a wording change before it goes live? |
+| [Cohort Retention Curves](cohort-retention-curves.md) | Diagnose | Does our retention level off, at what level, and do newer cohorts retain better or worse than older ones? |
 | [Community & Dark Social](community-and-dark-social.md) | Execute | Where do our buyers already talk, should we open a community of our own, and is word of mouth growing? |
 | [Comparison Pages](comparison-pages.md) | Execute | Is this vs or alternatives page fair and current enough to publish, and when must its rival facts be re-checked? |
 | [Competitor Messaging Matrix](competitor-messaging-matrix.md) | Diagnose | What do rival homepages all claim, what does no one claim, and can a buyer tell our headline apart from theirs? |
