@@ -1094,7 +1094,7 @@
       "engine": "skills/cohort-retention-curves/resources/cohort-curve.js",
       "setup": {
         "install": "npx skills add sarojkjha/aaj-marketing-skills --skill cohort-retention-curves",
-        "hosted_mcp": "https://aaj-engines-mcp.sarojkjha10.workers.dev/mcp",
+        "hosted_mcp": "https://mcp.aajconsult.com/mcp",
         "local_mcp": "node platform/mcp/server.mjs (Node 18 or newer)",
         "runtime": "Node 18 or newer for local runs; none for the hosted server",
         "agents_listed": [

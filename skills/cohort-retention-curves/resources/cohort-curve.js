@@ -319,6 +319,19 @@ function chain(cohorts) {
 
 function lastReliable(n) { var r = 0; for (var k = 0; k < n.length; k++) if (n[k] >= MIN_COHORTS) r = k; return r; }
 
+function ptsText(n) { return n + (n === 1 ? " point" : " points"); }
+
+// The latest move inside the judged window that breaks the levelling-off rule, for the
+// not-flat finding: which two periods, how many points and in which direction.
+function breakingMove(S, last, flatPts) {
+  for (var j = last; j > last - FLAT_MIN_AFTER; j--) {
+    if (S[j] === null || S[j - 1] === null) return null;
+    var d = S[j] - S[j - 1];
+    if (Math.abs(d) >= flatPts / 100) return { from: j - 1, to: j, pts: Math.abs(d) * 100, down: d < 0 };
+  }
+  return null;
+}
+
 function flattening(S, last, flatPts) {
   var thr = flatPts / 100;
   for (var F = 1; F <= last - FLAT_MIN_AFTER; F++) {
@@ -406,7 +419,13 @@ function analyse(parsed, opts) {
   if (measure === "customers" && weighted && totalStart < 50) findings.push({ level: "warn", id: "small", text: "There are only " + Math.round(totalStart) + " customers in total. With numbers this small, one customer moves a cohort's retention by several points, so read the shape of the curve rather than the exact percentages." });
   if (last < 3) findings.push({ level: "warn", id: "thin", text: "Only " + (last + 1) + " period" + (last === 0 ? " has" : "s have") + " data from at least " + MIN_COHORTS + " cohorts. The curve is shown, but it is too short to say whether it levels off." });
   if (ch.n[ch.n.length - 1] < MIN_COHORTS && ch.n.length - 1 > last) findings.push({ level: "info", id: "tail", text: "Periods " + (last + 1) + " to " + (ch.n.length - 1) + " come from fewer than " + MIN_COHORTS + " cohorts. They are drawn dashed and are not used to judge where the curve levels off." });
-  if (last >= FLAT_MIN_AFTER + 1 && !flat) findings.push({ level: "warn", id: "not-flat", text: "The curve has not levelled off within the data: it is still losing " + flatPts + " points or more of the starting cohort per period. Retention that keeps falling means no cohort settles into a stable base yet, which puts a ceiling on growth however much you acquire." });
+  if (last >= FLAT_MIN_AFTER + 1 && !flat) {
+    var mv = breakingMove(S, last, flatPts);
+    findings.push({ level: "warn", id: "not-flat", text: mv
+      ? "The curve has not levelled off within the data: from period " + mv.from + " to period " + mv.to + " it " + (mv.down ? "falls " : "rises ") + mv.pts.toFixed(1) + " points of the starting cohort, against a threshold of " + ptsText(flatPts) + "." +
+        (mv.down ? "" : " The level it settles at is not known yet.")
+      : "The curve has not levelled off within the data." });
+  }
   if (cmp && cmp.test && cmp.test.p < 0.05) findings.push({ level: cmp.diff > 0 ? "info" : "warn", id: "trend", text: "Newer cohorts retain " + (cmp.diff > 0 ? "better" : "worse") + " than older ones at period " + cmp.period + ": " + Math.round(cmp.newer.rate * 100) + "% against " + Math.round(cmp.older.rate * 100) + "% (p = " + cmp.test.p.toFixed(3) + "). " + (cmp.diff > 0 ? "Something that changed between them is working. Find out what it was before it gets undone." : "Find out what changed between them: the channel, the customer, the product or the onboarding.") });
   if (measure === "revenue" && S[last] > 1) findings.push({ level: "info", id: "nrr-over-100", text: "Revenue in the average cohort ends above where it started: expansion outweighs churn and contraction over the first " + last + " periods." });
 
@@ -604,15 +623,20 @@ function run(cfg) {
   r.sources = SOURCES;
   r.rules = RULES;
   r.view = [];
-  if (r.flattening) r.view.push("In AAJ's view, a curve that levels off is a base to build on: from " + r.period + " " + r.flattening.period + " each " + r.period + " moves less than " + flatPts + " points of the starting cohort, so what you acquire adds to a base that keeps.");
+  if (r.flattening) r.view.push("In AAJ's view, a curve that levels off is a base to build on: from " + r.period + " " + r.flattening.period + " each " + r.period + " moves less than " + ptsText(flatPts) + " of the starting cohort, so what you acquire adds to a base that keeps.");
   else if (r.lastReliable >= FLAT_MIN_AFTER + 1 && r.curve[r.lastReliable] < r.curve[r.lastReliable - 1]) r.view.push("In AAJ's view, fix retention before buying more acquisition: while the curve keeps falling, more customers in only fills a leaking bucket faster.");
-  r.view.push("The levelling-off threshold (" + flatPts + " points per " + r.period + "), the " + MIN_COHORTS + "-cohort minimum and the " + FLAT_MIN_AFTER + " later " + r.period + "s it is judged over are tool rules, AAJ's choices, not benchmarks.");
+  r.view.push("The levelling-off threshold (" + ptsText(flatPts) + " per " + r.period + "), the " + MIN_COHORTS + "-cohort minimum and the " + FLAT_MIN_AFTER + " later " + r.period + "s it is judged over are tool rules, AAJ's choices, not benchmarks.");
   return r;
 }
 /* aaj:core:end */
 
 /* ─────────────────────────── render ─────────────────────────── */
 function cap(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
+// Why a result has no 95% band (the band needs customer counts with cohort sizes).
+function noBandReason(r) {
+  return r.measure === 'revenue' ? 'no 95% band for revenue' : (!r.weighted ? 'no 95% band without cohort sizes' : 'no 95% band for this data');
+}
+
 function render(r) {
   const w = r.period, W = cap(w), L = [];
   const n = r.cohorts.length, K = r.curve.length - 1;
@@ -625,7 +649,7 @@ function render(r) {
   L.push('');
   L.push('KEY FIGURES');
   const b1 = r.band && r.band[1];
-  L.push('  ' + (W + ' 1 retention:').padEnd(30) + fmtPct(r.curve[1]).padStart(6) + '   ' + (b1 ? '95% band ' + fmtPct(b1.lo) + ' to ' + fmtPct(b1.hi) : 'the first drop is usually the biggest'));
+  L.push('  ' + (W + ' 1 retention:').padEnd(30) + fmtPct(r.curve[1]).padStart(6) + '   ' + (b1 ? '95% band ' + fmtPct(b1.lo) + ' to ' + fmtPct(b1.hi) : noBandReason(r)));
   L.push('  ' + (W + ' ' + r.lastReliable + ' retention:').padEnd(30) + fmtPct(r.curve[r.lastReliable]).padStart(6) + '   the last ' + w + ' at least ' + r.rules.MIN_COHORTS + ' cohorts have reached');
   if (r.measure === 'revenue') L.push('  ' + ('Revenue over ' + r.area.periods + ' ' + w + 's:').padEnd(30) + (r.area.value.toFixed(1) + 'x').padStart(6) + '   multiples of the first ' + w + "'s revenue, per cohort");
   else L.push('  ' + (W + 's active, first ' + r.area.periods + ':').padEnd(30) + r.area.value.toFixed(1).padStart(6) + '   of the first ' + r.area.periods + ' ' + w + 's, the average customer was around for this many');
