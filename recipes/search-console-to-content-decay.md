@@ -21,7 +21,7 @@ If your agent connects to Google Search Console via an MCP server or API integra
 
 Either setup works:
 
-- **Hosted, no install:** add `https://aaj-engines-mcp.sarojkjha10.workers.dev/mcp` as a custom connector. The engine is `content-decay`.
+- **Hosted, no install:** add `https://mcp.aajconsult.com/mcp` as a custom connector. The engine is `content-decay`.
 - **In a coding agent:** `npx skills add sarojkjha/aaj-marketing-skills --skill content-decay`.
 
 ## 3. What to check first

@@ -22,7 +22,7 @@ A keyword tool's MCP server supplies search demand for the queries your template
 
 ## 2. Add the AAJ engines
 
-- **Hosted, no install:** add `https://aaj-engines-mcp.sarojkjha10.workers.dev/mcp` as a custom connector. The engine is `aaj-programmatic-seo`.
+- **Hosted, no install:** add `https://mcp.aajconsult.com/mcp` as a custom connector. The engine is `aaj-programmatic-seo`.
 - **In a coding agent:** `npx skills add sarojkjha/aaj-marketing-skills --skill aaj-programmatic-seo`.
 
 ## 3. Give your agent this prompt

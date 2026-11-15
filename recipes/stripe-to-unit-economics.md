@@ -25,7 +25,7 @@ Either route works:
 
 Either one works:
 
-- **Hosted, no install:** add `https://aaj-engines-mcp.sarojkjha10.workers.dev/mcp` as a custom connector. The engine is `unit-economics`.
+- **Hosted, no install:** add `https://mcp.aajconsult.com/mcp` as a custom connector. The engine is `unit-economics`.
 - **In a coding agent:** `npx skills add sarojkjha/aaj-marketing-skills --skill unit-economics`.
 
 ## 3. Give your agent this prompt
