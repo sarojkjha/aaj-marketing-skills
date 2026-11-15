@@ -40,7 +40,11 @@
  *     leading, synergy, game-changing, holistic, robust, turnkey, solutions,
  *     leverage, empower.
  *   - A differentiator using better, faster, cheaper, easier, smarter,
- *     superior or "the best" with no digit in it is flagged as a claim.
+ *     superior or "the best" is flagged as a claim unless it carries a measured
+ *     number: a percent, a multiple ("3x", "10 times"), an amount of money or a
+ *     time ("2 days"). A bare digit ("v2", "24/7", "in 2026") is not one. When
+ *     it does carry a measured number and the proof field is empty, the proof
+ *     field is flagged: the number needs a source, a named customer or a result.
  *   - Grammar: "a" or "an" goes by how the category's first word is said
  *     (acronyms letter by letter: "an AI copilot", "a CRM"), and "who" is added
  *     before a problem that does not start with who/whose/that/which. The
@@ -79,6 +83,9 @@ var SHARE_BASE_URL = "https://aajconsult.com/tools/positioning-statement-generat
 
 var BUZZ = ["innovative","best-in-class","best in class","world-class","cutting-edge","cutting edge","revolutionary","disruptive","next-generation","next generation","state-of-the-art","state of the art","seamless","leading","synergy","game-changing","game changing","holistic","robust","turnkey","solutions","leverage","empower"];
 var CLAIMS = ["better", "faster", "cheaper", "easier", "smarter", "superior", "the best"];
+// A measured number in a (lower-cased) differentiator: a percent, a multiple, an amount of
+// money or a time. A bare digit ("v2", "24/7", "in 2026") is not one. No lookbehind (old Safari).
+var MEASURED = /\d[\d,.]*\s?(?:%|percent\b|x\b|\u00d7|times\b)|[$\u20ac\u00a3\u20b9]\s?\d|\d[\d,.]*\s?(?:ms|milliseconds?|seconds?|secs?|minutes?|mins?|hours?|hrs?|days?|weeks?|months?|years?)\b/;
 var BROAD = ["everyone", "anybody", "anyone", "all businesses", "businesses", "companies", "people", "users"];
 var LINT_SHOWN = 6;  // the page lists at most this many lint messages at once
 var LINT_OK = "No vague language detected — every slot is doing real work.";
@@ -153,8 +160,12 @@ function generate(input) {
   if (c && BROAD.some(function (w) { return c === w || c === "all " + w; }))
     flag("customer", "Target customer is too broad — narrow until you could name 20 real examples.");
   var d = val("diff").toLowerCase();
-  if (d && CLAIMS.some(function (w) { return new RegExp("\\b" + w + "\\b").test(d); }) && !/\d/.test(d))
-    flag("diff", "Differentiator reads as a claim (\"better/faster\") without a capability or number behind it.");
+  if (d && CLAIMS.some(function (w) { return new RegExp("\\b" + w + "\\b").test(d); })) {
+    if (!MEASURED.test(d))
+      flag("diff", "Differentiator reads as a claim (\"better/faster\") without a capability or a measured number behind it (a percent, a multiple, an amount or a time).");
+    else if (!val("proof"))
+      flag("proof", "Your differentiator claims a number. Add the proof behind it: a source, a named customer or a result.");
+  }
   var b = val("benefit").toLowerCase();
   if (b && /^(has|with|features|offers|includes|provides)\b/.test(b))
     flag("benefit", "That reads like a feature (what it has). Restate as the outcome the customer gets.");
