@@ -12,7 +12,7 @@
   "remotes": [
     {
       "type": "streamable-http",
-      "url": "https://aaj-engines-mcp.sarojkjha10.workers.dev/mcp"
+      "url": "https://mcp.aajconsult.com/mcp"
     }
   ]
 }

@@ -19,7 +19,7 @@ import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { frontmatter, readText } from "./catalog.mjs";
 
-export const HOSTED_MCP = "https://aaj-engines-mcp.sarojkjha10.workers.dev/mcp";
+export const HOSTED_MCP = "https://mcp.aajconsult.com/mcp";
 export const REPO = "sarojkjha/aaj-marketing-skills";
 
 export const DATA_FLOW = [

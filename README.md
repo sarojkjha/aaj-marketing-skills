@@ -129,7 +129,7 @@ as five tools:
 **Hosted, no install.** Add this URL as a custom connector (a remote MCP server) in Claude, ChatGPT or any MCP client:
 
 ```
-https://aaj-engines-mcp.sarojkjha10.workers.dev/mcp
+https://mcp.aajconsult.com/mcp
 ```
 
 No sign-in. The server runs the engines in memory and keeps no copy of what you send ([what happens to your data](#what-happens-to-your-data)). In Claude: Settings → Connectors → Add custom connector. Then ask, for example, "Use the AAJ engines to check my unit economics: CAC $1,200, ARPA $300 a month, 80% gross margin, 3% monthly churn."

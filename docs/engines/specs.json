@@ -14,7 +14,7 @@
       "engine": "skills/aaj-copywriting/resources/copy-scorer.js",
       "setup": {
         "install": "npx skills add sarojkjha/aaj-marketing-skills --skill aaj-copywriting",
-        "hosted_mcp": "https://aaj-engines-mcp.sarojkjha10.workers.dev/mcp",
+        "hosted_mcp": "https://mcp.aajconsult.com/mcp",
         "local_mcp": "node platform/mcp/server.mjs (Node 18 or newer)",
         "runtime": "Node 18 or newer for local runs; none for the hosted server",
         "agents_listed": [
@@ -68,7 +68,7 @@
       "engine": "skills/aaj-marketing-loops/resources/loop-model.js",
       "setup": {
         "install": "npx skills add sarojkjha/aaj-marketing-skills --skill aaj-marketing-loops",
-        "hosted_mcp": "https://aaj-engines-mcp.sarojkjha10.workers.dev/mcp",
+        "hosted_mcp": "https://mcp.aajconsult.com/mcp",
         "local_mcp": "node platform/mcp/server.mjs (Node 18 or newer)",
         "runtime": "Node 18 or newer for local runs; none for the hosted server",
         "agents_listed": [
@@ -122,7 +122,7 @@
       "engine": "skills/aaj-marketing-psychology/resources/pattern-check.js",
       "setup": {
         "install": "npx skills add sarojkjha/aaj-marketing-skills --skill aaj-marketing-psychology",
-        "hosted_mcp": "https://aaj-engines-mcp.sarojkjha10.workers.dev/mcp",
+        "hosted_mcp": "https://mcp.aajconsult.com/mcp",
         "local_mcp": "node platform/mcp/server.mjs (Node 18 or newer)",
         "runtime": "Node 18 or newer for local runs; none for the hosted server",
         "agents_listed": [
@@ -176,7 +176,7 @@
       "engine": "skills/aaj-programmatic-seo/resources/pseo-model.js",
       "setup": {
         "install": "npx skills add sarojkjha/aaj-marketing-skills --skill aaj-programmatic-seo",
-        "hosted_mcp": "https://aaj-engines-mcp.sarojkjha10.workers.dev/mcp",
+        "hosted_mcp": "https://mcp.aajconsult.com/mcp",
         "local_mcp": "node platform/mcp/server.mjs (Node 18 or newer)",
         "runtime": "Node 18 or newer for local runs; none for the hosted server",
         "agents_listed": [
@@ -230,7 +230,7 @@
       "engine": "skills/aaj-sales-enablement/resources/enablement-audit.js",
       "setup": {
         "install": "npx skills add sarojkjha/aaj-marketing-skills --skill aaj-sales-enablement",
-        "hosted_mcp": "https://aaj-engines-mcp.sarojkjha10.workers.dev/mcp",
+        "hosted_mcp": "https://mcp.aajconsult.com/mcp",
         "local_mcp": "node platform/mcp/server.mjs (Node 18 or newer)",
         "runtime": "Node 18 or newer for local runs; none for the hosted server",
         "agents_listed": [
@@ -284,7 +284,7 @@
       "engine": "skills/ab-test-significance/resources/significance.js",
       "setup": {
         "install": "npx skills add sarojkjha/aaj-marketing-skills --skill ab-test-significance",
-        "hosted_mcp": "https://aaj-engines-mcp.sarojkjha10.workers.dev/mcp",
+        "hosted_mcp": "https://mcp.aajconsult.com/mcp",
         "local_mcp": "node platform/mcp/server.mjs (Node 18 or newer)",
         "runtime": "Node 18 or newer for local runs; none for the hosted server",
         "agents_listed": [
@@ -338,7 +338,7 @@
       "engine": "skills/abm-program-design/resources/abm-design.js",
       "setup": {
         "install": "npx skills add sarojkjha/aaj-marketing-skills --skill abm-program-design",
-        "hosted_mcp": "https://aaj-engines-mcp.sarojkjha10.workers.dev/mcp",
+        "hosted_mcp": "https://mcp.aajconsult.com/mcp",
         "local_mcp": "node platform/mcp/server.mjs (Node 18 or newer)",
         "runtime": "Node 18 or newer for local runs; none for the hosted server",
         "agents_listed": [
@@ -392,7 +392,7 @@
       "engine": "skills/ad-creative-testing/resources/creative-test.js",
       "setup": {
         "install": "npx skills add sarojkjha/aaj-marketing-skills --skill ad-creative-testing",
-        "hosted_mcp": "https://aaj-engines-mcp.sarojkjha10.workers.dev/mcp",
+        "hosted_mcp": "https://mcp.aajconsult.com/mcp",
         "local_mcp": "node platform/mcp/server.mjs (Node 18 or newer)",
         "runtime": "Node 18 or newer for local runs; none for the hosted server",
         "agents_listed": [
@@ -446,7 +446,7 @@
       "engine": "skills/agent-readiness-audit/resources/agent-readiness.js",
       "setup": {
         "install": "npx skills add sarojkjha/aaj-marketing-skills --skill agent-readiness-audit",
-        "hosted_mcp": "https://aaj-engines-mcp.sarojkjha10.workers.dev/mcp",
+        "hosted_mcp": "https://mcp.aajconsult.com/mcp",
         "local_mcp": "node platform/mcp/server.mjs (Node 18 or newer)",
         "runtime": "Node 18 or newer for local runs; none for the hosted server",
         "agents_listed": [
@@ -500,7 +500,7 @@
       "engine": "skills/ai-inference-pricing/resources/inference-pricing.js",
       "setup": {
         "install": "npx skills add sarojkjha/aaj-marketing-skills --skill ai-inference-pricing",
-        "hosted_mcp": "https://aaj-engines-mcp.sarojkjha10.workers.dev/mcp",
+        "hosted_mcp": "https://mcp.aajconsult.com/mcp",
         "local_mcp": "node platform/mcp/server.mjs (Node 18 or newer)",
         "runtime": "Node 18 or newer for local runs; none for the hosted server",
         "agents_listed": [
@@ -554,7 +554,7 @@
       "engine": "skills/ai-marketing-governance/resources/ai-governance.js",
       "setup": {
         "install": "npx skills add sarojkjha/aaj-marketing-skills --skill ai-marketing-governance",
-        "hosted_mcp": "https://aaj-engines-mcp.sarojkjha10.workers.dev/mcp",
+        "hosted_mcp": "https://mcp.aajconsult.com/mcp",
         "local_mcp": "node platform/mcp/server.mjs (Node 18 or newer)",
         "runtime": "Node 18 or newer for local runs; none for the hosted server",
         "agents_listed": [
@@ -608,7 +608,7 @@
       "engine": "skills/ai-referral-share/resources/ai-referral-share.js",
       "setup": {
         "install": "npx skills add sarojkjha/aaj-marketing-skills --skill ai-referral-share",
-        "hosted_mcp": "https://aaj-engines-mcp.sarojkjha10.workers.dev/mcp",
+        "hosted_mcp": "https://mcp.aajconsult.com/mcp",
         "local_mcp": "node platform/mcp/server.mjs (Node 18 or newer)",
         "runtime": "Node 18 or newer for local runs; none for the hosted server",
         "agents_listed": [
@@ -662,7 +662,7 @@
       "engine": "skills/beachhead-segment-selection/resources/beachhead-score.js",
       "setup": {
         "install": "npx skills add sarojkjha/aaj-marketing-skills --skill beachhead-segment-selection",
-        "hosted_mcp": "https://aaj-engines-mcp.sarojkjha10.workers.dev/mcp",
+        "hosted_mcp": "https://mcp.aajconsult.com/mcp",
         "local_mcp": "node platform/mcp/server.mjs (Node 18 or newer)",
         "runtime": "Node 18 or newer for local runs; none for the hosted server",
         "agents_listed": [
@@ -716,7 +716,7 @@
       "engine": "skills/brand-voice-definition/resources/voice-derive.js",
       "setup": {
         "install": "npx skills add sarojkjha/aaj-marketing-skills --skill brand-voice-definition",
-        "hosted_mcp": "https://aaj-engines-mcp.sarojkjha10.workers.dev/mcp",
+        "hosted_mcp": "https://mcp.aajconsult.com/mcp",
         "local_mcp": "node platform/mcp/server.mjs (Node 18 or newer)",
         "runtime": "Node 18 or newer for local runs; none for the hosted server",
         "agents_listed": [
@@ -770,7 +770,7 @@
       "engine": "skills/brand-voice-governance/resources/voice-check.js",
       "setup": {
         "install": "npx skills add sarojkjha/aaj-marketing-skills --skill brand-voice-governance",
-        "hosted_mcp": "https://aaj-engines-mcp.sarojkjha10.workers.dev/mcp",
+        "hosted_mcp": "https://mcp.aajconsult.com/mcp",
         "local_mcp": "node platform/mcp/server.mjs (Node 18 or newer)",
         "runtime": "Node 18 or newer for local runs; none for the hosted server",
         "agents_listed": [
@@ -824,7 +824,7 @@
       "engine": "skills/buying-committee-map/resources/buying-committee.js",
       "setup": {
         "install": "npx skills add sarojkjha/aaj-marketing-skills --skill buying-committee-map",
-        "hosted_mcp": "https://aaj-engines-mcp.sarojkjha10.workers.dev/mcp",
+        "hosted_mcp": "https://mcp.aajconsult.com/mcp",
         "local_mcp": "node platform/mcp/server.mjs (Node 18 or newer)",
         "runtime": "Node 18 or newer for local runs; none for the hosted server",
         "agents_listed": [
@@ -878,7 +878,7 @@
       "engine": "skills/campaign-orchestrator/resources/decision-guides.js",
       "setup": {
         "install": "npx skills add sarojkjha/aaj-marketing-skills --skill campaign-orchestrator",
-        "hosted_mcp": "https://aaj-engines-mcp.sarojkjha10.workers.dev/mcp",
+        "hosted_mcp": "https://mcp.aajconsult.com/mcp",
         "local_mcp": "node platform/mcp/server.mjs (Node 18 or newer)",
         "runtime": "Node 18 or newer for local runs; none for the hosted server",
         "agents_listed": [
@@ -932,7 +932,7 @@
       "engine": "skills/case-study-and-proof/resources/proof-check.js",
       "setup": {
         "install": "npx skills add sarojkjha/aaj-marketing-skills --skill case-study-and-proof",
-        "hosted_mcp": "https://aaj-engines-mcp.sarojkjha10.workers.dev/mcp",
+        "hosted_mcp": "https://mcp.aajconsult.com/mcp",
         "local_mcp": "node platform/mcp/server.mjs (Node 18 or newer)",
         "runtime": "Node 18 or newer for local runs; none for the hosted server",
         "agents_listed": [
@@ -986,7 +986,7 @@
       "engine": "skills/channel-selection-and-testing/resources/channel-test.js",
       "setup": {
         "install": "npx skills add sarojkjha/aaj-marketing-skills --skill channel-selection-and-testing",
-        "hosted_mcp": "https://aaj-engines-mcp.sarojkjha10.workers.dev/mcp",
+        "hosted_mcp": "https://mcp.aajconsult.com/mcp",
         "local_mcp": "node platform/mcp/server.mjs (Node 18 or newer)",
         "runtime": "Node 18 or newer for local runs; none for the hosted server",
         "agents_listed": [
@@ -1040,7 +1040,7 @@
       "engine": "skills/claims-and-proof-check/resources/claims-check.js",
       "setup": {
         "install": "npx skills add sarojkjha/aaj-marketing-skills --skill claims-and-proof-check",
-        "hosted_mcp": "https://aaj-engines-mcp.sarojkjha10.workers.dev/mcp",
+        "hosted_mcp": "https://mcp.aajconsult.com/mcp",
         "local_mcp": "node platform/mcp/server.mjs (Node 18 or newer)",
         "runtime": "Node 18 or newer for local runs; none for the hosted server",
         "agents_listed": [
@@ -1148,7 +1148,7 @@
       "engine": "skills/community-and-dark-social/resources/dark-social-read.js",
       "setup": {
         "install": "npx skills add sarojkjha/aaj-marketing-skills --skill community-and-dark-social",
-        "hosted_mcp": "https://aaj-engines-mcp.sarojkjha10.workers.dev/mcp",
+        "hosted_mcp": "https://mcp.aajconsult.com/mcp",
         "local_mcp": "node platform/mcp/server.mjs (Node 18 or newer)",
         "runtime": "Node 18 or newer for local runs; none for the hosted server",
         "agents_listed": [
@@ -1202,7 +1202,7 @@
       "engine": "skills/comparison-pages/resources/comparison-check.js",
       "setup": {
         "install": "npx skills add sarojkjha/aaj-marketing-skills --skill comparison-pages",
-        "hosted_mcp": "https://aaj-engines-mcp.sarojkjha10.workers.dev/mcp",
+        "hosted_mcp": "https://mcp.aajconsult.com/mcp",
         "local_mcp": "node platform/mcp/server.mjs (Node 18 or newer)",
         "runtime": "Node 18 or newer for local runs; none for the hosted server",
         "agents_listed": [
@@ -1256,7 +1256,7 @@
       "engine": "skills/competitor-messaging-matrix/resources/messaging-matrix.js",
       "setup": {
         "install": "npx skills add sarojkjha/aaj-marketing-skills --skill competitor-messaging-matrix",
-        "hosted_mcp": "https://aaj-engines-mcp.sarojkjha10.workers.dev/mcp",
+        "hosted_mcp": "https://mcp.aajconsult.com/mcp",
         "local_mcp": "node platform/mcp/server.mjs (Node 18 or newer)",
         "runtime": "Node 18 or newer for local runs; none for the hosted server",
         "agents_listed": [
@@ -1310,7 +1310,7 @@
       "engine": "skills/content-calendar-planning/resources/calendar-engine.js",
       "setup": {
         "install": "npx skills add sarojkjha/aaj-marketing-skills --skill content-calendar-planning",
-        "hosted_mcp": "https://aaj-engines-mcp.sarojkjha10.workers.dev/mcp",
+        "hosted_mcp": "https://mcp.aajconsult.com/mcp",
         "local_mcp": "node platform/mcp/server.mjs (Node 18 or newer)",
         "runtime": "Node 18 or newer for local runs; none for the hosted server",
         "agents_listed": [
@@ -1364,7 +1364,7 @@
       "engine": "skills/content-decay/resources/content-decay.js",
       "setup": {
         "install": "npx skills add sarojkjha/aaj-marketing-skills --skill content-decay",
-        "hosted_mcp": "https://aaj-engines-mcp.sarojkjha10.workers.dev/mcp",
+        "hosted_mcp": "https://mcp.aajconsult.com/mcp",
         "local_mcp": "node platform/mcp/server.mjs (Node 18 or newer)",
         "runtime": "Node 18 or newer for local runs; none for the hosted server",
         "agents_listed": [
@@ -1418,7 +1418,7 @@
       "engine": "skills/creator-partnerships/resources/creator-fit.js",
       "setup": {
         "install": "npx skills add sarojkjha/aaj-marketing-skills --skill creator-partnerships",
-        "hosted_mcp": "https://aaj-engines-mcp.sarojkjha10.workers.dev/mcp",
+        "hosted_mcp": "https://mcp.aajconsult.com/mcp",
         "local_mcp": "node platform/mcp/server.mjs (Node 18 or newer)",
         "runtime": "Node 18 or newer for local runs; none for the hosted server",
         "agents_listed": [
@@ -1472,7 +1472,7 @@
       "engine": "skills/customer-interview-synthesis/resources/interview-synthesis.js",
       "setup": {
         "install": "npx skills add sarojkjha/aaj-marketing-skills --skill customer-interview-synthesis",
-        "hosted_mcp": "https://aaj-engines-mcp.sarojkjha10.workers.dev/mcp",
+        "hosted_mcp": "https://mcp.aajconsult.com/mcp",
         "local_mcp": "node platform/mcp/server.mjs (Node 18 or newer)",
         "runtime": "Node 18 or newer for local runs; none for the hosted server",
         "agents_listed": [
@@ -1526,7 +1526,7 @@
       "engine": "skills/customer-survey-design/resources/survey-design.js",
       "setup": {
         "install": "npx skills add sarojkjha/aaj-marketing-skills --skill customer-survey-design",
-        "hosted_mcp": "https://aaj-engines-mcp.sarojkjha10.workers.dev/mcp",
+        "hosted_mcp": "https://mcp.aajconsult.com/mcp",
         "local_mcp": "node platform/mcp/server.mjs (Node 18 or newer)",
         "runtime": "Node 18 or newer for local runs; none for the hosted server",
         "agents_listed": [
@@ -1580,7 +1580,7 @@
       "engine": "skills/email-lifecycle-sequence/resources/lifecycle-audit.js",
       "setup": {
         "install": "npx skills add sarojkjha/aaj-marketing-skills --skill email-lifecycle-sequence",
-        "hosted_mcp": "https://aaj-engines-mcp.sarojkjha10.workers.dev/mcp",
+        "hosted_mcp": "https://mcp.aajconsult.com/mcp",
         "local_mcp": "node platform/mcp/server.mjs (Node 18 or newer)",
         "runtime": "Node 18 or newer for local runs; none for the hosted server",
         "agents_listed": [
@@ -1634,7 +1634,7 @@
       "engine": "skills/first-marketing-hire/resources/hire-scorecard.js",
       "setup": {
         "install": "npx skills add sarojkjha/aaj-marketing-skills --skill first-marketing-hire",
-        "hosted_mcp": "https://aaj-engines-mcp.sarojkjha10.workers.dev/mcp",
+        "hosted_mcp": "https://mcp.aajconsult.com/mcp",
         "local_mcp": "node platform/mcp/server.mjs (Node 18 or newer)",
         "runtime": "Node 18 or newer for local runs; none for the hosted server",
         "agents_listed": [
@@ -1688,7 +1688,7 @@
       "engine": "skills/founder-led-content/resources/founder-channel.js",
       "setup": {
         "install": "npx skills add sarojkjha/aaj-marketing-skills --skill founder-led-content",
-        "hosted_mcp": "https://aaj-engines-mcp.sarojkjha10.workers.dev/mcp",
+        "hosted_mcp": "https://mcp.aajconsult.com/mcp",
         "local_mcp": "node platform/mcp/server.mjs (Node 18 or newer)",
         "runtime": "Node 18 or newer for local runs; none for the hosted server",
         "agents_listed": [
@@ -1742,7 +1742,7 @@
       "engine": "skills/funnel-leak-finder/resources/funnel-leak.js",
       "setup": {
         "install": "npx skills add sarojkjha/aaj-marketing-skills --skill funnel-leak-finder",
-        "hosted_mcp": "https://aaj-engines-mcp.sarojkjha10.workers.dev/mcp",
+        "hosted_mcp": "https://mcp.aajconsult.com/mcp",
         "local_mcp": "node platform/mcp/server.mjs (Node 18 or newer)",
         "runtime": "Node 18 or newer for local runs; none for the hosted server",
         "agents_listed": [
@@ -1796,7 +1796,7 @@
       "engine": "skills/geo-citation-tracker/resources/citation-tracker.js",
       "setup": {
         "install": "npx skills add sarojkjha/aaj-marketing-skills --skill geo-citation-tracker",
-        "hosted_mcp": "https://aaj-engines-mcp.sarojkjha10.workers.dev/mcp",
+        "hosted_mcp": "https://mcp.aajconsult.com/mcp",
         "local_mcp": "node platform/mcp/server.mjs (Node 18 or newer)",
         "runtime": "Node 18 or newer for local runs; none for the hosted server",
         "agents_listed": [
@@ -1850,7 +1850,7 @@
       "engine": "skills/incrementality-and-mmm/resources/incrementality.js",
       "setup": {
         "install": "npx skills add sarojkjha/aaj-marketing-skills --skill incrementality-and-mmm",
-        "hosted_mcp": "https://aaj-engines-mcp.sarojkjha10.workers.dev/mcp",
+        "hosted_mcp": "https://mcp.aajconsult.com/mcp",
         "local_mcp": "node platform/mcp/server.mjs (Node 18 or newer)",
         "runtime": "Node 18 or newer for local runs; none for the hosted server",
         "agents_listed": [
@@ -1904,7 +1904,7 @@
       "engine": "skills/lead-handoff-sla/resources/handoff-sla.js",
       "setup": {
         "install": "npx skills add sarojkjha/aaj-marketing-skills --skill lead-handoff-sla",
-        "hosted_mcp": "https://aaj-engines-mcp.sarojkjha10.workers.dev/mcp",
+        "hosted_mcp": "https://mcp.aajconsult.com/mcp",
         "local_mcp": "node platform/mcp/server.mjs (Node 18 or newer)",
         "runtime": "Node 18 or newer for local runs; none for the hosted server",
         "agents_listed": [
@@ -1958,7 +1958,7 @@
       "engine": "skills/lead-magnet-and-free-tool-design/resources/lead-magnet-fit.js",
       "setup": {
         "install": "npx skills add sarojkjha/aaj-marketing-skills --skill lead-magnet-and-free-tool-design",
-        "hosted_mcp": "https://aaj-engines-mcp.sarojkjha10.workers.dev/mcp",
+        "hosted_mcp": "https://mcp.aajconsult.com/mcp",
         "local_mcp": "node platform/mcp/server.mjs (Node 18 or newer)",
         "runtime": "Node 18 or newer for local runs; none for the hosted server",
         "agents_listed": [
@@ -2012,7 +2012,7 @@
       "engine": "skills/lifecycle-and-retention/resources/retention.js",
       "setup": {
         "install": "npx skills add sarojkjha/aaj-marketing-skills --skill lifecycle-and-retention",
-        "hosted_mcp": "https://aaj-engines-mcp.sarojkjha10.workers.dev/mcp",
+        "hosted_mcp": "https://mcp.aajconsult.com/mcp",
         "local_mcp": "node platform/mcp/server.mjs (Node 18 or newer)",
         "runtime": "Node 18 or newer for local runs; none for the hosted server",
         "agents_listed": [
@@ -2066,7 +2066,7 @@
       "engine": "skills/market-sizing/resources/market-size.js",
       "setup": {
         "install": "npx skills add sarojkjha/aaj-marketing-skills --skill market-sizing",
-        "hosted_mcp": "https://aaj-engines-mcp.sarojkjha10.workers.dev/mcp",
+        "hosted_mcp": "https://mcp.aajconsult.com/mcp",
         "local_mcp": "node platform/mcp/server.mjs (Node 18 or newer)",
         "runtime": "Node 18 or newer for local runs; none for the hosted server",
         "agents_listed": [
@@ -2120,7 +2120,7 @@
       "engine": "skills/marketing-budget-planning/resources/budget-planner.js",
       "setup": {
         "install": "npx skills add sarojkjha/aaj-marketing-skills --skill marketing-budget-planning",
-        "hosted_mcp": "https://aaj-engines-mcp.sarojkjha10.workers.dev/mcp",
+        "hosted_mcp": "https://mcp.aajconsult.com/mcp",
         "local_mcp": "node platform/mcp/server.mjs (Node 18 or newer)",
         "runtime": "Node 18 or newer for local runs; none for the hosted server",
         "agents_listed": [
@@ -2174,7 +2174,7 @@
       "engine": "skills/marketing-leadership-model/resources/leadership-model.js",
       "setup": {
         "install": "npx skills add sarojkjha/aaj-marketing-skills --skill marketing-leadership-model",
-        "hosted_mcp": "https://aaj-engines-mcp.sarojkjha10.workers.dev/mcp",
+        "hosted_mcp": "https://mcp.aajconsult.com/mcp",
         "local_mcp": "node platform/mcp/server.mjs (Node 18 or newer)",
         "runtime": "Node 18 or newer for local runs; none for the hosted server",
         "agents_listed": [
@@ -2228,7 +2228,7 @@
       "engine": "skills/marketing-maturity-assessment/resources/maturity-assessment.js",
       "setup": {
         "install": "npx skills add sarojkjha/aaj-marketing-skills --skill marketing-maturity-assessment",
-        "hosted_mcp": "https://aaj-engines-mcp.sarojkjha10.workers.dev/mcp",
+        "hosted_mcp": "https://mcp.aajconsult.com/mcp",
         "local_mcp": "node platform/mcp/server.mjs (Node 18 or newer)",
         "runtime": "Node 18 or newer for local runs; none for the hosted server",
         "agents_listed": [
@@ -2282,7 +2282,7 @@
       "engine": "skills/marketing-report/resources/marketing-report.js",
       "setup": {
         "install": "npx skills add sarojkjha/aaj-marketing-skills --skill marketing-report",
-        "hosted_mcp": "https://aaj-engines-mcp.sarojkjha10.workers.dev/mcp",
+        "hosted_mcp": "https://mcp.aajconsult.com/mcp",
         "local_mcp": "node platform/mcp/server.mjs (Node 18 or newer)",
         "runtime": "Node 18 or newer for local runs; none for the hosted server",
         "agents_listed": [
@@ -2336,7 +2336,7 @@
       "engine": "skills/objection-handling/resources/battlecard.js",
       "setup": {
         "install": "npx skills add sarojkjha/aaj-marketing-skills --skill objection-handling",
-        "hosted_mcp": "https://aaj-engines-mcp.sarojkjha10.workers.dev/mcp",
+        "hosted_mcp": "https://mcp.aajconsult.com/mcp",
         "local_mcp": "node platform/mcp/server.mjs (Node 18 or newer)",
         "runtime": "Node 18 or newer for local runs; none for the hosted server",
         "agents_listed": [
@@ -2390,7 +2390,7 @@
       "engine": "skills/paid-media-budget-allocation/resources/allocation-engine.js",
       "setup": {
         "install": "npx skills add sarojkjha/aaj-marketing-skills --skill paid-media-budget-allocation",
-        "hosted_mcp": "https://aaj-engines-mcp.sarojkjha10.workers.dev/mcp",
+        "hosted_mcp": "https://mcp.aajconsult.com/mcp",
         "local_mcp": "node platform/mcp/server.mjs (Node 18 or newer)",
         "runtime": "Node 18 or newer for local runs; none for the hosted server",
         "agents_listed": [
@@ -2444,7 +2444,7 @@
       "engine": "skills/paid-search-account-audit/resources/search-audit.js",
       "setup": {
         "install": "npx skills add sarojkjha/aaj-marketing-skills --skill paid-search-account-audit",
-        "hosted_mcp": "https://aaj-engines-mcp.sarojkjha10.workers.dev/mcp",
+        "hosted_mcp": "https://mcp.aajconsult.com/mcp",
         "local_mcp": "node platform/mcp/server.mjs (Node 18 or newer)",
         "runtime": "Node 18 or newer for local runs; none for the hosted server",
         "agents_listed": [
@@ -2498,7 +2498,7 @@
       "engine": "skills/partnerships-and-co-marketing/resources/partner-fit.js",
       "setup": {
         "install": "npx skills add sarojkjha/aaj-marketing-skills --skill partnerships-and-co-marketing",
-        "hosted_mcp": "https://aaj-engines-mcp.sarojkjha10.workers.dev/mcp",
+        "hosted_mcp": "https://mcp.aajconsult.com/mcp",
         "local_mcp": "node platform/mcp/server.mjs (Node 18 or newer)",
         "runtime": "Node 18 or newer for local runs; none for the hosted server",
         "agents_listed": [
@@ -2552,7 +2552,7 @@
       "engine": "skills/pilot-to-contract/resources/pilot-plan.js",
       "setup": {
         "install": "npx skills add sarojkjha/aaj-marketing-skills --skill pilot-to-contract",
-        "hosted_mcp": "https://aaj-engines-mcp.sarojkjha10.workers.dev/mcp",
+        "hosted_mcp": "https://mcp.aajconsult.com/mcp",
         "local_mcp": "node platform/mcp/server.mjs (Node 18 or newer)",
         "runtime": "Node 18 or newer for local runs; none for the hosted server",
         "agents_listed": [
@@ -2606,7 +2606,7 @@
       "engine": "skills/pipeline-and-forecast/resources/forecast.js",
       "setup": {
         "install": "npx skills add sarojkjha/aaj-marketing-skills --skill pipeline-and-forecast",
-        "hosted_mcp": "https://aaj-engines-mcp.sarojkjha10.workers.dev/mcp",
+        "hosted_mcp": "https://mcp.aajconsult.com/mcp",
         "local_mcp": "node platform/mcp/server.mjs (Node 18 or newer)",
         "runtime": "Node 18 or newer for local runs; none for the hosted server",
         "agents_listed": [
@@ -2660,7 +2660,7 @@
       "engine": "skills/plg-upgrade-prompts/resources/upgrade-funnel.js",
       "setup": {
         "install": "npx skills add sarojkjha/aaj-marketing-skills --skill plg-upgrade-prompts",
-        "hosted_mcp": "https://aaj-engines-mcp.sarojkjha10.workers.dev/mcp",
+        "hosted_mcp": "https://mcp.aajconsult.com/mcp",
         "local_mcp": "node platform/mcp/server.mjs (Node 18 or newer)",
         "runtime": "Node 18 or newer for local runs; none for the hosted server",
         "agents_listed": [
@@ -2714,7 +2714,7 @@
       "engine": "skills/positioning-statement/resources/positioning.js",
       "setup": {
         "install": "npx skills add sarojkjha/aaj-marketing-skills --skill positioning-statement",
-        "hosted_mcp": "https://aaj-engines-mcp.sarojkjha10.workers.dev/mcp",
+        "hosted_mcp": "https://mcp.aajconsult.com/mcp",
         "local_mcp": "node platform/mcp/server.mjs (Node 18 or newer)",
         "runtime": "Node 18 or newer for local runs; none for the hosted server",
         "agents_listed": [
@@ -2768,7 +2768,7 @@
       "engine": "skills/pr-and-earned-media/resources/newsworthiness.js",
       "setup": {
         "install": "npx skills add sarojkjha/aaj-marketing-skills --skill pr-and-earned-media",
-        "hosted_mcp": "https://aaj-engines-mcp.sarojkjha10.workers.dev/mcp",
+        "hosted_mcp": "https://mcp.aajconsult.com/mcp",
         "local_mcp": "node platform/mcp/server.mjs (Node 18 or newer)",
         "runtime": "Node 18 or newer for local runs; none for the hosted server",
         "agents_listed": [
@@ -2822,7 +2822,7 @@
       "engine": "skills/pricing-and-packaging/resources/price-packaging.js",
       "setup": {
         "install": "npx skills add sarojkjha/aaj-marketing-skills --skill pricing-and-packaging",
-        "hosted_mcp": "https://aaj-engines-mcp.sarojkjha10.workers.dev/mcp",
+        "hosted_mcp": "https://mcp.aajconsult.com/mcp",
         "local_mcp": "node platform/mcp/server.mjs (Node 18 or newer)",
         "runtime": "Node 18 or newer for local runs; none for the hosted server",
         "agents_listed": [
@@ -2876,7 +2876,7 @@
       "engine": "skills/pricing-page-teardown/resources/pricing-teardown.js",
       "setup": {
         "install": "npx skills add sarojkjha/aaj-marketing-skills --skill pricing-page-teardown",
-        "hosted_mcp": "https://aaj-engines-mcp.sarojkjha10.workers.dev/mcp",
+        "hosted_mcp": "https://mcp.aajconsult.com/mcp",
         "local_mcp": "node platform/mcp/server.mjs (Node 18 or newer)",
         "runtime": "Node 18 or newer for local runs; none for the hosted server",
         "agents_listed": [
@@ -2930,7 +2930,7 @@
       "engine": "skills/product-launch/resources/launch.js",
       "setup": {
         "install": "npx skills add sarojkjha/aaj-marketing-skills --skill product-launch",
-        "hosted_mcp": "https://aaj-engines-mcp.sarojkjha10.workers.dev/mcp",
+        "hosted_mcp": "https://mcp.aajconsult.com/mcp",
         "local_mcp": "node platform/mcp/server.mjs (Node 18 or newer)",
         "runtime": "Node 18 or newer for local runs; none for the hosted server",
         "agents_listed": [
@@ -2984,7 +2984,7 @@
       "engine": "skills/referral-program-design/resources/referral-economics.js",
       "setup": {
         "install": "npx skills add sarojkjha/aaj-marketing-skills --skill referral-program-design",
-        "hosted_mcp": "https://aaj-engines-mcp.sarojkjha10.workers.dev/mcp",
+        "hosted_mcp": "https://mcp.aajconsult.com/mcp",
         "local_mcp": "node platform/mcp/server.mjs (Node 18 or newer)",
         "runtime": "Node 18 or newer for local runs; none for the hosted server",
         "agents_listed": [
@@ -3038,7 +3038,7 @@
       "engine": "skills/revenue-to-pipeline/resources/pipeline-plan.js",
       "setup": {
         "install": "npx skills add sarojkjha/aaj-marketing-skills --skill revenue-to-pipeline",
-        "hosted_mcp": "https://aaj-engines-mcp.sarojkjha10.workers.dev/mcp",
+        "hosted_mcp": "https://mcp.aajconsult.com/mcp",
         "local_mcp": "node platform/mcp/server.mjs (Node 18 or newer)",
         "runtime": "Node 18 or newer for local runs; none for the hosted server",
         "agents_listed": [
@@ -3092,7 +3092,7 @@
       "engine": "skills/review-mining/resources/review-miner.js",
       "setup": {
         "install": "npx skills add sarojkjha/aaj-marketing-skills --skill review-mining",
-        "hosted_mcp": "https://aaj-engines-mcp.sarojkjha10.workers.dev/mcp",
+        "hosted_mcp": "https://mcp.aajconsult.com/mcp",
         "local_mcp": "node platform/mcp/server.mjs (Node 18 or newer)",
         "runtime": "Node 18 or newer for local runs; none for the hosted server",
         "agents_listed": [
@@ -3146,7 +3146,7 @@
       "engine": "skills/saas-growth-efficiency/resources/growth-efficiency.js",
       "setup": {
         "install": "npx skills add sarojkjha/aaj-marketing-skills --skill saas-growth-efficiency",
-        "hosted_mcp": "https://aaj-engines-mcp.sarojkjha10.workers.dev/mcp",
+        "hosted_mcp": "https://mcp.aajconsult.com/mcp",
         "local_mcp": "node platform/mcp/server.mjs (Node 18 or newer)",
         "runtime": "Node 18 or newer for local runs; none for the hosted server",
         "agents_listed": [
@@ -3200,7 +3200,7 @@
       "engine": "skills/search-demand-reader/resources/search-demand.js",
       "setup": {
         "install": "npx skills add sarojkjha/aaj-marketing-skills --skill search-demand-reader",
-        "hosted_mcp": "https://aaj-engines-mcp.sarojkjha10.workers.dev/mcp",
+        "hosted_mcp": "https://mcp.aajconsult.com/mcp",
         "local_mcp": "node platform/mcp/server.mjs (Node 18 or newer)",
         "runtime": "Node 18 or newer for local runs; none for the hosted server",
         "agents_listed": [
@@ -3254,7 +3254,7 @@
       "engine": "skills/seo-content-brief/resources/brief-check.js",
       "setup": {
         "install": "npx skills add sarojkjha/aaj-marketing-skills --skill seo-content-brief",
-        "hosted_mcp": "https://aaj-engines-mcp.sarojkjha10.workers.dev/mcp",
+        "hosted_mcp": "https://mcp.aajconsult.com/mcp",
         "local_mcp": "node platform/mcp/server.mjs (Node 18 or newer)",
         "runtime": "Node 18 or newer for local runs; none for the hosted server",
         "agents_listed": [
@@ -3307,7 +3307,7 @@
       "engine": "skills/seo-geo-aeo-audit/resources/score.js",
       "setup": {
         "install": "npx skills add sarojkjha/aaj-marketing-skills --skill seo-geo-aeo-audit",
-        "hosted_mcp": "https://aaj-engines-mcp.sarojkjha10.workers.dev/mcp",
+        "hosted_mcp": "https://mcp.aajconsult.com/mcp",
         "local_mcp": "node platform/mcp/server.mjs (Node 18 or newer)",
         "runtime": "Node 18 or newer for local runs; none for the hosted server",
         "agents_listed": [
@@ -3361,7 +3361,7 @@
       "engine": "skills/signup-flow-optimizer/resources/friction-score.js",
       "setup": {
         "install": "npx skills add sarojkjha/aaj-marketing-skills --skill signup-flow-optimizer",
-        "hosted_mcp": "https://aaj-engines-mcp.sarojkjha10.workers.dev/mcp",
+        "hosted_mcp": "https://mcp.aajconsult.com/mcp",
         "local_mcp": "node platform/mcp/server.mjs (Node 18 or newer)",
         "runtime": "Node 18 or newer for local runs; none for the hosted server",
         "agents_listed": [
@@ -3415,7 +3415,7 @@
       "engine": "skills/structured-data-for-ai-search/resources/schema-check.js",
       "setup": {
         "install": "npx skills add sarojkjha/aaj-marketing-skills --skill structured-data-for-ai-search",
-        "hosted_mcp": "https://aaj-engines-mcp.sarojkjha10.workers.dev/mcp",
+        "hosted_mcp": "https://mcp.aajconsult.com/mcp",
         "local_mcp": "node platform/mcp/server.mjs (Node 18 or newer)",
         "runtime": "Node 18 or newer for local runs; none for the hosted server",
         "agents_listed": [
@@ -3469,7 +3469,7 @@
       "engine": "skills/target-account-list/resources/score-accounts.js",
       "setup": {
         "install": "npx skills add sarojkjha/aaj-marketing-skills --skill target-account-list",
-        "hosted_mcp": "https://aaj-engines-mcp.sarojkjha10.workers.dev/mcp",
+        "hosted_mcp": "https://mcp.aajconsult.com/mcp",
         "local_mcp": "node platform/mcp/server.mjs (Node 18 or newer)",
         "runtime": "Node 18 or newer for local runs; none for the hosted server",
         "agents_listed": [
@@ -3523,7 +3523,7 @@
       "engine": "skills/unit-economics/resources/unit-economics.js",
       "setup": {
         "install": "npx skills add sarojkjha/aaj-marketing-skills --skill unit-economics",
-        "hosted_mcp": "https://aaj-engines-mcp.sarojkjha10.workers.dev/mcp",
+        "hosted_mcp": "https://mcp.aajconsult.com/mcp",
         "local_mcp": "node platform/mcp/server.mjs (Node 18 or newer)",
         "runtime": "Node 18 or newer for local runs; none for the hosted server",
         "agents_listed": [
@@ -3577,7 +3577,7 @@
       "engine": "skills/webinar-and-event-programs/resources/event-program.js",
       "setup": {
         "install": "npx skills add sarojkjha/aaj-marketing-skills --skill webinar-and-event-programs",
-        "hosted_mcp": "https://aaj-engines-mcp.sarojkjha10.workers.dev/mcp",
+        "hosted_mcp": "https://mcp.aajconsult.com/mcp",
         "local_mcp": "node platform/mcp/server.mjs (Node 18 or newer)",
         "runtime": "Node 18 or newer for local runs; none for the hosted server",
         "agents_listed": [
@@ -3631,7 +3631,7 @@
       "engine": "skills/website-conversion-audit/resources/score.js",
       "setup": {
         "install": "npx skills add sarojkjha/aaj-marketing-skills --skill website-conversion-audit",
-        "hosted_mcp": "https://aaj-engines-mcp.sarojkjha10.workers.dev/mcp",
+        "hosted_mcp": "https://mcp.aajconsult.com/mcp",
         "local_mcp": "node platform/mcp/server.mjs (Node 18 or newer)",
         "runtime": "Node 18 or newer for local runs; none for the hosted server",
         "agents_listed": [
@@ -3685,7 +3685,7 @@
       "engine": "skills/win-loss-analysis/resources/win-loss.js",
       "setup": {
         "install": "npx skills add sarojkjha/aaj-marketing-skills --skill win-loss-analysis",
-        "hosted_mcp": "https://aaj-engines-mcp.sarojkjha10.workers.dev/mcp",
+        "hosted_mcp": "https://mcp.aajconsult.com/mcp",
         "local_mcp": "node platform/mcp/server.mjs (Node 18 or newer)",
         "runtime": "Node 18 or newer for local runs; none for the hosted server",
         "agents_listed": [

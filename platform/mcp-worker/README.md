@@ -1,6 +1,6 @@
 # Hosted AAJ Engines MCP server (Cloudflare Worker)
 
-**Live at `https://aaj-engines-mcp.sarojkjha10.workers.dev/mcp`** (deployed Oct 10, 2026; `/health` on the same host).
+**Live at `https://mcp.aajconsult.com/mcp`** (`/health` on the same host). The first address, `https://aaj-engines-mcp.sarojkjha10.workers.dev/mcp`, stays on for connectors added with it.
 
 This is the same five tools as the local server in `platform/mcp/`, served at one URL. Founders add that URL as a custom connector in Claude, ChatGPT or any MCP client instead of cloning the repo.
 
@@ -42,11 +42,15 @@ npx wrangler deploy
 
 Wrangler prints the address, `https://aaj-engines-mcp.<your-subdomain>.workers.dev`. The MCP endpoint is that address plus `/mcp`.
 
-### Use mcp.aajconsult.com instead
-1. Uncomment the `routes` line in `wrangler.jsonc`.
-2. Run `npx wrangler deploy` again.
+### mcp.aajconsult.com
+`wrangler.jsonc` serves the worker at `mcp.aajconsult.com` as a custom domain, and keeps the workers.dev address on so connectors added with it keep working. Cloudflare creates the DNS record and certificate on deploy, as long as:
+1. aajconsult.com is on the same Cloudflare account as the worker;
+2. there is no existing DNS record named `mcp` on that zone;
+3. the deploy token (the `CLOUDFLARE_API_TOKEN` secret the publish workflow uses) has **Zone > Workers Routes > Edit** on aajconsult.com, besides **Account > Workers Scripts > Edit**.
 
-Cloudflare creates the DNS record and certificate, as long as aajconsult.com is on the same Cloudflare account.
+If the token lacks the zone permission, the deploy stops with an authentication error. Either add the permission to the token, or add the custom domain once by hand (Workers & Pages > aaj-engines-mcp > Settings > Domains & Routes > Add > Custom domain > `mcp.aajconsult.com`); later deploys then keep it.
+
+Switch the published links (README, server.json, `HOSTED_MCP` in `platform/lib/specs.mjs`, the skills site and the AAJ site) only after `https://mcp.aajconsult.com/health` answers.
 
 ### After you deploy
 - **Check the server.** `curl https://<host>/health` should return the skill and engine counts.
