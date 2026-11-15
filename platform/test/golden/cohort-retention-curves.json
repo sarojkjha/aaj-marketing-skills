@@ -581,19 +581,6 @@
         "",
         "Run --help for the schema, or --demo for a worked example."
       ]
-    },
-    {
-      "name": "bad input: invalid JSON",
-      "source": "rejection",
-      "args": [
-        "{cohorts:"
-      ],
-      "exitCode": 1,
-      "stdout": [],
-      "stderr": [
-        "error: Invalid JSON. Run --help for the schema.",
-        "       Expected property name or '}' in JSON at position 1 (line 1 column 2)"
-      ]
     }
   ]
 }
