@@ -24,7 +24,8 @@
  *     (churnMonthly is a percentage: 3 = 3%, 0.9 = 0.9%. Values below 0.1 are
  *      rejected as likely proportions; use "lifetimeMonths" for churn that low.)
  *     (alt: "lifetimeMonths":33 instead of churnMonthly; "cac" can be replaced
- *      by "adSpend"+"customers" to derive blended CAC)
+ *      by "adSpend"+"customers" to derive blended CAC; "arpaMonthly" can be
+ *      replaced by "mrr"+"activeCustomers" to work ARPA out as MRR / customers)
  *   Ecommerce:
  *     { "model":"ecommerce", "aov":80, "grossMargin":60,
  *       "ordersPerYear":3, "retentionYears":2, "cac":40 }
@@ -35,6 +36,15 @@
  *     "paybackTargetMonths": 9      your own payback bar (overrides the default)
  *     "segment": "smb"              subscription only: smb | midmarket | enterprise
  *                                   (uses Bessemer's 12 / 18 / 24-month bar)
+ *     "targetLtvCac": 4             the LTV:CAC you want to hold (default 3,
+ *                                   David Skok's reference point; at least 1)
+ *
+ * CAC CEILING — the most you can pay to win a customer and still hold:
+ *   your LTV:CAC target:   LTV / target
+ *   your payback bar:      monthly gross profit x the bar's months
+ *                          (only when a payback bar applies)
+ * The lower of the two is the ceiling. Both are arithmetic on your inputs;
+ * the 3:1 and payback bars are the sourced reference points above.
  */
 
 // --- AAJ arg normalisation ---------------------------------------------------
@@ -58,6 +68,7 @@ process.argv = process.argv.map((a, i) =>
 
 function money(n){ return '$' + Math.round(n).toLocaleString(); }
 function one(n){ return (Math.round(n*10)/10).toLocaleString(); }
+function money2(n){ return '$' + (Math.round(n*100)/100).toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 }); }
 // Show two decimals when one-decimal rounding would land on or cross a verdict
 // threshold, so the printed number never contradicts the verdict beside it
 // (e.g. 2.98 must not print as "3:1 is below 3:1").
@@ -74,6 +85,9 @@ function deriveCAC(c){
   if (c.adSpend != null && c.customers) return c.adSpend / c.customers;
   return null;
 }
+
+// ARPA as given, or worked out from MRR and the number of paying customers.
+function arpaOf(c){ return c.arpaMonthly != null ? c.arpaMonthly : c.mrr / c.activeCustomers; }
 
 function compute(c){
   const gm = (c.grossMargin != null ? c.grossMargin : 100) / 100;
@@ -94,7 +108,7 @@ function compute(c){
   } else { // subscription
     const churn = c.churnMonthly != null ? c.churnMonthly / 100 : (c.lifetimeMonths ? 1 / c.lifetimeMonths : null);
     const lifeMonths = c.lifetimeMonths != null ? c.lifetimeMonths : (churn ? 1 / churn : null);
-    monthlyGP = c.arpaMonthly * gm;
+    monthlyGP = arpaOf(c) * gm;
     ltv = churn ? monthlyGP / churn : monthlyGP * (lifeMonths || 0);
     lifetimeLabel = churn ? `${pct(churn*100)}% monthly churn (~${one(lifeMonths)} mo lifetime)` : `${one(lifeMonths)} mo lifetime`;
   }
@@ -115,6 +129,17 @@ function paybackBar(c, model){
   return { months: 12, source: "David Skok's SaaS guidance" };
 }
 
+// The most CAC that still holds the LTV:CAC target and, when a payback bar
+// applies, pays back within it. Arithmetic on the inputs, not a benchmark.
+function cacCeiling(r, c, model){
+  const target = c.targetLtvCac != null ? c.targetLtvCac : 3;
+  const atRatio = { ratio: target, source: c.targetLtvCac != null ? 'your own target' : (model === 'subscription' ? "David Skok's reference point" : "David Skok's SaaS reference point"), cac: r.ltv / target };
+  const bar = paybackBar(c, model);
+  const withinPayback = bar && r.monthlyGP > 0 ? { months: bar.months, source: bar.source, cac: r.monthlyGP * bar.months } : null;
+  const ceiling = withinPayback ? Math.min(atRatio.cac, withinPayback.cac) : atRatio.cac;
+  return { atRatio, withinPayback, ceiling };
+}
+
 function verdict(r, c, model){
   const lines = [];
   if (r.ltvCac == null) { lines.push('• No CAC supplied — provide cac, or adSpend + customers, to assess efficiency.'); return lines; }
@@ -130,6 +155,10 @@ function verdict(r, c, model){
     else if (r.paybackMonths <= bar.months) lines.push(`✓ CAC payback ${months(r.paybackMonths, bar.months)} mo is within ${bar.months} months (${bar.source}).`);
     else lines.push(`▼ CAC payback ${months(r.paybackMonths, bar.months)} mo exceeds ${bar.months} months (${bar.source}) — cash is tied up longer; watch burn.`);
   }
+  const ce = cacCeiling(r, c, model);
+  const gap = ce.ceiling - r.cac;
+  const which = ce.withinPayback && ce.withinPayback.cac < ce.atRatio.cac ? `the ${ce.withinPayback.months}-month payback` : `${one(ce.atRatio.ratio)}:1`;
+  lines.push(`• CAC ceiling ${money(ce.ceiling)}, set by ${which}: your CAC of ${money(r.cac)} is ${Math.abs(Math.round(gap)) < 1 ? 'at the ceiling' : `${money(Math.abs(gap))} ${gap > 0 ? 'under' : 'over'} it`}. (Arithmetic on your inputs, not a benchmark.)`);
   return lines;
 }
 
@@ -144,11 +173,15 @@ function render(c){
   out.push('');
   out.push(`AAJ Unit Economics — ${c.model || 'subscription'}`);
   out.push('-'.repeat(54));
+  if ((c.model || 'subscription') === 'subscription' && c.arpaMonthly == null) out.push(`ARPA                    ${money2(arpaOf(c))}/mo   (MRR ${money(c.mrr)} / ${c.activeCustomers.toLocaleString()} customers)`);
   out.push(`Gross-margin LTV        ${money(r.ltv)}   (${r.lifetimeLabel})`);
   out.push(`Monthly gross profit    ${money(r.monthlyGP)}/customer`);
   out.push(`CAC                     ${r.cac != null ? money(r.cac) : '—'}`);
   out.push(`LTV : CAC               ${r.ltvCac != null ? ratio(r.ltvCac)+':1' : '—'}`);
   out.push(`CAC payback             ${r.paybackMonths != null ? months(r.paybackMonths, (paybackBar(c, c.model || 'subscription') || {}).months)+' mo' : '—'}`);
+  const ce = cacCeiling(r, c, c.model || 'subscription');
+  out.push(`Most CAC at ${(one(ce.atRatio.ratio)+':1').padEnd(12)}${money(ce.atRatio.cac)}   (LTV / ${one(ce.atRatio.ratio)}, ${ce.atRatio.source})`);
+  if (ce.withinPayback) out.push(`Most CAC, ${(ce.withinPayback.months+'-mo payback').padEnd(14)}${money(ce.withinPayback.cac)}   (monthly gross profit x ${ce.withinPayback.months}, ${ce.withinPayback.source})`);
   out.push('');
   verdict(r, c, c.model || 'subscription').forEach(l => out.push(l));
   out.push('');
@@ -161,6 +194,12 @@ function render(c){
     ltvCac: r.ltvCac != null ? Math.round(r.ltvCac*100)/100 : null,
     cacPaybackMonths: r.paybackMonths != null ? Math.round(r.paybackMonths*10)/10 : null,
     monthlyGrossProfit: Math.round(r.monthlyGP),
+    arpaMonthly: (c.model || 'subscription') === 'subscription' ? Math.round(arpaOf(c)*100)/100 : undefined,
+    cacCeiling: (ce2 => ({
+      cac: Math.round(ce2.ceiling),
+      atRatio: { ratio: ce2.atRatio.ratio, source: ce2.atRatio.source, cac: Math.round(ce2.atRatio.cac) },
+      withinPayback: ce2.withinPayback ? { months: ce2.withinPayback.months, source: ce2.withinPayback.source, cac: Math.round(ce2.withinPayback.cac) } : null
+    }))(cacCeiling(r, c, c.model || 'subscription')),
     paybackBar: (b => b ? { months: b.months, source: b.source } : null)(paybackBar(c, c.model || 'subscription')),
     references: REFERENCES
   }, null, 2));
@@ -171,15 +210,15 @@ function render(c){
 // Fail loudly on bad input. Without this, an unrecognised key name yields
 // "LTV $NaN" and a wrong-but-confident verdict, which reads as a broken tool.
 const SCHEMA = {
-  subscription: { required: ['arpaMonthly', 'grossMargin'],
-                  oneOf: [['churnMonthly', 'lifetimeMonths']],
-                  optional: ['churnMonthly', 'lifetimeMonths'] },
+  subscription: { required: ['grossMargin'],
+                  oneOf: [['arpaMonthly', 'mrr'], ['churnMonthly', 'lifetimeMonths']],
+                  optional: ['arpaMonthly', 'mrr', 'activeCustomers', 'churnMonthly', 'lifetimeMonths'] },
   ecommerce:    { required: ['aov', 'grossMargin', 'ordersPerYear', 'retentionYears'],
                   oneOf: [], optional: [] },
   services:     { required: ['acv', 'grossMargin', 'retentionYears'],
                   oneOf: [], optional: [] }
 };
-const COMMON = ['model', 'cac', 'adSpend', 'customers', 'paybackTargetMonths', 'segment'];
+const COMMON = ['model', 'cac', 'adSpend', 'customers', 'paybackTargetMonths', 'segment', 'targetLtvCac'];
 
 function udie(msg, hint) {
   console.error('error: ' + msg + (hint ? '\n       ' + hint : '') +
@@ -246,6 +285,22 @@ function validate(c) {
          `Use ${+(c.churnMonthly * 100).toFixed(2)} for ${+(c.churnMonthly * 100).toFixed(2)}%. If you really mean ${c.churnMonthly}% a month, set "lifetimeMonths": ${Math.round(100 / c.churnMonthly)} instead.`);
   }
   if (c.grossMargin > 100) udie(`"grossMargin" cannot exceed 100 (got ${c.grossMargin}).`);
+  // ARPA comes from one place: as given, or as MRR over paying customers.
+  if (c.arpaMonthly !== undefined && (c.mrr !== undefined || c.activeCustomers !== undefined)) {
+    udie('give "arpaMonthly", or "mrr" + "activeCustomers", not both.');
+  }
+  if (c.mrr !== undefined && c.activeCustomers === undefined) {
+    udie('"mrr" needs "activeCustomers" (paying customers) to work out ARPA.');
+  }
+  if (c.activeCustomers !== undefined && c.mrr === undefined) {
+    udie('"activeCustomers" is only used with "mrr" to work out ARPA.', 'Give "mrr" too, or use "arpaMonthly".');
+  }
+  if (c.activeCustomers !== undefined && (!Number.isInteger(c.activeCustomers) || c.activeCustomers < 1)) {
+    udie(`"activeCustomers" must be a whole number of at least 1 (got ${c.activeCustomers}).`);
+  }
+  if (c.targetLtvCac !== undefined && c.targetLtvCac < 1) {
+    udie(`"targetLtvCac" must be at least 1 (got ${c.targetLtvCac}): below 1:1 every customer loses money.`);
+  }
   if (c.churnMonthly !== undefined && c.churnMonthly > 100) {
     udie(`"churnMonthly" cannot exceed 100 (got ${c.churnMonthly}).`);
   }
