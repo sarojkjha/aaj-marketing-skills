@@ -17,13 +17,13 @@ metadata:
   difficulty: Intermediate
   card: >-
     Scores and tiers accounts by ICP fit, showing the signals each matched.
-  version: 1.0.1
+  version: 1.1.0
   sprint: gtm-pipeline
   topic: sales-pipeline
   secondary_topics: [audience-research]
   agents: [Claude Code, Cursor, OpenAI Codex, Windsurf, Cline]
   inputs: The ICP and its predictive signals, plus a list of candidate accounts carrying those attributes.
-  outputs: A fit-scored, tiered (A/B/C) account list with matched signals and the weighting used.
+  outputs: A fit-scored, tiered (A/B/C, or Out when a disqualifier holds) account list with matched, lowering and ruling-out signals and the weighting used.
   related_aaj:
     - https://aajconsult.com/tools/icp-fit-scorer
     - https://aajconsult.com/resources/icp-target-account-scorecard
@@ -51,7 +51,7 @@ Turn the ICP's fit criteria into weighted, checkable signals, weight each by how
 
 ## Workflow
 
-1. **Turn ICP criteria into weighted signals** (industry match, employee-count band, uses a complementary tool, recent funding, hiring for a relevant role).
+1. **Turn ICP criteria into weighted signals** (industry match, employee-count band, uses a complementary tool, recent funding, hiring for a relevant role). A signal that is a matter of degree can be rated 0 to 10 instead of yes/no. A signal that makes a deal less likely (a competitor's customer, say) gets a negative weight. A hard no (outside the regions you can serve) is a disqualifier: it rules the account out whatever its score.
 2. **Weight by predictiveness**, using `win-loss-analysis` evidence if available.
 3. **Score with the engine** (see Run the tool) — it returns a 0–100 fit score and an A/B/C tier per account.
 4. **Calibrate against known-good customers**; fix the weights and re-run if they score low.
@@ -60,10 +60,13 @@ Turn the ICP's fit criteria into weighted, checkable signals, weight each by how
 ## The framework
 
 ```
-fit score = (sum of weights for matched signals / sum of all weights) × 100
-tier: A ≥ 70   ·   B 40–69   ·   C < 40
+value     = 1 for yes, 0 for no, rating ÷ 10 for a 0–10 rating
+fit score = max(0, sum of weight × value) ÷ sum of the positive weights × 100
+tier:       A ≥ 70, B 40–69, C < 40 (AAJ's cut-offs); Out when a disqualifier holds
 weights should reflect predictiveness of a good deal (win-loss evidence > gut)
 ```
+
+With only yes/no signals and positive weights, this is matched weight ÷ total weight × 100.
 
 ## Run the tool
 
@@ -73,7 +76,7 @@ weights should reflect predictiveness of a good deal (win-loss evidence > gut)
 node .agents/skills/target-account-list/resources/score-accounts.js --input=accounts.json
 node .agents/skills/target-account-list/resources/score-accounts.js  # built-in demo
 ```
-Input JSON: `{ "weights": { "industryMatch": 30, ... }, "accounts": [ { "name": "Prospect A", "signals": { "industryMatch": true, ... } } ] }`. It prints each account's fit score, tier, and matched signals, plus the A/B/C tally. Use these exact scores and tiers — don't restate them from memory.
+Input JSON: `{ "weights": { "industryMatch": 30, "competitorCustomer": -15, ... }, "disqualifiers": ["outsideRegion"], "accounts": [ { "name": "Prospect A", "domain": "example.com", "signals": { "industryMatch": true, "sizeBand": 7, "competitorCustomer": false, "outsideRegion": false } } ] }`. `disqualifiers` and `domain` are optional; a rating is a whole number from 0 to 10. It prints each account's fit score, tier, the signals it matched, any that lowered its score or ruled it out, the tally, and a JSON block. Use these exact scores and tiers; don't restate them from memory.
 
 ## Reference
 
