@@ -3514,7 +3514,7 @@
       "id": "unit-economics",
       "slug": "unit-economics",
       "title": "Unit Economics",
-      "version": "1.1.0",
+      "version": "1.2.0",
       "phase": "Diagnose",
       "category": "Analytics & Experimentation",
       "decision": "Can we afford to spend more on acquisition, and what CAC can we not exceed?",
