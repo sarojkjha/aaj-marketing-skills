@@ -78,7 +78,7 @@ commit = Σ amount for deals at prob ≥ 0.75   ·   best case = Σ amount (all 
 node .agents/skills/pipeline-and-forecast/resources/forecast.js --input=pipeline.json
 node .agents/skills/pipeline-and-forecast/resources/forecast.js  # built-in demo
 ```
-Input JSON: `{ "target": 500000, "winRate": 0.25, "stageProbabilities": { "Proposal": 0.5, ... }, "deals": [ { "name": "Prospect A", "amount": 60000, "stage": "Proposal" } ] }`. It prints the weighted forecast, commit vs best case, the early-stage share, coverage ratio with a healthy/thin flag, the gap, the new pipeline needed, and the recommended lever. Use these exact numbers — don't restate them from memory.
+Input JSON: `{ "target": 500000, "winRate": 0.25, "stageProbabilities": { "Proposal": 0.5, ... }, "deals": [ { "name": "Prospect A", "amount": 60000, "stage": "Proposal" } ] }`. In place of `winRate`, you can give `wonDeals` and `lostDeals`, the deals closed won and closed lost over the same past period, and the engine works out the win rate; use this when the counts come from a CRM. It prints the weighted forecast, commit vs best case, the early-stage share, coverage ratio with a healthy/thin flag, the gap, the new pipeline needed, and the recommended lever. Use these exact numbers — don't restate them from memory.
 
 ## Reference
 

@@ -24,6 +24,11 @@
  *     "deals": [ { "name": "Prospect A", "amount": 60000, "stage": "Proposal" }, ... ]
  *   }
  *
+ *   In place of "winRate", give the counts it comes from: "wonDeals" and "lostDeals",
+ *   the deals closed won and closed lost over the same past period. The engine
+ *   works out winRate = wonDeals / (wonDeals + lostDeals), so an agent reading a
+ *   CRM passes the CRM's counts and never divides them itself.
+ *
  * Recommended lever (first match wins):
  *   weighted ≥ target, commit ≥ target  -> ON TRACK
  *   weighted ≥ target, commit < target  -> ON TRACK ON AVERAGE, NOT COMMITTED
@@ -99,16 +104,36 @@ function main() {
     try { cfg = JSON.parse(inline); } catch (e) { console.error("Invalid JSON: " + e.message); process.exit(1); }
     source = "your input";
   }
-  if (!cfg || !Array.isArray(cfg.deals) || !cfg.stageProbabilities || typeof cfg.target !== "number" || typeof cfg.winRate !== "number") {
-    console.error('Give "target" (number), "winRate" (0-1), "stageProbabilities" ({stage: 0-1}) and "deals" ([{name, amount, stage}]).');
+  const hasCounts = cfg && (cfg.wonDeals !== undefined || cfg.lostDeals !== undefined);
+  if (!cfg || !Array.isArray(cfg.deals) || !cfg.stageProbabilities || typeof cfg.target !== "number" || (typeof cfg.winRate !== "number" && !hasCounts)) {
+    console.error('Give "target" (number), "winRate" (0-1) or "wonDeals" and "lostDeals" (counts), "stageProbabilities" ({stage: 0-1}) and "deals" ([{name, amount, stage}]).');
     process.exit(1);
   }
 
-  const known = ["target", "winRate", "stageProbabilities", "deals"];
+  const known = ["target", "winRate", "wonDeals", "lostDeals", "stageProbabilities", "deals"];
   const unknownKeys = Object.keys(cfg).filter((k) => !known.includes(k));
   if (unknownKeys.length) {
     console.error("Unrecognised field" + (unknownKeys.length > 1 ? "s" : "") + ": " + unknownKeys.map((k) => '"' + k + '"').join(", ") + ". Expected: " + known.join(", ") + ".");
     process.exit(1);
+  }
+  // Win rate from closed-deal counts: the engine divides, so the caller never has to.
+  let winFrom = "";
+  if (hasCounts) {
+    if (cfg.winRate !== undefined) {
+      console.error('Give "winRate" or "wonDeals" and "lostDeals", not both.');
+      process.exit(1);
+    }
+    const isCount = (n) => Number.isInteger(n) && n >= 0;
+    if (!isCount(cfg.wonDeals) || !isCount(cfg.lostDeals)) {
+      console.error('"wonDeals" and "lostDeals" are whole numbers, 0 or more: the deals closed won and closed lost over the same past period.');
+      process.exit(1);
+    }
+    if (cfg.wonDeals === 0) {
+      console.error("No deals were won in that period, so there is no win rate to plan with. Use a longer period.");
+      process.exit(1);
+    }
+    cfg.winRate = cfg.wonDeals / (cfg.wonDeals + cfg.lostDeals);
+    winFrom = `   (${cfg.wonDeals} won of ${cfg.wonDeals + cfg.lostDeals} closed)`;
   }
   const { target, winRate, stageProbabilities, deals } = cfg;
   // Match stage names ignoring case and surrounding spaces; stop on any that still
@@ -194,7 +219,7 @@ function main() {
   console.log("Source: " + source);
   console.log("");
   console.log("Target (quota):        " + money(target));
-  console.log("Win rate:              " + (winRate * 100).toFixed(0) + "%");
+  console.log("Win rate:              " + (winRate * 100).toFixed(0) + "%" + winFrom);
   console.log("Open pipeline:         " + money(openPipeline) + `  (${deals.length} deals)`);
   console.log("");
   console.log("Weighted forecast:     " + money(weighted) + "   <- expected (Σ amount × stage probability)");

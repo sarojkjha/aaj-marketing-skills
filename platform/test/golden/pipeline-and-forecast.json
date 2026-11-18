@@ -69,6 +69,55 @@
       "stderr": [
         "1 deal(s) have a negative amount: \"Prospect A\". Amounts are 0 or more."
       ]
+    },
+    {
+      "name": "win rate from won and lost counts",
+      "args": [
+        "{\"target\":200000,\"wonDeals\":12,\"lostDeals\":36,\"stageProbabilities\":{\"Discovery\":0.1,\"Proposal\":0.5,\"Negotiation\":0.75},\"deals\":[{\"name\":\"Example Co. renewal\",\"amount\":\"60000\",\"stage\":\"Proposal\"},{\"name\":\"Example Co. expansion\",\"amount\":120000,\"stage\":\"discovery\"},{\"name\":\"Example Co. new site\",\"amount\":90000,\"stage\":\"Negotiation\"}]}"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "AAJ — Pipeline & Forecast",
+        "Source: your input",
+        "",
+        "Target (quota):        $200,000",
+        "Win rate:              25%   (12 won of 48 closed)",
+        "Open pipeline:         $270,000  (3 deals)",
+        "",
+        "Weighted forecast:     $109,500   <- expected (Σ amount × stage probability)",
+        "  Commit (>=75%):      $90,000",
+        "  Best case (all open):$270,000",
+        "Early-stage share:     44% of open pipeline below 25% probability",
+        "",
+        "Coverage:              1.4x   (need ~4.0x at a 25% win rate)  ->  THIN",
+        "Gap to target:         $90,500",
+        "New pipeline needed:   $362,000   (gap ÷ win rate)",
+        "",
+        "Recommended lever: BUILD PIPELINE — coverage is below what your win rate requires; add qualified pipeline. New pipeline closes on your full sales cycle, so most of it lands after this quarter."
+      ],
+      "stderr": []
+    },
+    {
+      "name": "win rate and counts together are refused",
+      "args": [
+        "{\"target\":200000,\"winRate\":0.25,\"wonDeals\":12,\"lostDeals\":36,\"stageProbabilities\":{\"Discovery\":0.1,\"Proposal\":0.5,\"Negotiation\":0.75},\"deals\":[{\"name\":\"Example Co. renewal\",\"amount\":\"60000\",\"stage\":\"Proposal\"},{\"name\":\"Example Co. expansion\",\"amount\":120000,\"stage\":\"discovery\"},{\"name\":\"Example Co. new site\",\"amount\":90000,\"stage\":\"Negotiation\"}]}"
+      ],
+      "exitCode": 1,
+      "stdout": [],
+      "stderr": [
+        "Give \"winRate\" or \"wonDeals\" and \"lostDeals\", not both."
+      ]
+    },
+    {
+      "name": "no won deals is refused",
+      "args": [
+        "{\"target\":200000,\"wonDeals\":0,\"lostDeals\":36,\"stageProbabilities\":{\"Discovery\":0.1,\"Proposal\":0.5,\"Negotiation\":0.75},\"deals\":[{\"name\":\"Example Co. renewal\",\"amount\":\"60000\",\"stage\":\"Proposal\"},{\"name\":\"Example Co. expansion\",\"amount\":120000,\"stage\":\"discovery\"},{\"name\":\"Example Co. new site\",\"amount\":90000,\"stage\":\"Negotiation\"}]}"
+      ],
+      "exitCode": 1,
+      "stdout": [],
+      "stderr": [
+        "No deals were won in that period, so there is no win rate to plan with. Use a longer period."
+      ]
     }
   ]
 }
