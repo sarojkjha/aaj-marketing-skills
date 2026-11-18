@@ -37,6 +37,30 @@
  *     "targetSource": "2026 operating plan" // optional: where the targets come from (recorded as given)
  *   }
  *
+ * COUNTS FROM CRM CONTACTS - in place of the stage counts, give the contacts and
+ * two date ranges, and the engine counts the stages itself. Use this when an
+ * agent reads a CRM: it passes each contact's stage dates as the CRM returns
+ * them and never counts or compares dates itself.
+ *
+ *   {
+ *     "contacts": [                        // one object per contact: the date it entered each stage
+ *       { "leads": "2026-07-03T14:22:05Z", "mqls": "2026-07-20", "sqls": null }
+ *     ],
+ *     "dates": { "from": "2026-07-01", "to": "2026-09-30" },        // this period, both days included
+ *     "priorDates": { "from": "2026-04-01", "to": "2026-06-30" },   // optional: becomes the "prior" baseline
+ *     "sessions": 120000, "priorSessions": 110000,                  // optional: sessions are not in a CRM
+ *     "revenuePerWin": 18000, "currency": "$", "targets": { ... }   // as above
+ *   }
+ *
+ *   A date is YYYY-MM-DD, an ISO date-time (the date as written is used), or
+ *   epoch milliseconds (read as a UTC date). Stages are leads, mqls, sqls, opps
+ *   and wins; give at least 3 in a row across the contacts (2 with sessions).
+ *   How it counts: a contact belongs to a period if its first stage date falls
+ *   in it, and it counts for a stage if it entered that stage or a later one on
+ *   or before the period's last day. So both periods get the same time to
+ *   progress, a skipped stage counts as passed, and no stage is larger than the
+ *   one before it. A contact with no stage dates is left out and reported.
+ *
  * HOW A LEAK IS NAMED
  *   For each transition (one stage to the next): rate now = next / this.
  *   Wins lost at a stage = what the last stage would have been with that one
@@ -285,6 +309,89 @@ function run(cfg) {
 }
 /* aaj:core:end */
 
+/* ─────────────────────────── counts from CRM contacts ─────────────────────────── */
+// Outside the core: the free tool reads a CRM file its own way; this is the same cohort method for
+// an agent that reads the CRM live. It turns { contacts, dates, priorDates } into the stage counts
+// the core takes, so run() and its checks are unchanged.
+const CONTACT_STAGES = STAGE_KEYS.filter((k) => k !== 'sessions');
+const CONTACT_FIELDS = ['contacts', 'dates', 'priorDates', 'sessions', 'priorSessions', 'period', 'revenuePerWin', 'currency', 'targets', 'targetSource'];
+
+function validYmd(y, mo, d) { return mo >= 1 && mo <= 12 && d >= 1 && d <= new Date(Date.UTC(y, mo, 0)).getUTCDate(); }
+// -> "YYYY-MM-DD", "" for empty, or null if it cannot be read.
+function toDay(v) {
+  if (v === null || v === undefined || v === '') return '';
+  if (typeof v === 'number' || (typeof v === 'string' && /^\d{11,14}$/.test(v.trim()))) {
+    const n = Number(v);
+    if (!isFinite(n) || n < 0 || Math.floor(n) !== n) return null;
+    const d = new Date(n);
+    return isNaN(d.getTime()) ? null : d.toISOString().slice(0, 10);
+  }
+  if (typeof v !== 'string') return null;
+  const m = /^(\d{4})-(\d{2})-(\d{2})(?:[T ].*)?$/.exec(v.trim());
+  return m && validYmd(+m[1], +m[2], +m[3]) ? m[1] + '-' + m[2] + '-' + m[3] : null;
+}
+function readRange(r, name) {
+  if (!r || typeof r !== 'object' || Array.isArray(r)) throw inputError('"' + name + '" must be {"from": "YYYY-MM-DD", "to": "YYYY-MM-DD"}.');
+  Object.keys(r).forEach((k) => { if (k !== 'from' && k !== 'to') throw inputError(name + ': unknown field "' + k + '".', 'Allowed: from, to.'); });
+  const ymd = (v) => (typeof v === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(v) && toDay(v)) || null;
+  const from = ymd(r.from), to = ymd(r.to);
+  if (!from || !to) throw inputError(name + ': "from" and "to" must be dates written YYYY-MM-DD (got ' + JSON.stringify(r.from) + ' and ' + JSON.stringify(r.to) + ').');
+  if (from > to) throw inputError(name + ' ends before it starts (' + from + ' to ' + to + ').');
+  return { from, to };
+}
+function fromContacts(cfg) {
+  STAGE_KEYS.concat(['prior']).forEach((k) => {
+    if (k !== 'sessions' && cfg[k] != null) throw inputError('Give "contacts" or the stage counts, not both (got "' + k + '").', 'With contacts the engine counts the stages. Sessions are the exception: give "sessions" and "priorSessions".');
+  });
+  checkFields(cfg, CONTACT_FIELDS, '');
+  if (!Array.isArray(cfg.contacts) || !cfg.contacts.length) throw inputError('"contacts" must be a list with at least one contact.');
+  if (cfg.dates == null) throw inputError('"contacts" needs "dates": {"from", "to"}, the period to count.');
+  const now = readRange(cfg.dates, 'dates'), prior = cfg.priorDates != null ? readRange(cfg.priorDates, 'priorDates') : null;
+  if (prior && prior.to >= now.from) throw inputError('"priorDates" must end before "dates" starts (' + prior.to + ' is not before ' + now.from + ').');
+  if (cfg.priorSessions != null && !prior) throw inputError('"priorSessions" needs "priorDates".');
+  if (prior && (cfg.sessions != null) !== (cfg.priorSessions != null)) throw inputError('Give sessions for both periods ("sessions" and "priorSessions") or for neither.');
+
+  const seen = {}, people = [];
+  let empty = 0;
+  cfg.contacts.forEach((c, i) => {
+    const where = 'contacts[' + i + ']';
+    if (!c || typeof c !== 'object' || Array.isArray(c)) throw inputError(where + ' must be an object of stage dates, such as {"leads": "2026-07-03"}.');
+    const days = {};
+    Object.keys(c).forEach((k) => {
+      if (CONTACT_STAGES.indexOf(k) < 0) throw inputError(where + ': unknown stage "' + k + '".', 'Stages: ' + CONTACT_STAGES.join(', ') + '.');
+      seen[k] = true;
+      const d = toDay(c[k]);
+      if (d === null) throw inputError(where + '.' + k + ' is not a date this engine reads (got ' + JSON.stringify(c[k]) + ').', 'Use YYYY-MM-DD, an ISO date-time, or epoch milliseconds.');
+      if (d) days[k] = d;
+    });
+    if (Object.keys(days).length) people.push(days); else empty++;
+  });
+  const keys = CONTACT_STAGES.filter((k) => seen[k]);
+  if (!people.length) throw inputError('No contact has a stage date.');
+  const cohort = (p) => {
+    const out = {}; keys.forEach((k) => { out[k] = 0; });
+    people.forEach((c) => {
+      const first = keys.map((k) => c[k]).filter(Boolean).sort()[0];
+      if (first < p.from || first > p.to) return;
+      keys.forEach((k, i) => {
+        for (let j = i; j < keys.length; j++) if (c[keys[j]] && c[keys[j]] <= p.to) { out[k]++; break; }
+      });
+    });
+    return out;
+  };
+  const out = Object.assign({ period: cfg.period != null ? cfg.period : now.from + ' to ' + now.to }, cohort(now));
+  if (cfg.sessions != null) out.sessions = cfg.sessions;
+  ['revenuePerWin', 'currency', 'targets', 'targetSource'].forEach((k) => { if (cfg[k] != null) out[k] = cfg[k]; });
+  if (prior) {
+    out.prior = Object.assign({ period: prior.from + ' to ' + prior.to }, cohort(prior));
+    if (cfg.priorSessions != null) out.prior.sessions = cfg.priorSessions;
+  }
+  const note = 'Counted from ' + people.length.toLocaleString('en-US') + ' contact' + (people.length === 1 ? '' : 's') + ' with stage dates' +
+    (empty ? ' (' + empty.toLocaleString('en-US') + ' with none left out)' : '') + '. A contact belongs to a period if its first stage date falls in it, ' +
+    'and counts for a stage if it entered that stage or a later one by the period\'s last day.';
+  return { cfg: out, note, contacts: people.length, empty };
+}
+
 /* ─────────────────────────── render ─────────────────────────── */
 function render(r) {
   const cur = r.inputs.currency;
@@ -344,7 +451,12 @@ function main() {
     try { cfg = JSON.parse(argv[0]); }
     catch (e) { console.error('error: Invalid JSON. Run --help for the schema.\n       ' + e.message); process.exit(1); }
   }
-  try { console.log(render(run(cfg))); }
+  try {
+    let note = '';
+    if (cfg && typeof cfg === 'object' && !Array.isArray(cfg) && cfg.contacts !== undefined) { const c = fromContacts(cfg); cfg = c.cfg; note = c.note; }
+    const text = render(run(cfg));
+    console.log(note ? text + '\n\nCOUNTED FROM CONTACTS\n  ' + note : text);
+  }
   catch (e) {
     if (!e.isInputError) throw e;
     console.error('error: ' + e.message);
@@ -356,4 +468,4 @@ function main() {
 
 if (require.main === module) main();
 
-module.exports = { run, render, normalise, SOURCES, fmtRate, fmtPts, fmtRel, fmtCount, fmtMoney };
+module.exports = { run, render, normalise, fromContacts, SOURCES, fmtRate, fmtPts, fmtRel, fmtCount, fmtMoney };

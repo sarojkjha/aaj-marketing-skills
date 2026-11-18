@@ -475,6 +475,155 @@
         "",
         "Run --help for the schema, or --demo for a worked example."
       ]
+    },
+    {
+      "name": "counts from contacts, with a prior period",
+      "args": [
+        "{\"contacts\":[{\"leads\":\"2026-07-01\",\"mqls\":\"2026-07-04\",\"sqls\":\"2026-07-07\",\"opps\":\"2026-07-09\",\"wins\":\"2026-07-11\"},{\"leads\":\"2026-07-02T09:30:00Z\",\"mqls\":\"2026-07-05\",\"sqls\":\"2026-07-08\",\"opps\":\"2026-07-10\",\"wins\":\"2026-07-12\"},{\"leads\":\"2026-07-03\",\"mqls\":\"2026-07-06\",\"sqls\":\"2026-07-09\",\"opps\":\"2026-07-11\"},{\"leads\":\"2026-07-04T09:30:00Z\",\"mqls\":\"2026-07-07\",\"sqls\":\"2026-07-10\",\"opps\":\"2026-07-12\"},{\"leads\":\"2026-07-05\",\"mqls\":\"2026-07-08\",\"sqls\":\"2026-07-11\",\"opps\":\"2026-07-13\"},{\"leads\":\"2026-07-06T09:30:00Z\",\"mqls\":\"2026-07-09\",\"sqls\":\"2026-07-12\"},{\"leads\":\"2026-07-07\",\"mqls\":\"2026-07-10\"},{\"leads\":\"2026-07-08T09:30:00Z\",\"mqls\":\"2026-07-11\"},{\"leads\":\"2026-07-09\",\"mqls\":\"2026-07-12\"},{\"leads\":\"2026-07-10T09:30:00Z\",\"mqls\":\"2026-07-13\"},{\"leads\":\"2026-07-11\",\"mqls\":\"2026-07-14\"},{\"leads\":\"2026-07-12T09:30:00Z\",\"mqls\":\"2026-07-15\"},{\"leads\":\"2026-07-13\",\"mqls\":\"2026-07-16\"},{\"leads\":\"2026-07-14T09:30:00Z\",\"mqls\":\"2026-07-17\"},{\"leads\":\"2026-07-15\",\"mqls\":\"2026-07-18\"},{\"leads\":\"2026-07-16T09:30:00Z\",\"mqls\":\"2026-07-19\"},{\"leads\":\"2026-07-17\",\"mqls\":\"2026-07-20\"},{\"leads\":\"2026-07-18T09:30:00Z\",\"mqls\":\"2026-07-21\"},{\"leads\":\"2026-07-19\",\"mqls\":\"2026-07-22\"},{\"leads\":\"2026-07-20T09:30:00Z\",\"mqls\":\"2026-07-23\"},{\"leads\":\"2026-07-21\",\"mqls\":\"2026-07-24\"},{\"leads\":\"2026-07-22T09:30:00Z\"},{\"leads\":\"2026-07-23\"},{\"leads\":\"2026-07-24T09:30:00Z\"},{\"leads\":\"2026-07-25\"},{\"leads\":\"2026-07-26T09:30:00Z\"},{\"leads\":\"2026-07-27\"},{\"leads\":\"2026-07-28T09:30:00Z\"},{\"leads\":\"2026-07-29\"},{\"leads\":\"2026-07-30T09:30:00Z\"},{\"leads\":\"2026-07-31\"},{\"leads\":\"2026-08-01T09:30:00Z\"},{\"leads\":\"2026-08-02\"},{\"leads\":\"2026-08-03T09:30:00Z\"},{\"leads\":\"2026-08-04\"},{\"leads\":\"2026-08-05T09:30:00Z\"},{\"leads\":\"2026-08-06\"},{\"leads\":\"2026-08-07T09:30:00Z\"},{\"leads\":\"2026-08-08\"},{\"leads\":\"2026-08-09T09:30:00Z\"},{\"leads\":\"2026-08-10\"},{\"leads\":\"2026-08-11T09:30:00Z\"},{\"leads\":\"2026-08-12\"},{\"leads\":\"2026-08-13T09:30:00Z\"},{\"leads\":\"2026-08-14\"},{\"leads\":\"2026-08-15T09:30:00Z\"},{\"leads\":\"2026-08-16\"},{\"leads\":\"2026-08-17T09:30:00Z\"},{\"leads\":\"2026-08-18\"},{\"leads\":\"2026-08-19T09:30:00Z\"},{\"leads\":\"2026-07-01\"},{\"leads\":\"2026-07-02T09:30:00Z\"},{\"leads\":\"2026-07-03\"},{\"leads\":\"2026-07-04T09:30:00Z\"},{\"leads\":\"2026-07-05\"},{\"leads\":\"2026-07-06T09:30:00Z\"},{\"leads\":\"2026-07-07\"},{\"leads\":\"2026-07-08T09:30:00Z\"},{\"leads\":\"2026-07-09\"},{\"leads\":\"2026-07-10T09:30:00Z\"},{\"leads\":\"2026-04-01\",\"mqls\":\"2026-04-04\",\"sqls\":\"2026-04-07\",\"opps\":\"2026-04-09\",\"wins\":\"2026-04-11\"},{\"leads\":\"2026-04-02\",\"mqls\":\"2026-04-05\",\"sqls\":\"2026-04-08\",\"opps\":\"2026-04-10\",\"wins\":\"2026-04-12\"},{\"leads\":\"2026-04-03\",\"mqls\":\"2026-04-06\",\"sqls\":\"2026-04-09\",\"opps\":\"2026-04-11\",\"wins\":\"2026-04-13\"},{\"leads\":\"2026-04-04\",\"mqls\":\"2026-04-07\",\"sqls\":\"2026-04-10\",\"opps\":\"2026-04-12\",\"wins\":\"2026-04-14\"},{\"leads\":\"2026-04-05\",\"mqls\":\"2026-04-08\",\"sqls\":\"2026-04-11\",\"opps\":\"2026-04-13\"},{\"leads\":\"2026-04-06\",\"mqls\":\"2026-04-09\",\"sqls\":\"2026-04-12\",\"opps\":\"2026-04-14\"},{\"leads\":\"2026-04-07\",\"mqls\":\"2026-04-10\",\"sqls\":\"2026-04-13\",\"opps\":\"2026-04-15\"},{\"leads\":\"2026-04-08\",\"mqls\":\"2026-04-11\",\"sqls\":\"2026-04-14\",\"opps\":\"2026-04-16\"},{\"leads\":\"2026-04-09\",\"mqls\":\"2026-04-12\",\"sqls\":\"2026-04-15\"},{\"leads\":\"2026-04-10\",\"mqls\":\"2026-04-13\",\"sqls\":\"2026-04-16\"},{\"leads\":\"2026-04-11\",\"mqls\":\"2026-04-14\",\"sqls\":\"2026-04-17\"},{\"leads\":\"2026-04-12\",\"mqls\":\"2026-04-15\"},{\"leads\":\"2026-04-13\",\"mqls\":\"2026-04-16\"},{\"leads\":\"2026-04-14\",\"mqls\":\"2026-04-17\"},{\"leads\":\"2026-04-15\",\"mqls\":\"2026-04-18\"},{\"leads\":\"2026-04-16\",\"mqls\":\"2026-04-19\"},{\"leads\":\"2026-04-17\",\"mqls\":\"2026-04-20\"},{\"leads\":\"2026-04-18\",\"mqls\":\"2026-04-21\"},{\"leads\":\"2026-04-19\",\"mqls\":\"2026-04-22\"},{\"leads\":\"2026-04-20\",\"mqls\":\"2026-04-23\"},{\"leads\":\"2026-04-21\",\"mqls\":\"2026-04-24\"},{\"leads\":\"2026-04-22\",\"mqls\":\"2026-04-25\"},{\"leads\":\"2026-04-23\"},{\"leads\":\"2026-04-24\"},{\"leads\":\"2026-04-25\"},{\"leads\":\"2026-04-26\"},{\"leads\":\"2026-04-27\"},{\"leads\":\"2026-04-28\"},{\"leads\":\"2026-04-29\"},{\"leads\":\"2026-04-30\"},{\"leads\":\"2026-05-01\"},{\"leads\":\"2026-05-02\"},{\"leads\":\"2026-05-03\"},{\"leads\":\"2026-05-04\"},{\"leads\":\"2026-05-05\"},{\"leads\":\"2026-05-06\"},{\"leads\":\"2026-05-07\"},{\"leads\":\"2026-05-08\"},{\"leads\":\"2026-05-09\"},{\"leads\":\"2026-05-10\"},{\"leads\":\"2026-05-11\"},{\"leads\":\"2026-05-12\"},{\"leads\":\"2026-05-13\"},{\"leads\":\"2026-05-14\"},{\"leads\":\"2026-05-15\"},{\"leads\":\"2026-05-16\"},{\"leads\":\"2026-05-17\"},{\"leads\":\"2026-05-18\"},{\"leads\":\"2026-05-19\"},{\"leads\":\"2026-05-20\"},{\"leads\":\"2026-04-01\"},{\"leads\":\"2026-04-02\"},{\"leads\":\"2026-04-03\"},{\"leads\":\"2026-04-04\"},{\"leads\":\"2026-04-05\"},{\"leads\":null,\"mqls\":\"\"},{\"leads\":1782864000000,\"mqls\":\"1783000000000\"}],\"dates\":{\"from\":\"2026-07-01\",\"to\":\"2026-09-30\"},\"priorDates\":{\"from\":\"2026-04-01\",\"to\":\"2026-06-30\"},\"revenuePerWin\":18000}"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "FUNNEL LEAK FINDER - 2026-07-01 to 2026-09-30",
+        "══════════════════════════════════════════════════════════",
+        "Baseline: 2026-04-01 to 2026-06-30",
+        "",
+        "STAGES",
+        "  Leads:                  61   (prior 55)",
+        "  MQLs:                   22   (prior 22)",
+        "  SQLs:                    6   (prior 11)",
+        "  Opportunities:           5   (prior 8)",
+        "  Wins:                    2   (prior 4)",
+        "",
+        "TRANSITIONS",
+        "  Leads -> MQLs                36.1% vs   40.0%  -3.9 pts (-9.8%)",
+        "      0.2 wins lost, $3,927  #3 [z -0.44, may be noise]",
+        "  MQLs -> SQLs                 27.3% vs   50.0%  -22.7 pts (-45.5%)",
+        "      1.7 wins lost, $30,000  #1 [z -1.55, may be noise]",
+        "  SQLs -> Opportunities        83.3% vs   72.7%  +10.6 pts (+14.6%)",
+        "      holding [too few to test]",
+        "  Opportunities -> Wins        40.0% vs   50.0%  -10.0 pts (-20.0%)",
+        "      0.5 wins lost, $9,000  #2 [too few to test]",
+        "",
+        "Leads (volume, not ranked): 61 vs 55 (+10.9%)",
+        "",
+        "RESULT: Leak: MQLs to SQLs",
+        "  MQLs to SQLs converted at 27.3% against 50.0% in 2026-04-01 to 2026-06-30. At the baseline rate, with every other stage as it is, this period would have had 1.7 more wins ($30,000). The change may be noise (not significant at 95%): confirm it next period before acting.",
+        "",
+        "NOTES",
+        "  - Each stage's figure holds the other stages at this period's rates, so the figures do not add up to the total change.",
+        "",
+        "AAJ'S VIEW",
+        "  - In AAJ's view, fix the named leak before adding volume at the top: more volume through a stage that is below baseline buys fewer wins per unit of spend than it did at baseline.",
+        "  - The noise check uses 95% (two-sided) and needs at least 5 conversions and 5 non-conversions in each period; those cut-offs are AAJ's choice.",
+        "",
+        "NOISE CHECK SOURCE",
+        "  NIST/SEMATECH e-Handbook of Statistical Methods, \"7.3.3. How can we determine whether two processes produce the same proportion of defectives?\": https://www.itl.nist.gov/div898/handbook/prc/section3/prc33.htm",
+        "",
+        "COUNTED FROM CONTACTS",
+        "  Counted from 116 contacts with stage dates (1 with none left out). A contact belongs to a period if its first stage date falls in it, and counts for a stage if it entered that stage or a later one by the period's last day."
+      ],
+      "stderr": []
+    },
+    {
+      "name": "counts from contacts, with sessions and targets",
+      "args": [
+        "{\"contacts\":[{\"leads\":\"2026-07-01\",\"mqls\":\"2026-07-04\",\"sqls\":\"2026-07-07\",\"opps\":\"2026-07-09\",\"wins\":\"2026-07-11\"},{\"leads\":\"2026-07-02T09:30:00Z\",\"mqls\":\"2026-07-05\",\"sqls\":\"2026-07-08\",\"opps\":\"2026-07-10\",\"wins\":\"2026-07-12\"},{\"leads\":\"2026-07-03\",\"mqls\":\"2026-07-06\",\"sqls\":\"2026-07-09\",\"opps\":\"2026-07-11\"},{\"leads\":\"2026-07-04T09:30:00Z\",\"mqls\":\"2026-07-07\",\"sqls\":\"2026-07-10\",\"opps\":\"2026-07-12\"},{\"leads\":\"2026-07-05\",\"mqls\":\"2026-07-08\",\"sqls\":\"2026-07-11\",\"opps\":\"2026-07-13\"},{\"leads\":\"2026-07-06T09:30:00Z\",\"mqls\":\"2026-07-09\",\"sqls\":\"2026-07-12\"},{\"leads\":\"2026-07-07\",\"mqls\":\"2026-07-10\"},{\"leads\":\"2026-07-08T09:30:00Z\",\"mqls\":\"2026-07-11\"},{\"leads\":\"2026-07-09\",\"mqls\":\"2026-07-12\"},{\"leads\":\"2026-07-10T09:30:00Z\",\"mqls\":\"2026-07-13\"},{\"leads\":\"2026-07-11\",\"mqls\":\"2026-07-14\"},{\"leads\":\"2026-07-12T09:30:00Z\",\"mqls\":\"2026-07-15\"},{\"leads\":\"2026-07-13\",\"mqls\":\"2026-07-16\"},{\"leads\":\"2026-07-14T09:30:00Z\",\"mqls\":\"2026-07-17\"},{\"leads\":\"2026-07-15\",\"mqls\":\"2026-07-18\"},{\"leads\":\"2026-07-16T09:30:00Z\",\"mqls\":\"2026-07-19\"},{\"leads\":\"2026-07-17\",\"mqls\":\"2026-07-20\"},{\"leads\":\"2026-07-18T09:30:00Z\",\"mqls\":\"2026-07-21\"},{\"leads\":\"2026-07-19\",\"mqls\":\"2026-07-22\"},{\"leads\":\"2026-07-20T09:30:00Z\",\"mqls\":\"2026-07-23\"},{\"leads\":\"2026-07-21\",\"mqls\":\"2026-07-24\"},{\"leads\":\"2026-07-22T09:30:00Z\"},{\"leads\":\"2026-07-23\"},{\"leads\":\"2026-07-24T09:30:00Z\"},{\"leads\":\"2026-07-25\"},{\"leads\":\"2026-07-26T09:30:00Z\"},{\"leads\":\"2026-07-27\"},{\"leads\":\"2026-07-28T09:30:00Z\"},{\"leads\":\"2026-07-29\"},{\"leads\":\"2026-07-30T09:30:00Z\"},{\"leads\":\"2026-07-31\"},{\"leads\":\"2026-08-01T09:30:00Z\"},{\"leads\":\"2026-08-02\"},{\"leads\":\"2026-08-03T09:30:00Z\"},{\"leads\":\"2026-08-04\"},{\"leads\":\"2026-08-05T09:30:00Z\"},{\"leads\":\"2026-08-06\"},{\"leads\":\"2026-08-07T09:30:00Z\"},{\"leads\":\"2026-08-08\"},{\"leads\":\"2026-08-09T09:30:00Z\"},{\"leads\":\"2026-08-10\"},{\"leads\":\"2026-08-11T09:30:00Z\"},{\"leads\":\"2026-08-12\"},{\"leads\":\"2026-08-13T09:30:00Z\"},{\"leads\":\"2026-08-14\"},{\"leads\":\"2026-08-15T09:30:00Z\"},{\"leads\":\"2026-08-16\"},{\"leads\":\"2026-08-17T09:30:00Z\"},{\"leads\":\"2026-08-18\"},{\"leads\":\"2026-08-19T09:30:00Z\"},{\"leads\":\"2026-07-01\"},{\"leads\":\"2026-07-02T09:30:00Z\"},{\"leads\":\"2026-07-03\"},{\"leads\":\"2026-07-04T09:30:00Z\"},{\"leads\":\"2026-07-05\"},{\"leads\":\"2026-07-06T09:30:00Z\"},{\"leads\":\"2026-07-07\"},{\"leads\":\"2026-07-08T09:30:00Z\"},{\"leads\":\"2026-07-09\"},{\"leads\":\"2026-07-10T09:30:00Z\"},{\"leads\":\"2026-04-01\",\"mqls\":\"2026-04-04\",\"sqls\":\"2026-04-07\",\"opps\":\"2026-04-09\",\"wins\":\"2026-04-11\"},{\"leads\":\"2026-04-02\",\"mqls\":\"2026-04-05\",\"sqls\":\"2026-04-08\",\"opps\":\"2026-04-10\",\"wins\":\"2026-04-12\"},{\"leads\":\"2026-04-03\",\"mqls\":\"2026-04-06\",\"sqls\":\"2026-04-09\",\"opps\":\"2026-04-11\",\"wins\":\"2026-04-13\"},{\"leads\":\"2026-04-04\",\"mqls\":\"2026-04-07\",\"sqls\":\"2026-04-10\",\"opps\":\"2026-04-12\",\"wins\":\"2026-04-14\"},{\"leads\":\"2026-04-05\",\"mqls\":\"2026-04-08\",\"sqls\":\"2026-04-11\",\"opps\":\"2026-04-13\"},{\"leads\":\"2026-04-06\",\"mqls\":\"2026-04-09\",\"sqls\":\"2026-04-12\",\"opps\":\"2026-04-14\"},{\"leads\":\"2026-04-07\",\"mqls\":\"2026-04-10\",\"sqls\":\"2026-04-13\",\"opps\":\"2026-04-15\"},{\"leads\":\"2026-04-08\",\"mqls\":\"2026-04-11\",\"sqls\":\"2026-04-14\",\"opps\":\"2026-04-16\"},{\"leads\":\"2026-04-09\",\"mqls\":\"2026-04-12\",\"sqls\":\"2026-04-15\"},{\"leads\":\"2026-04-10\",\"mqls\":\"2026-04-13\",\"sqls\":\"2026-04-16\"},{\"leads\":\"2026-04-11\",\"mqls\":\"2026-04-14\",\"sqls\":\"2026-04-17\"},{\"leads\":\"2026-04-12\",\"mqls\":\"2026-04-15\"},{\"leads\":\"2026-04-13\",\"mqls\":\"2026-04-16\"},{\"leads\":\"2026-04-14\",\"mqls\":\"2026-04-17\"},{\"leads\":\"2026-04-15\",\"mqls\":\"2026-04-18\"},{\"leads\":\"2026-04-16\",\"mqls\":\"2026-04-19\"},{\"leads\":\"2026-04-17\",\"mqls\":\"2026-04-20\"},{\"leads\":\"2026-04-18\",\"mqls\":\"2026-04-21\"},{\"leads\":\"2026-04-19\",\"mqls\":\"2026-04-22\"},{\"leads\":\"2026-04-20\",\"mqls\":\"2026-04-23\"},{\"leads\":\"2026-04-21\",\"mqls\":\"2026-04-24\"},{\"leads\":\"2026-04-22\",\"mqls\":\"2026-04-25\"},{\"leads\":\"2026-04-23\"},{\"leads\":\"2026-04-24\"},{\"leads\":\"2026-04-25\"},{\"leads\":\"2026-04-26\"},{\"leads\":\"2026-04-27\"},{\"leads\":\"2026-04-28\"},{\"leads\":\"2026-04-29\"},{\"leads\":\"2026-04-30\"},{\"leads\":\"2026-05-01\"},{\"leads\":\"2026-05-02\"},{\"leads\":\"2026-05-03\"},{\"leads\":\"2026-05-04\"},{\"leads\":\"2026-05-05\"},{\"leads\":\"2026-05-06\"},{\"leads\":\"2026-05-07\"},{\"leads\":\"2026-05-08\"},{\"leads\":\"2026-05-09\"},{\"leads\":\"2026-05-10\"},{\"leads\":\"2026-05-11\"},{\"leads\":\"2026-05-12\"},{\"leads\":\"2026-05-13\"},{\"leads\":\"2026-05-14\"},{\"leads\":\"2026-05-15\"},{\"leads\":\"2026-05-16\"},{\"leads\":\"2026-05-17\"},{\"leads\":\"2026-05-18\"},{\"leads\":\"2026-05-19\"},{\"leads\":\"2026-05-20\"},{\"leads\":\"2026-04-01\"},{\"leads\":\"2026-04-02\"},{\"leads\":\"2026-04-03\"},{\"leads\":\"2026-04-04\"},{\"leads\":\"2026-04-05\"},{\"leads\":null,\"mqls\":\"\"},{\"leads\":1782864000000,\"mqls\":\"1783000000000\"}],\"dates\":{\"from\":\"2026-07-01\",\"to\":\"2026-09-30\"},\"sessions\":4000,\"targets\":{\"sessionsToLeads\":0.02,\"leadsToMqls\":0.4}}"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "FUNNEL LEAK FINDER - 2026-07-01 to 2026-09-30",
+        "══════════════════════════════════════════════════════════",
+        "Baseline: your targets",
+        "",
+        "STAGES",
+        "  Sessions:            4,000",
+        "  Leads:                  61",
+        "  MQLs:                   22",
+        "  SQLs:                    6",
+        "  Opportunities:           5",
+        "  Wins:                    2",
+        "",
+        "TRANSITIONS",
+        "  Sessions -> Leads             1.5% vs    2.0%  -0.47 pts (-23.8%)",
+        "      0.6 wins lost  #1 [z -2.15]",
+        "  Leads -> MQLs                36.1% vs   40.0%  -3.9 pts (-9.8%)",
+        "      0.2 wins lost  #2 [z -0.63, may be noise]",
+        "  MQLs -> SQLs                 27.3%   no baseline",
+        "  SQLs -> Opportunities        83.3%   no baseline",
+        "  Opportunities -> Wins        40.0%   no baseline",
+        "",
+        "RESULT: Leak: Sessions to Leads",
+        "  Sessions to Leads converted at 1.5% against your target of 2.0%. At the baseline rate, with every other stage as it is, this period would have had 0.6 more wins.",
+        "",
+        "NOTES",
+        "  - No target for mqlsToSqls, sqlsToOpps, oppsToWins: those stages are shown but not judged, so they cannot be named as the leak.",
+        "  - Each stage's figure holds the other stages at this period's rates, so the figures do not add up to the total change.",
+        "",
+        "AAJ'S VIEW",
+        "  - In AAJ's view, fix the named leak before adding volume at the top: more volume through a stage that is below baseline buys fewer wins per unit of spend than it did at baseline.",
+        "  - The noise check uses 95% (two-sided) and needs the stage count times the target, and times one minus the target, to be at least 5 (NIST 7.2.4); the 95% level is AAJ's choice.",
+        "",
+        "NOISE CHECK SOURCE",
+        "  NIST/SEMATECH e-Handbook of Statistical Methods, \"7.2.4. Does the proportion of defectives meet requirements?\": https://www.itl.nist.gov/div898/handbook/prc/section2/prc24.htm",
+        "",
+        "COUNTED FROM CONTACTS",
+        "  Counted from 116 contacts with stage dates (1 with none left out). A contact belongs to a period if its first stage date falls in it, and counts for a stage if it entered that stage or a later one by the period's last day."
+      ],
+      "stderr": []
+    },
+    {
+      "name": "contacts: stage counts given too",
+      "args": [
+        "{\"contacts\":[{\"leads\":\"2026-07-03\",\"mqls\":\"2026-07-04\",\"sqls\":null}],\"dates\":{\"from\":\"2026-07-01\",\"to\":\"2026-09-30\"},\"leads\":10}"
+      ],
+      "exitCode": 1,
+      "stdout": [],
+      "stderr": [
+        "error: Give \"contacts\" or the stage counts, not both (got \"leads\").",
+        "       With contacts the engine counts the stages. Sessions are the exception: give \"sessions\" and \"priorSessions\".",
+        "",
+        "Run --help for the schema, or --demo for a worked example."
+      ]
+    },
+    {
+      "name": "contacts: a date in another format",
+      "args": [
+        "{\"contacts\":[{\"leads\":\"07/03/2026\"}],\"dates\":{\"from\":\"2026-07-01\",\"to\":\"2026-09-30\"}}"
+      ],
+      "exitCode": 1,
+      "stdout": [],
+      "stderr": [
+        "error: contacts[0].leads is not a date this engine reads (got \"07/03/2026\").",
+        "       Use YYYY-MM-DD, an ISO date-time, or epoch milliseconds.",
+        "",
+        "Run --help for the schema, or --demo for a worked example."
+      ]
+    },
+    {
+      "name": "contacts: prior period overlaps",
+      "args": [
+        "{\"contacts\":[{\"leads\":\"2026-07-03\",\"mqls\":\"2026-07-04\",\"sqls\":null}],\"dates\":{\"from\":\"2026-07-01\",\"to\":\"2026-09-30\"},\"priorDates\":{\"from\":\"2026-06-01\",\"to\":\"2026-07-01\"}}"
+      ],
+      "exitCode": 1,
+      "stdout": [],
+      "stderr": [
+        "error: \"priorDates\" must end before \"dates\" starts (2026-07-01 is not before 2026-07-01).",
+        "",
+        "Run --help for the schema, or --demo for a worked example."
+      ]
+    },
+    {
+      "name": "contacts: sessions for one period only",
+      "args": [
+        "{\"contacts\":[{\"leads\":\"2026-07-03\",\"mqls\":\"2026-07-04\",\"sqls\":null}],\"dates\":{\"from\":\"2026-07-01\",\"to\":\"2026-09-30\"},\"sessions\":500,\"priorDates\":{\"from\":\"2026-04-01\",\"to\":\"2026-06-30\"}}"
+      ],
+      "exitCode": 1,
+      "stdout": [],
+      "stderr": [
+        "error: Give sessions for both periods (\"sessions\" and \"priorSessions\") or for neither.",
+        "",
+        "Run --help for the schema, or --demo for a worked example."
+      ]
     }
   ]
 }
