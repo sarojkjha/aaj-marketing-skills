@@ -8,10 +8,12 @@ description: >-
   margin of error, "how many responses do I need," or "what should I ask my
   customers." Produces a structured survey with unbiased questions mapped to
   decisions, plus computed sample-size, invite, and segment-readability numbers
-  from a runnable engine.
+  from a runnable engine. Also use once the answers are in, to read a results
+  export: the engine counts each answer and returns shares with ranges, rating
+  averages and NPS.
 license: MIT
 metadata:
-  search_description: "Design a customer or market survey with unbiased questions mapped to decisions, plus computed sample size, invite numbers and how many segments you can read."
+  search_description: "Design a customer or market survey with unbiased questions mapped to decisions, plus computed sample size, invite numbers and how many segments you can read. Then read the results export: shares with ranges, rating averages and NPS."
   publisher: AAJ
   slug: customer-survey-design
   category: Research & Personas
@@ -19,12 +21,12 @@ metadata:
   difficulty: Starter
   card: >-
     Designs surveys that produce usable answers, with sample sizing and segments.
-  version: 1.1.0
+  version: 1.2.0
   sprint: positioning-message
   topic: audience-research
   agents: [Claude Code, Cursor, OpenAI Codex, Windsurf, Cline]
   inputs: The decision the survey should inform, who you'll ask, audience size and expected response rate if known, and the segment cuts you plan to report
-  outputs: A structured survey — questions, types, scales, and order — designed to avoid bias, plus required completes, invites, and a per-segment readability verdict from the engine
+  outputs: A structured survey — questions, types, scales, and order — designed to avoid bias, plus required completes, invites, and a per-segment readability verdict from the engine; and, from a results export, each answer's share with its range, rating averages and NPS
   related_aaj:
     - https://aajconsult.com/tools/survey-studio
     - https://aajconsult.com/playbooks/survey-playbook
@@ -57,7 +59,11 @@ The engine (`resources/survey-design.js`, Node, stdlib only) computes:
 - **Invites** — completes ÷ response rate, with a feasibility verdict against the audience size (loosen the margin, lift response, or run a census and report the achieved ±).
 - **Segment readability** — worst-case margin per cell, e = z·√(0.25/n_cell), labelled READ (≤±5pp), CAUTION (±5–8pp, directional), DON'T READ (wider). Thresholds are working labels, not laws.
 
-Modes: `sample '<json>'` and `segments '<json>'`. `--demo` runs both worked examples with no arguments; `--help` prints the schema.
+- **Results readout**: from a results export with one row per person and one column per question, the engine counts the answers itself. Each share comes with a range from the Wilson score interval (Wilson, 1927), which holds up for small samples and for shares near 0% or 100%. A rating gets its average with a range (z·sd/√n). An NPS question gets promoters (9 to 10), passives (7 to 8), detractors (0 to 6) and the score, % promoters minus % detractors, with a range from z·√((p + d − (p − d)²)/n). Blank cells are no answer, and shares are of the people who answered that question.
+
+Modes: `sample '<json>'`, `segments '<json>'` and `readout '<json>'`. One JSON object on its own also works: add `"mode"`, or the engine tells the mode from the fields. That is the form the hosted connector uses. `--demo` runs the worked examples with no arguments; `--help` prints the schema.
+
+**Readout input.** `columns` is the list of headings and `rows` is one list of cells per person, as text. `questions` is optional and sets a column's type: `choice`, `multi` (several answers in one cell), `rating`, `nps`, `text` or `skip`. A choice or multi may list its `options`, so an option nobody picked shows as 0 and an answer outside the list is marked. A multi may give the `separator` between answers (default `;`). A rating may give `min` and `max`. Without a type, the engine reads the column by AAJ's rules: whole numbers from 0 to 10 are a rating (an NPS question if the heading says "recommend" and the answers reach 10); up to 12 different answers, with at least two people per answer on average, are a choice; anything else is open text; dates, IDs and contact columns are left out. Those rules are AAJ's view. Say the type when you know it.
 
 ## Workflow
 
@@ -68,6 +74,7 @@ Modes: `sample '<json>'` and `segments '<json>'`. `--demo` runs both worked exam
 5. **Write unbiased wording** — neutral, one idea per question, no leading or loaded phrasing, balanced options.
 6. **Order for flow and low drop-off** — easy/engaging first, sensitive/demographic last, group by topic, keep it short.
 7. **Add the key open-ended "why"** after rating questions — that's where the actionable insight lives.
+8. **Read the results with the engine.** When the answers are in, pass the export's headings and rows to `readout`. Do not count answers or work out percentages yourself. Give each question's type, options and scale from the survey you designed, so nothing is guessed.
 
 ## Present the result
 
@@ -83,6 +90,8 @@ Lead with the sample plan (completes, invites, feasibility, and the segment-read
 - **Keep it short.** Every extra question lowers completion and data quality.
 - **Balance the scale.** Offer as many negative as positive options; include a neutral where appropriate.
 - **Pilot first.** Test with a few people to catch confusing wording before fielding.
+- **Don't tally by hand.** Counts, shares, averages and NPS come from `readout`. Read the open-text answers yourself; the engine does not count words or score sentiment.
+- **A range is not the whole error.** The ranges cover sampling error only. They say nothing about who chose not to answer.
 - **Survey sampling ≠ experiment significance.** Testing whether variant B beat variant A belongs in `ab-test-significance`; this engine sizes *reads*, not experiments.
 
 ## Related AAJ resources

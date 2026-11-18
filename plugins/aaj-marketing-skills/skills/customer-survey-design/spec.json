@@ -1,10 +1,10 @@
 {
-  "decision": "How many responses do we need, and which segment cuts will our sample be able to read?",
+  "decision": "How many responses do we need, which segment cuts will our sample be able to read, and what do the answers say once they are in?",
   "limitations": [
     "It sizes the sample, not the questions. It cannot spot leading or double-barrelled wording; pilot the survey with a few people first.",
-    "Invites are completes divided by the response rate you enter. An optimistic rate makes an infeasible plan look feasible.",
-    "Segment margins are worst case per cell, and the READ, CAUTION and DON'T READ cut-offs (5 and 8 points) are working labels, not laws.",
+    "Invites are completes divided by the response rate you enter; an optimistic rate makes an infeasible plan look feasible. Segment margins are worst case per cell, and the 5 and 8 point cut-offs are working labels, not laws.",
+    "The readout's ranges cover sampling error only: not who chose not to answer, no weighting, no reading of open text. Without a type from you it reads each column by AAJ's rules, which can misread one; say the type when you know it.",
     "It sizes survey reads, not experiments. Whether variant B beat variant A belongs in ab-test-significance."
   ],
-  "review": "The founder or researcher confirms the reachable audience size and a response rate from past sends, and drops or resizes any DON'T READ segment before the readout promises it."
+  "review": "The founder or researcher confirms the reachable audience size and a response rate from past sends, and drops or resizes any DON'T READ segment before the readout promises it. For a readout, they check each column's type and scale against the survey that was sent, and read the open-text answers themselves."
 }

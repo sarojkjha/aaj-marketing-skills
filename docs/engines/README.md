@@ -34,7 +34,7 @@ One page per engine: the decision it supports, its inputs and output, setup, whe
 | [Content Decay](content-decay.md) | Diagnose | Which pages are losing search clicks, why, and which should we refresh first? |
 | [Creator Partnerships](creator-partnerships.md) | Execute | Which creators reach our buyers at the lowest cost, what terms are still missing, and which sponsorships should we keep or drop? |
 | [Customer Interview Synthesis](customer-interview-synthesis.md) | Diagnose | Which customer problems are real patterns rather than anecdotes, and have we done enough interviews to act? |
-| [Customer Survey Design](customer-survey-design.md) | Diagnose | How many responses do we need, and which segment cuts will our sample be able to read? |
+| [Customer Survey Design](customer-survey-design.md) | Diagnose | How many responses do we need, which segment cuts will our sample be able to read, and what do the answers say once they are in? |
 | [Email Lifecycle Sequence](email-lifecycle-sequence.md) | Execute | Which lifecycle email sequences are we missing, in what order should we build them, and are new users getting too many emails? |
 | [First Marketing Hire](first-marketing-hire.md) | Design | Should we hire this candidate as our first marketer, turn them down, or gather more evidence first? |
 | [Founder Led Content](founder-led-content.md) | Execute | Is this founder ready to start posting, and does each draft stay inside themes only they can own? |

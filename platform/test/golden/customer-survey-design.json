@@ -33,7 +33,49 @@
         "",
         "▼ 3 cut(s) below a clean read. Smallest cell \"Enterprise\" (n=48) is ±14.1pp.",
         "  A ±5pp read needs ~385 completes per cell at 95% — either boost total n,",
-        "  oversample the small segment, or merge it into a wider cut before fielding."
+        "  oversample the small segment, or merge it into a wider cut before fielding.",
+        "",
+        "▸ DEMO 3 — readout mode (Example Co., a fictional company; invented answers)",
+        "AAJ · SURVEY RESULTS READOUT",
+        "────────────────────────────────────────────────────────────────────────",
+        "45 responses · 95% confidence (z=1.96) · ranges are Wilson score intervals",
+        "",
+        "How often do you use it?",
+        "  set to one answer each · 45 answers",
+        "  ███░░░░░░░░░░░  24.4%     11  14.2% to 38.7%   Daily",
+        "  ███████░░░░░░░  51.1%     23  37.0% to 65.0%   Weekly",
+        "  ███░░░░░░░░░░░  24.4%     11  14.2% to 38.7%   Monthly",
+        "  ░░░░░░░░░░░░░░   0.0%      0  0.0% to 7.9%     Never",
+        "  Ranges here reach ±14.0 points: only large gaps between answers mean anything.",
+        "",
+        "Which features matter most?",
+        "  read as several answers allowed, split on \";\" · 40 answers, 5 blank · shares are of people, so they can add to more than 100%",
+        "  ██████████░░░░  72.5%     29  57.2% to 83.9%   Reports",
+        "  ████████░░░░░░  55.0%     22  39.8% to 69.3%   Alerts",
+        "  ████░░░░░░░░░░  27.5%     11  16.1% to 42.8%   Integrations",
+        "  Ranges here reach ±14.7 points: only large gaps between answers mean anything.",
+        "",
+        "How satisfied are you?",
+        "  set to a rating, 1 to 5 · 45 answers",
+        "  Average 3.9, range 3.6 to 4.2",
+        "  ░░░░░░░░░░░░░░   0.0%      0  1",
+        "  ██░░░░░░░░░░░░  11.1%      5  2",
+        "  ██░░░░░░░░░░░░  13.3%      6  3",
+        "  ███████░░░░░░░  48.9%     22  4",
+        "  ████░░░░░░░░░░  26.7%     12  5",
+        "",
+        "How likely are you to recommend us?",
+        "  read as an NPS question, 0 to 10 · 42 answers, 3 blank",
+        "  NPS 43, range 22 to 64",
+        "  ████████░░░░░░  54.8%     23  39.9% to 68.8%   Promoters (9-10)",
+        "  █████░░░░░░░░░  33.3%     14  21.0% to 48.4%   Passives (7-8)",
+        "  ██░░░░░░░░░░░░  11.9%      5  5.2% to 25.0%    Detractors (0-6)",
+        "",
+        "Anything else?",
+        "  read as open text · 5 answers, 5 different, 40 blank. Read them; the engine does not count words.",
+        "",
+        "Within ±5 points reads clean, within ±8 is directional, wider is noise for small gaps: working labels, not laws.",
+        "The ranges cover sampling error only, not who chose to answer."
       ],
       "stderr": []
     },
@@ -60,6 +102,256 @@
         "  oversample the small segment, or merge it into a wider cut before fielding."
       ],
       "stderr": []
+    },
+    {
+      "name": "readout: 20 answers, 10/6/4 split (10 of 20 is 29.9% to 70.1% by Wilson), rating average 3.9, NPS 16 promoters - 4 detractors = 60",
+      "source": "readout mode, hand-checked",
+      "args": [
+        "readout",
+        "{\"columns\": [\"How often do you use it?\", \"How satisfied are you?\", \"How likely are you to recommend us?\"], \"rows\": [[\"Weekly\", \"4\", \"9\"], [\"Weekly\", \"4\", \"9\"], [\"Weekly\", \"4\", \"9\"], [\"Weekly\", \"4\", \"9\"], [\"Weekly\", \"4\", \"9\"], [\"Weekly\", \"4\", \"9\"], [\"Weekly\", \"4\", \"9\"], [\"Weekly\", \"4\", \"9\"], [\"Weekly\", \"4\", \"9\"], [\"Weekly\", \"4\", \"9\"], [\"Monthly\", \"5\", \"10\"], [\"Monthly\", \"5\", \"10\"], [\"Monthly\", \"5\", \"10\"], [\"Monthly\", \"5\", \"10\"], [\"Monthly\", \"5\", \"10\"], [\"Monthly\", \"5\", \"10\"], [\"Never\", \"2\", \"3\"], [\"Never\", \"2\", \"3\"], [\"Never\", \"2\", \"3\"], [\"Never\", \"2\", \"3\"]]}"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "AAJ · SURVEY RESULTS READOUT",
+        "────────────────────────────────────────────────────────────────────────",
+        "20 responses · 95% confidence (z=1.96) · ranges are Wilson score intervals",
+        "",
+        "How often do you use it?",
+        "  read as one answer each · 20 answers",
+        "  ███████░░░░░░░  50.0%     10  29.9% to 70.1%   Weekly",
+        "  ████░░░░░░░░░░  30.0%      6  14.5% to 51.9%   Monthly",
+        "  ███░░░░░░░░░░░  20.0%      4  8.1% to 41.6%    Never",
+        "  Ranges here reach ±20.1 points: only large gaps between answers mean anything.",
+        "",
+        "How satisfied are you?",
+        "  read as a rating, 1 to 5 (taken from the answers seen; give min and max if the scale is wider) · 20 answers",
+        "  Average 3.9, range 3.4 to 4.4",
+        "  ░░░░░░░░░░░░░░   0.0%      0  1",
+        "  ███░░░░░░░░░░░  20.0%      4  2",
+        "  ░░░░░░░░░░░░░░   0.0%      0  3",
+        "  ███████░░░░░░░  50.0%     10  4",
+        "  ████░░░░░░░░░░  30.0%      6  5",
+        "",
+        "How likely are you to recommend us?",
+        "  read as an NPS question, 0 to 10 · 20 answers",
+        "  NPS 60, range 25 to 95",
+        "  ███████████░░░  80.0%     16  58.4% to 91.9%   Promoters (9-10)",
+        "  ░░░░░░░░░░░░░░   0.0%      0  0.0% to 16.1%    Passives (7-8)",
+        "  ███░░░░░░░░░░░  20.0%      4  8.1% to 41.6%    Detractors (0-6)",
+        "",
+        "Within ±5 points reads clean, within ±8 is directional, wider is noise for small gaps: working labels, not laws.",
+        "The ranges cover sampling error only, not who chose to answer."
+      ],
+      "stderr": []
+    },
+    {
+      "name": "readout: one JSON object, mode told from the fields, 90% confidence, options listed so an unpicked one shows as 0 and an unlisted answer is marked",
+      "source": "readout mode, hand-checked",
+      "args": [
+        "{\"confidence\": 90, \"columns\": [\"Plan\"], \"rows\": [[\"Pro\"], [\"Pro\"], [\"Free\"], [\"free trial\"], [\"\"], [\"Pro\"]], \"questions\": [{\"column\": 0, \"type\": \"choice\", \"options\": [\"Free\", \"Pro\", \"Team\"]}]}"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "AAJ · SURVEY RESULTS READOUT",
+        "────────────────────────────────────────────────────────────────────────",
+        "5 responses · 90% confidence (z=1.645) · ranges are Wilson score intervals · 1 blank row left out",
+        "",
+        "Plan",
+        "  set to one answer each · 5 answers",
+        "  ███░░░░░░░░░░░  20.0%      1  4.6% to 56.5%    Free",
+        "  ████████░░░░░░  60.0%      3  27.2% to 85.7%   Pro",
+        "  ░░░░░░░░░░░░░░   0.0%      0  0.0% to 35.1%    Team",
+        "  ███░░░░░░░░░░░  20.0%      1  4.6% to 56.5%    free trial  (not one of your options)",
+        "  Ranges here reach ±29.2 points: only large gaps between answers mean anything.",
+        "",
+        "Within ±5 points reads clean, within ±8 is directional, wider is noise for small gaps: working labels, not laws.",
+        "The ranges cover sampling error only, not who chose to answer."
+      ],
+      "stderr": []
+    },
+    {
+      "name": "readout: several answers in one cell, comma separator, an option with a comma in its label still matches whole",
+      "source": "readout mode, hand-checked",
+      "args": [
+        "readout",
+        "{\"columns\": [\"Timestamp\", \"Tools (pick all)\"], \"rows\": [[\"t1\", \"Docs, Sheets\"], [\"t2\", \"Docs\"], [\"t3\", \"Sheets, Slides, etc.\"], [\"t4\", \"\"], [\"t5\", \"Docs, Docs\"]], \"questions\": [{\"column\": 1, \"type\": \"multi\", \"separator\": \",\", \"options\": [\"Docs\", \"Sheets\", \"Slides, etc.\"]}]}"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "AAJ · SURVEY RESULTS READOUT",
+        "────────────────────────────────────────────────────────────────────────",
+        "5 responses · 95% confidence (z=1.96) · ranges are Wilson score intervals",
+        "",
+        "Tools (pick all)",
+        "  set to several answers allowed, split on \",\" · 4 answers, 1 blank · shares are of people, so they can add to more than 100%",
+        "  ███████████░░░  75.0%      3  30.1% to 95.4%   Docs",
+        "  ███████░░░░░░░  50.0%      2  15.0% to 85.0%   Sheets",
+        "  ████░░░░░░░░░░  25.0%      1  4.6% to 69.9%    Slides, etc.",
+        "  Ranges here reach ±35.0 points: only large gaps between answers mean anything.",
+        "",
+        "Columns left out: Timestamp (not a question (a date, an ID or contact details))",
+        "",
+        "Within ±5 points reads clean, within ±8 is directional, wider is noise for small gaps: working labels, not laws.",
+        "The ranges cover sampling error only, not who chose to answer."
+      ],
+      "stderr": []
+    },
+    {
+      "name": "readout: rating with a given scale, an answer off the scale is left out and named; a blank row is dropped; one answer has no range",
+      "source": "readout mode, hand-checked",
+      "args": [
+        "readout",
+        "{\"columns\": [\"Score\", \"Solo\"], \"rows\": [[\"5\", \"3\"], [\"4\", \"\"], [\"n/a\", \"\"], [\"7\", \"\"], [\"\", \"\"], [\"3\", \"\"]], \"questions\": [{\"column\": 0, \"type\": \"rating\", \"min\": 1, \"max\": 5}, {\"column\": 1, \"type\": \"rating\", \"min\": 1, \"max\": 5}]}"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "AAJ · SURVEY RESULTS READOUT",
+        "────────────────────────────────────────────────────────────────────────",
+        "5 responses · 95% confidence (z=1.96) · ranges are Wilson score intervals · 1 blank row left out",
+        "",
+        "Score",
+        "  set to a rating, 1 to 5 · 3 answers",
+        "  2 answers left out as not a whole number on the scale: \"n/a\", \"7\"",
+        "  Average 4.0, range 2.9 to 5.0",
+        "  ░░░░░░░░░░░░░░   0.0%      0  1",
+        "  ░░░░░░░░░░░░░░   0.0%      0  2",
+        "  █████░░░░░░░░░  33.3%      1  3",
+        "  █████░░░░░░░░░  33.3%      1  4",
+        "  █████░░░░░░░░░  33.3%      1  5",
+        "",
+        "Solo",
+        "  set to a rating, 1 to 5 · 1 answer, 4 blank",
+        "  Average 3.0 (one answer: no range)",
+        "  ░░░░░░░░░░░░░░   0.0%      0  1",
+        "  ░░░░░░░░░░░░░░   0.0%      0  2",
+        "  ██████████████ 100.0%      1  3",
+        "  ░░░░░░░░░░░░░░   0.0%      0  4",
+        "  ░░░░░░░░░░░░░░   0.0%      0  5",
+        "",
+        "Within ±5 points reads clean, within ±8 is directional, wider is noise for small gaps: working labels, not laws.",
+        "The ranges cover sampling error only, not who chose to answer."
+      ],
+      "stderr": []
+    },
+    {
+      "name": "readout: mode set inside the object",
+      "source": "readout mode, hand-checked",
+      "args": [
+        "{\"mode\": \"readout\", \"columns\": [\"A\"], \"rows\": [[\"x\"], [\"x\"], [\"y\"], [\"y\"]]}"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "AAJ · SURVEY RESULTS READOUT",
+        "────────────────────────────────────────────────────────────────────────",
+        "4 responses · 95% confidence (z=1.96) · ranges are Wilson score intervals",
+        "",
+        "A",
+        "  read as one answer each · 4 answers",
+        "  ███████░░░░░░░  50.0%      2  15.0% to 85.0%   x",
+        "  ███████░░░░░░░  50.0%      2  15.0% to 85.0%   y",
+        "  Ranges here reach ±35.0 points: only large gaps between answers mean anything.",
+        "",
+        "Within ±5 points reads clean, within ±8 is directional, wider is noise for small gaps: working labels, not laws.",
+        "The ranges cover sampling error only, not who chose to answer."
+      ],
+      "stderr": []
+    },
+    {
+      "name": "sample from one JSON object, mode told from the fields (as the hosted connector sends it)",
+      "source": "sample mode, hand-checked",
+      "args": [
+        "{\"marginOfError\": 5, \"confidence\": 95, \"population\": 2000, \"responseRate\": 20}"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "AAJ · SURVEY SAMPLE SIZE",
+        "────────────────────────────────────────────────────────",
+        "Target read        ±5.0pp at 95% confidence (z=1.96)",
+        "Assumed proportion 50% (worst case — safest)",
+        "",
+        "Completes needed   323   (infinite-population n=385, corrected for N=2000)",
+        "Invites needed     1615   (at 20% response rate)",
+        "",
+        "▲ FEASIBLE — 1615 invites fits inside your 2000-person audience."
+      ],
+      "stderr": []
+    },
+    {
+      "name": "readout: rejects a row with more cells than columns",
+      "source": "strict inputs",
+      "args": [
+        "readout",
+        "{\"columns\": [\"A\"], \"rows\": [[\"x\", \"y\"]]}"
+      ],
+      "exitCode": 1,
+      "stdout": [],
+      "stderr": [
+        "row 1 has 2 cells but there is 1 column"
+      ]
+    },
+    {
+      "name": "readout: rejects rows with no answers",
+      "source": "strict inputs",
+      "args": [
+        "readout",
+        "{\"columns\": [\"A\"], \"rows\": [[\"\"]]}"
+      ],
+      "exitCode": 1,
+      "stdout": [],
+      "stderr": [
+        "there are no answers in rows"
+      ]
+    },
+    {
+      "name": "readout: rejects an unknown field",
+      "source": "strict inputs",
+      "args": [
+        "readout",
+        "{\"columns\": [\"A\"], \"rows\": [[\"x\"]], \"weights\": [1]}"
+      ],
+      "exitCode": 1,
+      "stdout": [],
+      "stderr": [
+        "unknown field \"weights\" (allowed: mode, confidence, columns, rows, questions)"
+      ]
+    },
+    {
+      "name": "readout: rejects a rating scale with min above max",
+      "source": "strict inputs",
+      "args": [
+        "readout",
+        "{\"columns\": [\"A\"], \"rows\": [[\"x\"]], \"questions\": [{\"column\": 0, \"type\": \"rating\", \"min\": 3, \"max\": 2}]}"
+      ],
+      "exitCode": 1,
+      "stdout": [],
+      "stderr": [
+        "questions[0]: min and max must be whole numbers with 0 <= min < max <= 10"
+      ]
+    },
+    {
+      "name": "readout: rejects an unknown question type",
+      "source": "strict inputs",
+      "args": [
+        "readout",
+        "{\"columns\": [\"A\"], \"rows\": [[\"x\"]], \"questions\": [{\"column\": 0, \"type\": \"matrix\"}]}"
+      ],
+      "exitCode": 1,
+      "stdout": [],
+      "stderr": [
+        "questions[0].type must be one of choice, multi, rating, nps, text, skip"
+      ]
+    },
+    {
+      "name": "rejects one JSON object with no mode and no telling fields",
+      "source": "strict inputs",
+      "args": [
+        "{\"foo\": 1}"
+      ],
+      "exitCode": 1,
+      "stdout": [],
+      "stderr": [
+        "Say which mode: add \"mode\": \"sample\", \"segments\" or \"readout\". Run --help for the schema."
+      ]
     }
   ]
 }
