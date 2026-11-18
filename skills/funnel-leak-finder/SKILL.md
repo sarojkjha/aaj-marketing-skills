@@ -88,10 +88,13 @@ This ranks stages by relative shortfall, not points: a 1-point drop on a 3% rate
 node resources/funnel-leak.js --demo
 node resources/funnel-leak.js '{"period":"Q3 2026","sessions":120000,"leads":3000,"mqls":1050,"sqls":252,"opps":126,"wins":28,"revenuePerWin":18000,"prior":{"period":"Q2 2026","sessions":110000,"leads":2860,"mqls":1001,"sqls":320,"opps":150,"wins":36}}'
 node resources/funnel-leak.js '{"leads":800,"mqls":300,"sqls":90,"opps":40,"wins":9,"targets":{"leadsToMqls":0.35,"mqlsToSqls":0.3,"sqlsToOpps":0.5},"targetSource":"2026 plan"}'
+node resources/funnel-leak.js '{"contacts":[{"leads":"2026-07-03","mqls":"2026-07-20","sqls":null}],"dates":{"from":"2026-07-01","to":"2026-09-30"},"priorDates":{"from":"2026-04-01","to":"2026-06-30"}}'
 node resources/funnel-leak.js --help
 ```
 
 Transition keys for `targets`: `sessionsToLeads`, `leadsToMqls`, `mqlsToSqls`, `sqlsToOpps`, `oppsToWins`. Rates are fractions (30% is 0.3).
+
+**Counts from CRM contacts.** When the numbers come from a CRM, do not count them yourself. Give `contacts` (one object per contact, with the date it entered each stage: `leads`, `mqls`, `sqls`, `opps`, `wins`), `dates` and, for a prior-period baseline, `priorDates`. The engine counts each period as a cohort: a contact belongs to a period if its first stage date falls in it, and counts for a stage if it entered that stage or a later one by the period's last day. Sessions are not in a CRM; add `sessions` and `priorSessions` if you have them.
 
 `run(config)` returns each transition with its rate, baseline rate, change in points and relative terms, status (leaking, holding, no baseline), wins and revenue lost, rank and noise check; the leak, and the firmest leak when the top one may be noise; top-of-funnel volume against the prior period; the verdict; notes; and AAJ's view, labelled. It rejects unknown fields, non-numbers, counts that are not whole numbers, gaps between stages, a stage larger than the one before it, both baselines at once, and rates written as whole percentages.
 

@@ -173,6 +173,7 @@ Setup for each client, troubleshooting, and the smoke test:
 Vendor MCP servers bring the data; the engines turn it into a verdict. Each recipe is a prompt to paste, a field-by-field mapping and the checks to make before you trust the result:
 
 - [HubSpot deals into `pipeline-and-forecast`](recipes/hubspot-to-pipeline-forecast.md): weighted forecast, coverage against your win rate, and the lever to pull.
+- [HubSpot contacts into `funnel-leak-finder`](recipes/hubspot-to-funnel-leak.md): the stage that cost the most wins against last period.
 - [GA4 results into `ab-test-significance`](recipes/ga4-to-ab-test-significance.md): sample size before the test, a verdict after it.
 - [GA4 traffic sources into `ai-referral-share`](recipes/ga4-to-ai-referral-share.md): how much traffic AI assistants send, and whether it converts differently.
 - [Ahrefs or Semrush keyword data into `aaj-programmatic-seo`](recipes/keyword-data-to-programmatic-seo.md): whether a template-page build pays back.
