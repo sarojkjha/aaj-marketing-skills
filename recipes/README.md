@@ -4,7 +4,7 @@ Vendor MCP servers give your agent data: deals, sessions, search volumes. They d
 
 | Recipe | Vendor data | Engine | What you get |
 |---|---|---|---|
-| [HubSpot deals into the forecast](hubspot-to-pipeline-forecast.md) | HubSpot MCP server: open deals, stages, win probabilities | `pipeline-and-forecast` | Weighted forecast, commit against best case, coverage against your win rate, the gap and the one lever to pull |
+| [HubSpot deals into the forecast](hubspot-to-pipeline-forecast.md) | HubSpot MCP server: open deals, stage probabilities, and closed won and lost counts | `pipeline-and-forecast` | Weighted forecast, commit against best case, coverage against your win rate, the gap and the one lever to pull |
 | [GA4 results into significance](ga4-to-ab-test-significance.md) | Google Analytics MCP server: sessions and key events by variant | `ab-test-significance` | Sample size before the test; lift, p-value, confidence interval and a verdict after it |
 | [Keyword data into a pSEO decision](keyword-data-to-programmatic-seo.md) | Ahrefs or Semrush MCP server: volume and difficulty for your target queries | `aaj-programmatic-seo` | Whether a template-page build pays back, through an indexation and ranking funnel |
 | [Search Console export into content decay](search-console-to-content-decay.md) | Google Search Console export or MCP server: clicks, impressions and average position across two periods | `content-decay` | Which pages are decaying, losing snippets or hitting seasonal drops; refresh priorities ranked by clicks lost; and page-one CTR tests |
