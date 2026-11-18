@@ -174,6 +174,7 @@ Vendor MCP servers bring the data; the engines turn it into a verdict. Each reci
 
 - [HubSpot deals into `pipeline-and-forecast`](recipes/hubspot-to-pipeline-forecast.md): weighted forecast, coverage against your win rate, and the lever to pull.
 - [GA4 results into `ab-test-significance`](recipes/ga4-to-ab-test-significance.md): sample size before the test, a verdict after it.
+- [GA4 traffic sources into `ai-referral-share`](recipes/ga4-to-ai-referral-share.md): how much traffic AI assistants send, and whether it converts differently.
 - [Ahrefs or Semrush keyword data into `aaj-programmatic-seo`](recipes/keyword-data-to-programmatic-seo.md): whether a template-page build pays back.
 - [Stripe data into `unit-economics`](recipes/stripe-to-unit-economics.md): gross-margin LTV, CAC payback, and whether your economics support growth.
 - [Search Console data into `content-decay`](recipes/search-console-to-content-decay.md): which pages are decaying, and refresh priorities ranked by clicks lost.
