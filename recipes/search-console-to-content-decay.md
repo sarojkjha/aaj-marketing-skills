@@ -1,83 +1,80 @@
-# Recipe: Google Search Console export into `content-decay`
+# Recipe: Google Search Console data into `content-decay`
 
-A Google Search Console comparison export shows how search traffic changed across two periods: clicks, impressions, and average position for each page. The `content-decay` engine sorts every page by what happened to it (decaying, snippet loss, demand drop, rising, or stable), ranks the refresh candidates by clicks lost, and finds page-one pages sitting below your site's own CTR median. Search Console brings the data and the engine brings the verdict.
+Search Console holds how search traffic changed across two periods: clicks, impressions and average position for each page. The `content-decay` engine sorts every page by what happened to it (decaying, snippet loss, demand drop, rising, stable or new), ranks the refresh candidates by clicks lost, and finds page-one pages sitting below your site's own CTR median. Search Console brings the data and the engine brings the verdict, so the agent never estimates a number it could compute: it passes Google's counts as they are.
 
-**You need:** access to Google Search Console for your site (with at least three to six months of performance history), an export or query comparing two equal-length periods, and the AAJ engines, either installed or as the hosted connector.
+**You need:** access to the Search Console property, two periods of the same length to compare, and the AAJ engines, installed or as the hosted connector.
 
-## 1. Export from Google Search Console
+## 1. Get the data from Search Console
 
-You can export directly from the Search Console web interface without writing code or configuring API credentials:
+There are two routes. Both give the engine the same fields.
 
-1. Open **Google Search Console** and select your property.
-2. In the left navigation, click **Performance** > **Search results**.
-3. Click the **Date** filter pill at the top, switch to the **Compare** tab, and choose **Compare last 3 months to previous period** (or set custom dates of equal length, such as 90 days vs the preceding 90 days).
-4. Select the **Pages** tab in the table below the chart.
-5. Click **Export** (top right) and choose **Download CSV** (or Google Sheets / Excel).
-6. Open the exported `Pages` table. It contains the comparison columns for each URL: Clicks (current and previous period), Impressions (current and previous period), and Average Position (current and previous period).
+**Live, through the Search Analytics API.** This recipe does not name a connector: use any MCP server or integration that calls Google's Search Analytics API (`searchanalytics.query`) with your own Google sign-in. Read access is enough: the `webmasters.readonly` scope. The agent runs the same query twice, once per period:
 
-If your agent connects to Google Search Console via an MCP server or API integration, query the Search Analytics API (`searchanalytics.query`) with dimension `page` over the two matching date ranges.
+| Request field | Value | Note |
+|---|---|---|
+| `startDate`, `endDate` | The period, as `YYYY-MM-DD` | Both dates are included, in Pacific time |
+| `dimensions` | `["page"]` | One row per page |
+| `rowLimit` | `25000` | The default is 1,000. For more rows, page with `startRow` |
+| `dataState` | Leave out, or `final` | Finalised data only. Recent days are still changing |
+
+Each row comes back with `keys` (the page URL), `clicks`, `impressions`, `ctr` and `position`.
+
+**From an export, no connection.** In Search Console, open **Performance**, then **Search results**. In the date filter choose **Compare** and pick two periods of the same length. Then **Export** and download the CSV. Give the Pages file to your agent, or drop it on the [Content Decay Finder](https://aajconsult.com/tools/content-decay-finder), which runs the same engine in your browser and uploads nothing.
 
 ## 2. Add the AAJ engines
 
-Either setup works:
+Either one works:
 
 - **Hosted, no install:** add `https://mcp.aajconsult.com/mcp` as a custom connector. The engine is `content-decay`.
 - **In a coding agent:** `npx skills add sarojkjha/aaj-marketing-skills --skill content-decay`.
 
-## 3. What to check first
-
-Before feeding numbers into the engine, verify three things:
-
-- **Equal date ranges.** The engine evaluates absolute click loss and percentage change. If the two periods are unequal (for example, comparing 90 days against 60 days, or a full quarter against a partial month), flat traffic will register as artificial decay. Ensure both periods span the exact same number of days, and set `periodDays` to that duration.
-- **Seasonality.** If your business has seasonal patterns (holiday surges, summer lulls, B2B end-of-year budget pauses), a quarter-over-quarter comparison will mistake a predictable seasonal drop for decaying content. When seasonality applies, compare the current period against the same period of the previous year (e.g. Q4 2026 vs Q4 2025) rather than the preceding quarter.
-- **Redirected URLs and migrations.** If you redesigned the site, moved `/posts/` to `/blog/`, updated slug formats, or have duplicate rows caused by trailing slashes or HTTP vs HTTPS variants, Search Console treats each URL as a separate entity. The old URL will show 100% click loss while the new URL looks like a new page. Consolidate redirected and duplicate URLs into the canonical target URL before running the engine.
-
-## 4. Give your agent this prompt
+## 3. Give your agent this prompt
 
 ```
-Use this Google Search Console export and the AAJ content-decay engine to find which pages are decaying and what to refresh first.
+Use Search Console and the AAJ content-decay engine to find which pages are
+decaying on [site] and what to refresh first. Read only.
 
-1. Here is the Search Console Pages comparison export covering two equal periods of [e.g. 90 days]:
-   [paste CSV rows, markdown table, or attach export file]
-2. For each page row, map:
-   - page: clean URL path (e.g. /blog/post-name)
-   - clicks: clicks in the current/recent period
-   - clicksPrev: clicks in the earlier comparison period
-   - impressions: impressions in the current/recent period
-   - impressionsPrev: impressions in the earlier comparison period
-   - position: average position in the recent period (if present)
-   - positionPrev: average position in the earlier period (if present)
-3. Check for redirected URLs, site migrations, or trailing-slash duplicates and merge them first.
-4. Call run_engine with engine "content-decay" and input:
-   { "periodDays": 90, "pages": [ ... ] }
-5. Report the engine's numbers as printed:
-   - The headline verdict and counts by category (decaying, snippet loss, demand drop, rising, stable, too small).
-   - The refresh candidates ranked by clicks lost, with the reason and recommended next action for each.
-   - Title and snippet test candidates that sit below our site's own CTR median for their position band.
-   - Any check warnings (such as masked decay hidden under site-wide growth).
+1. Query the Search Analytics API twice with dimensions ["page"] and rowLimit
+   25000, finalised data only:
+   - recent period: [start date] to [end date]
+   - previous period: [start date] to [end date], the same number of days
+   (Or read the Pages comparison export I attach.)
+2. Build one row per page URL: clicks, impressions and position from the recent
+   period; clicksPrev, impressionsPrev and positionPrev from the previous
+   period. A page missing from one period gets 0 clicks and 0 impressions there
+   and no position. Pass the numbers as Google returns them: do not round, add
+   or rescale anything.
+3. If you see URLs that look like the same page (http and https, with and
+   without a trailing slash, an old and a new path), list them for me. Leave
+   the rows as they are; do not add them together.
+4. Call run_engine with engine "content-decay" and input
+   { "periodDays": [days in each period], "pages": [ ... ] }.
+5. Report the engine's output as printed. Do not recompute or round it.
 ```
 
-## 5. How Search Console's export maps to the engine
+## 4. How Search Console's fields map to the engine
 
-| Engine input | From Search Console export | Note |
-|---|---|---|
-| `pages[].page` | `Top pages` or `Page` column | Clean URL path or full URL. Removing protocol and domain (e.g. `/blog/example` instead of `https://example.com/blog/example`) keeps reports readable |
-| `pages[].clicks` | `Clicks` (current / recent period) | Numeric count in the recent period. Whole numbers |
-| `pages[].clicksPrev` | `Clicks` (previous comparison period) | Numeric count in the earlier period. Whole numbers. A page needs 20+ clicks in `clicksPrev` to be judged (under 20 is classified as `too-small`) |
-| `pages[].impressions` | `Impressions` (current / recent period) | Numeric count. Compares search demand between periods |
-| `pages[].impressionsPrev` | `Impressions` (previous comparison period) | Numeric count in earlier period. Flat impressions with falling clicks indicate decay; falling impressions indicate demand drop; rising impressions with falling clicks indicate snippet loss |
-| `pages[].position` | `Average Position` (recent period) | Optional average ranking position (e.g. 6.8). Used to separate ranking loss (>= 1.0 drop) from snippet loss, and to identify positions 1–10 for CTR tests |
-| `pages[].positionPrev` | `Average Position` (previous period) | Optional average ranking position in earlier period |
-| `periodDays` | Comparison duration | Optional integer (e.g. 90 or 28). Labels the report header |
+| Engine input | From the API | From the export | Note |
+|---|---|---|---|
+| `pages[].page` | `keys[0]` | The page column | The URL as Google gives it |
+| `pages[].clicks` | `clicks`, recent period | Clicks, recent period | "Click count for the row" |
+| `pages[].clicksPrev` | `clicks`, previous period | Clicks, previous period | A page with under 20 clicks in both periods is not judged; that is an engine rule |
+| `pages[].impressions` | `impressions`, recent period | Impressions, recent period | "Impression count for the row" |
+| `pages[].impressionsPrev` | `impressions`, previous period | Impressions, previous period | Without impressions the engine cannot tell decay from a demand drop |
+| `pages[].position` | `position`, recent period | Position, recent period | "Average position in search results." Optional |
+| `pages[].positionPrev` | `position`, previous period | Position, previous period | Optional. Leave it out, or `null`, for a page with no previous data |
+| `periodDays` | The days in each period | The days in each period | Optional. It labels the report |
 
-How the engine categorises each page:
-- **Decaying:** clicks fell by 20% or more with demand roughly flat (impressions within ±20%). If average position slipped by 1.0 or more, it is a ranking loss; refresh the content and inspect what now ranks above it. If position held flat, check the title and SERP snippet first.
-- **Snippet loss:** impressions rose by 20% or more while clicks fell by 20% or more. The page appears more often but is chosen less; a SERP feature, AI Overview, or competitor title is taking the click.
-- **Demand drop:** impressions fell by 20% or more alongside clicks. Overall search interest declined. Not the page's fault; verify seasonality before editing.
-- **Rising / Stable:** clicks rose by 20% or more (rising) or remained within ±20% (stable).
-- **Too small:** fewer than 20 clicks in both periods; too small to judge statistically.
+How the engine sorts each page. Every threshold is the engine's rule, not a benchmark:
 
-The input the engine receives looks like this:
+- **Decaying:** clicks fell 20% or more with impressions roughly flat. If average position worsened by 1.0 or more, it is a ranking loss.
+- **Snippet loss:** impressions rose 20% or more while clicks fell 20% or more. The page shows more and gets chosen less.
+- **Demand drop:** impressions fell 20% or more along with clicks. Fewer people searched.
+- **Rising or stable:** clicks rose 20% or more, or stayed within 20%.
+- **Too small:** under 20 clicks in both periods.
+- **New:** no clicks in the previous period.
+
+The input the engine receives looks like this (Example Co. is fictional):
 
 ```json
 {
@@ -97,19 +94,23 @@ The input the engine receives looks like this:
 }
 ```
 
-## 6. Before you trust it
+## 5. Before you trust it
 
-- **Export all pages, not a filtered view.** The engine calculates your site's own CTR medians by position band (positions 1–3 and 4–10) from pages with 500+ impressions. Filtering by subfolder or tag distorts the site baseline.
-- **Total traffic growth hides decay.** If total clicks grew (for instance, driven by recent viral or new articles), that overall gain often conceals hundreds of lost clicks on previously core evergreen pages. The engine specifically checks for and flags masked decay.
-- **Average position blends queries.** A page that starts ranking for broad, low-CTR queries on position 20+ will show a worsening average position even if its primary target keyword held position 1. Cross-check the top refresh candidates in Search Console's Queries tab.
-- **Twenty clicks is a statistical cutoff, not a business cutoff.** A high-intent checkout or contact page that dropped from 19 clicks to 3 won't trigger the decay threshold because under-20 counts are volatile. Inspect high-value low-volume pages manually.
-- **Refresh the page, do not rewrite it.** Keep the URL intact, preserve the sections that still win impressions, update outdated screenshots and figures, and cover the specific subtopics competitors ranking above you now address.
+- **Equal periods.** If one period is longer, flat traffic looks like decay. Use the same number of days in both.
+- **Seasonality.** The engine sees two periods only. If your demand is seasonal, compare with the same period last year, not the period just before.
+- **Moved and duplicate URLs.** Search Console counts each URL separately. After a migration the old URL shows a total loss and the new one looks new. Fix this in the data you give the engine, not by having the agent add rows.
+- **The API returns top rows, not every row.** Google says the API "does not guarantee to return all data rows but rather top ones," sorted by clicks. On a large site, low-traffic pages are missing. They would be too small for the engine to judge anyway.
+- **Use the whole site.** The engine works out your own CTR medians, for positions 1 to 3 and 4 to 10, from pages with 500 or more impressions. A filtered view shifts that baseline.
+- **Total growth hides decay.** New pages can lift total clicks while older pages lose them. The engine checks for this and says so.
+- **Average position blends queries.** For a page, it is one average across all the searches the page appeared in. A page that starts showing for new, low-ranked queries gets a worse average even if its main query held. In AAJ's view, check the top refresh candidates in the Queries tab before rewriting anything.
+- **Twenty clicks is a counting rule, not a business rule.** A contact page that fell from 19 clicks to 3 is too small to be judged. Check low-volume, high-value pages by hand.
 
 ## Sources
 
-Checked on October 19, 2026.
+Checked on November 18, 2026.
 
-- [Google Search Console Help: Performance report (Search)](https://support.google.com/webmasters/answer/7576553)
-- [Google Search Console Help: Compare dates](https://support.google.com/webmasters/answer/7576553#compare)
-- [Google Search Central: Search Console Search Analytics API](https://developers.google.com/webmaster-tools/v1/searchanalytics)
-- [AAJ Marketing Skills: Content Decay Engine](https://github.com/sarojkjha/aaj-marketing-skills/tree/main/skills/content-decay)
+- [Search Analytics: query](https://developers.google.com/webmaster-tools/v1/searchanalytics/query) (Search Console API reference): request fields, row limits, `dataState`, response fields, scopes, and the top-rows limit
+- [Query your Google Search data](https://developers.google.com/webmaster-tools/v1/how-tos/all-your-data) (Search Console API guide): grouping by page and paging with `startRow`
+- [Performance report (Search results)](https://support.google.com/webmasters/answer/7576553) (Search Console Help): the report, average position, export, and that "the newest data can be preliminary"
+- [Performance report: Advanced filtering and comparison](https://support.google.com/webmasters/answer/17011165) (Search Console Help): comparing two date ranges
+- Engine spec: [content-decay](../docs/engines/content-decay.md)
