@@ -177,6 +177,7 @@ Vendor MCP servers bring the data; the engines turn it into a verdict. Each reci
 - [Ahrefs or Semrush keyword data into `aaj-programmatic-seo`](recipes/keyword-data-to-programmatic-seo.md): whether a template-page build pays back.
 - [Stripe data into `unit-economics`](recipes/stripe-to-unit-economics.md): gross-margin LTV, CAC payback, and whether your economics support growth.
 - [Search Console data into `content-decay`](recipes/search-console-to-content-decay.md): which pages are decaying, and refresh priorities ranked by clicks lost.
+- [Search Console queries into `search-demand-reader`](recipes/search-console-to-search-demand.md): where the demand is, by intent and topic, and the gaps you already appear for.
 - [Google Ads data into `paid-search-account-audit`](recipes/google-ads-to-paid-search-audit.md): the spend that produced nothing, starved winners, and one fix list ranked blocking-first.
 
 ---
