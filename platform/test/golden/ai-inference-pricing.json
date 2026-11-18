@@ -113,7 +113,10 @@
         "    2% conversion -> 3,428 tasks per active free user a month",
         "    6% conversion -> 10,285 tasks per active free user a month",
         "  Your current cap of 40 tasks: $0.0560 per free user a month, $4.20 of free-tier cost behind each converted free user.",
-        "    That is under 0.1 months of their margin: within the 6 you allow."
+        "    That is under 0.1 months of their margin: within the 6 you allow.",
+        "    BREAK-EVEN CONVERSION: 0.03% (at least 1 paying user in every 4,285 free sign-ups)",
+        "      = $0.1680 per free sign-up over 3 months on free / ($120.00 margin a month x 6 months of margin you allow)",
+        "      Below this rate, the cap costs more than the margin you allow the free tier."
       ],
       "stderr": []
     },
@@ -139,7 +142,10 @@
         "    0.5% conversion -> no room for any free usage",
         "    1.5% conversion -> 13 tasks per active free user a month",
         "  Your current cap of 100 tasks: $1.60 per free user a month, $960.00 of free-tier cost behind each converted free user.",
-        "    That is 24 months of their margin: over the 3 you allow."
+        "    That is 24 months of their margin: over the 3 you allow.",
+        "    BREAK-EVEN CONVERSION: 8% (at least 1 paying user in every 12 free sign-ups)",
+        "      = $9.60 per free sign-up over 6 months on free / ($40.00 margin a month x 3 months of margin you allow)",
+        "      Below this rate, the cap costs more than the margin you allow the free tier."
       ],
       "stderr": []
     },
@@ -246,6 +252,9 @@
         "    4.5% conversion -> 165 tasks per active free user a month",
         "  Your current cap of 40 tasks: $0.1516 per free user a month, $20.21 of free-tier cost behind each converted free user.",
         "    That is 1.1 months of their margin: within the 3 you allow.",
+        "    BREAK-EVEN CONVERSION: 1.09% (at least 1 paying user in every 92 free sign-ups)",
+        "      = $0.6062 per free sign-up over 4 months on free / ($18.60 margin a month x 3 months of margin you allow)",
+        "      Below this rate, the cap costs more than the margin you allow the free tier.",
         "  For comparison, the model above charges the same free tier as $10.10 a month to each paid account: the same cost, seen month by month instead of per converted user. Don't add the two.",
         "  Seat plan: if a converted free user brings a whole account, enter marginPerConversion for the account instead.",
         "",
@@ -353,6 +362,9 @@
         "    6% conversion -> 743 tasks per active free user a month",
         "  Your current cap of 40 tasks (the model's free cap): $0.1700 per free user a month, $12.75 of free-tier cost behind each converted free user.",
         "    That is 0.7 months of their margin: within the 6 you allow.",
+        "    BREAK-EVEN CONVERSION: 0.45% (at least 1 paying user in every 223 free sign-ups)",
+        "      = $0.5100 per free sign-up over 3 months on free / ($19.00 margin a month x 6 months of margin you allow)",
+        "      Below this rate, the cap costs more than the margin you allow the free tier.",
         "  For comparison, the model above charges the same free tier as $8.50 a month to each paid account: the same cost, seen month by month instead of per converted user. Don't add the two.",
         "  Seat plan: if a converted free user brings a whole account, enter marginPerConversion for the account instead.",
         "",
@@ -361,6 +373,154 @@
         "  -  No usage limit on the plan. Inference cost grows with every task while revenue stays flat; the usage break-even shows where an account stops paying."
       ],
       "stderr": []
+    },
+    {
+      "name": "break-even conversion on its own: a cap and no conversion rate (0.168 / 720 = 0.0233%, printed up as 0.03%; 1 in 4,285)",
+      "source": "free-tier limit mode, hand-checked",
+      "args": [
+        "{\"freeTierLimit\": {\"monthsOnFree\": 3, \"marginMonths\": 6, \"costPerTask\": 0.004, \"marginPerConversion\": 120, \"activeShare\": 0.35, \"currentCap\": 40}}"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "",
+        "AAJ - AI FREE-TIER COST LIMIT",
+        "------------------------------------------------------------------",
+        "BREAK-EVEN CONVERSION FOR YOUR CURRENT CAP (no conversion rate given)",
+        "  Your current cap of 40 tasks: $0.0560 per free user a month, $0.1680 over 3 months on free.",
+        "    assumes 35% of free users are active and they use 100% of the cap",
+        "  Cost of one free task: $0.00400 (entered). Margin per converted free user: $120.00 (entered).",
+        "  BREAK-EVEN CONVERSION: 0.03% (at least 1 paying user in every 4,285 free sign-ups)",
+        "    = $0.1680 per free sign-up over 3 months on free / ($120.00 margin a month x 6 months of margin you allow)",
+        "    Below this rate, the cap costs more than the margin you allow the free tier.",
+        "  Give conversionRate as well to get the most free usage you can afford and to check this cap against it."
+      ],
+      "stderr": []
+    },
+    {
+      "name": "break-even conversion: exactly 50% (30 / 60), 1 in 2",
+      "source": "free-tier limit mode, hand-checked",
+      "args": [
+        "{\"freeTierLimit\": {\"monthsOnFree\": 3, \"marginMonths\": 2, \"costPerTask\": 0.02, \"marginPerConversion\": 30, \"currentCap\": 500}}"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "",
+        "AAJ - AI FREE-TIER COST LIMIT",
+        "------------------------------------------------------------------",
+        "BREAK-EVEN CONVERSION FOR YOUR CURRENT CAP (no conversion rate given)",
+        "  Your current cap of 500 tasks: $10.00 per free user a month, $30.00 over 3 months on free.",
+        "    assumes 100% of free users are active and they use 100% of the cap",
+        "  Cost of one free task: $0.0200 (entered). Margin per converted free user: $30.00 (entered).",
+        "  BREAK-EVEN CONVERSION: 50% (at least 1 paying user in every 2 free sign-ups)",
+        "    = $30.00 per free sign-up over 3 months on free / ($30.00 margin a month x 2 months of margin you allow)",
+        "    Below this rate, the cap costs more than the margin you allow the free tier.",
+        "  Give conversionRate as well to get the most free usage you can afford and to check this cap against it."
+      ],
+      "stderr": []
+    },
+    {
+      "name": "break-even conversion: above 100% is out of reach",
+      "source": "free-tier limit mode, hand-checked",
+      "args": [
+        "{\"freeTierLimit\": {\"monthsOnFree\": 3, \"marginMonths\": 2, \"costPerTask\": 0.02, \"marginPerConversion\": 30, \"currentCap\": 5000}}"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "",
+        "AAJ - AI FREE-TIER COST LIMIT",
+        "------------------------------------------------------------------",
+        "BREAK-EVEN CONVERSION FOR YOUR CURRENT CAP (no conversion rate given)",
+        "  Your current cap of 5,000 tasks: $100.00 per free user a month, $300.00 over 3 months on free.",
+        "    assumes 100% of free users are active and they use 100% of the cap",
+        "  Cost of one free task: $0.0200 (entered). Margin per converted free user: $30.00 (entered).",
+        "  Break-even conversion: out of reach. Even if every free user converted, this cap would cost more than the 2 months of margin you allow.",
+        "  Give conversionRate as well to get the most free usage you can afford and to check this cap against it."
+      ],
+      "stderr": []
+    },
+    {
+      "name": "break-even conversion: no margin, so no rate repays the cap",
+      "source": "free-tier limit mode, hand-checked",
+      "args": [
+        "{\"freeTierLimit\": {\"monthsOnFree\": 3, \"marginMonths\": 2, \"costPerTask\": 0.02, \"marginPerConversion\": 0, \"currentCap\": 50}}"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "",
+        "AAJ - AI FREE-TIER COST LIMIT",
+        "------------------------------------------------------------------",
+        "BREAK-EVEN CONVERSION FOR YOUR CURRENT CAP (no conversion rate given)",
+        "  Your current cap of 50 tasks: $1.00 per free user a month, $3.00 over 3 months on free.",
+        "    assumes 100% of free users are active and they use 100% of the cap",
+        "  Cost of one free task: $0.0200 (entered). Margin per converted free user: $0.00 (entered).",
+        "  Break-even conversion: none. Converted users bring no margin, so no conversion rate repays this cap.",
+        "  Give conversionRate as well to get the most free usage you can afford and to check this cap against it."
+      ],
+      "stderr": []
+    },
+    {
+      "name": "break-even conversion: a cap that costs nothing needs none",
+      "source": "free-tier limit mode, hand-checked",
+      "args": [
+        "{\"freeTierLimit\": {\"monthsOnFree\": 3, \"marginMonths\": 2, \"costPerTask\": 0, \"marginPerConversion\": 10, \"currentCap\": 50}}"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "",
+        "AAJ - AI FREE-TIER COST LIMIT",
+        "------------------------------------------------------------------",
+        "BREAK-EVEN CONVERSION FOR YOUR CURRENT CAP (no conversion rate given)",
+        "  Your current cap of 50 tasks: $0.00 per free user a month, $0.00 over 3 months on free.",
+        "    assumes 100% of free users are active and they use 100% of the cap",
+        "  Cost of one free task: $0.00 (entered). Margin per converted free user: $10.00 (entered).",
+        "  Break-even conversion: none needed. This cap costs nothing.",
+        "  Give conversionRate as well to get the most free usage you can afford and to check this cap against it."
+      ],
+      "stderr": []
+    },
+    {
+      "name": "break-even conversion with a conversion rate over the allowance: 4% entered, 5% needed (cap 3,000: 12 x 3 / 720)",
+      "source": "free-tier limit mode, hand-checked",
+      "args": [
+        "{\"freeTierLimit\": {\"conversionRate\": 0.04, \"monthsOnFree\": 3, \"marginMonths\": 6, \"costPerTask\": 0.004, \"marginPerConversion\": 120, \"currentCap\": 3000}}"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "",
+        "AAJ - AI FREE-TIER COST LIMIT",
+        "------------------------------------------------------------------",
+        "FREE-TIER LIMIT (from your conversion and the margin you allow the free tier)",
+        "  Each free user may cost up to $28.80 over 3 months on free",
+        "    = 4% conversion x $120.00 margin a month x 6 months of margin you allow the free tier",
+        "  That leaves $9.60 a month for inference per free user",
+        "  Cost of one free task: $0.00400 (entered). Margin per converted free user: $120.00 (entered).",
+        "  MOST THE FREE TIER CAN AFFORD: 2,400 tasks per active free user a month",
+        "    a ceiling, not a recommended setting; assumes 100% of free users are active, they use 100% of the cap, and conversion doesn't change with the cap",
+        "  If conversion is different (AAJ's what-ifs):",
+        "    2% conversion -> 1,200 tasks per active free user a month",
+        "    6% conversion -> 3,600 tasks per active free user a month",
+        "  Your current cap of 3,000 tasks: $12.00 per free user a month, $900.00 of free-tier cost behind each converted free user.",
+        "    That is 7.5 months of their margin: over the 6 you allow.",
+        "    BREAK-EVEN CONVERSION: 5% (at least 1 paying user in every 20 free sign-ups)",
+        "      = $36.00 per free sign-up over 3 months on free / ($120.00 margin a month x 6 months of margin you allow)",
+        "      Below this rate, the cap costs more than the margin you allow the free tier."
+      ],
+      "stderr": []
+    },
+    {
+      "name": "free-tier limit: rejects neither a conversion rate nor a current cap",
+      "source": "free-tier limit mode, hand-checked",
+      "args": [
+        "{\"freeTierLimit\": {\"monthsOnFree\": 3, \"marginMonths\": 6, \"costPerTask\": 0.004, \"marginPerConversion\": 120}}"
+      ],
+      "exitCode": 1,
+      "stdout": [],
+      "stderr": [
+        "error: Give the free-to-paid conversion rate (\"freeTierLimit.conversionRate\"), or your current cap (\"freeTierLimit.currentCap\").",
+        "       With the conversion rate, the engine returns the most free usage you can afford. With only your current cap, it returns the conversion rate that cap needs. The rate is the share of free sign-ups who ever become paying, as a fraction: 0.04 for 4%.",
+        "",
+        "Run --help for the schema, or --demo for a worked example."
+      ]
     }
   ]
 }

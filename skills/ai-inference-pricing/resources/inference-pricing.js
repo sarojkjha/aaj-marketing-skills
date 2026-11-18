@@ -61,7 +61,8 @@
  * with costPerTask and marginPerConversion:
  *
  *   { "freeTierLimit": {
- *       "conversionRate": 0.04,               // share of free sign-ups that become paid accounts (required)
+ *       "conversionRate": 0.04,               // share of free sign-ups that become paid accounts (required, unless
+ *                                             //   a current cap is given: see BREAK-EVEN CONVERSION)
  *       "monthsOnFree": 3,                    // average months a free user stays on the free tier (required)
  *       "marginMonths": 6,                    // YOUR choice: months of a converted user's margin you allow the free tier,
  *                                             //   separate from what you allow for acquisition (required)
@@ -74,6 +75,13 @@
  *       "currentCap": 40                      // optional: your current cap to check (default: the model's free cap)
  *   } }
  *   conversionRate is over a free user's whole time on free, not per month.
+ *
+ *   BREAK-EVEN CONVERSION - with a current cap, the engine also returns the lowest conversion
+ *   rate at which that cap stays inside the margin you allow:
+ *     (activeShare x usedShareOfCap x currentCap x costPerTask + otherCostPerUser) x monthsOnFree
+ *       / (marginPerConversion x marginMonths).
+ *   Leave conversionRate out and give currentCap to get only that: the cap is already set and
+ *   the question is what conversion it needs.
  *
  *   Budget per free user = conversionRate x marginPerConversion x marginMonths.
  *   Most tasks per active free user a month =
@@ -316,6 +324,12 @@ function money(v) {
   return (v < 0 ? '-$' : '$') + parts[0].replace(/\B(?=(\d{3})+$)/g, ',') + (parts[1] ? '.' + parts[1] : '');
 }
 function times(k) { return (Math.round(k * 100) / 100) + 'x'; }
+// A share that is a minimum to reach, as a percentage rounded UP to two decimals, so the printed
+// figure is never below the real one.
+function pctUp(v) {
+  if (v > 0 && v < 0.0001) return 'under 0.01%';
+  return (Math.ceil(v * 10000 * (1 - 1e-12)) / 100) + '%';
+}
 
 // ---- free-tier limit: how much free usage the founder's own conversion and margin allowance can afford
 const FTL_FIELDS = ['conversionRate', 'monthsOnFree', 'marginMonths', 'costPerTask', 'marginPerConversion', 'activeShare', 'usedShareOfCap', 'otherCostPerUser', 'currentCap'];
@@ -331,7 +345,7 @@ function freeTierLimit(raw, model) {
   const dMargin = m ? (seat ? m.normal.contribution / m.plan.users : m.normal.contribution) : undefined;
   const dUsed = mf && mf.capTasks !== null && mf.capTasks > 0 ? Math.min(1, m.normal.tasksPerUser * mf.usageShare / mf.capTasks) : 1;
   const f = {
-    conversion: num(raw.conversionRate, 'the free-to-paid conversion rate ("freeTierLimit.conversionRate")', { required: true, min: 0, max: 1, hint: 'The share of free sign-ups who ever become paying, over their whole time on free (not per month), as a fraction: 0.04 for 4%.' }),
+    conversion: blank(raw.conversionRate) ? null : num(raw.conversionRate, 'the free-to-paid conversion rate ("freeTierLimit.conversionRate")', { required: true, min: 0, max: 1, hint: 'The share of free sign-ups who ever become paying, over their whole time on free (not per month), as a fraction: 0.04 for 4%.' }),
     months: num(raw.monthsOnFree, 'months on the free tier ("freeTierLimit.monthsOnFree")', { required: true, min: 0, max: 120, hint: 'On average, how many months a free user stays on the free tier, whether they convert or leave.' }),
     marginMonths: num(raw.marginMonths, 'months of margin you allow the free tier ("freeTierLimit.marginMonths")', { required: true, min: 0, max: 120, hint: 'Your own choice: how many months of a new paying customer\'s margin you are willing to spend on the free tier. Keep it separate from what you allow for acquisition (CAC payback). Not a benchmark.' }),
     cpt: num(raw.costPerTask, 'the cost of one free task ("freeTierLimit.costPerTask")', { required: !m, min: 0, def: m ? m.normal.avgCostPerTask : undefined, hint: 'Your inference cost for one task a free user runs.' }),
@@ -341,7 +355,9 @@ function freeTierLimit(raw, model) {
     other: num(raw.otherCostPerUser, 'other cost per free user ("freeTierLimit.otherCostPerUser")', { def: mf ? mf.otherCostPerUser : 0, min: 0 }),
     current: blank(raw.currentCap) ? (mf && mf.capTasks !== null ? mf.capTasks : null) : num(raw.currentCap, 'your current cap ("freeTierLimit.currentCap")', { min: 0 }),
   };
-  if (f.conversion <= 0) die('The conversion rate must be more than 0: with no conversions, no free usage pays back.');
+  // The conversion rate may be left out only when there is a cap to work back from.
+  if (f.conversion === null && f.current === null) die('Give the free-to-paid conversion rate ("freeTierLimit.conversionRate"), or your current cap ("freeTierLimit.currentCap").', 'With the conversion rate, the engine returns the most free usage you can afford. With only your current cap, it returns the conversion rate that cap needs. The rate is the share of free sign-ups who ever become paying, as a fraction: 0.04 for 4%.');
+  if (f.conversion !== null && f.conversion <= 0) die('The conversion rate must be more than 0: with no conversions, no free usage pays back.');
   if (f.months <= 0 || f.marginMonths <= 0) die('Months on free and months of margin must be more than 0.');
   if (f.active <= 0 || f.used <= 0) die('The active share and the share of the cap used must be more than 0.');
   const from = (k, label) => (blank(raw[k]) ? label : 'entered');
@@ -364,16 +380,25 @@ function freeTierLimit(raw, model) {
     const cap = Math.floor(x * (1 + 1e-12));
     return { budget, perMonth, cap, status: cap === 0 ? 'no-room' : 'capped' };
   };
-  const base = capFor(f.conversion);
+  const known = f.conversion !== null;
+  const base = known ? capFor(f.conversion) : { budget: null, perMonth: null, cap: null, status: 'break-even-only' };
   const out = { inputs: f, source, budgetPerFreeUser: base.budget, inferenceBudgetPerMonth: base.perMonth, cap: base.cap, status: base.status, seatPlan: !!seat,
-    whatIf: FTL_WHATIF.filter((k) => f.conversion * k <= 1).map((k) => { const c = capFor(f.conversion * k); return { conversionMultiplier: k, conversionRate: f.conversion * k, cap: c.cap, status: c.status }; }),
+    whatIf: !known ? [] : FTL_WHATIF.filter((k) => f.conversion * k <= 1).map((k) => { const c = capFor(f.conversion * k); return { conversionMultiplier: k, conversionRate: f.conversion * k, cap: c.cap, status: c.status }; }),
     rules: { FTL_WHATIF, FTL_NO_LIMIT } };
   if (f.current !== null) {
     const monthly = f.active * f.used * f.current * f.cpt + f.other;    // cost per free user per month at your cap
-    const perPaid = monthly * f.months / f.conversion;                  // free-tier cost behind each converted free user
-    const months = monthly === 0 ? 0 : f.margin > 0 ? perPaid / f.margin : null;
-    out.current = { cap: f.current, costPerFreeUserMonth: monthly, costPerConversion: perPaid, marginMonths: months,
-      withinTarget: months !== null && months <= f.marginMonths * (1 + 1e-12) };
+    const perSignup = monthly * f.months;                               // cost of one free sign-up over their time on free
+    const perPaid = known ? perSignup / f.conversion : null;            // free-tier cost behind each converted free user
+    const months = !known ? null : monthly === 0 ? 0 : f.margin > 0 ? perPaid / f.margin : null;
+    // Break-even conversion: the rate at which this cap uses exactly the margin you allow. Below it, the
+    // cap costs more than that. Above 100% no conversion rate can carry the cap.
+    const be = monthly === 0 ? 0 : f.margin > 0 ? perSignup / (f.margin * f.marginMonths) : null;
+    const beStatus = monthly === 0 ? 'no-cost' : be === null ? 'never' : be > 1 + 1e-12 ? 'out-of-reach' : 'reachable';
+    out.current = { cap: f.current, costPerFreeUserMonth: monthly, costPerSignup: perSignup, costPerConversion: perPaid, marginMonths: months,
+      withinTarget: known ? months !== null && months <= f.marginMonths * (1 + 1e-12) : null,
+      breakEvenConversion: be, breakEvenStatus: beStatus,
+      // "one paying user in every N sign-ups": the largest N that still reaches the break-even rate
+      payingOneIn: beStatus === 'reachable' ? Math.floor((1 / be) * (1 + 1e-12)) : null };
   }
   if (m && m.normal.free) out.modelFree = { tasksPerActiveUser: m.normal.free.tasksPerActiveUser, perPaidAccount: m.normal.freeCarry };
   return out;
@@ -483,6 +508,25 @@ function renderLimit(t, L) {
   const f = t.inputs;
   const pctx = (v) => (v > 0 && v < 0.01 ? (Math.round(v * 10000) / 100) + '%' : pct(v));
   const capTxt = (x, st) => st === 'no-room' ? 'no room for any free usage' : st === 'unlimited' ? 'no practical limit' : x.toLocaleString('en-US') + ' task' + (x === 1 ? '' : 's') + ' per active free user a month';
+  const beLines = (c) => {
+    if (c.breakEvenStatus === 'no-cost') return ['Break-even conversion: none needed. This cap costs nothing.'];
+    if (c.breakEvenStatus === 'never') return ['Break-even conversion: none. Converted users bring no margin, so no conversion rate repays this cap.'];
+    if (c.breakEvenStatus === 'out-of-reach') return [`Break-even conversion: out of reach. Even if every free user converted, this cap would cost more than the ${f.marginMonths} month${f.marginMonths === 1 ? '' : 's'} of margin you allow.`];
+    return [`BREAK-EVEN CONVERSION: ${pctUp(c.breakEvenConversion)} (at least 1 paying user in every ${c.payingOneIn.toLocaleString('en-US')} free sign-up${c.payingOneIn === 1 ? '' : 's'})`,
+      `  = ${money(c.costPerSignup)} per free sign-up over ${f.months} month${f.months === 1 ? '' : 's'} on free / (${money(f.margin)} margin a month x ${f.marginMonths} month${f.marginMonths === 1 ? '' : 's'} of margin you allow)`,
+      '  Below this rate, the cap costs more than the margin you allow the free tier.'];
+  };
+  if (f.conversion === null) {
+    const c = t.current;
+    L.push('BREAK-EVEN CONVERSION FOR YOUR CURRENT CAP (no conversion rate given)');
+    L.push(`  Your current cap of ${c.cap.toLocaleString('en-US')} task${c.cap === 1 ? '' : 's'}${t.source.currentCap === 'entered' ? '' : ' (' + t.source.currentCap + ')'}: ${money(c.costPerFreeUserMonth)} per free user a month, ${money(c.costPerSignup)} over ${f.months} month${f.months === 1 ? '' : 's'} on free.`);
+    L.push(`    assumes ${pct(f.active)} of free users are active and they use ${pct(f.used)} of the cap`);
+    L.push(`  Cost of one free task: ${money(f.cpt)} (${t.source.costPerTask}). Margin per converted free user: ${money(f.margin)} (${t.source.margin}).`);
+    beLines(c).forEach((x) => L.push('  ' + x));
+    L.push('  Give conversionRate as well to get the most free usage you can afford and to check this cap against it.');
+    if (t.seatPlan && t.source.margin !== 'entered') L.push('  Seat plan: if a converted free user brings a whole account, enter marginPerConversion for the account instead.');
+    return;
+  }
   L.push('FREE-TIER LIMIT (from your conversion and the margin you allow the free tier)');
   if (f.margin <= 0) L.push(`  Each converted free user brings ${money(f.margin)} a month before free-tier costs, so nothing is left to pay for a free tier.`);
   else {
@@ -503,6 +547,7 @@ function renderLimit(t, L) {
     L.push('    ' + (c.costPerFreeUserMonth === 0 ? 'No free-tier cost at this cap.'
       : c.marginMonths === null ? 'Converted users bring no margin, so this cost is never repaid.'
       : `That is ${c.marginMonths < 0.1 ? 'under 0.1' : Math.round(c.marginMonths * 10) / 10} months of their margin: ${c.withinTarget ? 'within' : 'over'} the ${f.marginMonths} you allow.`));
+    if (c.costPerFreeUserMonth > 0 && c.breakEvenStatus !== 'never') beLines(c).forEach((x) => L.push('    ' + x));
   }
   if (t.modelFree) L.push(`  For comparison, the model above charges the same free tier as ${money(t.modelFree.perPaidAccount)} a month to each paid account: the same cost, seen month by month instead of per converted user. Don't add the two.`);
   if (t.seatPlan && t.source.margin !== 'entered') L.push('  Seat plan: if a converted free user brings a whole account, enter marginPerConversion for the account instead.');
@@ -605,4 +650,4 @@ function main() {
 
 if (require.main === module) main();
 
-module.exports = { build, scenario, normalise, usageBreakEven, priceFor, freeTierLimit, STALE_DAYS, DEFAULT_SPIKE, LEVER };
+module.exports = { build, scenario, normalise, usageBreakEven, priceFor, freeTierLimit, pctUp, STALE_DAYS, DEFAULT_SPIKE, LEVER };
