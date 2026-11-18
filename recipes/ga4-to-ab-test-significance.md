@@ -1,12 +1,12 @@
 # Recipe: GA4 test results into `ab-test-significance`
 
-Google's Analytics MCP server reads the counts for each variant from GA4. The `ab-test-significance` engine says whether the difference is real: lift, p-value, a confidence interval and a verdict. It can also tell you, before the test starts, how many visitors you need. GA4 brings the data and the engine brings the verdict.
+Google's Analytics MCP server reads the sessions and the key event rate for each variant from GA4. The `ab-test-significance` engine says whether the difference is real: lift, p-value, a confidence interval and a verdict. It can also tell you, before the test starts, how many visitors you need. GA4 brings the data and the engine brings the verdict, so the agent never estimates a number it could compute: it passes GA4's figures as they are, and the engine works out the conversion counts.
 
 **You need:** read access to the GA4 property, a Google Cloud project, Python 3.10 or later, and the AAJ engines, either installed or as the hosted connector. Your test must record which variant each visitor saw (step 3).
 
 ## 1. Connect the Google Analytics MCP server
 
-Google publishes it as the "Google Analytics MCP Server (Experimental)", PyPI package `analytics-mcp`. It runs on your machine, and it is read-only: it asks only for the `analytics.readonly` scope.
+Google publishes it as the "Google Analytics MCP Server (Experimental)", PyPI package `analytics-mcp`. It runs on your machine and reads with the `analytics.readonly` scope. Its one write tool, which adds a note to a property, is off unless you start the server with `--allow-write`. This recipe leaves it off.
 
 1. Enable the Google Analytics Admin API and the Google Analytics Data API in a Google Cloud project, and install `pipx`.
 2. Sign in with Application Default Credentials:
@@ -49,13 +49,16 @@ Use the Google Analytics MCP server and the AAJ ab-test-significance engine.
 2. Call run_report for [test start date] to [test end date] with
    dimensions: [the variant dimension]
    metrics: sessions, sessionKeyEventRate:[your key event name]
-3. For each variant: visitors = sessions; conversions = sessions × the key event
-   rate, rounded to a whole number. If the rate comes back as a percentage
-   rather than a fraction, divide it by 100 first.
+3. For each variant, pass the two values exactly as GA4 returns them:
+   visitors = sessions, rate = the key event rate. Do not multiply, round or
+   convert them.
 4. Call run_engine with engine "ab-test-significance" and input
-   { "control": {visitors, conversions}, "variant": {visitors, conversions},
+   { "control": {visitors, rate}, "variant": {visitors, rate},
      "confidence": 95 }
-5. Report the engine's verdict as printed, with the counts you used.
+   If the engine refuses a rate as a percentage, stop and show me the report;
+   do not rescale it yourself.
+5. Report the engine's output as printed, including the conversions it worked
+   out for each variant.
 ```
 
 ## 6. How GA4's report maps to the engine
@@ -63,22 +66,24 @@ Use the Google Analytics MCP server and the AAJ ab-test-significance engine.
 | Engine input | From GA4 | Note |
 |---|---|---|
 | `control.visitors`, `variant.visitors` | `sessions` for each value of the variant dimension | Whole numbers. GA4 returns them as text; the engine reads numeric text |
-| `control.conversions`, `variant.conversions` | `sessions` × `sessionKeyEventRate:<event>` | A count of converting sessions, rounded. The engine stops if you pass a rate as a count |
+| `control.rate`, `variant.rate` | `sessionKeyEventRate:<event>` for each variant | Google defines it as the percentage of sessions in which that key event was triggered. The engine takes a fraction from 0 to 1 (0.05 is 5%), works out conversions as sessions × rate, rounded, and prints the count and the rate it read. It refuses a value above 1 |
 | `confidence` | You, before the test | 90, 95 or 99. Decide it before you look |
 
 ## 7. Before you trust it
 
+- **Check the rate the engine read.** The engine prints each rate as a percentage ("read as 5.00%"). Compare it with the key event rate GA4 shows for that variant. Google's schema calls this metric a percentage and does not say whether the API returns 0.05 or 5 for 5%. The engine refuses anything above 1; if the printed rate is far from what GA4 shows, do not use the result.
 - **Check the counts against your testing tool.** If GA4's sessions per variant differ from the tool's assignment counts by more than a few percent, something is not being recorded. The engine only needs the counts, so use the tool's numbers if they are cleaner.
 - **Sessions are not people.** One person can bring several sessions to the same variant. If your testing tool reports users, prefer those counts.
 - **Variant on later events.** If the variant parameter is sent only on `experience_impression`, check that GA4 attributes the key event to the same sessions before relying on the split. Google's docs do not settle this for every setup.
-- **Thresholding.** GA4 can withhold or round small numbers in reports. If counts look rounded or are missing, take them from the testing tool instead.
+- **Thresholding.** GA4 applies data thresholds to some reports, and Google says limited data in a report can be the result. If rows are missing or counts look short, take them from the testing tool instead.
 
 ## Sources
 
-Checked on October 11, 2026.
+Checked on November 18, 2026.
 
 - [Google Analytics MCP server](https://github.com/googleanalytics/google-analytics-mcp) (GitHub, Google) and [Google's MCP guide for Analytics](https://developers.google.com/analytics/devguides/MCP)
 - [Integrate GA4 with A/B testing tools](https://developers.google.com/analytics/devguides/collection/ga4/integration), where the `experience_impression` event is defined
 - [Data API advanced guide](https://developers.google.com/analytics/devguides/reporting/data/v1/advanced) and [API schema](https://developers.google.com/analytics/devguides/reporting/data/v1/api-schema)
 - [Data API changelog](https://developers.google.com/analytics/devguides/reporting/changelog), on key events replacing conversions in 2024
 - [Custom dimensions and metrics](https://support.google.com/analytics/answer/14240153) (Analytics Help)
+- [About data thresholds](https://support.google.com/analytics/answer/9383630) (Analytics Help)

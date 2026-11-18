@@ -19,6 +19,10 @@
  *       "variant":   {"visitors":4050,"conversions":250},
  *       "confidence": 95,           // 90 | 95 | 99 (default 95)
  *       "tail": "two" }             // "two" | "one" (default two)
+ *     An arm can give "rate" in place of "conversions": the conversion rate as
+ *     a fraction from 0 to 1 (0.05 is 5%), for analytics tools that report
+ *     visitors and a rate. The engine works out conversions = visitors x rate,
+ *     rounded to a whole number, and prints both so you can check them.
  *   Plan a sample size (add "plan"):
  *     { "plan": true, "baselineRate": 5, "mde": 1, "confidence": 95, "power": 80 }
  *       baselineRate & mde are in PERCENTAGE POINTS (5% baseline, +1pt target).
@@ -323,6 +327,16 @@ function validate(cfg){
   for (const arm of ['control', 'variant']){
     const g = cfg[arm];
     if (!g || typeof g !== 'object'){ errs.push('"' + arm + '" needs {"visitors": n, "conversions": n}.'); continue; }
+    // A rate in place of a count: the engine multiplies, so the caller never has to.
+    if (g.rate !== undefined){
+      if (g.conversions !== undefined){ errs.push(arm + ': give "conversions" or "rate", not both.'); continue; }
+      g.visitors = toNum(g.visitors); g.rate = toNum(g.rate);
+      if (!Number.isInteger(g.visitors) || g.visitors < 0){ errs.push(arm + '.visitors must be a whole number: a count, not a rate.'); continue; }
+      if (!(g.rate >= 0 && g.rate <= 1)){ errs.push(arm + '.rate must be a fraction from 0 to 1 (0.05 for 5%), not a percentage.'); continue; }
+      g.fromRate = g.rate;
+      g.conversions = Math.round(g.visitors * g.rate);
+      delete g.rate;
+    }
     for (const k of ['visitors', 'conversions']){
       g[k] = toNum(g[k]);
       if (!Number.isInteger(g[k]) || g[k] < 0) errs.push(arm + '.' + k + ' must be a whole number: a count, not a rate.');
@@ -400,6 +414,10 @@ function render(c){
   out.push('-'.repeat(46));
   out.push(`Control   ${pct(r.pA)}   (${c.control.conversions}/${c.control.visitors})`);
   out.push(`Variant   ${pct(r.pB)}   (${c.variant.conversions}/${c.variant.visitors})`);
+  for (const arm of ['control', 'variant']){
+    const g = c[arm];
+    if (g.fromRate !== undefined) out.push(`  ${arm}: ${g.conversions} conversions worked out from rate ${g.fromRate} (read as ${(g.fromRate * 100).toFixed(2)}%) x ${g.visitors} visitors`);
+  }
   out.push(`Relative lift  ${(r.relLift>=0?'+':'')}${pct(r.relLift)}   (abs ${(r.absLift>=0?'+':'')}${pct(r.absLift)})`);
   out.push(`z = ${r.z.toFixed(2)}   p = ${r.pValue.toFixed(4)}   (${r.tail}-tailed${r.tail === 'one' ? ', variant better than control' : ''}, ${r.conf}% threshold)`);
   const srm = srmLines(c, [c.control.visitors, c.variant.visitors]);

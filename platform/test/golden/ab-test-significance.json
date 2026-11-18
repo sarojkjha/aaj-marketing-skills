@@ -356,6 +356,86 @@
         "\"plannedSplit\" must add up to 100 (got 90).",
         "Run --help for the input shape."
       ]
+    },
+    {
+      "name": "conversions from a rate, as text",
+      "args": [
+        "{\"control\":{\"visitors\":\"4000\",\"rate\":\"0.05\"},\"variant\":{\"visitors\":4050,\"rate\":0.0617283950617284},\"confidence\":95}"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "",
+        "AAJ A/B Test — significance",
+        "----------------------------------------------",
+        "Control   5%   (200/4000)",
+        "Variant   6.2%   (250/4050)",
+        "  control: 200 conversions worked out from rate 0.05 (read as 5.00%) x 4000 visitors",
+        "  variant: 250 conversions worked out from rate 0.0617283950617284 (read as 6.17%) x 4050 visitors",
+        "Relative lift  +23.5%   (abs +1.2%)",
+        "z = 2.29   p = 0.0220   (two-tailed, 95% threshold)",
+        "Sample ratio   4,000 / 4,050 visitors, planned 50/50: chi-square 0.31, p = 0.5773",
+        "No sample ratio mismatch (Microsoft ExP flags p below 0.0005).",
+        "",
+        "✓ SIGNIFICANT at 95% — variant wins. 95% interval on the difference: 0.2% to 2.2%.",
+        "",
+        "--- JSON ---",
+        "{",
+        "  \"controlRate\": 0.05,",
+        "  \"variantRate\": 0.0617,",
+        "  \"relativeLift\": 0.2346,",
+        "  \"z\": 2.29,",
+        "  \"pValue\": 0.022,",
+        "  \"significant\": true,",
+        "  \"confidence\": 95,",
+        "  \"winner\": \"variant\",",
+        "  \"differenceInterval\": {",
+        "    \"low\": 0.0017,",
+        "    \"high\": 0.02182,",
+        "    \"method\": \"score (Miettinen-Nurminen), agrees with the pooled z-test\"",
+        "  },",
+        "  \"sampleRatio\": {",
+        "    \"visitors\": [",
+        "      4000,",
+        "      4050",
+        "    ],",
+        "    \"plannedSplit\": [",
+        "      50,",
+        "      50",
+        "    ],",
+        "    \"chiSquare\": 0.311,",
+        "    \"pValue\": 0.577,",
+        "    \"mismatch\": false,",
+        "    \"threshold\": 0.0005,",
+        "    \"source\": \"Fabijan et al., Diagnosing Sample Ratio Mismatch in A/B Testing, Microsoft Research (2020)\"",
+        "  }",
+        "}"
+      ],
+      "stderr": []
+    },
+    {
+      "name": "bad input: rate given as a percentage",
+      "args": [
+        "{\"control\":{\"visitors\":4000,\"rate\":5},\"variant\":{\"visitors\":4050,\"rate\":6.2}}"
+      ],
+      "exitCode": 1,
+      "stdout": [],
+      "stderr": [
+        "control.rate must be a fraction from 0 to 1 (0.05 for 5%), not a percentage.",
+        "variant.rate must be a fraction from 0 to 1 (0.05 for 5%), not a percentage.",
+        "Run --help for the input shape."
+      ]
+    },
+    {
+      "name": "bad input: rate and conversions together",
+      "args": [
+        "{\"control\":{\"visitors\":4000,\"rate\":0.05,\"conversions\":200},\"variant\":{\"visitors\":4050,\"conversions\":250}}"
+      ],
+      "exitCode": 1,
+      "stdout": [],
+      "stderr": [
+        "control: give \"conversions\" or \"rate\", not both.",
+        "Run --help for the input shape."
+      ]
     }
   ]
 }

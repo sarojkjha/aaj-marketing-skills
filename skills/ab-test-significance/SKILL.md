@@ -54,6 +54,8 @@ node .agents/skills/ab-test-significance/resources/significance.js '{"plan":true
 node .agents/skills/ab-test-significance/resources/significance.js --help
 ```
 
+If your analytics tool reports visitors and a conversion rate, not a count, give each arm `"rate"` as a fraction from 0 to 1 in place of `"conversions"` (`{"visitors":4000,"rate":0.05}`). The engine works out the count and prints it; do not multiply it yourself.
+
 It returns rates (or averages), relative and absolute lift, the test statistic and p, a significance verdict at your confidence level with an interval on the difference, and a sample ratio check; or, in plan mode, the visitors needed per variant.
 
 ## Interpret the result
