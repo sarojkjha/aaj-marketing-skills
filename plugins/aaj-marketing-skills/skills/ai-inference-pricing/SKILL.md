@@ -26,7 +26,7 @@ metadata:
   secondary_topics: [analytics-budget]
   agents: [Claude Code, Cursor, OpenAI Codex, Windsurf, Cline]
   inputs: Plan price and basis, task types with usage and tokens, the model prices the founder checked (with dates), routing, included usage and overage, free tier, other variable costs, and the founder's target margin; for the free-tier limit, the free-to-paid conversion rate, months on free and the months of margin the founder allows the free tier.
-  outputs: Inference cost per task and per active user, all-in margin per paid account at normal and spike usage, break-even price and usage, free-tier cost per paid account, a healthy/thin/underwater verdict, and the top three margin levers; and, with freeTierLimit, the most tasks per active free user a month and a check of the current cap.
+  outputs: Inference cost per task and per active user, all-in margin per paid account at normal and spike usage, break-even price and usage, free-tier cost per paid account, a healthy/thin/underwater verdict, and the top three margin levers; and, with freeTierLimit, the most tasks per active free user a month, a check of the current cap, and the break-even conversion rate that cap needs.
   related_aaj:
     - https://aajconsult.com/tools/ai-inference-cost-modeler
     - https://aajconsult.com/tools/free-tier-cost-limit-calculator
@@ -64,7 +64,7 @@ Price an AI product from the cost of one task upward. Inference cost per task is
 4. **Read the spike and the usage break-even.** If an account loses money at the spike, the usage terms (included tasks, overage, caps) need work before the price does.
 5. **Check overage.** An overage price below the cost of a task after fees loses money on every extra task.
 6. **Rank the levers** the engine returns and present the top two or three, with their trade-offs.
-7. **Size the free tier, if there is one.** Add `freeTierLimit` with the user's free-to-paid conversion rate, how long free users stay on free, and how many months of a converted user's margin they allow the free tier. The engine returns the most tasks per active free user a month that allowance can afford, and checks the current cap.
+7. **Size the free tier, if there is one.** Add `freeTierLimit` with the user's free-to-paid conversion rate, how long free users stay on free, and how many months of a converted user's margin they allow the free tier. The engine returns the most tasks per active free user a month that allowance can afford, checks the current cap, and gives the break-even conversion rate that cap needs. If the cap is already set and the user does not know their conversion rate, leave `conversionRate` out and give `currentCap`: the engine returns the break-even conversion rate alone.
 8. **Hand off.** Price ladders and tiers go to `pricing-and-packaging`; LTV, CAC and payback go to `unit-economics`.
 
 ## The math
@@ -93,11 +93,14 @@ inference per month   = budget per free user / months on free - other cost per f
 cap (tasks a month)   = inference per month / (active share x share of the cap used x cost per task), rounded down
 current cap check     = (active share x share used x current cap x cost per task + other cost) x months on free
                         / conversion rate / margin per converted user  ->  months of margin, vs the allowance
+break-even conversion = (active share x share used x current cap x cost per task + other cost) x months on free
+                        / (margin per converted user x months of margin allowed)
 ```
 
 - **Conversion rate** is the share of free sign-ups who ever pay, over their whole time on free, not per month.
 - **Months of margin allowed** is the user's own choice, and separate from what they allow for acquisition. Do not reuse the CAC payback target here; that would hand the whole payback window to the free tier.
 - **With a full config**, the cost per task is the model's average, the margin is the model's margin before free-tier costs (per seat on a seat plan, assuming each converted free user adds one seat), and the active share, other cost, share of the cap used and current cap come from the model's free tier. Any of them can be overridden. On its own, `freeTierLimit` needs `costPerTask` and `marginPerConversion`.
+- **Break-even conversion** is the lowest conversion rate at which the current cap stays inside the margin allowance. Below it, the cap costs more than the user allows. It needs a current cap but not a conversion rate, so it answers "my cap is set; what conversion does it need?". The engine prints it rounded up, so the printed rate is never below the real one. If it comes out above 100%, no conversion rate can carry the cap, and the engine says so.
 - **The cap is a ceiling, not a recommended setting.** It assumes conversion doesn't change with the cap, and that free users run the same mix of tasks as paid users.
 - **The model's monthly free-tier carry and the cost per converted user are the same cost** seen two ways; the engine says so, and they must not be added.
 
@@ -118,7 +121,7 @@ node resources/inference-pricing.js --help
 - no usage limit, or included usage with no overage price;
 - an account that loses money at the spike.
 
-With `freeTierLimit`, it also returns the free-tier budget per free user, the most tasks per active free user a month, the cap at half and one and a half times the conversion rate, and, for a current cap, the free-tier cost behind each converted free user and how many months of their margin it uses. The free AI Free-Tier Cost Limit Calculator at aajconsult.com/tools/free-tier-cost-limit-calculator runs this mode.
+With `freeTierLimit`, it also returns the free-tier budget per free user, the most tasks per active free user a month, the cap at half and one and a half times the conversion rate, and, for a current cap, the free-tier cost behind each converted free user, how many months of their margin it uses, and the break-even conversion rate. With a current cap and no conversion rate, it returns the break-even conversion rate alone. The free AI Free-Tier Cost Limit Calculator at aajconsult.com/tools/free-tier-cost-limit-calculator runs this mode.
 
 Levers are fixed what-if moves (price +10%, 20 points of task share to the cheapest model, -20% tokens per task, -20% included tasks, -20% free-tier usage), ranked by the change in all-in margin per paid account. The demo uses a fictional product and example prices that are not quotes from any provider. The same engine runs in the free AI Inference Cost Modeler at aajconsult.com/tools/ai-inference-cost-modeler.
 
