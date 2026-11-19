@@ -13,7 +13,7 @@ description: >-
   averages and NPS.
 license: MIT
 metadata:
-  search_description: "Design a customer or market survey with unbiased questions mapped to decisions, plus computed sample size, invite numbers and how many segments you can read. Then read the results export: shares with ranges, rating averages and NPS."
+  search_description: "Design a customer survey with unbiased questions and a computed sample size, then read the results export: shares with ranges, rating averages and NPS."
   publisher: AAJ
   slug: customer-survey-design
   category: Research & Personas
