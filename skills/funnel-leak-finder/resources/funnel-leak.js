@@ -3,8 +3,9 @@
  * AAJ Funnel Leak Finder - engine
  * Part of the "funnel-leak-finder" Agent Skill.
  *
- * Names the funnel stage that cost the most wins this period, measured against
- * a baseline the user gives: last period's counts, or target rates per stage.
+ * Names the funnel stage that cost the most wins (or purchases, or paid
+ * subscribers) this period, measured against a baseline the user gives: last
+ * period's counts, or target rates per stage.
  * It never names a leak from raw drop-off. The biggest percentage drop is
  * almost always the top of the funnel, and in a multiplicative funnel a 10%
  * relative lift at any stage gives the same 10% more wins, so raw drop-off
@@ -17,8 +18,19 @@
  *   node funnel-leak.js --help
  *
  * CONFIG (JSON) - this period's counts, plus ONE baseline: prior or targets.
- * Stage fields are the marketing-report names, in this order: sessions, leads,
- * mqls, sqls, opps, wins. Give at least 3, consecutive (no gaps), as whole numbers.
+ * Stage fields depend on "funnel". Give at least 3, consecutive (no gaps), as
+ * whole numbers. The arithmetic is the same for every funnel.
+ *
+ *   "funnel"      stages, in order                               revenue field
+ *   b2b (default) sessions, leads, mqls, sqls, opps, wins        revenuePerWin
+ *   ecommerce     sessions, carts, checkouts, purchases          revenuePerPurchase
+ *   app           installs, signups, activated, paid             revenuePerPaid
+ *
+ *   b2b uses the marketing-report names. For ecommerce, count sessions at each
+ *   stage (sessions with an add to cart, sessions that reached checkout,
+ *   sessions that ended in an order), not events, so no stage is larger than
+ *   the one before. For app, count the people who installed in the period and
+ *   how far each got.
  *
  *   {
  *     "period": "Q3 2026",                 // optional label
@@ -37,7 +49,17 @@
  *     "targetSource": "2026 operating plan" // optional: where the targets come from (recorded as given)
  *   }
  *
- * COUNTS FROM CRM CONTACTS - in place of the stage counts, give the contacts and
+ *   An ecommerce funnel (Example Co., invented numbers):
+ *   {
+ *     "funnel": "ecommerce", "period": "Oct 2026",
+ *     "sessions": 40000, "carts": 2400, "checkouts": 1200, "purchases": 684,
+ *     "revenuePerPurchase": 60,
+ *     "prior": { "period": "Sep 2026", "sessions": 38000, "carts": 2660, "checkouts": 1330, "purchases": 798 }
+ *   }
+ *   Target keys: sessionsToCarts, cartsToCheckouts, checkoutsToPurchases; for
+ *   app: installsToSignups, signupsToActivated, activatedToPaid.
+ *
+ * COUNTS FROM CRM CONTACTS (b2b only) - in place of the stage counts, give the contacts and
  * two date ranges, and the engine counts the stages itself. Use this when an
  * agent reads a CRM: it passes each contact's stage dates as the CRM returns
  * them and never counts or compares dates itself.
@@ -97,10 +119,24 @@ process.argv = process.argv.map((a, i) =>
 'use strict';
 
 /* aaj:core:begin - copied verbatim into any AAJ tool that runs this engine */
-// The stage names and order are the marketing-report skill's. No rates or benchmarks live here:
-// every rate the engine judges against comes from the user's prior period or the user's targets.
-var STAGES = [['sessions', 'Sessions'], ['leads', 'Leads'], ['mqls', 'MQLs'], ['sqls', 'SQLs'], ['opps', 'Opportunities'], ['wins', 'Wins']];
-var STAGE_KEYS = STAGES.map(function (s) { return s[0]; });
+// Three funnels. "b2b" is the default; its stage names and order are the marketing-report skill's.
+// A funnel sets the stage names, their order, the revenue field and the wording. The arithmetic is
+// the same for all three. No rates or benchmarks live here: every rate the engine judges against
+// comes from the user's prior period or the user's targets.
+// units: a stage's name inside a sentence ("9.3 more wins", "62.5 more MQLs").
+var FUNNELS = {
+  b2b: { label: 'B2B', stages: [['sessions', 'Sessions'], ['leads', 'Leads'], ['mqls', 'MQLs'], ['sqls', 'SQLs'], ['opps', 'Opportunities'], ['wins', 'Wins']],
+    units: { sessions: 'sessions', leads: 'leads', mqls: 'MQLs', sqls: 'SQLs', opps: 'opportunities', wins: 'wins' },
+    revenueField: 'revenuePerWin', counts: 'people or deals', exampleTarget: 'mqlsToSqls' },
+  ecommerce: { label: 'Ecommerce', stages: [['sessions', 'Sessions'], ['carts', 'Add to cart'], ['checkouts', 'Checkout'], ['purchases', 'Purchases']],
+    units: { sessions: 'sessions', carts: 'add-to-cart sessions', checkouts: 'checkout sessions', purchases: 'purchases' },
+    revenueField: 'revenuePerPurchase', counts: 'sessions or orders', exampleTarget: 'checkoutsToPurchases' },
+  app: { label: 'Subscription app', stages: [['installs', 'Installs'], ['signups', 'Sign-ups'], ['activated', 'Activated'], ['paid', 'Paid']],
+    units: { installs: 'installs', signups: 'sign-ups', activated: 'activated users', paid: 'paid subscribers' },
+    revenueField: 'revenuePerPaid', counts: 'people', exampleTarget: 'activatedToPaid' }
+};
+var FUNNEL_KEYS = Object.keys(FUNNELS);
+var DEFAULT_FUNNEL = 'b2b';
 var MIN_STAGES = 3;
 var Z_CRIT = 1.96;   // AAJ's choice: 95%, two-sided
 var MIN_COUNT = 5;   // NIST 7.2.4's condition for the normal approximation; AAJ applies it to both periods
@@ -108,30 +144,35 @@ var SOURCES = {
   twoProportion: { who: 'NIST/SEMATECH e-Handbook of Statistical Methods', title: '7.3.3. How can we determine whether two processes produce the same proportion of defectives?', url: 'https://www.itl.nist.gov/div898/handbook/prc/section3/prc33.htm' },
   oneProportion: { who: 'NIST/SEMATECH e-Handbook of Statistical Methods', title: '7.2.4. Does the proportion of defectives meet requirements?', url: 'https://www.itl.nist.gov/div898/handbook/prc/section2/prc24.htm' }
 };
-var FIELDS = ['period'].concat(STAGE_KEYS, ['revenuePerWin', 'currency', 'prior', 'targets', 'targetSource']);
-var PRIOR_FIELDS = ['period'].concat(STAGE_KEYS);
 
 function cap(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
 function transitionKey(a, b) { return a + 'To' + cap(b); }
-var TRANSITION_KEYS = [];
-for (var ti = 1; ti < STAGE_KEYS.length; ti++) TRANSITION_KEYS.push(transitionKey(STAGE_KEYS[ti - 1], STAGE_KEYS[ti]));
-function labelOf(k) { return STAGES[STAGE_KEYS.indexOf(k)][1]; }
-// The last stage's name inside a sentence ("9.3 more wins", "62.5 more MQLs").
-var UNITS = { sessions: 'sessions', leads: 'leads', mqls: 'MQLs', sqls: 'SQLs', opps: 'opportunities', wins: 'wins' };
+// Each funnel's stage keys, transition keys and allowed fields, worked out once from its stages.
+FUNNEL_KEYS.forEach(function (name) {
+  var F = FUNNELS[name];
+  F.key = name;
+  F.stageKeys = F.stages.map(function (s) { return s[0]; });
+  F.transitionKeys = [];
+  for (var ti = 1; ti < F.stageKeys.length; ti++) F.transitionKeys.push(transitionKey(F.stageKeys[ti - 1], F.stageKeys[ti]));
+  F.fields = ['period'].concat(F.stageKeys, [F.revenueField, 'currency', 'prior', 'targets', 'targetSource', 'funnel']);
+  F.priorFields = ['period'].concat(F.stageKeys);
+});
+// The b2b names under their first names, for the code outside the core that reads a CRM.
+var STAGES = FUNNELS.b2b.stages, STAGE_KEYS = FUNNELS.b2b.stageKeys, TRANSITION_KEYS = FUNNELS.b2b.transitionKeys, UNITS = FUNNELS.b2b.units;
 
 function inputError(msg, hint) { var e = new Error(msg); e.hint = hint; e.isInputError = true; return e; }
 function isNum(v) { return typeof v === 'number' && isFinite(v); }
 function tidy(v) { return Math.round(v * 1e9) / 1e9; }
 
 // Reads the stage counts of one block (this period, or prior). Returns [{key,label,count}] in order.
-function readStages(c, where) {
-  var got = [];
-  STAGE_KEYS.forEach(function (k) {
+function readStages(c, where, F) {
+  var got = [], STAGE_KEYS = F.stageKeys;   // this funnel's stages, not the b2b names
+  STAGE_KEYS.forEach(function (k, n) {
     if (c[k] == null) return;
     var v = c[k];
     if (!isNum(v)) throw inputError(where + '"' + k + '" must be a number (got ' + JSON.stringify(v) + ').');
-    if (v < 0 || Math.floor(v) !== v) throw inputError(where + '"' + k + '" must be a whole number, 0 or more (got ' + v + ').', 'Stage counts are counts of people or deals.');
-    got.push({ key: k, label: labelOf(k), count: v });
+    if (v < 0 || Math.floor(v) !== v) throw inputError(where + '"' + k + '" must be a whole number, 0 or more (got ' + v + ').', 'Stage counts are counts of ' + F.counts + '.');
+    got.push({ key: k, label: F.stages[n][1], count: v });
   });
   if (got.length < MIN_STAGES) throw inputError(where + 'Give at least ' + MIN_STAGES + ' funnel stages (got ' + got.length + ').', 'Stages, in order: ' + STAGE_KEYS.join(', ') + '.');
   for (var i = 1; i < got.length; i++) {
@@ -147,28 +188,45 @@ function readLabel(c, k, where) {
   if (typeof c[k] !== 'string') throw inputError(where + '"' + k + '" must be text (got ' + JSON.stringify(c[k]) + ').');
   return c[k].trim().slice(0, 120) || null;
 }
-function checkFields(c, allowed, where) {
+// A field that belongs to another funnel gets a hint that names the funnel to set.
+function otherFunnel(k, F) {
+  if (!F) return null;
+  if (FUNNEL_KEYS.some(function (n) { return n !== F.key && FUNNELS[n].revenueField === k; })) return 'For the ' + F.key + ' funnel the revenue field is "' + F.revenueField + '".';
+  var hit = FUNNEL_KEYS.filter(function (n) { return n !== F.key && FUNNELS[n].stageKeys.indexOf(k) >= 0; })[0];
+  return hit ? '"' + k + '" belongs to the ' + hit + ' funnel: set "funnel": "' + hit + '" to use it.' : null;
+}
+function checkFields(c, allowed, where, F) {
   if (!c || typeof c !== 'object' || Array.isArray(c)) throw inputError(where ? where.replace(/: $/, '') + ' must be a JSON object.' : 'The config must be a JSON object.');
   Object.keys(c).forEach(function (k) {
-    if (allowed.indexOf(k) < 0) throw inputError(where + 'Unknown field "' + k + '".', 'Allowed: ' + allowed.join(', ') + '.');
+    if (allowed.indexOf(k) < 0) throw inputError(where + 'Unknown field "' + k + '".', otherFunnel(k, F) || 'Allowed: ' + allowed.join(', ') + '.');
   });
+}
+function readFunnel(cfg) {
+  var v = cfg && typeof cfg === 'object' && !Array.isArray(cfg) ? cfg.funnel : null;
+  if (v == null) return FUNNELS[DEFAULT_FUNNEL];
+  if (typeof v !== 'string' || FUNNEL_KEYS.indexOf(v) < 0) throw inputError('"funnel" must be one of: ' + FUNNEL_KEYS.join(', ') + ' (got ' + JSON.stringify(v) + ').', 'Leave it out for the b2b funnel.');
+  return FUNNELS[v];
 }
 
 function normalise(cfg) {
-  checkFields(cfg, FIELDS, '');
-  var s = { period: readLabel(cfg, 'period', ''), stages: readStages(cfg, ''), revenuePerWin: null,
-    currency: cfg.currency == null ? '$' : String(cfg.currency).slice(0, 4), prior: null, targets: null, targetSource: null };
-  if (cfg.revenuePerWin != null) {
-    if (!isNum(cfg.revenuePerWin) || cfg.revenuePerWin < 0) throw inputError('"revenuePerWin" must be a number, 0 or more (got ' + JSON.stringify(cfg.revenuePerWin) + ').');
-    if (s.stages[s.stages.length - 1].key !== 'wins') throw inputError('"revenuePerWin" needs "wins" as the last stage you give.', 'Without wins, the engine counts what is lost in your last stage, not in wins.');
-    s.revenuePerWin = cfg.revenuePerWin;
+  var F = readFunnel(cfg), REV = F.revenueField;
+  checkFields(cfg, F.fields, '', F);
+  var s = { period: readLabel(cfg, 'period', ''), stages: readStages(cfg, '', F) };
+  // The revenue field keeps its funnel's name: revenuePerWin, revenuePerPurchase or revenuePerPaid.
+  s[REV] = null;
+  s.currency = cfg.currency == null ? '$' : String(cfg.currency).slice(0, 4); s.prior = null; s.targets = null; s.targetSource = null; s.funnel = F.key;
+  if (cfg[REV] != null) {
+    var lastKey = F.stageKeys[F.stageKeys.length - 1], lastUnit = F.units[lastKey];
+    if (!isNum(cfg[REV]) || cfg[REV] < 0) throw inputError('"' + REV + '" must be a number, 0 or more (got ' + JSON.stringify(cfg[REV]) + ').');
+    if (s.stages[s.stages.length - 1].key !== lastKey) throw inputError('"' + REV + '" needs "' + lastKey + '" as the last stage you give.', 'Without ' + lastUnit + ', the engine counts what is lost in your last stage, not in ' + lastUnit + '.');
+    s[REV] = cfg[REV];
   }
   if (cfg.prior != null && cfg.targets != null) throw inputError('Give one baseline: "prior" or "targets", not both.', 'Run the engine twice to compare against each.');
   if (cfg.targetSource != null && cfg.targets == null) throw inputError('"targetSource" describes "targets"; give the targets too, or leave it out.');
   var keys = s.stages.map(function (x) { return x.key; });
   if (cfg.prior != null) {
-    checkFields(cfg.prior, PRIOR_FIELDS, 'prior: ');
-    var p = readStages(cfg.prior, 'prior: ');
+    checkFields(cfg.prior, F.priorFields, 'prior: ', F);
+    var p = readStages(cfg.prior, 'prior: ', F);
     var pk = p.map(function (x) { return x.key; });
     if (pk.join() !== keys.join()) throw inputError('prior: give the same stages as this period (' + keys.join(', ') + '); got ' + pk.join(', ') + '.');
     s.prior = { period: readLabel(cfg.prior, 'period', 'prior: '), stages: p };
@@ -176,7 +234,7 @@ function normalise(cfg) {
   if (cfg.targets != null) {
     var allowedT = [];
     for (var i = 1; i < keys.length; i++) allowedT.push(transitionKey(keys[i - 1], keys[i]));
-    if (!cfg.targets || typeof cfg.targets !== 'object' || Array.isArray(cfg.targets)) throw inputError('"targets" must be a JSON object of target rates, such as {"mqlsToSqls": 0.3}.');
+    if (!cfg.targets || typeof cfg.targets !== 'object' || Array.isArray(cfg.targets)) throw inputError('"targets" must be a JSON object of target rates, such as {"' + F.exampleTarget + '": 0.3}.');
     var t = {};
     Object.keys(cfg.targets).forEach(function (k) {
       if (allowedT.indexOf(k) < 0) throw inputError('targets: unknown or unused transition "' + k + '".', 'For the stages you gave, the transitions are: ' + allowedT.join(', ') + '.');
@@ -216,9 +274,10 @@ function fmtCount(v) { return (Math.round(v * 10) / 10).toLocaleString('en-US');
 function fmtMoney(v, cur) { return (v < 0 ? '-' : '') + (cur == null ? '$' : cur) + Math.round(Math.abs(v)).toLocaleString('en-US'); }
 
 function run(cfg) {
-  var s = normalise(cfg);
+  // UNITS here is this funnel's wording, not the b2b names.
+  var s = normalise(cfg), F = FUNNELS[s.funnel], UNITS = F.units, revenue = s[F.revenueField];
   var st = s.stages, last = st[st.length - 1];
-  var out = { inputs: s, period: s.period, stages: st, outcome: { key: last.key, label: last.label, unit: UNITS[last.key], count: last.count },
+  var out = { inputs: s, funnel: F.key, funnelLabel: F.label, revenueField: F.revenueField, period: s.period, stages: st, outcome: { key: last.key, label: last.label, unit: UNITS[last.key], count: last.count },
     baseline: s.prior ? 'prior' : s.targets ? 'targets' : null,
     baselineLabel: s.prior ? (s.prior.period || 'the prior period') : s.targets ? (s.targetSource ? 'your targets (' + s.targetSource + ')' : 'your targets') : null,
     targetSource: s.targetSource, transitions: [], leak: null, firmLeak: null, volume: null, notes: [], view: [], sources: SOURCES,
@@ -251,7 +310,7 @@ function run(cfg) {
         t.lost = tidy(counterfactual - last.count);
         // Below baseline but costing nothing: a later stage converted none, so no rate here changes the outcome.
         t.status = t.lost > 0 ? 'leaking' : 'below-no-effect';
-        if (s.revenuePerWin !== null) t.revenueLost = tidy(t.lost * s.revenuePerWin);
+        if (revenue !== null) t.revenueLost = tidy(t.lost * revenue);
       }
     }
     out.transitions.push(t);
@@ -265,7 +324,7 @@ function run(cfg) {
   var judged = out.transitions.filter(function (t) { return t.status !== 'no-baseline'; });
   var leaking = judged.filter(function (t) { return t.status === 'leaking'; });
   // Rank by what each shortfall cost in the last stage; ties go to the earlier stage.
-  leaking.sort(function (x, y) { return y.lost - x.lost || TRANSITION_KEYS.indexOf(x.key) - TRANSITION_KEYS.indexOf(y.key); });
+  leaking.sort(function (x, y) { return y.lost - x.lost || F.transitionKeys.indexOf(x.key) - F.transitionKeys.indexOf(y.key); });
   leaking.forEach(function (t, n) { t.rank = n + 1; });
   var unit = UNITS[last.key];
   if (s.targets) {
@@ -314,7 +373,7 @@ function run(cfg) {
 // an agent that reads the CRM live. It turns { contacts, dates, priorDates } into the stage counts
 // the core takes, so run() and its checks are unchanged.
 const CONTACT_STAGES = STAGE_KEYS.filter((k) => k !== 'sessions');
-const CONTACT_FIELDS = ['contacts', 'dates', 'priorDates', 'sessions', 'priorSessions', 'period', 'revenuePerWin', 'currency', 'targets', 'targetSource'];
+const CONTACT_FIELDS = ['contacts', 'dates', 'priorDates', 'sessions', 'priorSessions', 'period', 'revenuePerWin', 'currency', 'targets', 'targetSource', 'funnel'];
 
 function validYmd(y, mo, d) { return mo >= 1 && mo <= 12 && d >= 1 && d <= new Date(Date.UTC(y, mo, 0)).getUTCDate(); }
 // -> "YYYY-MM-DD", "" for empty, or null if it cannot be read.
@@ -340,6 +399,7 @@ function readRange(r, name) {
   return { from, to };
 }
 function fromContacts(cfg) {
+  if (cfg.funnel != null && cfg.funnel !== 'b2b') throw inputError('"contacts" works with the b2b funnel only (got "funnel": ' + JSON.stringify(cfg.funnel) + ').', 'For the ecommerce and app funnels, give the stage counts.');
   STAGE_KEYS.concat(['prior']).forEach((k) => {
     if (k !== 'sessions' && cfg[k] != null) throw inputError('Give "contacts" or the stage counts, not both (got "' + k + '").', 'With contacts the engine counts the stages. Sessions are the exception: give "sessions" and "priorSessions".');
   });
@@ -381,7 +441,7 @@ function fromContacts(cfg) {
   };
   const out = Object.assign({ period: cfg.period != null ? cfg.period : now.from + ' to ' + now.to }, cohort(now));
   if (cfg.sessions != null) out.sessions = cfg.sessions;
-  ['revenuePerWin', 'currency', 'targets', 'targetSource'].forEach((k) => { if (cfg[k] != null) out[k] = cfg[k]; });
+  ['revenuePerWin', 'currency', 'targets', 'targetSource', 'funnel'].forEach((k) => { if (cfg[k] != null) out[k] = cfg[k]; });
   if (prior) {
     out.prior = Object.assign({ period: prior.from + ' to ' + prior.to }, cohort(prior));
     if (cfg.priorSessions != null) out.prior.sessions = cfg.priorSessions;
@@ -468,4 +528,4 @@ function main() {
 
 if (require.main === module) main();
 
-module.exports = { run, render, normalise, fromContacts, SOURCES, fmtRate, fmtPts, fmtRel, fmtCount, fmtMoney };
+module.exports = { run, render, normalise, fromContacts, FUNNELS, SOURCES, fmtRate, fmtPts, fmtRel, fmtCount, fmtMoney };
