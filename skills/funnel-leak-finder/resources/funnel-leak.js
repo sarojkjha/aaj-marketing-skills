@@ -23,8 +23,13 @@
  *
  *   "funnel"      stages, in order                               revenue field
  *   b2b (default) sessions, leads, mqls, sqls, opps, wins        revenuePerWin
- *   ecommerce     sessions, carts, checkouts, purchases          revenuePerPurchase
- *   app           installs, signups, activated, paid             revenuePerPaid
+ *   ecommerce     sessions, [views], carts, checkouts, purchases revenuePerPurchase
+ *   app           installs, signups, activated, [trials], paid   revenuePerPaid
+ *
+ *   A stage in [brackets] is optional and may be left out in the middle:
+ *   views (sessions that viewed a product page) and trials (people who
+ *   started a trial). Without it, the step runs across it, such as
+ *   sessionsToCarts or activatedToPaid.
  *
  *   b2b uses the marketing-report names. For ecommerce, count sessions at each
  *   stage (sessions with an add to cart, sessions that reached checkout,
@@ -56,8 +61,14 @@
  *     "revenuePerPurchase": 60,
  *     "prior": { "period": "Sep 2026", "sessions": 38000, "carts": 2660, "checkouts": 1330, "purchases": 798 }
  *   }
- *   Target keys: sessionsToCarts, cartsToCheckouts, checkoutsToPurchases; for
- *   app: installsToSignups, signupsToActivated, activatedToPaid.
+ *   Target keys: sessionsToCarts, cartsToCheckouts, checkoutsToPurchases, and
+ *   with views, sessionsToViews and viewsToCarts; for app: installsToSignups,
+ *   signupsToActivated, activatedToPaid, and with trials, activatedToTrials
+ *   and trialsToPaid.
+ *
+ *   "margin" (optional, any funnel): your margin on the revenue field, as a
+ *   fraction (40% is 0.4). It needs the revenue field, and turns revenue lost
+ *   into profit lost as well.
  *
  * COUNTS FROM CRM CONTACTS (b2b only) - in place of the stage counts, give the contacts and
  * two date ranges, and the engine counts the stages itself. Use this when an
@@ -124,16 +135,17 @@ process.argv = process.argv.map((a, i) =>
 // the same for all three. No rates or benchmarks live here: every rate the engine judges against
 // comes from the user's prior period or the user's targets.
 // units: a stage's name inside a sentence ("9.3 more wins", "62.5 more MQLs").
+// optional: stages that may be left out in the middle of a run; the step then runs across them.
 var FUNNELS = {
   b2b: { label: 'B2B', stages: [['sessions', 'Sessions'], ['leads', 'Leads'], ['mqls', 'MQLs'], ['sqls', 'SQLs'], ['opps', 'Opportunities'], ['wins', 'Wins']],
     units: { sessions: 'sessions', leads: 'leads', mqls: 'MQLs', sqls: 'SQLs', opps: 'opportunities', wins: 'wins' },
     revenueField: 'revenuePerWin', counts: 'people or deals', exampleTarget: 'mqlsToSqls' },
-  ecommerce: { label: 'Ecommerce', stages: [['sessions', 'Sessions'], ['carts', 'Add to cart'], ['checkouts', 'Checkout'], ['purchases', 'Purchases']],
-    units: { sessions: 'sessions', carts: 'add-to-cart sessions', checkouts: 'checkout sessions', purchases: 'purchases' },
-    revenueField: 'revenuePerPurchase', counts: 'sessions or orders', exampleTarget: 'checkoutsToPurchases' },
-  app: { label: 'Subscription app', stages: [['installs', 'Installs'], ['signups', 'Sign-ups'], ['activated', 'Activated'], ['paid', 'Paid']],
-    units: { installs: 'installs', signups: 'sign-ups', activated: 'activated users', paid: 'paid subscribers' },
-    revenueField: 'revenuePerPaid', counts: 'people', exampleTarget: 'activatedToPaid' }
+  ecommerce: { label: 'Ecommerce', stages: [['sessions', 'Sessions'], ['views', 'Product page views'], ['carts', 'Add to cart'], ['checkouts', 'Checkout'], ['purchases', 'Purchases']],
+    units: { sessions: 'sessions', views: 'product page view sessions', carts: 'add-to-cart sessions', checkouts: 'checkout sessions', purchases: 'purchases' },
+    optional: ['views'], revenueField: 'revenuePerPurchase', counts: 'sessions or orders', exampleTarget: 'checkoutsToPurchases' },
+  app: { label: 'Subscription app', stages: [['installs', 'Installs'], ['signups', 'Sign-ups'], ['activated', 'Activated'], ['trials', 'Started trial'], ['paid', 'Paid']],
+    units: { installs: 'installs', signups: 'sign-ups', activated: 'activated users', trials: 'started trials', paid: 'paid subscribers' },
+    optional: ['trials'], revenueField: 'revenuePerPaid', counts: 'people', exampleTarget: 'activatedToPaid' }
 };
 var FUNNEL_KEYS = Object.keys(FUNNELS);
 var DEFAULT_FUNNEL = 'b2b';
@@ -152,9 +164,17 @@ FUNNEL_KEYS.forEach(function (name) {
   var F = FUNNELS[name];
   F.key = name;
   F.stageKeys = F.stages.map(function (s) { return s[0]; });
+  F.optional = F.optional || [];
+  // Every step a run of stages can make, in funnel order: next-door stages, and stages with only
+  // optional stages between them (sessionsToCarts when views is left out).
   F.transitionKeys = [];
-  for (var ti = 1; ti < F.stageKeys.length; ti++) F.transitionKeys.push(transitionKey(F.stageKeys[ti - 1], F.stageKeys[ti]));
-  F.fields = ['period'].concat(F.stageKeys, [F.revenueField, 'currency', 'prior', 'targets', 'targetSource', 'funnel']);
+  for (var fi = 0; fi < F.stageKeys.length; fi++) {
+    for (var tj = fi + 1; tj < F.stageKeys.length; tj++) {
+      F.transitionKeys.push(transitionKey(F.stageKeys[fi], F.stageKeys[tj]));
+      if (F.optional.indexOf(F.stageKeys[tj]) < 0) break;
+    }
+  }
+  F.fields = ['period'].concat(F.stageKeys, [F.revenueField, 'margin', 'currency', 'prior', 'targets', 'targetSource', 'funnel']);
   F.priorFields = ['period'].concat(F.stageKeys);
 });
 // The b2b names under their first names, for the code outside the core that reads a CRM.
@@ -177,7 +197,8 @@ function readStages(c, where, F) {
   if (got.length < MIN_STAGES) throw inputError(where + 'Give at least ' + MIN_STAGES + ' funnel stages (got ' + got.length + ').', 'Stages, in order: ' + STAGE_KEYS.join(', ') + '.');
   for (var i = 1; i < got.length; i++) {
     var a = STAGE_KEYS.indexOf(got[i - 1].key), b = STAGE_KEYS.indexOf(got[i].key);
-    if (b !== a + 1) throw inputError(where + 'Stages must be consecutive: "' + got[i - 1].key + '" is followed by "' + got[i].key + '" but "' + STAGE_KEYS.slice(a + 1, b).join('", "') + '" is missing.', 'Stages, in order: ' + STAGE_KEYS.join(', ') + '. Give a run of them with no gaps.');
+    var gap = STAGE_KEYS.slice(a + 1, b).filter(function (k) { return F.optional.indexOf(k) < 0; });
+    if (gap.length) throw inputError(where + 'Stages must be consecutive: "' + got[i - 1].key + '" is followed by "' + got[i].key + '" but "' + gap.join('", "') + '" is missing.', 'Stages, in order: ' + STAGE_KEYS.join(', ') + '. Give a run of them with no gaps' + (F.optional.length ? ' (' + F.optional.join(', ') + ' may be left out)' : '') + '.');
     if (got[i].count > got[i - 1].count) throw inputError(where + got[i].label + ' (' + got[i].count + ') is more than ' + got[i - 1].label + ' (' + got[i - 1].count + '); each stage must be no larger than the one before it.');
     if (got[i - 1].count === 0) throw inputError(where + got[i - 1].label + ' is 0, so the rate to ' + got[i].label + ' cannot be computed.', 'Every stage except the last must be above 0.');
   }
@@ -220,6 +241,12 @@ function normalise(cfg) {
     if (!isNum(cfg[REV]) || cfg[REV] < 0) throw inputError('"' + REV + '" must be a number, 0 or more (got ' + JSON.stringify(cfg[REV]) + ').');
     if (s.stages[s.stages.length - 1].key !== lastKey) throw inputError('"' + REV + '" needs "' + lastKey + '" as the last stage you give.', 'Without ' + lastUnit + ', the engine counts what is lost in your last stage, not in ' + lastUnit + '.');
     s[REV] = cfg[REV];
+  }
+  s.margin = null;
+  if (cfg.margin != null) {
+    if (!isNum(cfg.margin) || cfg.margin <= 0 || cfg.margin > 1) throw inputError('"margin" must be a fraction above 0 and up to 1 (got ' + JSON.stringify(cfg.margin) + ').', 'Write 40% as 0.4.');
+    if (s[REV] === null) throw inputError('"margin" needs "' + REV + '": it is your margin on that revenue.');
+    s.margin = cfg.margin;
   }
   if (cfg.prior != null && cfg.targets != null) throw inputError('Give one baseline: "prior" or "targets", not both.', 'Run the engine twice to compare against each.');
   if (cfg.targetSource != null && cfg.targets == null) throw inputError('"targetSource" describes "targets"; give the targets too, or leave it out.');
@@ -290,7 +317,7 @@ function run(cfg) {
   for (i = 1; i < st.length; i++) {
     var a = st[i - 1], b = st[i], k = transitionKey(a.key, b.key), r = rates[i - 1];
     var t = { key: k, from: a.key, to: b.key, fromLabel: a.label, toLabel: b.label, fromCount: a.count, toCount: b.count, rate: r,
-      baselineRate: null, changePts: null, changeRel: null, status: 'no-baseline', lost: null, revenueLost: null, noise: null, rank: null };
+      baselineRate: null, changePts: null, changeRel: null, status: 'no-baseline', lost: null, revenueLost: null, profitLost: null, noise: null, rank: null };
     if (s.prior) {
       var pa = s.prior.stages[i - 1].count, pb = s.prior.stages[i].count;
       t.baselineRate = pb / pa; t.baselineFrom = pa; t.baselineTo = pb;
@@ -311,6 +338,7 @@ function run(cfg) {
         // Below baseline but costing nothing: a later stage converted none, so no rate here changes the outcome.
         t.status = t.lost > 0 ? 'leaking' : 'below-no-effect';
         if (revenue !== null) t.revenueLost = tidy(t.lost * revenue);
+        if (s.margin !== null) t.profitLost = tidy(t.revenueLost * s.margin);
       }
     }
     out.transitions.push(t);
@@ -350,7 +378,8 @@ function run(cfg) {
     out.leak = L.key;
     var firm = leaking.filter(function (t) { return t.noise && t.noise.verdict === 'clear'; })[0] || null;
     out.firmLeak = firm ? firm.key : null;
-    var money = L.revenueLost !== null ? ' (' + fmtMoney(L.revenueLost, s.currency) + ')' : '';
+    var money = L.revenueLost === null ? '' : L.profitLost === null ? ' (' + fmtMoney(L.revenueLost, s.currency) + ')'
+      : ' (' + fmtMoney(L.revenueLost, s.currency) + ' of revenue, ' + fmtMoney(L.profitLost, s.currency) + ' of profit)';
     var against = s.prior ? fmtRate(L.baselineRate) + ' in ' + out.baselineLabel : 'your target of ' + fmtRate(L.baselineRate) + (s.targetSource ? ' (' + s.targetSource + ')' : '');
     var txt = L.fromLabel + ' to ' + L.toLabel + ' converted at ' + fmtRate(L.rate) + ' against ' + against + '. At the baseline rate, with every other stage as it is, this period would have had ' + fmtCount(L.lost) + ' more ' + unit + money + '.';
     if (L.noise.verdict === 'may-be-noise') {
@@ -472,7 +501,7 @@ function render(r) {
     L.push('  ' + name + fmtRate(t.rate).padStart(8) + ' vs ' + fmtRate(t.baselineRate).padStart(7) + '  ' + fmtPts(t.changePts) + ' (' + fmtRel(t.changeRel) + ')');
     if (t.status === 'holding') L.push('      holding' + ' [' + z + ']');
     else if (t.status === 'below-no-effect') L.push('      below baseline, 0 ' + unit + ' lost: a later stage converted none [' + z + ']');
-    else L.push('      ' + fmtCount(t.lost) + ' ' + unit + ' lost' + (t.revenueLost !== null ? ', ' + fmtMoney(t.revenueLost, cur) : '') + '  #' + t.rank + ' [' + z + ']');
+    else L.push('      ' + fmtCount(t.lost) + ' ' + unit + ' lost' + (t.revenueLost !== null ? ', ' + fmtMoney(t.revenueLost, cur) : '') + (t.profitLost !== null ? ' (' + fmtMoney(t.profitLost, cur) + ' profit)' : '') + '  #' + t.rank + ' [' + z + ']');
   });
   L.push('');
   if (r.volume) L.push(r.volume.label + ' (volume, not ranked): ' + fmtCount(r.volume.count) + ' vs ' + fmtCount(r.volume.priorCount) + ' (' + fmtRel(r.volume.changeRel) + ')');

@@ -26,8 +26,8 @@ metadata:
   topic: analytics-budget
   secondary_topics: [sales-pipeline, website-conversion]
   agents: [Claude Code, Cursor, OpenAI Codex, Windsurf, Cline]
-  inputs: This period's funnel counts for one of three funnels - B2B (sessions, leads, MQLs, SQLs, opportunities, wins), ecommerce (sessions, add to cart, checkout, purchases) or subscription app (installs, sign-ups, activated, paid); at least 3 consecutive stages - and a baseline, which is last period's counts or your target rate per stage, with where the targets come from; optionally revenue per win, purchase or paid subscriber
-  outputs: Each stage's rate against its baseline in points and relative terms, the wins, purchases or paid subscribers (and revenue) each shortfall cost, the stages ranked, the leak named, a noise check per stage, and a plain statement when no baseline was given
+  inputs: This period's funnel counts for one of three funnels - B2B (sessions, leads, MQLs, SQLs, opportunities, wins), ecommerce (sessions, product page views if you have them, add to cart, checkout, purchases) or subscription app (installs, sign-ups, activated, started trial if you have it, paid); at least 3 consecutive stages - and a baseline, which is last period's counts or your target rate per stage, with where the targets come from; optionally revenue per win, purchase or paid subscriber, and your margin on it
+  outputs: Each stage's rate against its baseline in points and relative terms, the wins, purchases or paid subscribers (and revenue and profit) each shortfall cost, the stages ranked, the leak named, a noise check per stage, and a plain statement when no baseline was given
   related_aaj:
     - https://aajconsult.com/tools/funnel-leak-finder
     - https://aajconsult.com/tools/marketing-kpi-report
@@ -55,14 +55,17 @@ For the full KPI report (CAC, efficiency, attainment, period deltas), use `marke
 1. **Read the brand/product context first.** If `.agents/product-marketing.md` or `.agents/aaj-brand.md` exists, read it for the funnel definitions (what counts as an MQL or SQL). If not, ask.
 2. **Pick the funnel and get this period's counts** for at least three consecutive stages:
    - B2B, the default, using the marketing-report names: `sessions`, `leads`, `mqls`, `sqls`, `opps`, `wins`.
-   - Ecommerce, with `"funnel": "ecommerce"`: `sessions`, `carts`, `checkouts`, `purchases`. Count sessions at each stage (sessions with an add to cart, sessions that reached checkout, sessions that ended in an order), not events, so no stage is larger than the one before.
-   - Subscription app, with `"funnel": "app"`: `installs`, `signups`, `activated`, `paid`. Count the people who installed in the period and how far each got. Ask the user what "activated" means in their product; the engine does not define it.
+   - Ecommerce, with `"funnel": "ecommerce"`: `sessions`, `views` (optional), `carts`, `checkouts`, `purchases`. Count sessions at each stage (sessions that viewed a product page, sessions with an add to cart, sessions that reached checkout, sessions that ended in an order), not events, so no stage is larger than the one before.
+   - Subscription app, with `"funnel": "app"`: `installs`, `signups`, `activated`, `trials` (optional), `paid`. Count the people who installed in the period and how far each got. Ask the user what "activated" means in their product; the engine does not define it. Count paid within the same number of days after install in both periods.
+   - An optional stage may be left out in the middle; the step then runs across it (`sessionsToCarts`, `activatedToPaid`). When the user has it, include it: it narrows the leak to a smaller step.
 3. **Get a baseline. Without one, no leak can be named.** Either last period's counts for the same stages (`prior`), or a target rate per stage transition (`targets`), with where the targets come from (`targetSource`, such as "2026 plan"). Never supply industry rates as targets on the user's behalf: targets come from the user's plan or a source the user names.
 4. **Check definitions did not change** between the two periods. A new MQL rule, a CRM migration, a tracking change, a new checkout or a moved paywall moves rates without anything leaking.
 
 ## Method
 
 **Rates.** For each transition, rate now = next stage / this stage. Baseline rate = the same ratio last period, or the user's target.
+
+**Margin.** With a revenue figure, the user can add `margin` (a fraction: 40% is 0.4), their margin on that revenue. The engine then shows profit lost beside revenue lost. In AAJ's view a store should act on profit. Never supply a margin on the user's behalf.
 
 **Wins lost at a stage.** What the last stage would have been with that one stage at its baseline rate, holding the top-of-funnel count and every other stage at this period's rates, minus what it actually was:
 
@@ -97,6 +100,7 @@ node resources/funnel-leak.js '{"period":"Q3 2026","sessions":120000,"leads":300
 node resources/funnel-leak.js '{"leads":800,"mqls":300,"sqls":90,"opps":40,"wins":9,"targets":{"leadsToMqls":0.35,"mqlsToSqls":0.3,"sqlsToOpps":0.5},"targetSource":"2026 plan"}'
 node resources/funnel-leak.js '{"contacts":[{"leads":"2026-07-03","mqls":"2026-07-20","sqls":null}],"dates":{"from":"2026-07-01","to":"2026-09-30"},"priorDates":{"from":"2026-04-01","to":"2026-06-30"}}'
 node resources/funnel-leak.js '{"funnel":"ecommerce","period":"Oct 2026","sessions":40000,"carts":2400,"checkouts":1200,"purchases":684,"revenuePerPurchase":60,"prior":{"period":"Sep 2026","sessions":38000,"carts":2660,"checkouts":1330,"purchases":798}}'
+node resources/funnel-leak.js '{"funnel":"ecommerce","sessions":40000,"views":16000,"carts":2400,"checkouts":1200,"purchases":684,"revenuePerPurchase":60,"margin":0.4,"prior":{"sessions":38000,"views":15200,"carts":2660,"checkouts":1330,"purchases":798}}'
 node resources/funnel-leak.js '{"funnel":"app","installs":20000,"signups":9000,"activated":3600,"paid":288,"revenuePerPaid":40,"targets":{"activatedToPaid":0.1},"targetSource":"2026 plan"}'
 node resources/funnel-leak.js --help
 ```
@@ -108,8 +112,10 @@ Transition keys for `targets`, as fractions (30% is 0.3):
 | Funnel | Transition keys | Revenue field |
 |---|---|---|
 | `b2b` (default) | `sessionsToLeads`, `leadsToMqls`, `mqlsToSqls`, `sqlsToOpps`, `oppsToWins` | `revenuePerWin` |
-| `ecommerce` | `sessionsToCarts`, `cartsToCheckouts`, `checkoutsToPurchases` | `revenuePerPurchase` |
-| `app` | `installsToSignups`, `signupsToActivated`, `activatedToPaid` | `revenuePerPaid` |
+| `ecommerce` | `sessionsToCarts`, `cartsToCheckouts`, `checkoutsToPurchases`; with `views`: `sessionsToViews`, `viewsToCarts` | `revenuePerPurchase` |
+| `app` | `installsToSignups`, `signupsToActivated`, `activatedToPaid`; with `trials`: `activatedToTrials`, `trialsToPaid` | `revenuePerPaid` |
+
+Any funnel also takes `margin`, a fraction, with its revenue field.
 
 A stage or revenue field from another funnel is rejected, with a hint naming the funnel it belongs to.
 
