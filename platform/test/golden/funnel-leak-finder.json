@@ -414,7 +414,7 @@
       "stdout": [],
       "stderr": [
         "error: Unknown field \"MQLs\".",
-        "       Allowed: period, sessions, leads, mqls, sqls, opps, wins, revenuePerWin, currency, prior, targets, targetSource.",
+        "       Allowed: period, sessions, leads, mqls, sqls, opps, wins, revenuePerWin, margin, currency, prior, targets, targetSource, funnel.",
         "",
         "Run --help for the schema, or --demo for a worked example."
       ]
@@ -621,6 +621,666 @@
       "stdout": [],
       "stderr": [
         "error: Give sessions for both periods (\"sessions\" and \"priorSessions\") or for neither.",
+        "",
+        "Run --help for the schema, or --demo for a worked example."
+      ]
+    },
+    {
+      "name": "ecommerce: sessions to add to cart is the leak",
+      "source": "hand-checked: 40,000 x 0.07 x 0.50 x 0.57 = 798, less 684 = 114 purchases, $6,840; checkout to purchases 720 less 684 = 36",
+      "args": [
+        "{\"funnel\": \"ecommerce\", \"period\": \"Oct 2026\", \"sessions\": 40000, \"carts\": 2400, \"checkouts\": 1200, \"purchases\": 684, \"revenuePerPurchase\": 60, \"prior\": {\"period\": \"Sep 2026\", \"sessions\": 38000, \"carts\": 2660, \"checkouts\": 1330, \"purchases\": 798}}"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "FUNNEL LEAK FINDER - Oct 2026",
+        "══════════════════════════════════════════════════════════",
+        "Baseline: Sep 2026",
+        "",
+        "STAGES",
+        "  Sessions:           40,000   (prior 38,000)",
+        "  Add to cart:         2,400   (prior 2,660)",
+        "  Checkout:            1,200   (prior 1,330)",
+        "  Purchases:             684   (prior 798)",
+        "",
+        "TRANSITIONS",
+        "  Sessions -> Add to cart       6.0% vs    7.0%  -1.0 pts (-14.3%)",
+        "      114 purchases lost, $6,840  #1 [z -5.67]",
+        "  Add to cart -> Checkout      50.0% vs   50.0%  0.0 pts (0.0%)",
+        "      holding [z 0.00]",
+        "  Checkout -> Purchases        57.0% vs   60.0%  -3.0 pts (-5.0%)",
+        "      36 purchases lost, $2,160  #2 [z -1.53, may be noise]",
+        "",
+        "Sessions (volume, not ranked): 40,000 vs 38,000 (+5.3%)",
+        "",
+        "RESULT: Leak: Sessions to Add to cart",
+        "  Sessions to Add to cart converted at 6.0% against 7.0% in Sep 2026. At the baseline rate, with every other stage as it is, this period would have had 114 more purchases ($6,840).",
+        "",
+        "NOTES",
+        "  - Each stage's figure holds the other stages at this period's rates, so the figures do not add up to the total change.",
+        "",
+        "AAJ'S VIEW",
+        "  - In AAJ's view, fix the named leak before adding volume at the top: more volume through a stage that is below baseline buys fewer purchases per unit of spend than it did at baseline.",
+        "  - The noise check uses 95% (two-sided) and needs at least 5 conversions and 5 non-conversions in each period; those cut-offs are AAJ's choice.",
+        "",
+        "NOISE CHECK SOURCE",
+        "  NIST/SEMATECH e-Handbook of Statistical Methods, \"7.3.3. How can we determine whether two processes produce the same proportion of defectives?\": https://www.itl.nist.gov/div898/handbook/prc/section3/prc33.htm"
+      ],
+      "stderr": []
+    },
+    {
+      "name": "app: activated to paid is the leak",
+      "source": "hand-checked: 20,000 x 0.45 x 0.40 x 0.10 = 360, less 288 = 72 paid, $2,880; installs to sign-ups 320 less 288 = 32",
+      "args": [
+        "{\"funnel\": \"app\", \"period\": \"Oct 2026\", \"installs\": 20000, \"signups\": 9000, \"activated\": 3600, \"paid\": 288, \"revenuePerPaid\": 40, \"prior\": {\"period\": \"Sep 2026\", \"installs\": 18000, \"signups\": 9000, \"activated\": 3600, \"paid\": 360}}"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "FUNNEL LEAK FINDER - Oct 2026",
+        "══════════════════════════════════════════════════════════",
+        "Baseline: Sep 2026",
+        "",
+        "STAGES",
+        "  Installs:           20,000   (prior 18,000)",
+        "  Sign-ups:            9,000   (prior 9,000)",
+        "  Activated:           3,600   (prior 3,600)",
+        "  Paid:                  288   (prior 360)",
+        "",
+        "TRANSITIONS",
+        "  Installs -> Sign-ups         45.0% vs   50.0%  -5.0 pts (-10.0%)",
+        "      32 paid subscribers lost, $1,280  #2 [z -9.75]",
+        "  Sign-ups -> Activated        40.0% vs   40.0%  0.0 pts (0.0%)",
+        "      holding [z 0.00]",
+        "  Activated -> Paid             8.0% vs   10.0%  -2.0 pts (-20.0%)",
+        "      72 paid subscribers lost, $2,880  #1 [z -2.96]",
+        "",
+        "Installs (volume, not ranked): 20,000 vs 18,000 (+11.1%)",
+        "",
+        "RESULT: Leak: Activated to Paid",
+        "  Activated to Paid converted at 8.0% against 10.0% in Sep 2026. At the baseline rate, with every other stage as it is, this period would have had 72 more paid subscribers ($2,880).",
+        "",
+        "NOTES",
+        "  - Each stage's figure holds the other stages at this period's rates, so the figures do not add up to the total change.",
+        "",
+        "AAJ'S VIEW",
+        "  - In AAJ's view, fix the named leak before adding volume at the top: more volume through a stage that is below baseline buys fewer paid subscribers per unit of spend than it did at baseline.",
+        "  - The noise check uses 95% (two-sided) and needs at least 5 conversions and 5 non-conversions in each period; those cut-offs are AAJ's choice.",
+        "",
+        "NOISE CHECK SOURCE",
+        "  NIST/SEMATECH e-Handbook of Statistical Methods, \"7.3.3. How can we determine whether two processes produce the same proportion of defectives?\": https://www.itl.nist.gov/div898/handbook/prc/section3/prc33.htm"
+      ],
+      "stderr": []
+    },
+    {
+      "name": "ecommerce: every rate exactly at baseline",
+      "source": "5%, 50%, 60% in both periods: no leak",
+      "args": [
+        "{\"funnel\": \"ecommerce\", \"sessions\": 10000, \"carts\": 500, \"checkouts\": 250, \"purchases\": 150, \"prior\": {\"sessions\": 8000, \"carts\": 400, \"checkouts\": 200, \"purchases\": 120}}"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "FUNNEL LEAK FINDER",
+        "══════════════════════════════════════════════════════════",
+        "Baseline: the prior period",
+        "",
+        "STAGES",
+        "  Sessions:           10,000   (prior 8,000)",
+        "  Add to cart:           500   (prior 400)",
+        "  Checkout:              250   (prior 200)",
+        "  Purchases:             150   (prior 120)",
+        "",
+        "TRANSITIONS",
+        "  Sessions -> Add to cart       5.0% vs    5.0%  0.0 pts (0.0%)",
+        "      holding [z 0.00]",
+        "  Add to cart -> Checkout      50.0% vs   50.0%  0.0 pts (0.0%)",
+        "      holding [z 0.00]",
+        "  Checkout -> Purchases        60.0% vs   60.0%  0.0 pts (0.0%)",
+        "      holding [z 0.00]",
+        "",
+        "Sessions (volume, not ranked): 10,000 vs 8,000 (+25.0%)",
+        "",
+        "RESULT: No leak",
+        "  Every stage you gave a baseline for is at or above the prior period.",
+        "",
+        "AAJ'S VIEW",
+        "  - The noise check uses 95% (two-sided) and needs at least 5 conversions and 5 non-conversions in each period; those cut-offs are AAJ's choice.",
+        "",
+        "NOISE CHECK SOURCE",
+        "  NIST/SEMATECH e-Handbook of Statistical Methods, \"7.3.3. How can we determine whether two processes produce the same proportion of defectives?\": https://www.itl.nist.gov/div898/handbook/prc/section3/prc33.htm"
+      ],
+      "stderr": []
+    },
+    {
+      "name": "app: zero paid",
+      "source": "hand-checked: 1,000 x 0.40 x 0.25 x 0.10 = 10 lost, too few to test; sign-ups to activated is below baseline but costs nothing on its own",
+      "args": [
+        "{\"funnel\": \"app\", \"installs\": 1000, \"signups\": 400, \"activated\": 100, \"paid\": 0, \"prior\": {\"installs\": 1000, \"signups\": 400, \"activated\": 120, \"paid\": 12}}"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "FUNNEL LEAK FINDER",
+        "══════════════════════════════════════════════════════════",
+        "Baseline: the prior period",
+        "",
+        "STAGES",
+        "  Installs:            1,000   (prior 1,000)",
+        "  Sign-ups:              400   (prior 400)",
+        "  Activated:             100   (prior 120)",
+        "  Paid:                    0   (prior 12)",
+        "",
+        "TRANSITIONS",
+        "  Installs -> Sign-ups         40.0% vs   40.0%  0.0 pts (0.0%)",
+        "      holding [z 0.00]",
+        "  Sign-ups -> Activated        25.0% vs   30.0%  -5.0 pts (-16.7%)",
+        "      below baseline, 0 paid subscribers lost: a later stage converted none [z -1.58, may be noise]",
+        "  Activated -> Paid             0.0% vs   10.0%  -10.0 pts (-100.0%)",
+        "      10 paid subscribers lost  #1 [too few to test]",
+        "",
+        "Installs (volume, not ranked): 1,000 vs 1,000 (0.0%)",
+        "",
+        "RESULT: Leak: Activated to Paid",
+        "  Activated to Paid converted at 0.0% against 10.0% in the prior period. At the baseline rate, with every other stage as it is, this period would have had 10 more paid subscribers. The change may be noise (too few to test): confirm it next period before acting.",
+        "",
+        "AAJ'S VIEW",
+        "  - In AAJ's view, fix the named leak before adding volume at the top: more volume through a stage that is below baseline buys fewer paid subscribers per unit of spend than it did at baseline.",
+        "  - The noise check uses 95% (two-sided) and needs at least 5 conversions and 5 non-conversions in each period; those cut-offs are AAJ's choice.",
+        "",
+        "NOISE CHECK SOURCE",
+        "  NIST/SEMATECH e-Handbook of Statistical Methods, \"7.3.3. How can we determine whether two processes produce the same proportion of defectives?\": https://www.itl.nist.gov/div898/handbook/prc/section3/prc33.htm"
+      ],
+      "stderr": []
+    },
+    {
+      "name": "ecommerce: no baseline names no leak",
+      "source": "rates only: 6.0%, 50.0%, 57.0%",
+      "args": [
+        "{\"funnel\": \"ecommerce\", \"period\": \"Oct 2026\", \"sessions\": 40000, \"carts\": 2400, \"checkouts\": 1200, \"purchases\": 684}"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "FUNNEL LEAK FINDER - Oct 2026",
+        "══════════════════════════════════════════════════════════",
+        "Baseline: none",
+        "",
+        "STAGES",
+        "  Sessions:           40,000",
+        "  Add to cart:         2,400",
+        "  Checkout:            1,200",
+        "  Purchases:             684",
+        "",
+        "TRANSITIONS",
+        "  Sessions -> Add to cart       6.0%   no baseline",
+        "  Add to cart -> Checkout      50.0%   no baseline",
+        "  Checkout -> Purchases        57.0%   no baseline",
+        "",
+        "RESULT: No leak named",
+        "  No leak can be named without a baseline. Raw drop-off cannot name one: each stage's rate has its own scale, and a 10% relative lift at any stage gives the same 10% more purchases. Add last period's counts (\"prior\") or your target rates (\"targets\") to see which stage cost you purchases."
+      ],
+      "stderr": []
+    },
+    {
+      "name": "ecommerce: three stages, sessions left out",
+      "source": "hand-checked: 2,400 x 0.50 x 0.60 = 720, less 684 = 36; z -1.53, may be noise",
+      "args": [
+        "{\"funnel\": \"ecommerce\", \"carts\": 2400, \"checkouts\": 1200, \"purchases\": 684, \"prior\": {\"carts\": 2660, \"checkouts\": 1330, \"purchases\": 798}}"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "FUNNEL LEAK FINDER",
+        "══════════════════════════════════════════════════════════",
+        "Baseline: the prior period",
+        "",
+        "STAGES",
+        "  Add to cart:         2,400   (prior 2,660)",
+        "  Checkout:            1,200   (prior 1,330)",
+        "  Purchases:             684   (prior 798)",
+        "",
+        "TRANSITIONS",
+        "  Add to cart -> Checkout      50.0% vs   50.0%  0.0 pts (0.0%)",
+        "      holding [z 0.00]",
+        "  Checkout -> Purchases        57.0% vs   60.0%  -3.0 pts (-5.0%)",
+        "      36 purchases lost  #1 [z -1.53, may be noise]",
+        "",
+        "Add to cart (volume, not ranked): 2,400 vs 2,660 (-9.8%)",
+        "",
+        "RESULT: Leak: Checkout to Purchases",
+        "  Checkout to Purchases converted at 57.0% against 60.0% in the prior period. At the baseline rate, with every other stage as it is, this period would have had 36 more purchases. The change may be noise (not significant at 95%): confirm it next period before acting.",
+        "",
+        "NOTES",
+        "  - Add to cart fell from 2,660 to 2,400: at this period's rates that is 74.1 fewer purchases. That is volume, not conversion, so it is not ranked as a leak.",
+        "",
+        "AAJ'S VIEW",
+        "  - In AAJ's view, fix the named leak before adding volume at the top: more volume through a stage that is below baseline buys fewer purchases per unit of spend than it did at baseline.",
+        "  - The noise check uses 95% (two-sided) and needs at least 5 conversions and 5 non-conversions in each period; those cut-offs are AAJ's choice.",
+        "",
+        "NOISE CHECK SOURCE",
+        "  NIST/SEMATECH e-Handbook of Statistical Methods, \"7.3.3. How can we determine whether two processes produce the same proportion of defectives?\": https://www.itl.nist.gov/div898/handbook/prc/section3/prc33.htm"
+      ],
+      "stderr": []
+    },
+    {
+      "name": "app: a target for one step only",
+      "source": "hand-checked: 72 lost; z = (0.08 - 0.10) / sqrt(0.10 x 0.90 / 3,600) = -4.00; the other steps are not judged",
+      "args": [
+        "{\"funnel\": \"app\", \"installs\": 20000, \"signups\": 9000, \"activated\": 3600, \"paid\": 288, \"targets\": {\"activatedToPaid\": 0.1}, \"targetSource\": \"2026 plan\"}"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "FUNNEL LEAK FINDER",
+        "══════════════════════════════════════════════════════════",
+        "Baseline: your targets (2026 plan)",
+        "",
+        "STAGES",
+        "  Installs:           20,000",
+        "  Sign-ups:            9,000",
+        "  Activated:           3,600",
+        "  Paid:                  288",
+        "",
+        "TRANSITIONS",
+        "  Installs -> Sign-ups         45.0%   no baseline",
+        "  Sign-ups -> Activated        40.0%   no baseline",
+        "  Activated -> Paid             8.0% vs   10.0%  -2.0 pts (-20.0%)",
+        "      72 paid subscribers lost  #1 [z -4.00]",
+        "",
+        "RESULT: Leak: Activated to Paid",
+        "  Activated to Paid converted at 8.0% against your target of 10.0% (2026 plan). At the baseline rate, with every other stage as it is, this period would have had 72 more paid subscribers.",
+        "",
+        "NOTES",
+        "  - No target for installsToSignups, signupsToActivated: those stages are shown but not judged, so they cannot be named as the leak.",
+        "",
+        "AAJ'S VIEW",
+        "  - In AAJ's view, fix the named leak before adding volume at the top: more volume through a stage that is below baseline buys fewer paid subscribers per unit of spend than it did at baseline.",
+        "  - The noise check uses 95% (two-sided) and needs the stage count times the target, and times one minus the target, to be at least 5 (NIST 7.2.4); the 95% level is AAJ's choice.",
+        "",
+        "NOISE CHECK SOURCE",
+        "  NIST/SEMATECH e-Handbook of Statistical Methods, \"7.2.4. Does the proportion of defectives meet requirements?\": https://www.itl.nist.gov/div898/handbook/prc/section2/prc24.htm"
+      ],
+      "stderr": []
+    },
+    {
+      "name": "ecommerce: sessions fell, rates held",
+      "source": "7%, 50%, 60% in both periods; 798 less 630 = 168 fewer purchases from volume, not ranked",
+      "args": [
+        "{\"funnel\": \"ecommerce\", \"sessions\": 30000, \"carts\": 2100, \"checkouts\": 1050, \"purchases\": 630, \"prior\": {\"sessions\": 38000, \"carts\": 2660, \"checkouts\": 1330, \"purchases\": 798}}"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "FUNNEL LEAK FINDER",
+        "══════════════════════════════════════════════════════════",
+        "Baseline: the prior period",
+        "",
+        "STAGES",
+        "  Sessions:           30,000   (prior 38,000)",
+        "  Add to cart:         2,100   (prior 2,660)",
+        "  Checkout:            1,050   (prior 1,330)",
+        "  Purchases:             630   (prior 798)",
+        "",
+        "TRANSITIONS",
+        "  Sessions -> Add to cart       7.0% vs    7.0%  0.0 pts (0.0%)",
+        "      holding [z 0.00]",
+        "  Add to cart -> Checkout      50.0% vs   50.0%  0.0 pts (0.0%)",
+        "      holding [z 0.00]",
+        "  Checkout -> Purchases        60.0% vs   60.0%  0.0 pts (0.0%)",
+        "      holding [z 0.00]",
+        "",
+        "Sessions (volume, not ranked): 30,000 vs 38,000 (-21.1%)",
+        "",
+        "RESULT: No leak",
+        "  Every stage you gave a baseline for is at or above the prior period.",
+        "",
+        "NOTES",
+        "  - Sessions fell from 38,000 to 30,000: at this period's rates that is 168 fewer purchases. That is volume, not conversion, so it is not ranked as a leak.",
+        "",
+        "AAJ'S VIEW",
+        "  - The noise check uses 95% (two-sided) and needs at least 5 conversions and 5 non-conversions in each period; those cut-offs are AAJ's choice.",
+        "",
+        "NOISE CHECK SOURCE",
+        "  NIST/SEMATECH e-Handbook of Statistical Methods, \"7.3.3. How can we determine whether two processes produce the same proportion of defectives?\": https://www.itl.nist.gov/div898/handbook/prc/section3/prc33.htm"
+      ],
+      "stderr": []
+    },
+    {
+      "name": "b2b named outright gives the b2b result",
+      "source": "the demo's numbers with \"funnel\": \"b2b\": same output as the demo",
+      "args": [
+        "{\"funnel\": \"b2b\", \"period\": \"Q3 2026\", \"sessions\": 120000, \"leads\": 3000, \"mqls\": 1050, \"sqls\": 252, \"opps\": 126, \"wins\": 28, \"revenuePerWin\": 18000, \"prior\": {\"period\": \"Q2 2026\", \"sessions\": 110000, \"leads\": 2860, \"mqls\": 1001, \"sqls\": 320, \"opps\": 150, \"wins\": 36}}"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "FUNNEL LEAK FINDER - Q3 2026",
+        "══════════════════════════════════════════════════════════",
+        "Baseline: Q2 2026",
+        "",
+        "STAGES",
+        "  Sessions:          120,000   (prior 110,000)",
+        "  Leads:               3,000   (prior 2,860)",
+        "  MQLs:                1,050   (prior 1,001)",
+        "  SQLs:                  252   (prior 320)",
+        "  Opportunities:         126   (prior 150)",
+        "  Wins:                   28   (prior 36)",
+        "",
+        "TRANSITIONS",
+        "  Sessions -> Leads             2.5% vs    2.6%  -0.10 pts (-3.8%)",
+        "      1.1 wins lost, $20,160  #3 [z -1.52, may be noise]",
+        "  Leads -> MQLs                35.0% vs   35.0%  0.0 pts (0.0%)",
+        "      holding [z 0.00]",
+        "  MQLs -> SQLs                 24.0% vs   32.0%  -8.0 pts (-24.9%)",
+        "      9.3 wins lost, $167,329  #1 [z -4.02]",
+        "  SQLs -> Opportunities        50.0% vs   46.9%  +3.1 pts (+6.7%)",
+        "      holding [z 0.74]",
+        "  Opportunities -> Wins        22.2% vs   24.0%  -1.8 pts (-7.4%)",
+        "      2.2 wins lost, $40,320  #2 [z -0.35, may be noise]",
+        "",
+        "Sessions (volume, not ranked): 120,000 vs 110,000 (+9.1%)",
+        "",
+        "RESULT: Leak: MQLs to SQLs",
+        "  MQLs to SQLs converted at 24.0% against 32.0% in Q2 2026. At the baseline rate, with every other stage as it is, this period would have had 9.3 more wins ($167,329).",
+        "",
+        "NOTES",
+        "  - Each stage's figure holds the other stages at this period's rates, so the figures do not add up to the total change.",
+        "",
+        "AAJ'S VIEW",
+        "  - In AAJ's view, fix the named leak before adding volume at the top: more volume through a stage that is below baseline buys fewer wins per unit of spend than it did at baseline.",
+        "  - The noise check uses 95% (two-sided) and needs at least 5 conversions and 5 non-conversions in each period; those cut-offs are AAJ's choice.",
+        "",
+        "NOISE CHECK SOURCE",
+        "  NIST/SEMATECH e-Handbook of Statistical Methods, \"7.3.3. How can we determine whether two processes produce the same proportion of defectives?\": https://www.itl.nist.gov/div898/handbook/prc/section3/prc33.htm"
+      ],
+      "stderr": []
+    },
+    {
+      "name": "ecommerce: rejects add to cart larger than sessions",
+      "source": "a funnel cannot grow downstream; count sessions, not events",
+      "args": [
+        "{\"funnel\": \"ecommerce\", \"sessions\": 1000, \"carts\": 1200, \"checkouts\": 300}"
+      ],
+      "exitCode": 1,
+      "stdout": [],
+      "stderr": [
+        "error: Add to cart (1200) is more than Sessions (1000); each stage must be no larger than the one before it.",
+        "",
+        "Run --help for the schema, or --demo for a worked example."
+      ]
+    },
+    {
+      "name": "ecommerce: rejects a zero before the last stage",
+      "source": "a rate from 0 cannot be computed",
+      "args": [
+        "{\"funnel\": \"ecommerce\", \"sessions\": 1000, \"carts\": 200, \"checkouts\": 0, \"purchases\": 0}"
+      ],
+      "exitCode": 1,
+      "stdout": [],
+      "stderr": [
+        "error: Checkout is 0, so the rate to Purchases cannot be computed.",
+        "       Every stage except the last must be above 0.",
+        "",
+        "Run --help for the schema, or --demo for a worked example."
+      ]
+    },
+    {
+      "name": "ecommerce: rejects revenue without purchases",
+      "source": "revenue needs the funnel's last stage",
+      "args": [
+        "{\"funnel\": \"ecommerce\", \"sessions\": 1000, \"carts\": 200, \"checkouts\": 100, \"revenuePerPurchase\": 60}"
+      ],
+      "exitCode": 1,
+      "stdout": [],
+      "stderr": [
+        "error: \"revenuePerPurchase\" needs \"purchases\" as the last stage you give.",
+        "       Without purchases, the engine counts what is lost in your last stage, not in purchases.",
+        "",
+        "Run --help for the schema, or --demo for a worked example."
+      ]
+    },
+    {
+      "name": "rejects an ecommerce stage when no funnel is set",
+      "source": "strict inputs; the hint names the funnel to set",
+      "args": [
+        "{\"sessions\": 40000, \"carts\": 2400, \"checkouts\": 1200}"
+      ],
+      "exitCode": 1,
+      "stdout": [],
+      "stderr": [
+        "error: Unknown field \"carts\".",
+        "       \"carts\" belongs to the ecommerce funnel: set \"funnel\": \"ecommerce\" to use it.",
+        "",
+        "Run --help for the schema, or --demo for a worked example."
+      ]
+    },
+    {
+      "name": "app: rejects the b2b revenue field",
+      "source": "each funnel has its own revenue field",
+      "args": [
+        "{\"funnel\": \"app\", \"installs\": 20000, \"signups\": 9000, \"activated\": 3600, \"paid\": 288, \"revenuePerWin\": 40}"
+      ],
+      "exitCode": 1,
+      "stdout": [],
+      "stderr": [
+        "error: Unknown field \"revenuePerWin\".",
+        "       For the app funnel the revenue field is \"revenuePerPaid\".",
+        "",
+        "Run --help for the schema, or --demo for a worked example."
+      ]
+    },
+    {
+      "name": "rejects an unknown funnel",
+      "source": "funnel is b2b, ecommerce or app",
+      "args": [
+        "{\"funnel\": \"dtc\", \"sessions\": 40000, \"carts\": 2400, \"checkouts\": 1200}"
+      ],
+      "exitCode": 1,
+      "stdout": [],
+      "stderr": [
+        "error: \"funnel\" must be one of: b2b, ecommerce, app (got \"dtc\").",
+        "       Leave it out for the b2b funnel.",
+        "",
+        "Run --help for the schema, or --demo for a worked example."
+      ]
+    },
+    {
+      "name": "contacts: rejects a consumer funnel",
+      "source": "counting from CRM contacts is b2b only",
+      "args": [
+        "{\"funnel\": \"ecommerce\", \"contacts\": [{\"leads\": \"2026-07-03\", \"mqls\": \"2026-07-04\", \"sqls\": null}], \"dates\": {\"from\": \"2026-07-01\", \"to\": \"2026-09-30\"}}"
+      ],
+      "exitCode": 1,
+      "stdout": [],
+      "stderr": [
+        "error: \"contacts\" works with the b2b funnel only (got \"funnel\": \"ecommerce\").",
+        "       For the ecommerce and app funnels, give the stage counts.",
+        "",
+        "Run --help for the schema, or --demo for a worked example."
+      ]
+    },
+    {
+      "name": "ecommerce: product page views narrows the leak, with margin",
+      "source": "hand-checked: 40,000 x 0.40 x 0.175 x 0.50 x 0.57 = 798, less 684 = 114 purchases at product page views to add to cart; $6,840 of revenue, at a 40% margin $2,736 of profit",
+      "args": [
+        "{\"funnel\": \"ecommerce\", \"period\": \"Oct 2026\", \"sessions\": 40000, \"views\": 16000, \"carts\": 2400, \"checkouts\": 1200, \"purchases\": 684, \"revenuePerPurchase\": 60, \"margin\": 0.4, \"prior\": {\"period\": \"Sep 2026\", \"sessions\": 38000, \"views\": 15200, \"carts\": 2660, \"checkouts\": 1330, \"purchases\": 798}}"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "FUNNEL LEAK FINDER - Oct 2026",
+        "══════════════════════════════════════════════════════════",
+        "Baseline: Sep 2026",
+        "",
+        "STAGES",
+        "  Sessions:           40,000   (prior 38,000)",
+        "  Product page views:    16,000   (prior 15,200)",
+        "  Add to cart:         2,400   (prior 2,660)",
+        "  Checkout:            1,200   (prior 1,330)",
+        "  Purchases:             684   (prior 798)",
+        "",
+        "TRANSITIONS",
+        "  Sessions -> Product page views   40.0% vs   40.0%  0.0 pts (0.0%)",
+        "      holding [z 0.00]",
+        "  Product page views -> Add to cart   15.0% vs   17.5%  -2.5 pts (-14.3%)",
+        "      114 purchases lost, $6,840 ($2,736 profit)  #1 [z -5.99]",
+        "  Add to cart -> Checkout      50.0% vs   50.0%  0.0 pts (0.0%)",
+        "      holding [z 0.00]",
+        "  Checkout -> Purchases        57.0% vs   60.0%  -3.0 pts (-5.0%)",
+        "      36 purchases lost, $2,160 ($864 profit)  #2 [z -1.53, may be noise]",
+        "",
+        "Sessions (volume, not ranked): 40,000 vs 38,000 (+5.3%)",
+        "",
+        "RESULT: Leak: Product page views to Add to cart",
+        "  Product page views to Add to cart converted at 15.0% against 17.5% in Sep 2026. At the baseline rate, with every other stage as it is, this period would have had 114 more purchases ($6,840 of revenue, $2,736 of profit).",
+        "",
+        "NOTES",
+        "  - Each stage's figure holds the other stages at this period's rates, so the figures do not add up to the total change.",
+        "",
+        "AAJ'S VIEW",
+        "  - In AAJ's view, fix the named leak before adding volume at the top: more volume through a stage that is below baseline buys fewer purchases per unit of spend than it did at baseline.",
+        "  - The noise check uses 95% (two-sided) and needs at least 5 conversions and 5 non-conversions in each period; those cut-offs are AAJ's choice.",
+        "",
+        "NOISE CHECK SOURCE",
+        "  NIST/SEMATECH e-Handbook of Statistical Methods, \"7.3.3. How can we determine whether two processes produce the same proportion of defectives?\": https://www.itl.nist.gov/div898/handbook/prc/section3/prc33.htm"
+      ],
+      "stderr": []
+    },
+    {
+      "name": "app: a trial stage narrows the leak",
+      "source": "hand-checked: 20,000 x 0.45 x 0.40 x 0.50 x 0.20 = 360, less 288 = 72 at activated to started trial; trials convert as before",
+      "args": [
+        "{\"funnel\": \"app\", \"period\": \"Oct 2026\", \"installs\": 20000, \"signups\": 9000, \"activated\": 3600, \"trials\": 1440, \"paid\": 288, \"revenuePerPaid\": 40, \"prior\": {\"period\": \"Sep 2026\", \"installs\": 18000, \"signups\": 9000, \"activated\": 3600, \"trials\": 1800, \"paid\": 360}}"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "FUNNEL LEAK FINDER - Oct 2026",
+        "══════════════════════════════════════════════════════════",
+        "Baseline: Sep 2026",
+        "",
+        "STAGES",
+        "  Installs:           20,000   (prior 18,000)",
+        "  Sign-ups:            9,000   (prior 9,000)",
+        "  Activated:           3,600   (prior 3,600)",
+        "  Started trial:       1,440   (prior 1,800)",
+        "  Paid:                  288   (prior 360)",
+        "",
+        "TRANSITIONS",
+        "  Installs -> Sign-ups         45.0% vs   50.0%  -5.0 pts (-10.0%)",
+        "      32 paid subscribers lost, $1,280  #2 [z -9.75]",
+        "  Sign-ups -> Activated        40.0% vs   40.0%  0.0 pts (0.0%)",
+        "      holding [z 0.00]",
+        "  Activated -> Started trial   40.0% vs   50.0%  -10.0 pts (-20.0%)",
+        "      72 paid subscribers lost, $2,880  #1 [z -8.53]",
+        "  Started trial -> Paid        20.0% vs   20.0%  0.0 pts (0.0%)",
+        "      holding [z 0.00]",
+        "",
+        "Installs (volume, not ranked): 20,000 vs 18,000 (+11.1%)",
+        "",
+        "RESULT: Leak: Activated to Started trial",
+        "  Activated to Started trial converted at 40.0% against 50.0% in Sep 2026. At the baseline rate, with every other stage as it is, this period would have had 72 more paid subscribers ($2,880).",
+        "",
+        "NOTES",
+        "  - Each stage's figure holds the other stages at this period's rates, so the figures do not add up to the total change.",
+        "",
+        "AAJ'S VIEW",
+        "  - In AAJ's view, fix the named leak before adding volume at the top: more volume through a stage that is below baseline buys fewer paid subscribers per unit of spend than it did at baseline.",
+        "  - The noise check uses 95% (two-sided) and needs at least 5 conversions and 5 non-conversions in each period; those cut-offs are AAJ's choice.",
+        "",
+        "NOISE CHECK SOURCE",
+        "  NIST/SEMATECH e-Handbook of Statistical Methods, \"7.3.3. How can we determine whether two processes produce the same proportion of defectives?\": https://www.itl.nist.gov/div898/handbook/prc/section3/prc33.htm"
+      ],
+      "stderr": []
+    },
+    {
+      "name": "app: targets with a trial stage",
+      "source": "targets use the steps the given stages make: activatedToTrials and trialsToPaid",
+      "args": [
+        "{\"funnel\": \"app\", \"installs\": 20000, \"signups\": 9000, \"activated\": 3600, \"trials\": 1440, \"paid\": 288, \"targets\": {\"activatedToTrials\": 0.5, \"trialsToPaid\": 0.2}, \"targetSource\": \"2026 plan\"}"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "FUNNEL LEAK FINDER",
+        "══════════════════════════════════════════════════════════",
+        "Baseline: your targets (2026 plan)",
+        "",
+        "STAGES",
+        "  Installs:           20,000",
+        "  Sign-ups:            9,000",
+        "  Activated:           3,600",
+        "  Started trial:       1,440",
+        "  Paid:                  288",
+        "",
+        "TRANSITIONS",
+        "  Installs -> Sign-ups         45.0%   no baseline",
+        "  Sign-ups -> Activated        40.0%   no baseline",
+        "  Activated -> Started trial   40.0% vs   50.0%  -10.0 pts (-20.0%)",
+        "      72 paid subscribers lost  #1 [z -12.00]",
+        "  Started trial -> Paid        20.0% vs   20.0%  0.0 pts (0.0%)",
+        "      holding [z 0.00]",
+        "",
+        "RESULT: Leak: Activated to Started trial",
+        "  Activated to Started trial converted at 40.0% against your target of 50.0% (2026 plan). At the baseline rate, with every other stage as it is, this period would have had 72 more paid subscribers.",
+        "",
+        "NOTES",
+        "  - No target for installsToSignups, signupsToActivated: those stages are shown but not judged, so they cannot be named as the leak.",
+        "",
+        "AAJ'S VIEW",
+        "  - In AAJ's view, fix the named leak before adding volume at the top: more volume through a stage that is below baseline buys fewer paid subscribers per unit of spend than it did at baseline.",
+        "  - The noise check uses 95% (two-sided) and needs the stage count times the target, and times one minus the target, to be at least 5 (NIST 7.2.4); the 95% level is AAJ's choice.",
+        "",
+        "NOISE CHECK SOURCE",
+        "  NIST/SEMATECH e-Handbook of Statistical Methods, \"7.2.4. Does the proportion of defectives meet requirements?\": https://www.itl.nist.gov/div898/handbook/prc/section2/prc24.htm"
+      ],
+      "stderr": []
+    },
+    {
+      "name": "ecommerce: rejects a gap that is not optional",
+      "source": "only views may be left out in the middle",
+      "args": [
+        "{\"funnel\": \"ecommerce\", \"sessions\": 40000, \"checkouts\": 1200, \"purchases\": 684}"
+      ],
+      "exitCode": 1,
+      "stdout": [],
+      "stderr": [
+        "error: Stages must be consecutive: \"sessions\" is followed by \"checkouts\" but \"carts\" is missing.",
+        "       Stages, in order: sessions, views, carts, checkouts, purchases. Give a run of them with no gaps (views may be left out).",
+        "",
+        "Run --help for the schema, or --demo for a worked example."
+      ]
+    },
+    {
+      "name": "ecommerce: rejects a target for a step the stages do not make",
+      "source": "without views, the step is sessionsToCarts",
+      "args": [
+        "{\"funnel\": \"ecommerce\", \"sessions\": 40000, \"carts\": 2400, \"checkouts\": 1200, \"targets\": {\"sessionsToViews\": 0.4}}"
+      ],
+      "exitCode": 1,
+      "stdout": [],
+      "stderr": [
+        "error: targets: unknown or unused transition \"sessionsToViews\".",
+        "       For the stages you gave, the transitions are: sessionsToCarts, cartsToCheckouts.",
+        "",
+        "Run --help for the schema, or --demo for a worked example."
+      ]
+    },
+    {
+      "name": "rejects margin written as a percentage",
+      "source": "margin is a fraction",
+      "args": [
+        "{\"funnel\": \"ecommerce\", \"sessions\": 40000, \"carts\": 2400, \"checkouts\": 1200, \"purchases\": 684, \"revenuePerPurchase\": 60, \"margin\": 40}"
+      ],
+      "exitCode": 1,
+      "stdout": [],
+      "stderr": [
+        "error: \"margin\" must be a fraction above 0 and up to 1 (got 40).",
+        "       Write 40% as 0.4.",
+        "",
+        "Run --help for the schema, or --demo for a worked example."
+      ]
+    },
+    {
+      "name": "rejects margin without revenue",
+      "source": "margin is a share of the revenue field",
+      "args": [
+        "{\"funnel\": \"ecommerce\", \"sessions\": 40000, \"carts\": 2400, \"checkouts\": 1200, \"purchases\": 684, \"margin\": 0.4}"
+      ],
+      "exitCode": 1,
+      "stdout": [],
+      "stderr": [
+        "error: \"margin\" needs \"revenuePerPurchase\": it is your margin on that revenue.",
         "",
         "Run --help for the schema, or --demo for a worked example."
       ]
