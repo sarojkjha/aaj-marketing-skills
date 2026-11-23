@@ -82,6 +82,19 @@
         "Unrecognised field in input: \"txt\". Expected: text, figures, themes, firstLineCarriesThePoint, ideaCount, customerResult, writtenPermission, inventedProof, theme, isPromotional, saysSoPlainly.",
         "Run --help for the input shape."
       ]
+    },
+    {
+      "name": "rejects an idea count that is not a whole number",
+      "source": "audit Nov 22, 2026: a word or negative was read as 0 or as not given",
+      "args": [
+        "{\"check\": \"checkPost\", \"input\": {\"text\": \"Last quarter we lost three deals in the same week.\\n\\nNot to a competitor. To a spreadsheet.\\n\\nThe buyers had built their own model and it was good enough. Here is what we changed in our demo after that week, and the one question we now ask on every first call.\\n\\nComment YES and I will send you the question.\", \"firstLineCarriesThePoint\": true, \"ideaCount\": \"two\", \"figures\": [{\"value\": \"three deals\", \"source\": \"our CRM, Q3 2026\"}]}}"
+      ],
+      "exitCode": 1,
+      "stdout": [],
+      "stderr": [
+        "\"ideaCount\" must be a whole number, 1 or more (got \"two\").",
+        "Run --help for the input shape."
+      ]
     }
   ]
 }

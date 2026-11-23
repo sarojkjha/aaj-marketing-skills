@@ -19,7 +19,7 @@ metadata:
   difficulty: Intermediate
   card: >-
     Maps where buyers already talk, decides whether to open your own community, and measures dark social by asking.
-  version: 1.0.0
+  version: 1.0.1
   topic: social-community
   secondary_topics: [analytics-budget, content-seo]
   agents: [Claude Code, Cursor, OpenAI Codex, Windsurf, Cline]

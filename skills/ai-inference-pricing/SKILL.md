@@ -20,7 +20,7 @@ metadata:
   difficulty: Intermediate
   card: >-
     Checks that an AI plan's price still covers inference when usage spikes.
-  version: 1.1.0
+  version: 1.1.1
   sprint: unit-economics-retention
   topic: pricing-monetization
   secondary_topics: [analytics-budget]

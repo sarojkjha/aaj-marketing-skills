@@ -310,6 +310,13 @@ if (require.main === module && process.argv.length > 2 && !process.argv.includes
     reviewPartnership: ["name", "goal", "signups", "qualifiedLeads", "pipelineValue", "ourHours", "theirHours", "fullSalesCycleElapsed"],
   };
   const badIn = Object.keys(req.input).filter((k) => !FIELDS[req.check].includes(k));
+  // Strict numbers (AAJ engine audit, Nov 22, 2026): a score given as a word or out of range is refused, not read as 0.
+  const RANGES = { overlap: [0, 3], complementary: [0, 3], reach: [0, 3], ease: [0, 3], signups: [0, Infinity], qualifiedLeads: [0, Infinity], pipelineValue: [0, Infinity], ourHours: [0, Infinity], theirHours: [0, Infinity] };
+  for (const [k, [lo, hi]] of Object.entries(RANGES)) {
+    const v = req.input[k];
+    if (v == null || !FIELDS[req.check].includes(k)) continue;
+    if (typeof v !== "number" || !Number.isFinite(v) || v < lo || v > hi) fail('"' + k + '" must be ' + (hi === 3 ? "a score from 0 to 3" : "a number, 0 or more") + " (got " + JSON.stringify(v) + ").");
+  }
   if (badIn.length) fail("Unrecognised field" + (badIn.length > 1 ? "s" : "") + " in input: " + badIn.map((k) => '"' + k + '"').join(", ") + ". Expected: " + FIELDS[req.check].join(", ") + ".");
   let result;
   try { result = CHECKS[req.check](req.input); } catch (e) { fail(req.check + " could not run on that input: " + e.message); }

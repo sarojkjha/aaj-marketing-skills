@@ -57,6 +57,20 @@
         "  CHANGE: Expected revenue (pipeline x win rate) is 2.9x cost: it pays for itself but misses your 3x target. Change the weakest step before running again."
       ],
       "stderr": []
+    },
+    {
+      "name": "rejects a word for the show rate",
+      "source": "audit Nov 22, 2026: a word was reported as no rate given",
+      "args": [
+        "{\"plan\": {\"pipelineTarget\": 150000, \"avgDealValue\": 15000, \"meetingToOppRate\": 0.5, \"attendeeToMeetingRate\": 0.1, \"showRate\": \"40%\", \"reachableRegistrations\": 350, \"costs\": {\"platform\": 400, \"promotion\": 2500, \"production\": 800, \"peopleHours\": 40, \"hourlyCost\": 90}}, \"runOfShow\": {\"topicIsBuyerProblem\": true, \"promotionLive14DaysOut\": true, \"dryRun\": false, \"recordingAndOnDemandPage\": true, \"followUpSequenceWritten\": false, \"salesHandoffAgreed\": false, \"questionOrPollPlanned\": true, \"singleCta\": true}, \"readout\": {\"registrations\": 320, \"attendees\": 121, \"onDemandViews\": 64, \"meetingsBooked\": 14, \"opportunities\": 6, \"pipelineCreated\": 84000, \"winRate\": 0.25, \"cost\": 7300, \"followUpHours\": 20, \"targetReturn\": 3}}"
+      ],
+      "exitCode": 1,
+      "stdout": [],
+      "stderr": [
+        "error: \"plan.showRate\" must be a number, 0 or more (got \"40%\").",
+        "",
+        "Run --help for the schema, or --demo for a worked example."
+      ]
     }
   ]
 }

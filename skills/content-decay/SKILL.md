@@ -20,7 +20,7 @@ metadata:
   difficulty: Starter
   card: >-
     Sorts a Search Console export into decaying, demand-drop, snippet-loss, rising and stable pages, and ranks what to refresh by clicks lost.
-  version: 1.0.0
+  version: 1.0.1
   topic: content-seo
   secondary_topics: [analytics-budget, ai-search]
   agents: [Claude Code, Cursor, OpenAI Codex, Windsurf, Cline]

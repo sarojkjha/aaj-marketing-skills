@@ -60,8 +60,32 @@ function inputError(msg) { var e = new Error(msg); e.isInputError = true; return
 function isNum(v) { return typeof v === 'number' && isFinite(v); }
 function norm(s) { return String(s || '').toLowerCase().replace(/\s+/g, ' ').trim(); }
 
+// Strict numbers (AAJ engine audit, Nov 22, 2026). A number that is given must be a finite number in
+// its range. A field left out, or blank, keeps its documented meaning; a word or a negative is refused
+// by name, never read as 0 or as "not given". rules: [path, min, max, words]; "list[]" walks a list.
+function strictNumbers(cfg, rules, fail) {
+  rules.forEach(function (r) {
+    var parts = r[0].split('.');
+    (function walk(o, i, where) {
+      if (o == null || typeof o !== 'object') return;
+      var p = parts[i], list = p.slice(-2) === '[]', key = list ? p.slice(0, -2) : p;
+      if (list) {
+        if (Array.isArray(o[key])) o[key].forEach(function (x, j) { walk(x, i + 1, where + key + '[' + (j + 1) + '].'); });
+        return;
+      }
+      if (i < parts.length - 1) { walk(o[key], i + 1, where + key + '.'); return; }
+      var v = o[key];
+      if (v == null || v === '') return;
+      if (typeof v !== 'number' || !isFinite(v) || v < r[1] || v > r[2]) fail('"' + where + key + '" must be ' + r[3] + ' (got ' + JSON.stringify(v) + ').');
+    })(cfg, 0, '');
+  });
+}
+
 function synthesise(cfg) {
   cfg = cfg || {};
+  strictNumbers(cfg, [
+    ['interviews[].notes[].severity', 1, 3, 'a severity from 1 to 3 (1 annoying, 2 costs time, 3 costs money or customers)']
+  ], function (m) { throw inputError(m); });
   var interviews = Array.isArray(cfg.interviews) ? cfg.interviews : [];
   if (!interviews.length) throw inputError('"interviews" needs at least one interview with notes.');
   var N = interviews.length;

@@ -19,7 +19,7 @@ metadata:
   card: >-
     Scores whether proof would convince a sceptic, and whether you may publish it at
     all.
-  version: 1.0.1
+  version: 1.0.2
   topic: website-conversion
   secondary_topics: [content-seo, sales-pipeline]
   agents: [Claude Code, Cursor, OpenAI Codex, Windsurf, Cline]

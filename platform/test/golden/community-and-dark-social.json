@@ -74,6 +74,20 @@
         "",
         "Run --help for the schema, or --demo for a worked example."
       ]
+    },
+    {
+      "name": "rejects a word for host hours",
+      "source": "audit Nov 22, 2026: a word was read as 0 hours",
+      "args": [
+        "{\"map\": [{\"name\": \"RevOps Co-op (Slack)\", \"kind\": \"community\", \"namedByBuyers\": 6, \"selfReportedMentions\": 4, \"present\": true, \"answering\": true, \"pitched\": false, \"crossPosted\": false}, {\"name\": \"Demand Gen Weekly\", \"kind\": \"newsletter\", \"namedByBuyers\": 3, \"selfReportedMentions\": 1, \"present\": false, \"answering\": false, \"pitched\": false, \"crossPosted\": false}], \"community\": {\"recurringConversation\": \"Weekly: what broke in your funnel this week\", \"host\": \"Saroj\", \"hostHoursPerWeek\": \"three\", \"quietPlan\": \"Month-three plan: bring in two guest practitioners\", \"membersAsking\": 14, \"roleOrProblem\": \"heads of marketing at seed-stage SaaS\"}, \"measure\": {\"periods\": [{\"label\": \"Jun\", \"leads\": 40, \"selfReported\": {\"person\": 3, \"community\": 2, \"podcast\": 1, \"newsletter\": 0, \"brandName\": 4, \"search\": 12, \"paid\": 9, \"other\": 5, \"unknown\": 4}, \"brandedSearchImpressions\": 1200, \"directSessions\": 900, \"directDeepPageSessions\": 240, \"pipeline\": 60000}, {\"label\": \"Jul\", \"leads\": 46, \"selfReported\": {\"person\": 5, \"community\": 4, \"podcast\": 1, \"newsletter\": 1, \"brandName\": 6, \"search\": 12, \"paid\": 9, \"other\": 4, \"unknown\": 4}, \"brandedSearchImpressions\": 1450, \"directSessions\": 980, \"directDeepPageSessions\": 300, \"pipeline\": 72000}]}}"
+      ],
+      "exitCode": 1,
+      "stdout": [],
+      "stderr": [
+        "error: \"community.hostHoursPerWeek\" must be a number, 0 or more (got \"three\").",
+        "",
+        "Run --help for the schema, or --demo for a worked example."
+      ]
     }
   ]
 }

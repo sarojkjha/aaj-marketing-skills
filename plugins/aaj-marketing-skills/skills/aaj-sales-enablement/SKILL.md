@@ -20,7 +20,7 @@ metadata:
   difficulty: Intermediate
   card: >-
     Audits sales assets against what each deal stage needs, and ranks what to build by the revenue being lost.
-  version: 1.0.1
+  version: 1.0.2
   topic: sales-pipeline
   secondary_topics: [strategy-positioning, content-seo]
   agents: [Claude Code, Cursor, OpenAI Codex, Windsurf, Cline]

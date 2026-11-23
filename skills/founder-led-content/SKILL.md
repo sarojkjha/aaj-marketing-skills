@@ -21,7 +21,7 @@ metadata:
   card: >-
     Scores a founder's channel setup, and checks a post against the themes only they
     can write.
-  version: 1.0.0
+  version: 1.0.1
   topic: social-community
   secondary_topics: [brand-voice, content-seo]
   agents: [Claude Code, Cursor, OpenAI Codex, Windsurf, Cline]

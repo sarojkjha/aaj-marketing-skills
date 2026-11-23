@@ -19,7 +19,7 @@ metadata:
   difficulty: Starter
   card: >-
     Writes the first marketer's scorecard, then scores the panel's evidence and calls hire, no-hire or more evidence.
-  version: 1.0.0
+  version: 1.0.1
   topic: ops-ai-team
   secondary_topics: [gtm-growth-planning]
   agents: [Claude Code, Cursor, OpenAI Codex, Windsurf, Cline]

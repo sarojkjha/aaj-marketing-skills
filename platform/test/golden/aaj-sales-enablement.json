@@ -81,6 +81,20 @@
         "BUILD: Build the ROI / business case first: 135,000 lost across 12 deals for want of it."
       ],
       "stderr": []
+    },
+    {
+      "name": "rejects a negative usage count",
+      "source": "audit Nov 22, 2026: -5 reps printed -83% of reps",
+      "args": [
+        "{\"asOf\": \"2026-09-28\", \"totalReps\": 6, \"inventory\": [{\"name\": \"Competitor X battlecard\", \"type\": \"battlecard\", \"owner\": \"PMM\", \"lastUpdated\": \"2026-02-10\", \"usedByReps\": -5}, {\"name\": \"Discovery guide\", \"type\": \"discovery-guide\", \"owner\": \"Sales lead\", \"lastUpdated\": \"2026-08-01\", \"usedByReps\": 5}, {\"name\": \"Logistics case study\", \"type\": \"case-study\", \"owner\": \"PMM\", \"lastUpdated\": \"2026-06-15\", \"usedByReps\": 4}], \"losses\": [{\"reason\": \"competitor\", \"count\": 7, \"value\": 140000}, {\"reason\": \"no-decision\", \"count\": 9, \"value\": 90000}, {\"reason\": \"price\", \"count\": 3, \"value\": 45000}]}"
+      ],
+      "exitCode": 1,
+      "stdout": [],
+      "stderr": [
+        "error: \"inventory[1].usedByReps\" must be a number, 0 or more (got -5).",
+        "",
+        "Run --help for the schema, or --demo for a worked example."
+      ]
     }
   ]
 }

@@ -20,7 +20,7 @@ metadata:
   difficulty: Starter
   card: >-
     Codes pasted reviews of you and your rivals into themes, switching reasons, feature asks and buyer language.
-  version: 1.0.0
+  version: 1.0.1
   topic: audience-research
   secondary_topics: [strategy-positioning, content-seo, sales-pipeline]
   agents: [Claude Code, Cursor, OpenAI Codex, Windsurf, Cline]

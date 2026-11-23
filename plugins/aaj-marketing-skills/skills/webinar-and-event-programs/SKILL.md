@@ -19,7 +19,7 @@ metadata:
   difficulty: Intermediate
   card: >-
     Sizes a webinar backwards from the pipeline it must create, and judges it on meetings and pipeline against cost.
-  version: 1.0.1
+  version: 1.0.2
   topic: pr-partnerships-events
   secondary_topics: [sales-pipeline, gtm-growth-planning]
   agents: [Claude Code, Cursor, OpenAI Codex, Windsurf, Cline]

@@ -19,7 +19,7 @@ metadata:
   card: >-
     Scores partners on audience overlap rather than fame, and judges the result on
     pipeline.
-  version: 1.0.0
+  version: 1.0.1
   topic: pr-partnerships-events
   secondary_topics: [gtm-growth-planning, audience-research]
   agents: [Claude Code, Cursor, OpenAI Codex, Windsurf, Cline]

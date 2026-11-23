@@ -61,6 +61,20 @@
         "     KEEP: Tracked conversions alone come in at or under target. Keep, and consider a longer arrangement."
       ],
       "stderr": []
+    },
+    {
+      "name": "rejects a match share above 1",
+      "source": "audit Nov 22, 2026: words and out-of-range shares were accepted",
+      "args": [
+        "{\"shortlist\": [{\"name\": \"Creator A\", \"platform\": \"YouTube\", \"followers\": 180000, \"avgViews\": 42000, \"avgEngagements\": 1900, \"audienceMatchShare\": 35, \"audienceMatchSource\": \"creator's analytics screenshot, Sep 2026\", \"recentPosts\": 20, \"sponsoredPosts\": 6, \"disclosesSponsorships\": true, \"fee\": 4000}, {\"name\": \"Creator B\", \"platform\": \"LinkedIn\", \"followers\": 25000, \"avgViews\": 9000, \"avgEngagements\": 600, \"audienceMatchShare\": 0.7, \"audienceMatchSource\": \"creator's analytics screenshot, Sep 2026\", \"recentPosts\": 20, \"sponsoredPosts\": 2, \"disclosesSponsorships\": \"unknown\", \"fee\": 1500}], \"contract\": {\"deliverables\": true, \"disclosure\": true, \"approval\": true, \"usageRights\": false, \"exclusivity\": false, \"tracking\": true, \"payment\": true, \"underperformance\": false}, \"results\": {\"targetCpa\": 250, \"creators\": [{\"name\": \"Creator A\", \"fee\": 4000, \"trackedConversions\": 11, \"surveyMentions\": 6}, {\"name\": \"Creator B\", \"fee\": 1500, \"trackedConversions\": 7, \"surveyMentions\": 2}]}}"
+      ],
+      "exitCode": 1,
+      "stdout": [],
+      "stderr": [
+        "error: \"shortlist[1].audienceMatchShare\" must be a share from 0 to 1 (got 35).",
+        "",
+        "Run --help for the schema, or --demo for a worked example."
+      ]
     }
   ]
 }

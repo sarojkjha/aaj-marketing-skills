@@ -90,6 +90,20 @@
         "      https://aajconsult.com/blog/referral-programs-for-startups"
       ],
       "stderr": []
+    },
+    {
+      "name": "rejects a word for the referrer reward",
+      "source": "audit Nov 22, 2026: a word was read as a /bin/bash reward",
+      "args": [
+        "{\"period\": \"quarter\", \"currency\": \"$\", \"customers\": 400, \"shareAsked\": 0.3, \"askedToReferrer\": 0.25, \"referralsPerReferrer\": 2, \"referralToCustomer\": 0.1, \"rewardReferrer\": \"150 dollars\", \"rewardFriend\": 150, \"referrerPaidOn\": \"customer\", \"fixedCost\": 3000, \"ltv\": 4800, \"otherCac\": 1200, \"monthlyMargin\": 200, \"monthlySpend\": 400, \"assumed\": [\"askedToReferrer\", \"referralToCustomer\"]}"
+      ],
+      "exitCode": 1,
+      "stdout": [],
+      "stderr": [
+        "error: \"rewardReferrer\" must be a number, 0 or more (got \"150 dollars\").",
+        "",
+        "Run --help for the schema, or --demo for a worked example."
+      ]
     }
   ]
 }

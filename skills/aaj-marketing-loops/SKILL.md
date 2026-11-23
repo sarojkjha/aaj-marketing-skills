@@ -19,7 +19,7 @@ metadata:
   difficulty: Intermediate
   card: >-
     Computes the loop factor, finds the throttling stage, projects users over time.
-  version: 1.0.0
+  version: 1.0.1
   sprint: unit-economics-retention
   topic: gtm-growth-planning
   secondary_topics: [retention-expansion]

@@ -156,8 +156,35 @@ function prioritise(losses, byType) {
   return { ranked: rows, totalLostValue: totalValue, uncodedValue: uncoded, notes: notes };
 }
 
+// Strict numbers (AAJ engine audit, Nov 22, 2026). A number that is given must be a finite number in
+// its range. A field left out, or blank, keeps its documented meaning; a word or a negative is refused
+// by name, never read as 0 or as "not given". rules: [path, min, max, words]; "list[]" walks a list.
+function strictNumbers(cfg, rules, fail) {
+  rules.forEach(function (r) {
+    var parts = r[0].split('.');
+    (function walk(o, i, where) {
+      if (o == null || typeof o !== 'object') return;
+      var p = parts[i], list = p.slice(-2) === '[]', key = list ? p.slice(0, -2) : p;
+      if (list) {
+        if (Array.isArray(o[key])) o[key].forEach(function (x, j) { walk(x, i + 1, where + key + '[' + (j + 1) + '].'); });
+        return;
+      }
+      if (i < parts.length - 1) { walk(o[key], i + 1, where + key + '.'); return; }
+      var v = o[key];
+      if (v == null || v === '') return;
+      if (typeof v !== 'number' || !isFinite(v) || v < r[1] || v > r[2]) fail('"' + where + key + '" must be ' + r[3] + ' (got ' + JSON.stringify(v) + ').');
+    })(cfg, 0, '');
+  });
+}
+
 function run(cfg) {
   cfg = cfg || {};
+  strictNumbers(cfg, [
+    ['totalReps', 0, Infinity, 'a number, 0 or more'],
+    ['inventory[].usedByReps', 0, Infinity, 'a number, 0 or more'],
+    ['losses[].count', 0, Infinity, 'a number, 0 or more'],
+    ['losses[].value', 0, Infinity, 'a number, 0 or more']
+  ], function (m) { throw inputError(m); });
   if (!Array.isArray(cfg.inventory) && !Array.isArray(cfg.losses)) throw inputError('Give an "inventory" (the assets that exist), "losses" (closed-lost reasons), or both.');
   var asOf = cfg.asOf && !isNaN(new Date(cfg.asOf)) ? cfg.asOf : new Date().toISOString().slice(0, 10);
   var totalReps = isNum(cfg.totalReps) && cfg.totalReps > 0 ? cfg.totalReps : null;

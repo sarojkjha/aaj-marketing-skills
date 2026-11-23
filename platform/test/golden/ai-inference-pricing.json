@@ -521,6 +521,20 @@
         "",
         "Run --help for the schema, or --demo for a worked example."
       ]
+    },
+    {
+      "name": "rejects a word for free users",
+      "source": "audit Nov 22, 2026: a word or negative was read as 0 or as not given",
+      "args": [
+        "{\"today\": \"2026-10-10\", \"plan\": {\"basis\": \"seat\", \"price\": 25, \"usersPerAccount\": 8, \"activeShare\": 0.75, \"includedTasks\": 1500, \"overagePrice\": 0.02}, \"models\": [{\"name\": \"Large model\", \"inputPerM\": 4, \"outputPerM\": 16, \"share\": 0.4, \"checked\": \"2026-09-15\"}, {\"name\": \"Small model\", \"inputPerM\": 0.3, \"outputPerM\": 1.2, \"share\": 0.6, \"checked\": \"2026-09-15\"}], \"tasks\": [{\"name\": \"Meeting summary\", \"perActiveUser\": 60, \"inputTokens\": 18000, \"outputTokens\": 1200}, {\"name\": \"Transcription\", \"perActiveUser\": 60, \"costPerTask\": 0.03, \"checked\": \"2026-09-15\"}], \"freeTier\": {\"users\": \"4k\", \"activeShare\": 0.35, \"usageShare\": 0.3, \"capTasks\": 40, \"paidAccounts\": 120}, \"otherCosts\": {\"hostingPerAccount\": 6, \"supportPct\": 0.04, \"paymentPct\": 0.03}, \"targetMargin\": 0.7, \"spikeMultiplier\": 2.5}"
+      ],
+      "exitCode": 1,
+      "stdout": [],
+      "stderr": [
+        "error: \"freeTier.users\" must be a number, 0 or more (got \"4k\").",
+        "",
+        "Run --help for the schema, or --demo for a worked example."
+      ]
     }
   ]
 }
