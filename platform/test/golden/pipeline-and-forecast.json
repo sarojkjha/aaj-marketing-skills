@@ -118,6 +118,18 @@
       "stderr": [
         "No deals were won in that period, so there is no win rate to plan with. Use a longer period."
       ]
+    },
+    {
+      "name": "rejects a stage probability that is not 0 to 1",
+      "source": "audit Nov 22, 2026: a word printed a NaN forecast",
+      "args": [
+        "{\"target\": 500000, \"winRate\": 0.25, \"stageProbabilities\": {\"Discovery\": 0.1, \"Qualified\": 0.25, \"Proposal\": 50, \"Negotiation\": 0.75, \"Verbal\": 0.9}, \"deals\": [{\"name\": \"Acme\", \"amount\": 60000, \"stage\": \"Proposal\"}, {\"name\": \"Globex\", \"amount\": 120000, \"stage\": \"Negotiation\"}, {\"name\": \"Initech\", \"amount\": 45000, \"stage\": \"Discovery\"}, {\"name\": \"Umbrella\", \"amount\": 90000, \"stage\": \"Verbal\"}, {\"name\": \"Hooli\", \"amount\": 150000, \"stage\": \"Qualified\"}]}"
+      ],
+      "exitCode": 1,
+      "stdout": [],
+      "stderr": [
+        "Each stage probability is a fraction from 0 to 1 (for example 0.25, not 25). Check: \"Proposal\" = 50."
+      ]
     }
   ]
 }

@@ -20,7 +20,7 @@ metadata:
   difficulty: Intermediate
   card: >-
     Scores a pricing page on 21 buyer checks, and says whether a price test can answer the question at your traffic.
-  version: 1.0.0
+  version: 1.0.1
   topic: pricing-monetization
   secondary_topics: [website-conversion, analytics-budget]
   agents: [Claude Code, Cursor, OpenAI Codex, Windsurf, Cline]

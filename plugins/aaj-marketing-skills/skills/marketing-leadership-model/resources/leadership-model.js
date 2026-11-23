@@ -73,7 +73,29 @@ function productiveMonths(horizon, startDelay, ramp) {
   return (working - ramping) + ramping * RAMP_OUTPUT;
 }
 
+// Optional numbers may be left out (they then count as 0, and the readout says so), but a number
+// that is given must be a number, 0 or more: a word or a negative is refused, never read as 0.
+var OPTIONAL_NUMBERS = {
+  '': ['horizonMonths', 'ownHourly', 'toolsMonthly'],
+  inHouse: ['loadPct', 'recruitPct', 'searchMonths', 'rampMonths', 'mgmtHoursPerWeek'],
+  fractional: ['executionMonthly', 'rampMonths', 'mgmtHoursPerWeek', 'noticeMonths'],
+  agency: ['setupFee', 'rampMonths', 'mgmtHoursPerWeek', 'minTermMonths']
+};
+var MAX_HORIZON = 120;            // ten years: the comparison is for a first leader, and longer horizons stall the crossover search
+function checkOptionalNumbers(c) {
+  Object.keys(OPTIONAL_NUMBERS).forEach(function (part) {
+    var o = part ? c[part] : c;
+    if (!o) return;
+    OPTIONAL_NUMBERS[part].forEach(function (k) {
+      if (o[k] == null || o[k] === '') return;   // blank counts as left out, as in the readout
+      if (!isNum(o[k]) || o[k] < 0) throw inputError('"compare.' + (part ? part + '.' : '') + k + '" must be a number, 0 or more (got ' + JSON.stringify(o[k]) + '). Leave it out if you do not know it.');
+    });
+  });
+  if (c.horizonMonths != null && (c.horizonMonths < 1 || c.horizonMonths > MAX_HORIZON)) throw inputError('"compare.horizonMonths" must be from 1 to ' + MAX_HORIZON + ' months (got ' + c.horizonMonths + ').');
+}
+
 function buildOptions(c) {
+  checkOptionalNumbers(c);
   var H = Math.max(1, n0(c.horizonMonths) || 12);
   var own = n0(c.ownHourly), tools = n0(c.toolsMonthly);
   var mgmtCost = function (hpw, months) { return hpw * WEEKS_PER_MONTH * own * months; };
@@ -171,6 +193,9 @@ function compare(c) {
 }
 
 function fit(f) {
+  ['leadershipHoursPerWeek', 'executionHoursPerWeek', 'founderHoursPerWeek', 'monthsToDecide'].forEach(function (k) {
+    if (f && f[k] != null && f[k] !== '' && (!isNum(f[k]) || f[k] < 0)) throw inputError('"fit.' + k + '" must be a number, 0 or more (got ' + JSON.stringify(f[k]) + '). Leave it out if you do not know it.');
+  });
   f = f || {};
   var lead = n0(f.leadershipHoursPerWeek), exec = n0(f.executionHoursPerWeek);
   var execInHouse = f.executionInHouse === true;

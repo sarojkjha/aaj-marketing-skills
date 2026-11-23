@@ -20,7 +20,7 @@ metadata:
   card: >-
     Checks content block by block against your own voice rules, with a pass/revise
     verdict.
-  version: 1.1.0
+  version: 1.1.1
   sprint: positioning-message
   topic: brand-voice
   secondary_topics: [content-seo]

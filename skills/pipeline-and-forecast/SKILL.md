@@ -18,7 +18,7 @@ metadata:
   difficulty: Intermediate
   card: >-
     Weights pipeline by stage and says whether coverage is real.
-  version: 1.0.2
+  version: 1.0.3
   sprint: unit-economics-retention
   topic: sales-pipeline
   secondary_topics: [analytics-budget]

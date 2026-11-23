@@ -123,15 +123,24 @@ function die(msg) {
   process.exit(1);
 }
 
+// alpha and power go into a normal quantile, so each must sit strictly between 0 and 1; engines is a count.
+function readAlphaPower(cfg) {
+  const alpha = cfg.alpha ?? 0.05;
+  const power = cfg.power ?? 0.8;
+  if (typeof alpha !== 'number' || !(alpha > 0 && alpha < 0.5)) die(`alpha must be a number above 0 and below 0.5, such as 0.05 (got ${JSON.stringify(cfg.alpha)})`);
+  if (typeof power !== 'number' || !(power > 0.5 && power < 1)) die(`power must be a number above 0.5 and below 1, such as 0.8 (got ${JSON.stringify(cfg.power)})`);
+  return { alpha, power };
+}
+
 /* ─────────────────────────────  design mode  ───────────────────────────── */
 
 function design(cfg) {
   const p1 = cfg.baselinePresence;
   const lift = cfg.detectAbsoluteLift;
-  const alpha = cfg.alpha ?? 0.05;
-  const power = cfg.power ?? 0.8;
+  const { alpha, power } = readAlphaPower(cfg);
   const engines = cfg.engines ?? 4;
   const cadence = cfg.cadence ?? 'monthly';
+  if (!Number.isInteger(engines) || engines < 1) die(`engines must be a whole number of engines tracked, 1 or more (got ${JSON.stringify(cfg.engines)})`);
 
   if (typeof p1 !== 'number' || p1 <= 0 || p1 >= 1) die('baselinePresence must be a proportion between 0 and 1');
   if (typeof lift !== 'number' || lift <= 0) die('detectAbsoluteLift must be a positive proportion (e.g. 0.15 for 15 points)');
@@ -221,8 +230,7 @@ function readout(cfg) {
   const enginesIn = cfg.engines;
   if (!enginesIn || typeof enginesIn !== 'object') die('readout needs an "engines" object mapping engine name → array of prompt results');
 
-  const alpha = cfg.alpha ?? 0.05;
-  const power = cfg.power ?? 0.8;
+  const { alpha, power } = readAlphaPower(cfg);
   const perEngine = {};
   let totalN = 0, totalMentioned = 0, totalCited = 0, totalVis = 0;
   const allCompetitors = {};

@@ -106,7 +106,7 @@ function validatePlan(c) {
       die(`cluster "${cl.name}" has no "pieces".`);
     }
     cl.pieces.forEach((p, j) => {
-      if (!p.title) die(`cluster "${cl.name}" piece ${j} is missing "title".`);
+      if (typeof p.title !== 'string' || !p.title.trim()) die(`cluster "${cl.name}" piece ${j} needs a "title" in words.`);
       const fmt = p.format || 'blog';
       const eff = (c.effort && c.effort[fmt]) !== undefined ? c.effort[fmt] : EFFORT[fmt];
       if (eff === undefined) {
@@ -118,8 +118,9 @@ function validatePlan(c) {
       }
     });
   });
-  if (c.rampMonths !== undefined && (typeof c.rampMonths !== 'number' || c.rampMonths < 0)) {
-    die('"rampMonths" must be a non-negative number.');
+  // A ramp past five years has no publish-by date worth planning to (and very large numbers break the date maths).
+  if (c.rampMonths !== undefined && (typeof c.rampMonths !== 'number' || !Number.isFinite(c.rampMonths) || c.rampMonths < 0 || c.rampMonths > 60)) {
+    die('"rampMonths" must be a number of months from 0 to 60.');
   }
 }
 
@@ -294,7 +295,7 @@ function validateAudit(c) {
   c.published.forEach((p, i) => {
     if (!p.date) die(`published[${i}] is missing "date".`);
     parseDate(p.date, `published[${i}].date`);
-    if (!p.title) die(`published[${i}] is missing "title".`);
+    if (typeof p.title !== 'string' || !p.title.trim()) die(`published[${i}] needs a "title" in words.`);
   });
 }
 

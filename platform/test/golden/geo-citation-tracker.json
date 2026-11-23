@@ -223,6 +223,36 @@
         "",
         "Run with --help for usage, or --demo for a worked example."
       ]
+    },
+    {
+      "name": "rejects alpha of 0",
+      "source": "audit Nov 22, 2026: alpha outside 0 to 0.5 crashed the normal quantile",
+      "args": [
+        "design",
+        "{\"baselinePresence\": 0.3, \"detectAbsoluteLift\": 0.15, \"engines\": 4, \"alpha\": 0, \"power\": 0.8, \"cadence\": \"monthly\"}"
+      ],
+      "exitCode": 1,
+      "stdout": [],
+      "stderr": [
+        "error: alpha must be a number above 0 and below 0.5, such as 0.05 (got 0)",
+        "",
+        "Run with --help for usage, or --demo for a worked example."
+      ]
+    },
+    {
+      "name": "rejects a word for engines",
+      "source": "audit Nov 22, 2026: a word printed NaN queries",
+      "args": [
+        "design",
+        "{\"baselinePresence\": 0.3, \"detectAbsoluteLift\": 0.15, \"engines\": \"four\", \"alpha\": 0.05, \"power\": 0.8, \"cadence\": \"monthly\"}"
+      ],
+      "exitCode": 1,
+      "stdout": [],
+      "stderr": [
+        "error: engines must be a whole number of engines tracked, 1 or more (got \"four\")",
+        "",
+        "Run with --help for usage, or --demo for a worked example."
+      ]
     }
   ]
 }

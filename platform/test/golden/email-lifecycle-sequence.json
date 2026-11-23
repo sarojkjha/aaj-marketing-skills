@@ -232,6 +232,19 @@
         ""
       ],
       "stderr": []
+    },
+    {
+      "name": "rejects zero signups",
+      "source": "audit Nov 22, 2026: 0 signups printed Infinity%",
+      "args": [
+        "{\"have\": [\"welcome\", \"onboarding\"], \"signups\": 0, \"value\": 400}"
+      ],
+      "exitCode": 1,
+      "stdout": [],
+      "stderr": [
+        "\"signups\" must be a number above 0 (got 0).",
+        "Run --help for the options."
+      ]
     }
   ]
 }

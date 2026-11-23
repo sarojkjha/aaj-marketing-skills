@@ -255,6 +255,15 @@ function parseArgs(argv) {
       i++;
     } else if (argv[i] !== "--json" && argv[i] !== "--demo") fail("Unrecognised argument: " + argv[i] + ".");
   }
+  // The breakeven divides by signups, value and payback, so each must be above zero; build hours
+  // and the hourly rate may be zero (a sequence built in house at no cost), never negative.
+  const shown = (v) => (typeof v === "number" && Number.isNaN(v) ? "something that is not a number" : JSON.stringify(v));
+  for (const k of ["signups", "value", "payback"]) {
+    if (!(typeof o[k] === "number" && Number.isFinite(o[k]) && o[k] > 0)) fail('"' + k + '" must be a number above 0 (got ' + shown(o[k]) + ").");
+  }
+  for (const k of ["buildHours", "rate"]) {
+    if (!(typeof o[k] === "number" && Number.isFinite(o[k]) && o[k] >= 0)) fail('"' + k + '" must be a number, 0 or more (got ' + shown(o[k]) + ").");
+  }
   return o;
 }
 

@@ -89,6 +89,10 @@ var POINTS = { yes: 2, partly: 1, no: 0, unsure: 0 };
 
 function inputError(msg) { var e = new Error(msg); e.isInputError = true; return e; }
 function isNum(v) { return typeof v === 'number' && isFinite(v); }
+function optionalIn(o, name, k, ok, words) {
+  if (o[k] == null) return;
+  if (!isNum(o[k]) || !ok(o[k])) throw inputError('"' + name + '" must be ' + words + ' (got ' + JSON.stringify(o[k]) + '). Leave it out for the default.');
+}
 // Standard normal CDF (Abramowitz & Stegun 7.1.26 via erf) and its inverse (Acklam).
 function normCdf(z) {
   var t = 1 / (1 + 0.3275911 * Math.abs(z) / Math.SQRT2);
@@ -164,10 +168,16 @@ function testPlan(p) {
   var c1 = p.conversion, c2 = isNum(p.guessConversion) ? p.guessConversion : null;
   if (c2 === null || c2 < 0 || c2 > 1) throw inputError('"testPlan.guessConversion" is your honest guess at conversion at the test price, between 0 and 1.');
   var p1 = p.currentPrice, p2 = p.testPrice;
-  var alpha = isNum(p.alpha) && p.alpha > 0 && p.alpha < 1 ? p.alpha : 0.05;
-  var power = isNum(p.power) && p.power > 0 && p.power < 1 ? p.power : 0.8;
-  var share = isNum(p.shareInTest) && p.shareInTest > 0 && p.shareInTest <= 1 ? p.shareInTest : 1;
-  var weeks = isNum(p.weeksAvailable) && p.weeksAvailable > 0 ? p.weeksAvailable : WEEKS_RULE;
+  if (p.conversion > 1) throw inputError('"testPlan.conversion" is a fraction of visitors who pay, between 0 and 1 (2% is 0.02).');
+  // Optional settings: left out, the default applies; given but out of range, they are refused, not replaced.
+  optionalIn(p, 'testPlan.alpha', 'alpha', function (v) { return v > 0 && v < 0.5; }, 'a number above 0 and below 0.5, such as 0.05');
+  optionalIn(p, 'testPlan.power', 'power', function (v) { return v > 0.5 && v < 1; }, 'a number above 0.5 and below 1, such as 0.8');
+  optionalIn(p, 'testPlan.shareInTest', 'shareInTest', function (v) { return v > 0 && v <= 1; }, 'the share of traffic in the test, above 0 and up to 1');
+  optionalIn(p, 'testPlan.weeksAvailable', 'weeksAvailable', function (v) { return v > 0 && v <= 52; }, 'a number of weeks above 0 and up to 52');
+  var alpha = isNum(p.alpha) ? p.alpha : 0.05;
+  var power = isNum(p.power) ? p.power : 0.8;
+  var share = isNum(p.shareInTest) ? p.shareInTest : 1;
+  var weeks = isNum(p.weeksAvailable) ? p.weeksAvailable : WEEKS_RULE;
   var rpv1 = p1 * c1, rpv2 = p2 * c2;
   var breakEven = c1 * p1 / p2;
   var zsum = normInv(1 - alpha / 2) + normInv(power);
@@ -191,7 +201,9 @@ function testRead(r) {
   r = r || {};
   ['visitorsA', 'conversionsA', 'revenueA', 'visitorsB', 'conversionsB', 'revenueB'].forEach(function (k) { if (!isNum(r[k]) || r[k] < 0) throw inputError('"testRead.' + k + '" is required.'); });
   if (!r.visitorsA || !r.visitorsB) throw inputError('Both arms need visitors.');
-  var alpha = isNum(r.alpha) && r.alpha > 0 && r.alpha < 1 ? r.alpha : 0.05;
+  optionalIn(r, 'testRead.alpha', 'alpha', function (v) { return v > 0 && v < 0.5; }, 'a number above 0 and below 0.5, such as 0.05');
+  if (r.conversionsA > r.visitorsA || r.conversionsB > r.visitorsB) throw inputError('"testRead" conversions cannot be more than visitors in the same arm.');
+  var alpha = isNum(r.alpha) ? r.alpha : 0.05;
   var design = String(r.design || 'Live A/B');
   var randomised = !/before|quote/i.test(design);
   var qA = r.conversionsA / r.visitorsA, qB = r.conversionsB / r.visitorsB;

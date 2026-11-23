@@ -20,7 +20,7 @@ metadata:
   difficulty: Starter
   card: >-
     Prices in-house, fractional and agency with ramp, search time and your own hours, and says which shape fits.
-  version: 1.0.1
+  version: 1.0.2
   topic: ops-ai-team
   secondary_topics: [gtm-growth-planning, analytics-budget]
   agents: [Claude Code, Cursor, OpenAI Codex, Windsurf, Cline]
