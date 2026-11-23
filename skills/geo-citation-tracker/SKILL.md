@@ -20,7 +20,7 @@ metadata:
   card: >-
     Measures whether AI engines name and cite you, and refuses to report noise as
     movement.
-  version: 1.0.1
+  version: 1.0.2
   sprint: ai-visibility
   topic: ai-search
   agents: [Claude Code, Cursor, OpenAI Codex, Windsurf, Cline]

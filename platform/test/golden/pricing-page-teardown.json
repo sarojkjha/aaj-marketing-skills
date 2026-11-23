@@ -53,6 +53,34 @@
         ""
       ],
       "stderr": []
+    },
+    {
+      "name": "rejects a conversion above 1",
+      "source": "audit Nov 22, 2026: printed a negative sample size",
+      "args": [
+        "{\"testPlan\": {\"currentPrice\": 49, \"testPrice\": 59, \"conversion\": 2, \"guessConversion\": 0.018, \"visitorsPerWeek\": 3000, \"shareInTest\": 1, \"alpha\": 0.05, \"power\": 0.8, \"weeksAvailable\": 8}}"
+      ],
+      "exitCode": 1,
+      "stdout": [],
+      "stderr": [
+        "error: \"testPlan.conversion\" is a fraction of visitors who pay, between 0 and 1 (2% is 0.02).",
+        "",
+        "Run --help for the schema, or --demo for a worked example."
+      ]
+    },
+    {
+      "name": "rejects an alpha it would have replaced",
+      "source": "audit Nov 22, 2026: an out-of-range alpha was silently swapped for 0.05",
+      "args": [
+        "{\"testPlan\": {\"currentPrice\": 49, \"testPrice\": 59, \"conversion\": 0.02, \"guessConversion\": 0.018, \"visitorsPerWeek\": 3000, \"shareInTest\": 1, \"alpha\": 5, \"power\": 0.8, \"weeksAvailable\": 8}}"
+      ],
+      "exitCode": 1,
+      "stdout": [],
+      "stderr": [
+        "error: \"testPlan.alpha\" must be a number above 0 and below 0.5, such as 0.05 (got 5). Leave it out for the default.",
+        "",
+        "Run --help for the schema, or --demo for a worked example."
+      ]
     }
   ]
 }

@@ -112,7 +112,7 @@ function segments(cfg) {
   const z = Z[conf];
   if (!z) throw new Error(`confidence must be 90, 95 or 99 (got ${cfg.confidence})`);
   const n = cfg.completes;
-  if (!n || n < 1) throw new Error('completes must be a positive number');
+  if (typeof n !== 'number' || !Number.isFinite(n) || n < 1) throw new Error(`completes must be a number, 1 or more (got ${JSON.stringify(n)})`);
   if (!Array.isArray(cfg.segments) || !cfg.segments.length) throw new Error('segments must be a non-empty array of {name, share}');
   const shareSum = cfg.segments.reduce((a, s) => a + (pct(s.share) || 0), 0);
   const rows = cfg.segments.map(s => {
@@ -120,7 +120,7 @@ function segments(cfg) {
     if (share == null || share <= 0) throw new Error(`segment "${s.name}" needs a positive share`);
     const nSeg = Math.round(n * share);
     const moe = nSeg > 0 ? segmentMoE(nSeg, z) * 100 : Infinity;
-    const [flag, note] = readLabel(moe);
+    const [flag, note] = nSeg > 0 ? readLabel(moe) : ['DON\u2019T READ', 'no completes in this cell'];
     return { name: s.name, share, nSeg, moe, flag, note };
   });
   return { conf, z, n, rows, shareSum };
@@ -343,7 +343,7 @@ function renderSegments(r) {
     L.push(
       s.name.padEnd(14) +
       String(s.nSeg).padStart(5) +
-      `  \u00b1${s.moe.toFixed(1)}pp  `.padEnd(11) +
+      (Number.isFinite(s.moe) ? `  \u00b1${s.moe.toFixed(1)}pp  ` : '  none    ').padEnd(11) +
       bar(Math.min(s.moe, 15), 15, 12) + '  ' +
       `${s.flag} (${s.note})`
     );
@@ -354,7 +354,8 @@ function renderSegments(r) {
   else {
     const worst = bad.reduce((a, s) => (s.nSeg < a.nSeg ? s : a), bad[0]);
     const needed = Math.ceil(0.25 * r.z * r.z / Math.pow(0.05, 2)); // n per cell for ±5pp
-    L.push(`\u25bc ${bad.length} cut(s) below a clean read. Smallest cell "${worst.name}" (n=${worst.nSeg}) is \u00b1${worst.moe.toFixed(1)}pp.`);
+    L.push(`\u25bc ${bad.length} cut(s) below a clean read. Smallest cell "${worst.name}" (n=${worst.nSeg}) ` +
+      (Number.isFinite(worst.moe) ? `is \u00b1${worst.moe.toFixed(1)}pp.` : 'gets no completes at this share, so it cannot be read at all.'));
     L.push(`  A \u00b15pp read needs ~${needed} completes per cell at ${r.conf}% \u2014 either boost total n,`);
     L.push('  oversample the small segment, or merge it into a wider cut before fielding.');
   }

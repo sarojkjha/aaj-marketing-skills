@@ -21,7 +21,7 @@ metadata:
   difficulty: Starter
   card: >-
     Designs surveys that produce usable answers, with sample sizing and segments.
-  version: 1.2.0
+  version: 1.2.1
   sprint: positioning-message
   topic: audience-research
   agents: [Claude Code, Cursor, OpenAI Codex, Windsurf, Cline]

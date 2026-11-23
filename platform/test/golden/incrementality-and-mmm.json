@@ -195,6 +195,58 @@
         ""
       ],
       "stderr": []
+    },
+    {
+      "name": "no control conversions: relative lift is not defined",
+      "source": "audit Nov 22, 2026: printed Infinity%; 12 of 1,000 against 0 of 1,000",
+      "args": [
+        "{\"controlN\": 1000, \"controlConv\": 0, \"treatN\": 1000, \"treatConv\": 12}"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "",
+        "AAJ · INCREMENTALITY READOUT",
+        "────────────────────────────────────────────────────────────────",
+        "  INCREMENTAL — the lift is real at the chosen confidence level.",
+        "",
+        "RATES",
+        "  Control                 0.00%   (0 / 1,000)",
+        "  Treatment               1.20%   (12 / 1,000)",
+        "  Relative lift           not defined: the control group had no conversions",
+        "",
+        "SIGNIFICANCE",
+        "  p-value                 0.0005   significant",
+        "  95% CI on difference  0.53% to 1.87%",
+        "  Smallest lift this test could detect: not defined at a control rate of 0",
+        "",
+        "INCREMENTALITY",
+        "  Expected at control rate 0 conversions",
+        "  Actually observed        12",
+        "  Incremental              12",
+        "  Incremental value        not shown: no value per conversion was given (pass --value)",
+        "",
+        "  No --mde was given, so no verdict is made on whether the test was big enough.",
+        "  With no control conversions, no relative lift can be sized; compare the absolute difference above instead.",
+        "",
+        "────────────────────────────────────────────────────────────────",
+        "JSON",
+        "{",
+        "  \"mode\": \"readout\",",
+        "  \"controlRate\": 0,",
+        "  \"treatmentRate\": 0.012,",
+        "  \"relativeLift\": null,",
+        "  \"pValue\": 0.00051,",
+        "  \"significant\": true,",
+        "  \"underpowered\": false,",
+        "  \"smallestDetectableLiftPct\": null,",
+        "  \"incrementalConversions\": 12,",
+        "  \"incrementalValue\": null,",
+        "  \"iRoas\": null,",
+        "  \"incrementalCac\": null",
+        "}",
+        ""
+      ],
+      "stderr": []
     }
   ]
 }

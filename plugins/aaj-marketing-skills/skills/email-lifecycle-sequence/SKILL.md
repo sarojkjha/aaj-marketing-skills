@@ -17,7 +17,7 @@ metadata:
   difficulty: Starter
   card: >-
     Maps which lifecycle sequences exist, checks send load, writes the missing ones.
-  version: 1.0.0
+  version: 1.0.1
   sprint: unit-economics-retention
   topic: retention-expansion
   agents: [Claude Code, Cursor, OpenAI Codex, Windsurf, Cline]

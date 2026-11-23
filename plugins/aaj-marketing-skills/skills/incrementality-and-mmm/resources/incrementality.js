@@ -203,12 +203,14 @@ function reportReadout(o, r) {
   L.push("RATES");
   L.push(`  Control                 ${pct(r.p1)}   (${int(num(o.controlConv))} / ${int(num(o.controlN))})`);
   L.push(`  Treatment               ${pct(r.p2)}   (${int(num(o.treatConv))} / ${int(num(o.treatN))})`);
-  L.push(`  Relative lift           ${(r.lift * 100).toFixed(1)}%`);
+  // With no control conversions a relative lift has no base: say so instead of printing Infinity.
+  const rel = (v) => (Number.isFinite(v) ? `${(v * 100).toFixed(1)}%` : null);
+  L.push(`  Relative lift           ${rel(r.lift) || "not defined: the control group had no conversions"}`);
   L.push("");
   L.push("SIGNIFICANCE");
   L.push(`  p-value                 ${r.pValue < 0.0001 ? "<0.0001" : r.pValue.toFixed(4)}   ${sig ? "significant" : "not significant"}`);
   L.push(`  ${(1 - num(o.alpha)) * 100}% CI on difference  ${pct(r.ciLow)} to ${pct(r.ciHigh)}`);
-  L.push(`  Smallest lift this test could detect: ${(r.detectableRel * 100).toFixed(1)}%`);
+  L.push(`  Smallest lift this test could detect: ${rel(r.detectableRel) || "not defined at a control rate of 0"}`);
   L.push("");
   L.push("INCREMENTALITY");
   L.push(`  Expected at control rate ${int(r.counterfactual)} conversions`);
@@ -231,7 +233,8 @@ function reportReadout(o, r) {
     L.push("  channel doesn't work. Rerun at the sample size the design mode gives you.");
   } else if (r.careAbout == null) {
     L.push("  No --mde was given, so no verdict is made on whether the test was big enough.");
-    L.push(`  It could reliably detect a lift of ${(r.detectableRel * 100).toFixed(1)}% or more; pass --mde with the lift you would act on.`);
+    L.push(rel(r.detectableRel) ? `  It could reliably detect a lift of ${rel(r.detectableRel)} or more; pass --mde with the lift you would act on.`
+      : "  With no control conversions, no relative lift can be sized; compare the absolute difference above instead.");
   } else if (!sig) {
     L.push(`  The test could detect a ${(r.detectableRel * 100).toFixed(1)}% lift and found nothing at that`);
     L.push("  level. That is a real result, not a failed test: treat this channel's");

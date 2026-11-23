@@ -173,6 +173,20 @@ function main() {
     console.error('"winRate" is a fraction between 0 and 1 (for example 0.25, not 25).');
     process.exit(1);
   }
+  if (!(Number.isFinite(target) && target > 0)) {
+    console.error('"target" is the revenue to close this period, a number above 0.');
+    process.exit(1);
+  }
+  // Each stage's probability multiplies amounts, so a word or a value outside 0 to 1 would print $NaN
+  // or a forecast larger than the pipeline.
+  const badStages = Object.keys(stageProbabilities).filter((k) => {
+    const v = stageProbabilities[k];
+    return typeof v !== "number" || !(v >= 0 && v <= 1);
+  });
+  if (badStages.length) {
+    console.error("Each stage probability is a fraction from 0 to 1 (for example 0.25, not 25). Check: " + badStages.map((k) => JSON.stringify(k) + " = " + JSON.stringify(stageProbabilities[k])).join(", ") + ".");
+    process.exit(1);
+  }
 
   let openPipeline = 0;
   let weighted = 0;

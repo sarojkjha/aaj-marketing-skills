@@ -338,6 +338,36 @@
         "  ✗ blocks before publishing; the notes can wait."
       ],
       "stderr": []
+    },
+    {
+      "name": "rejects a number in the avoid list",
+      "source": "audit Nov 22, 2026: a number in a word list crashed the engine",
+      "args": [
+        "check",
+        "{\"brand\": \"Northwind\", \"content\": \"Northwind shows you which accounts are about to churn.\\n\\nWe leverage robust synergy to deliver a seamless experience. It is really very easy.\\n\\nConnect your billing data and see the first report in ten minutes.\", \"profile\": {\"avoid\": [5, \"leverage\", \"robust\"], \"prefer\": [\"plain\", \"concrete\"], \"maxGrade\": 9}}"
+      ],
+      "exitCode": 1,
+      "stdout": [],
+      "stderr": [
+        "error: profile \"avoid\" item 1 must be a word or phrase (got 5)",
+        "",
+        "Run --help for usage, or --demo for a worked example."
+      ]
+    },
+    {
+      "name": "rejects a reading grade outside 1 to 20",
+      "source": "audit Nov 22, 2026: a word or negative grade was accepted",
+      "args": [
+        "check",
+        "{\"brand\": \"Northwind\", \"content\": \"Northwind shows you which accounts are about to churn.\\n\\nWe leverage robust synergy to deliver a seamless experience. It is really very easy.\\n\\nConnect your billing data and see the first report in ten minutes.\", \"profile\": {\"avoid\": [\"synergy\", \"leverage\", \"robust\"], \"prefer\": [\"plain\", \"concrete\"], \"maxGrade\": 40}}"
+      ],
+      "exitCode": 1,
+      "stdout": [],
+      "stderr": [
+        "error: \"maxGrade\" must be a reading grade from 1 to 20 (got 40)",
+        "",
+        "Run --help for usage, or --demo for a worked example."
+      ]
     }
   ]
 }

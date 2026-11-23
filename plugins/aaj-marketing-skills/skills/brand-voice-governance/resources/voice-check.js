@@ -224,6 +224,16 @@ function resolveProfile(cfg) {
   let p = cfg.profile;
   if (!p && cfg.brief) p = profile({ brief: cfg.brief, brand: cfg.brand, maxGrade: cfg.maxGrade }).__profile;
   if (!p) p = {};
+  // Word lists are lists of words; a number or a blank in one is a mistake to name, not to crash on.
+  ['avoid', 'prefer'].forEach((k) => {
+    if (p[k] == null) return;
+    if (!Array.isArray(p[k])) fail(`profile "${k}" must be a list of words or phrases`);
+    p[k].forEach((w, i) => { if (typeof w !== 'string' || !w.trim()) fail(`profile "${k}" item ${i + 1} must be a word or phrase (got ${JSON.stringify(w)})`); });
+  });
+  const grade = p.maxGrade ?? cfg.maxGrade;
+  if (grade != null && (typeof grade !== 'number' || !Number.isFinite(grade) || grade < 1 || grade > 20)) {
+    fail(`"maxGrade" must be a reading grade from 1 to 20 (got ${JSON.stringify(grade)})`);
+  }
   const avoid = (p.avoid && p.avoid.length) ? p.avoid : (cfg.useHouseDefaults !== false ? HOUSE_DEFAULT_AVOID : []);
   return {
     brand: p.brand || cfg.brand || 'Brand',

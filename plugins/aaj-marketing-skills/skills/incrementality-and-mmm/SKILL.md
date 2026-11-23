@@ -19,7 +19,7 @@ metadata:
   card: >-
     Designs and reads holdout tests honestly, including whether they could ever have
     answered.
-  version: 1.0.0
+  version: 1.0.1
   sprint: unit-economics-retention
   topic: analytics-budget
   secondary_topics: [paid-media]

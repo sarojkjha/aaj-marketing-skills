@@ -53,6 +53,34 @@
         "FIT - AGENCY: The work is mostly hands (25 hours a week) in channels you do not have (paid search). In AAJ's view, an agency or specialist contractors fit; add a fractional leader only if nobody is setting direction."
       ],
       "stderr": []
+    },
+    {
+      "name": "rejects a horizon past 120 months",
+      "source": "audit Nov 22, 2026: a huge horizon hung the crossover search",
+      "args": [
+        "{\"compare\": {\"horizonMonths\": 1000000000000, \"ownHourly\": 150, \"toolsMonthly\": 400, \"inHouse\": {\"salary\": 180000, \"loadPct\": 30, \"recruitPct\": 20, \"searchMonths\": 2, \"rampMonths\": 3, \"mgmtHoursPerWeek\": 2}, \"fractional\": {\"retainer\": 10000, \"executionMonthly\": 3000, \"rampMonths\": 1, \"mgmtHoursPerWeek\": 2, \"noticeMonths\": 1}, \"agency\": {\"retainer\": 12000, \"setupFee\": 5000, \"rampMonths\": 2, \"mgmtHoursPerWeek\": 4, \"minTermMonths\": 6}}, \"fit\": {\"leadershipHoursPerWeek\": 10, \"executionHoursPerWeek\": 25, \"executionInHouse\": false, \"channelSpecialism\": [\"paid search\"], \"founderHoursPerWeek\": 3, \"monthsToDecide\": 12}}"
+      ],
+      "exitCode": 1,
+      "stdout": [],
+      "stderr": [
+        "error: \"compare.horizonMonths\" must be from 1 to 120 months (got 1000000000000).",
+        "",
+        "Run --help for the schema, or --demo for a worked example."
+      ]
+    },
+    {
+      "name": "rejects a word for your hourly cost",
+      "source": "audit Nov 22, 2026: a word was read as 0",
+      "args": [
+        "{\"compare\": {\"horizonMonths\": 12, \"ownHourly\": \"150 an hour\", \"toolsMonthly\": 400, \"inHouse\": {\"salary\": 180000, \"loadPct\": 30, \"recruitPct\": 20, \"searchMonths\": 2, \"rampMonths\": 3, \"mgmtHoursPerWeek\": 2}, \"fractional\": {\"retainer\": 10000, \"executionMonthly\": 3000, \"rampMonths\": 1, \"mgmtHoursPerWeek\": 2, \"noticeMonths\": 1}, \"agency\": {\"retainer\": 12000, \"setupFee\": 5000, \"rampMonths\": 2, \"mgmtHoursPerWeek\": 4, \"minTermMonths\": 6}}, \"fit\": {\"leadershipHoursPerWeek\": 10, \"executionHoursPerWeek\": 25, \"executionInHouse\": false, \"channelSpecialism\": [\"paid search\"], \"founderHoursPerWeek\": 3, \"monthsToDecide\": 12}}"
+      ],
+      "exitCode": 1,
+      "stdout": [],
+      "stderr": [
+        "error: \"compare.ownHourly\" must be a number, 0 or more (got \"150 an hour\"). Leave it out if you do not know it.",
+        "",
+        "Run --help for the schema, or --demo for a worked example."
+      ]
     }
   ]
 }

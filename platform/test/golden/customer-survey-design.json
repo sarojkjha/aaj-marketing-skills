@@ -352,6 +352,42 @@
       "stderr": [
         "Say which mode: add \"mode\": \"sample\", \"segments\" or \"readout\". Run --help for the schema."
       ]
+    },
+    {
+      "name": "a segment with no completes says so",
+      "source": "audit Nov 22, 2026: a tiny share printed Infinity; 40 completes x 1% = 0 in the cell",
+      "args": [
+        "segments",
+        "{\"completes\": 40, \"segments\": [{\"name\": \"SMB\", \"share\": 0.01}, {\"name\": \"Mid-market\", \"share\": 0.99}]}"
+      ],
+      "exitCode": 0,
+      "stdout": [
+        "AAJ · SEGMENT READABILITY",
+        "────────────────────────────────────────────────────────────────",
+        "Total completes 40 · 95% confidence · worst-case p=50%",
+        "",
+        "Segment          n     ±MoE                Verdict",
+        "SMB               0  none     ████████████  DON’T READ (no completes in this cell)",
+        "Mid-market       40  ±15.5pp  ████████████  DON’T READ (noise at this size)",
+        "",
+        "▼ 2 cut(s) below a clean read. Smallest cell \"SMB\" (n=0) gets no completes at this share, so it cannot be read at all.",
+        "  A ±5pp read needs ~385 completes per cell at 95% — either boost total n,",
+        "  oversample the small segment, or merge it into a wider cut before fielding."
+      ],
+      "stderr": []
+    },
+    {
+      "name": "rejects completes that are not a number",
+      "source": "audit Nov 22, 2026: a word printed NaN",
+      "args": [
+        "segments",
+        "{\"completes\": \"forty\", \"segments\": [{\"name\": \"SMB\", \"share\": 0.5}, {\"name\": \"Mid-market\", \"share\": 0.5}]}"
+      ],
+      "exitCode": 1,
+      "stdout": [],
+      "stderr": [
+        "completes must be a number, 1 or more (got \"forty\")"
+      ]
     }
   ]
 }
