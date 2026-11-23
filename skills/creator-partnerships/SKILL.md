@@ -20,7 +20,7 @@ metadata:
   card: >-
     Pays creators for the buyers they reach, not their follower count, and
     judges the result on what it sold.
-  version: 1.0.0
+  version: 1.0.1
   topic: social-community
   secondary_topics: [paid-media, pr-partnerships-events]
   agents: [Claude Code, Cursor, OpenAI Codex, Windsurf, Cline]

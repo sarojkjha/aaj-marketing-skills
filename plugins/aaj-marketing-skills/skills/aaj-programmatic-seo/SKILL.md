@@ -17,7 +17,7 @@ metadata:
   difficulty: Intermediate
   card: >-
     Models whether a template-page build pays back before anything gets written.
-  version: 1.0.1
+  version: 1.0.2
   sprint: ai-visibility
   topic: content-seo
   agents: [Claude Code, Cursor, OpenAI Codex, Windsurf, Cline]

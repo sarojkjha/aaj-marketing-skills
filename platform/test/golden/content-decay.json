@@ -76,6 +76,20 @@
         "  Your own Search Console numbers, compared with themselves. No external click-through curve, no benchmark."
       ],
       "stderr": []
+    },
+    {
+      "name": "rejects a negative impression count",
+      "source": "audit Nov 22, 2026: a word or negative was read as 0 or as not given",
+      "args": [
+        "{\"periodDays\": 90, \"pages\": [{\"page\": \"/blog/unit-economics\", \"clicks\": 410, \"clicksPrev\": 620, \"impressions\": -5, \"impressionsPrev\": 17500, \"position\": 6.8, \"positionPrev\": 4.1}, {\"page\": \"/blog/ltv-cac\", \"clicks\": 300, \"clicksPrev\": 290, \"impressions\": 9000, \"impressionsPrev\": 8800, \"position\": 3.2, \"positionPrev\": 3.4}, {\"page\": \"/blog/budget-template\", \"clicks\": 120, \"clicksPrev\": 200, \"impressions\": 6000, \"impressionsPrev\": 10000, \"position\": 5, \"positionPrev\": 5.1}, {\"page\": \"/blog/positioning\", \"clicks\": 80, \"clicksPrev\": 140, \"impressions\": 12000, \"impressionsPrev\": 9000, \"position\": 2.5, \"positionPrev\": 2.6}]}"
+      ],
+      "exitCode": 1,
+      "stdout": [],
+      "stderr": [
+        "error: \"pages[1].impressions\" must be a number, 0 or more (got -5).",
+        "",
+        "Run --help for the schema, or --demo for a worked example."
+      ]
     }
   ]
 }

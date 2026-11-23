@@ -120,6 +120,19 @@
         "}"
       ],
       "stderr": []
+    },
+    {
+      "name": "rejects a score outside 0 to 3",
+      "source": "audit Nov 22, 2026: a negative score changed the tier",
+      "args": [
+        "{\"check\": \"scorePartner\", \"input\": {\"name\": \"Ledger Academy\", \"goal\": \"We want 40 qualified leads from Ledger Academy within one quarter\", \"overlap\": -5, \"complementary\": 3, \"reach\": 2, \"ease\": 2, \"namedContact\": \"Head of partnerships\", \"wellKnown\": false, \"unknowns\": [\"list size\"]}}"
+      ],
+      "exitCode": 1,
+      "stdout": [],
+      "stderr": [
+        "\"overlap\" must be a score from 0 to 3 (got -5).",
+        "Run --help for the input shape."
+      ]
     }
   ]
 }

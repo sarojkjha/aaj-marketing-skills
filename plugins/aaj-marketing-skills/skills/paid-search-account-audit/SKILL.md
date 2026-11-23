@@ -20,7 +20,7 @@ metadata:
   difficulty: Intermediate
   card: >-
     Audits a search account against its own target: tracking, waste, starved winners, pages. Fixes ranked by spend.
-  version: 1.0.0
+  version: 1.0.1
   topic: paid-media
   secondary_topics: [website-conversion, analytics-budget]
   agents: [Claude Code, Cursor, OpenAI Codex, Windsurf, Cline]

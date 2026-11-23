@@ -145,8 +145,42 @@ function readResults(res) {
     blendedCpaTracked: totalTracked ? totalFee / totalTracked : null };
 }
 
+// Strict numbers (AAJ engine audit, Nov 22, 2026). A number that is given must be a finite number in
+// its range. A field left out, or blank, keeps its documented meaning; a word or a negative is refused
+// by name, never read as 0 or as "not given". rules: [path, min, max, words]; "list[]" walks a list.
+function strictNumbers(cfg, rules, fail) {
+  rules.forEach(function (r) {
+    var parts = r[0].split('.');
+    (function walk(o, i, where) {
+      if (o == null || typeof o !== 'object') return;
+      var p = parts[i], list = p.slice(-2) === '[]', key = list ? p.slice(0, -2) : p;
+      if (list) {
+        if (Array.isArray(o[key])) o[key].forEach(function (x, j) { walk(x, i + 1, where + key + '[' + (j + 1) + '].'); });
+        return;
+      }
+      if (i < parts.length - 1) { walk(o[key], i + 1, where + key + '.'); return; }
+      var v = o[key];
+      if (v == null || v === '') return;
+      if (typeof v !== 'number' || !isFinite(v) || v < r[1] || v > r[2]) fail('"' + where + key + '" must be ' + r[3] + ' (got ' + JSON.stringify(v) + ').');
+    })(cfg, 0, '');
+  });
+}
+
 function run(cfg) {
   cfg = cfg || {};
+  strictNumbers(cfg, [
+    ['shortlist[].followers', 0, Infinity, 'a number, 0 or more'],
+    ['shortlist[].avgViews', 0, Infinity, 'a number, 0 or more'],
+    ['shortlist[].avgEngagements', 0, Infinity, 'a number, 0 or more'],
+    ['shortlist[].recentPosts', 0, Infinity, 'a number, 0 or more'],
+    ['shortlist[].sponsoredPosts', 0, Infinity, 'a number, 0 or more'],
+    ['shortlist[].fee', 0, Infinity, 'a number, 0 or more'],
+    ['shortlist[].audienceMatchShare', 0, 1, 'a share from 0 to 1'],
+    ['results.targetCpa', 0, Infinity, 'a number, 0 or more'],
+    ['results.creators[].fee', 0, Infinity, 'a number, 0 or more'],
+    ['results.creators[].trackedConversions', 0, Infinity, 'a number, 0 or more'],
+    ['results.creators[].surveyMentions', 0, Infinity, 'a number, 0 or more']
+  ], function (m) { throw inputError(m); });
   if (!cfg.shortlist && !cfg.contract && !cfg.results) throw inputError('Give a "shortlist", a "contract", "results", or any combination.');
   return {
     shortlist: cfg.shortlist ? scoreShortlist(cfg.shortlist) : null,

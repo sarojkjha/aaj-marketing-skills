@@ -61,6 +61,20 @@
         "     KEEP: 47% of emails fit your buyer at 39 per qualified lead. Keep it, and point more of the same traffic at it."
       ],
       "stderr": []
+    },
+    {
+      "name": "rejects negative build hours",
+      "source": "audit Nov 22, 2026: a negative was read as no estimate",
+      "args": [
+        "{\"ideas\": [{\"name\": \"Churn & NRR calculator\", \"kind\": \"tool\", \"problem\": \"Founders cannot tell whether their retention is good\", \"minutesToValue\": 5, \"reusable\": true, \"icpOnly\": true, \"qualifyingInputs\": true, \"nextStep\": \"Retention audit call\", \"gated\": false, \"buildHours\": -5}, {\"name\": \"State of SaaS marketing report\", \"kind\": \"report\", \"problem\": \"Marketers want to know what peers spend\", \"minutesToValue\": 45, \"reusable\": false, \"icpOnly\": false, \"qualifyingInputs\": false, \"nextStep\": \"\", \"gated\": true, \"buildHours\": 80}], \"results\": {\"targetCostPerQualified\": 60, \"magnets\": [{\"name\": \"Churn & NRR calculator\", \"visitors\": 1400, \"starts\": 610, \"completions\": 480, \"emails\": 130, \"qualified\": 61, \"meetings\": 7, \"cost\": 2400}]}}"
+      ],
+      "exitCode": 1,
+      "stdout": [],
+      "stderr": [
+        "error: \"ideas[1].buildHours\" must be a number, 0 or more (got -5).",
+        "",
+        "Run --help for the schema, or --demo for a worked example."
+      ]
     }
   ]
 }

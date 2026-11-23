@@ -95,6 +95,20 @@
         "(* = no evidence note; not counted in the score)"
       ],
       "stderr": []
+    },
+    {
+      "name": "rejects an outcome month below 1",
+      "source": "audit Nov 22, 2026: a word or negative was read as 0 or as not given",
+      "args": [
+        "{\"role\": {\"title\": \"First marketer\", \"stage\": \"Seed\", \"channelFocus\": \"community and LinkedIn content for finance leaders\", \"outcomes\": [{\"month\": -5, \"outcome\": \"Tracking fixed; three channel experiments run\"}, {\"month\": 6, \"outcome\": \"Qualified leads from the working channel at the agreed target\"}], \"competencies\": [{\"id\": \"channel\", \"name\": \"Grows the working channel\", \"weight\": 30, \"mustHave\": true, \"bar\": 3}, {\"id\": \"customer\", \"name\": \"Understands the buyer\", \"weight\": 20, \"mustHave\": true}, {\"id\": \"paid\", \"name\": \"Paid search\", \"weight\": 5}]}, \"candidates\": [{\"name\": \"Candidate A\", \"ratings\": [{\"competency\": \"channel\", \"interviewer\": \"CEO\", \"stage\": \"founder screen\", \"score\": 3, \"evidence\": \"Grew a community from 400 to 2,100 members; showed the export\"}, {\"competency\": \"customer\", \"interviewer\": \"CEO\", \"stage\": \"founder screen\", \"score\": 4, \"evidence\": \"Ran 30 buyer interviews at last company; shared the synthesis\"}, {\"competency\": \"paid\", \"interviewer\": \"Advisor\", \"stage\": \"work sample\", \"score\": 2, \"evidence\": \"Has not run paid search beyond small tests\"}]}]}"
+      ],
+      "exitCode": 1,
+      "stdout": [],
+      "stderr": [
+        "error: \"role.outcomes[1].month\" must be a month from 1 to 36 (got -5).",
+        "",
+        "Run --help for the schema, or --demo for a worked example."
+      ]
     }
   ]
 }

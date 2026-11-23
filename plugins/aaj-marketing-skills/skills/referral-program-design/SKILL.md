@@ -20,7 +20,7 @@ metadata:
   card: >-
     Designs who to ask and what to reward, then prices referral against the CAC
     it replaces.
-  version: 1.0.0
+  version: 1.0.1
   sprint: unit-economics-retention
   topic: retention-expansion
   secondary_topics: [gtm-growth-planning, analytics-budget]

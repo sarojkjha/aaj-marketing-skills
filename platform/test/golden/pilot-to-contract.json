@@ -147,6 +147,20 @@
         "NOTE  Student data: ask what the district's privacy and security review needs before students use the product, start it before kickoff, and check your obligations with counsel."
       ],
       "stderr": []
+    },
+    {
+      "name": "rejects negative weeks to signal",
+      "source": "audit Nov 22, 2026: a word or negative was read as 0 or as not given",
+      "args": [
+        "{\"buyerType\": \"school\", \"buyerName\": \"Example district (fictional)\", \"today\": \"2026-10-10\", \"pilotStart\": \"2027-01-18\", \"pilotWeeks\": 8, \"budgetDecisionDate\": \"2027-03-15\", \"fiscalYearStart\": \"2027-07-01\", \"procurementWeeks\": 8, \"readoutWeeks\": 1, \"decisionWeeks\": 2, \"criteria\": [{\"metric\": \"Weekly active classrooms\", \"baseline\": \"0 (new product)\", \"target\": \"5 of 6 classrooms active 4+ weeks\", \"howMeasured\": \"Product usage log, weekly export\", \"dataOwner\": \"District literacy coordinator\", \"agreedInWriting\": true, \"weeksToSignal\": -5}], \"evidenceNeeded\": \"usage\", \"championNamed\": true, \"economicBuyerInvolved\": false, \"conversionTerms\": {\"priceAfterPilot\": true, \"startDate\": false, \"ifCriteriaMet\": false}, \"pilotPrice\": \"free\", \"seats\": 6, \"seatUnit\": \"classrooms\", \"rolloutSeats\": 40}"
+      ],
+      "exitCode": 1,
+      "stdout": [],
+      "stderr": [
+        "error: \"criteria[1].weeksToSignal\" must be a number, 0 or more (got -5).",
+        "",
+        "Run --help for the schema, or --demo for a worked example."
+      ]
     }
   ]
 }

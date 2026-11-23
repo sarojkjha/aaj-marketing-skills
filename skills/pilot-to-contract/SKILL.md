@@ -18,7 +18,7 @@ metadata:
   difficulty: Intermediate
   card: >-
     Plans a pilot backwards from the buyer's budget date, so a pilot that works becomes a contract.
-  version: 1.0.0
+  version: 1.0.1
   sprint: gtm-pipeline
   topic: sales-pipeline
   secondary_topics: [industry-playbooks, gtm-growth-planning]

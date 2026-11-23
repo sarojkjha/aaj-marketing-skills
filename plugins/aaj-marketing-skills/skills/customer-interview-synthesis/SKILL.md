@@ -20,7 +20,7 @@ metadata:
   difficulty: Starter
   card: >-
     Turns coded interview notes into ranked patterns and anecdotes, and says whether you can stop interviewing.
-  version: 1.0.0
+  version: 1.0.1
   topic: audience-research
   secondary_topics: [strategy-positioning, gtm-growth-planning]
   agents: [Claude Code, Cursor, OpenAI Codex, Windsurf, Cline]

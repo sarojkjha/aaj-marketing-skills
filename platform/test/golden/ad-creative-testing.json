@@ -73,6 +73,20 @@
         ""
       ],
       "stderr": []
+    },
+    {
+      "name": "rejects a word for max days",
+      "source": "audit Nov 22, 2026: a word or negative was read as 0 or as not given",
+      "args": [
+        "{\"metric\": \"cpi\", \"plan\": {\"baselineRate\": 0.002, \"minDetectableLift\": 0.3, \"variants\": 3, \"dailyUnitsPerVariant\": 20000, \"maxDays\": \"four weeks\"}, \"read\": {\"variants\": [{\"name\": \"Control - product shot\", \"change\": \"\", \"impressions\": 60000, \"clicks\": 540, \"conversions\": 118, \"spend\": 1800}, {\"name\": \"Customer quote\", \"change\": \"headline is a customer quote\", \"impressions\": 61000, \"clicks\": 610, \"conversions\": 152, \"spend\": 1830}, {\"name\": \"Before/after\", \"change\": \"before/after visual\", \"impressions\": 59000, \"clicks\": 500, \"conversions\": 121, \"spend\": 1770}], \"plannedUnitsPerVariant\": 60000}}"
+      ],
+      "exitCode": 1,
+      "stdout": [],
+      "stderr": [
+        "error: \"plan.maxDays\" must be a number of days from 1 to 365 (got \"four weeks\").",
+        "",
+        "Run --help for the schema, or --demo for a worked example."
+      ]
     }
   ]
 }

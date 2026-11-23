@@ -154,6 +154,19 @@
         ""
       ],
       "stderr": []
+    },
+    {
+      "name": "rejects a negative page count",
+      "source": "audit Nov 22, 2026: -500 pages printed negative sessions",
+      "args": [
+        "{\"pages\": -500, \"volume\": 40, \"conv\": 2, \"value\": 400}"
+      ],
+      "exitCode": 1,
+      "stdout": [],
+      "stderr": [
+        "Invalid values for: pages (cannot be negative)",
+        "Run --help for usage."
+      ]
     }
   ]
 }

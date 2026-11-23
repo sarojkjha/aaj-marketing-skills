@@ -87,6 +87,20 @@
         "  Only what Search Console showed you. Searches where you never appeared are not in this data and are not estimated."
       ],
       "stderr": []
+    },
+    {
+      "name": "rejects a word for clicks",
+      "source": "audit Nov 22, 2026: a word was read as 0 clicks",
+      "args": [
+        "{\"brand\": [\"aaj\", \"aajconsult\"], \"rivals\": [\"hubspot\"], \"queries\": [{\"query\": \"marketing budget calculator\", \"clicks\": \"thirty\", \"impressions\": 2000, \"position\": 4.2, \"page\": \"/tools/marketing-budget-calculator\"}, {\"query\": \"marketing budget template\", \"clicks\": 4, \"impressions\": 1500, \"position\": 14.5, \"page\": \"/templates/budget\"}, {\"query\": \"how to calculate cac\", \"clicks\": 12, \"impressions\": 900, \"position\": 8.1, \"page\": \"/blog/cac\"}, {\"query\": \"aaj consult\", \"clicks\": 80, \"impressions\": 120, \"position\": 1, \"page\": \"/\"}, {\"query\": \"hubspot alternative for startups\", \"clicks\": 2, \"impressions\": 600, \"position\": 18, \"page\": \"/blog/crm\"}, {\"query\": \"cac payback\", \"clicks\": 6, \"impressions\": 700, \"position\": 11.2, \"page\": \"/blog/cac\"}]}"
+      ],
+      "exitCode": 1,
+      "stdout": [],
+      "stderr": [
+        "error: \"queries[1].clicks\" must be a number, 0 or more (got \"thirty\").",
+        "",
+        "Run --help for the schema, or --demo for a worked example."
+      ]
     }
   ]
 }

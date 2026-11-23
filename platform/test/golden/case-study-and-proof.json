@@ -82,6 +82,20 @@
         "  Publishable as it stands. Keep the permission record with the asset."
       ],
       "stderr": []
+    },
+    {
+      "name": "rejects a word for the before value",
+      "source": "audit Nov 22, 2026: a word was read as no baseline",
+      "args": [
+        "{\"study\": {\"customer\": \"Northwind Logistics\", \"descriptor\": \"a 40-person freight broker in the Midwest\", \"problem\": \"quotes took three days, so buyers went elsewhere\", \"beforeValue\": \"three days\", \"afterValue\": 4, \"metric\": \"hours to quote\", \"periodMonths\": 6, \"otherChanges\": [\"hired two ops staff\"], \"quote\": {\"text\": \"We quote the same afternoon now, and we win more of them.\", \"name\": \"Dana Ruiz\", \"role\": \"COO\"}, \"verifiable\": \"reference-call\"}, \"consent\": {\"written\": true, \"approver\": {\"name\": \"Dana Ruiz\", \"role\": \"COO\"}, \"dated\": \"2026-03-04\", \"covers\": [\"name\", \"logo\", \"numbers\", \"quote\"], \"reviewMonths\": 12, \"uses\": [\"name\", \"numbers\", \"quote\"]}}"
+      ],
+      "exitCode": 1,
+      "stdout": [],
+      "stderr": [
+        "error: \"study.beforeValue\" must be a number (got \"three days\").",
+        "",
+        "Run --help for the schema, or --demo for a worked example."
+      ]
     }
   ]
 }

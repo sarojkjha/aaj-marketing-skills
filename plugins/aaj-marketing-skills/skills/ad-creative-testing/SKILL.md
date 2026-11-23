@@ -20,7 +20,7 @@ metadata:
   card: >-
     Sizes a creative test before it runs, and refuses to name a winner the data
     cannot back.
-  version: 1.0.0
+  version: 1.0.1
   topic: paid-media
   secondary_topics: [analytics-budget]
   agents: [Claude Code, Cursor, OpenAI Codex, Windsurf, Cline]

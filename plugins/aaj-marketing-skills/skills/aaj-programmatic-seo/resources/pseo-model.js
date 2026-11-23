@@ -281,6 +281,9 @@ function main() {
   ["pages", "volume", "indexRate", "rankRate", "position", "aiDrag", "conv", "value", "costPerPage", "fixedCost"]
     .forEach(k => { if (Number.isNaN(num(o[k]))) bad.push(k); });
   if (!["none", "some", "strong"].includes(o.uniqueData)) bad.push("uniqueData (none|some|strong)");
+  // Strict numbers (AAJ engine audit, Nov 22, 2026): a negative page count, volume or value printed negative sessions.
+  ["pages", "volume", "indexRate", "rankRate", "aiDrag", "conv", "value", "costPerPage", "fixedCost"].forEach(k => { if (!bad.includes(k) && num(o[k]) < 0) bad.push(k + " (cannot be negative)"); });
+  if (!bad.includes("position") && num(o.position) < 1) bad.push("position (1 or more)");
   if (bad.length) { console.error(`Invalid values for: ${bad.join(", ")}\nRun --help for usage.`); process.exit(1); }
   if (num(o.indexRate) > 1 || num(o.rankRate) > 1 || num(o.aiDrag) > 1) {
     console.error("index-rate, rank-rate and ai-drag are fractions between 0 and 1 (e.g. 0.6, not 60).");

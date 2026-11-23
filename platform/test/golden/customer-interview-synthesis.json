@@ -54,6 +54,20 @@
         "KEEP-GOING: 1 new theme in the last 3 interviews. Keep going; re-run after every two or three."
       ],
       "stderr": []
+    },
+    {
+      "name": "rejects a severity outside 1 to 3",
+      "source": "audit Nov 22, 2026: a negative severity lowered the average",
+      "args": [
+        "{\"question\": \"Why do small contractors lose jobs?\", \"interviews\": [{\"id\": \"I-01\", \"segment\": \"owner-operator\", \"notes\": [{\"theme\": \"double booking\", \"severity\": -5, \"quote\": \"Lost a job last month because two crews showed up.\", \"workaround\": \"whiteboard photo on WhatsApp\", \"wouldPay\": true}, {\"theme\": \"late invoices\", \"severity\": 2}]}, {\"id\": \"I-02\", \"segment\": \"owner-operator\", \"notes\": [{\"theme\": \"double booking\", \"severity\": 3, \"wouldPay\": true}]}, {\"id\": \"I-03\", \"segment\": \"small crew\", \"notes\": [{\"theme\": \"late invoices\", \"severity\": 2}, {\"theme\": \"quote follow-up\", \"severity\": 3, \"wouldPay\": true}]}, {\"id\": \"I-04\", \"segment\": \"small crew\", \"notes\": [{\"theme\": \"Double booking \", \"severity\": 2}]}, {\"id\": \"I-05\", \"segment\": \"owner-operator\", \"notes\": [{\"theme\": \"late invoices\", \"severity\": 1}]}]}"
+      ],
+      "exitCode": 1,
+      "stdout": [],
+      "stderr": [
+        "error: \"interviews[1].notes[1].severity\" must be a severity from 1 to 3 (1 annoying, 2 costs time, 3 costs money or customers) (got -5).",
+        "",
+        "Run --help for the schema, or --demo for a worked example."
+      ]
     }
   ]
 }

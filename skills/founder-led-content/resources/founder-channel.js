@@ -328,6 +328,8 @@ if (require.main === module && process.argv.length > 2 && !process.argv.includes
     checkPost: ["text", "figures", "themes", "firstLineCarriesThePoint", "ideaCount", "customerResult", "writtenPermission", "inventedProof", "theme", "isPromotional", "saysSoPlainly"],
   };
   const badIn = Object.keys(req.input).filter((k) => !FIELDS[req.check].includes(k));
+  // Strict numbers (AAJ engine audit, Nov 22, 2026): a count given as a word or below 1 is refused.
+  if (req.input.ideaCount != null && !(Number.isInteger(req.input.ideaCount) && req.input.ideaCount >= 1)) fail('"ideaCount" must be a whole number, 1 or more (got ' + JSON.stringify(req.input.ideaCount) + ").");
   if (badIn.length) fail("Unrecognised field" + (badIn.length > 1 ? "s" : "") + " in input: " + badIn.map((k) => '"' + k + '"').join(", ") + ". Expected: " + FIELDS[req.check].join(", ") + ".");
   let result;
   try { result = CHECKS[req.check](req.input); } catch (e) { fail(req.check + " could not run on that input: " + e.message); }

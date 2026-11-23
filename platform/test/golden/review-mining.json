@@ -115,6 +115,20 @@
         "  Counts of the reviews you pasted. Sentiment comes from star ratings only; themes coded by the word list are a starting point, not a finding."
       ],
       "stderr": []
+    },
+    {
+      "name": "rejects a rating outside 1 to 5",
+      "source": "audit Nov 22, 2026: a word or negative was read as 0 or as not given",
+      "args": [
+        "{\"product\": \"Fieldnote\", \"reviews\": [{\"product\": \"Fieldnote\", \"rating\": -5, \"text\": \"Switched from Jobber. Scheduling is great but support took three days.\", \"source\": \"G2\", \"date\": \"2026-09-14\"}, {\"product\": \"Fieldnote\", \"rating\": 5, \"text\": \"Reports go out before we leave the driveway. Easy to set up.\", \"source\": \"G2\", \"date\": \"2026-09-20\"}, {\"product\": \"Fieldnote\", \"rating\": 4, \"text\": \"Simple and fast. Wish it had an export to Excel.\", \"source\": \"Capterra\", \"date\": \"2026-08-02\"}, {\"product\": \"Jobber\", \"rating\": 2, \"text\": \"Too expensive for a two-person crew and the pricing keeps changing.\", \"source\": \"G2\", \"date\": \"2026-07-11\"}, {\"product\": \"Jobber\", \"rating\": 3, \"text\": \"Scheduling works but the mobile app is slow.\", \"source\": \"Capterra\", \"date\": \"2026-06-30\"}, {\"product\": \"Jobber\", \"rating\": 5, \"text\": \"Great support team, they answered within an hour.\", \"source\": \"G2\", \"date\": \"2026-09-01\"}]}"
+      ],
+      "exitCode": 1,
+      "stdout": [],
+      "stderr": [
+        "error: \"reviews[1].rating\" must be a star rating from 1 to 5 (got -5).",
+        "",
+        "Run --help for the schema, or --demo for a worked example."
+      ]
     }
   ]
 }

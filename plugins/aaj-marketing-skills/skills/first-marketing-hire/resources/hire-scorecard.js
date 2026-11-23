@@ -239,8 +239,32 @@ function scoreCandidate(cand, role, idx) {
   };
 }
 
+// Strict numbers (AAJ engine audit, Nov 22, 2026). A number that is given must be a finite number in
+// its range. A field left out, or blank, keeps its documented meaning; a word or a negative is refused
+// by name, never read as 0 or as "not given". rules: [path, min, max, words]; "list[]" walks a list.
+function strictNumbers(cfg, rules, fail) {
+  rules.forEach(function (r) {
+    var parts = r[0].split('.');
+    (function walk(o, i, where) {
+      if (o == null || typeof o !== 'object') return;
+      var p = parts[i], list = p.slice(-2) === '[]', key = list ? p.slice(0, -2) : p;
+      if (list) {
+        if (Array.isArray(o[key])) o[key].forEach(function (x, j) { walk(x, i + 1, where + key + '[' + (j + 1) + '].'); });
+        return;
+      }
+      if (i < parts.length - 1) { walk(o[key], i + 1, where + key + '.'); return; }
+      var v = o[key];
+      if (v == null || v === '') return;
+      if (typeof v !== 'number' || !isFinite(v) || v < r[1] || v > r[2]) fail('"' + where + key + '" must be ' + r[3] + ' (got ' + JSON.stringify(v) + ').');
+    })(cfg, 0, '');
+  });
+}
+
 function run(cfg) {
   cfg = cfg || {};
+  strictNumbers(cfg, [
+    ['role.outcomes[].month', 1, 36, 'a month from 1 to 36']
+  ], function (m) { throw inputError(m); });
   var role = normaliseRole(cfg.role);
   if (cfg.candidates != null && !Array.isArray(cfg.candidates)) throw inputError('"candidates" must be a list: each with a name and ratings from interviewers.');
   if (!cfg.candidates || !cfg.candidates.length) {

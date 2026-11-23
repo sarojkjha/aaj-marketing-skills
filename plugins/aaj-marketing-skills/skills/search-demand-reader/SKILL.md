@@ -20,7 +20,7 @@ metadata:
   difficulty: Starter
   card: >-
     Reads a Search Console Queries export by intent and topic, and names the demand you already appear for but do not yet win.
-  version: 1.0.0
+  version: 1.0.1
   topic: content-seo
   secondary_topics: [audience-research, gtm-growth-planning, ai-search]
   agents: [Claude Code, Cursor, OpenAI Codex, Windsurf, Cline]

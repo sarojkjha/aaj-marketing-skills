@@ -296,6 +296,14 @@ function main() {
   }
 
   if (!cfg.study && !cfg.consent) die('Give "study", "consent", or both.');
+  // Strict numbers (AAJ engine audit, Nov 22, 2026): a word in a number field is refused, not read as
+  // "no baseline". Before and after values may be negative (an NPS can be); months may not.
+  const numField = (o, k, where, min) => {
+    if (!o || o[k] == null || o[k] === '') return;
+    if (typeof o[k] !== 'number' || !Number.isFinite(o[k]) || o[k] < min) die(`"${where}.${k}" must be ${min === -Infinity ? 'a number' : 'a number, 0 or more'} (got ${JSON.stringify(o[k])}).`);
+  };
+  numField(cfg.study, 'beforeValue', 'study', -Infinity); numField(cfg.study, 'afterValue', 'study', -Infinity);
+  numField(cfg.study, 'periodMonths', 'study', 0); numField(cfg.consent, 'reviewMonths', 'consent', 0);
 
   if (cfg.study) {
     const r = scoreProof(cfg.study);

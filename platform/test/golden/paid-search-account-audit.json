@@ -68,6 +68,20 @@
         "WASTE: 32% of search-term spend went to terms that cannot or did not convert. Negatives first."
       ],
       "stderr": []
+    },
+    {
+      "name": "rejects a word for campaign spend",
+      "source": "audit Nov 22, 2026: a word was read as 0 spend and CPA 0",
+      "args": [
+        "{\"targetCpa\": 250, \"setup\": {\"conversionTrackingVerified\": true, \"offlineConversionsImported\": false, \"brandSeparated\": true, \"searchPartnersReviewed\": true, \"displayExpansionOff\": true, \"geoPresenceOnly\": false, \"sharedNegativeLists\": false, \"autoApplyOff\": true, \"assetsComplete\": true}, \"campaigns\": [{\"name\": \"Brand\", \"type\": \"brand\", \"spend\": \"900 dollars\", \"clicks\": 1200, \"impressions\": 4000, \"conversions\": 60, \"bidStrategy\": \"manual\", \"lostToBudget\": 0.05, \"lostToRank\": 0.1}, {\"name\": \"Field service - core\", \"type\": \"non-brand\", \"spend\": 6000, \"clicks\": 1500, \"impressions\": 40000, \"conversions\": 30, \"bidStrategy\": \"target-cpa\", \"lostToBudget\": 0.3, \"lostToRank\": 0.2}], \"searchTerms\": [{\"term\": \"field service software\", \"spend\": 640, \"clicks\": 80, \"conversions\": 4, \"match\": \"phrase\", \"isKeyword\": true}, {\"term\": \"free field service app\", \"spend\": 300, \"clicks\": 60, \"conversions\": 0, \"match\": \"broad\", \"isKeyword\": false}], \"irrelevantPatterns\": [\"free\", \"jobs?\", \"salary\", \"tutorial\"], \"landingPages\": [{\"url\": \"/pricing\", \"spend\": 1500, \"clicks\": 300, \"conversions\": 12, \"messageMatch\": true, \"mobileOk\": true}, {\"url\": \"/\", \"spend\": 3000, \"clicks\": 900, \"conversions\": 10, \"messageMatch\": false, \"mobileOk\": true}]}"
+      ],
+      "exitCode": 1,
+      "stdout": [],
+      "stderr": [
+        "error: \"campaigns[1].spend\" must be a number, 0 or more (got \"900 dollars\").",
+        "",
+        "Run --help for the schema, or --demo for a worked example."
+      ]
     }
   ]
 }

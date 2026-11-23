@@ -19,7 +19,7 @@ metadata:
   difficulty: Starter
   card: >-
     Scores lead-magnet and free-tool ideas on the job they do against build effort, and judges live ones on qualified leads.
-  version: 1.0.0
+  version: 1.0.1
   topic: website-conversion
   secondary_topics: [content-seo, gtm-growth-planning]
   agents: [Claude Code, Cursor, OpenAI Codex, Windsurf, Cline]

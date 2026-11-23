@@ -363,6 +363,21 @@
         "",
         "Run --help for usage, or --demo for a worked example."
       ]
+    },
+    {
+      "name": "rejects a negative paid CAC",
+      "source": "audit Nov 22, 2026: a negative paid CAC printed a negative effective CAC",
+      "args": [
+        "score",
+        "{\"loopType\": \"viral\", \"stages\": [{\"name\": \"user invites\", \"rate\": 0.4}, {\"name\": \"invite opened\", \"rate\": 0.5}, {\"name\": \"signs up\", \"rate\": 0.3}], \"branches\": 4, \"paidCac\": -80}"
+      ],
+      "exitCode": 1,
+      "stdout": [],
+      "stderr": [
+        "error: \"paidCac\" must be a number, 0 or more (got -80).",
+        "",
+        "Run --help for usage, or --demo for a worked example."
+      ]
     }
   ]
 }
