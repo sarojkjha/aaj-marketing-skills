@@ -29,6 +29,7 @@ import { join, dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { listSkills } from "../lib/catalog.mjs";
 import { buildCounts, serializeCounts } from "../lib/counts.mjs";
+import { RENAMED_SKILLS } from "../lib/renamed.mjs";
 import { existsSync, readdirSync, statSync } from "node:fs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
@@ -232,6 +233,22 @@ const skillsSh = {
     })).filter((g) => g.skills.length),
   ],
 };
+// skills.sh lists a skill for as long as it has install records, so the old names of
+// renamed skills stay on the page after the folders are gone, and a page config cannot
+// hide them. Grouping them under a label at the bottom tells a visitor which name to
+// install instead. Only old names whose folder no longer exists are listed.
+const retired = Object.entries(RENAMED_SKILLS).filter(([from, to]) => !slugSet.has(from) && slugSet.has(to));
+if (retired.length) {
+  const words = ["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"];
+  const n = words[retired.length] || String(retired.length);
+  const list = retired.map(([, to]) => to);
+  const names = list.length > 1 ? list.slice(0, -1).join(", ") + " and " + list.at(-1) : list[0];
+  skillsSh.groupings.push({
+    title: "Renamed: install the aaj- names instead",
+    description: `These ${n} names are retired. The skills took an aaj- prefix so they install next to another library's skills of the same name. Install ${names}.`,
+    skills: retired.map(([from]) => from),
+  });
+}
 for (const g of skillsSh.groupings) {
   if (!g.description) delete g.description;
   if (g.title.length > 120 || (g.description || "").length > 500) fail(`skills.sh group "${g.title}" exceeds skills.sh's length limits`);

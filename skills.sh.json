@@ -151,6 +151,17 @@
         "referral-program-design",
         "webinar-and-event-programs"
       ]
+    },
+    {
+      "title": "Renamed: install the aaj- names instead",
+      "description": "These five names are retired. The skills took an aaj- prefix so they install next to another library's skills of the same name. Install aaj-copywriting, aaj-marketing-psychology, aaj-programmatic-seo, aaj-marketing-loops and aaj-sales-enablement.",
+      "skills": [
+        "copywriting",
+        "marketing-psychology",
+        "programmatic-seo",
+        "marketing-loops",
+        "sales-enablement"
+      ]
     }
   ]
 }
