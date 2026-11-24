@@ -15,6 +15,8 @@
     "counts": "node platform/scripts/generate-readme.mjs",
     "check:counts": "node platform/scripts/generate-readme.mjs --check",
     "counts:phrases": "node platform/scripts/generate-readme.mjs --phrases",
+    "sync:tools": "node platform/scripts/sync-tools.mjs",
+    "check:tools": "node platform/scripts/sync-tools.mjs --check",
     "mcp:build": "node platform/mcp-worker/build.mjs",
     "mcp:test": "node platform/mcp-worker/test.mjs",
     "mcp:smoke": "node platform/mcp/smoke-test.mjs",

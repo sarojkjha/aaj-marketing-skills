@@ -10,6 +10,8 @@
  *   counts.json               written by the same script; CI fails when stale
  *   hosted MCP server         serves the same object at /counts.json
  *   aajconsult.com            copies counts.json at build (scripts/sync-skills-manifest.mjs)
+ *   tools                     the one block not derived here: free tool counts copied from
+ *                             aajconsult.com (site-counts.mjs, npm run sync:tools)
  *   GitHub About line         set by CI from phrases.github_about
  *   Product Hunt, bios, deck  pasted from `npm run counts:phrases` (never retyped)
  *
@@ -17,6 +19,7 @@
  */
 import { listSkills } from "./catalog.mjs";
 import { createServer } from "../mcp/core.mjs";
+import { SITE_COUNTS } from "./site-counts.mjs";
 
 export const PHASE_ORDER = ["Diagnose", "Design", "Execute"];
 
@@ -32,6 +35,7 @@ export const MCP_TOOLS = createServer({ skills: [], engines: new Map(), run: asy
  */
 export function phrasesFor(n) {
   const { skills, engines } = n;
+  const tools = SITE_COUNTS.free_tools;
   return {
     headline: `${skills} marketing skills for AI agents. ${engines} run real engines.`,
     short: `${skills} marketing skills, ${engines} with runnable engines`,
@@ -45,6 +49,8 @@ export function phrasesFor(n) {
     maker_bio:
       `Founder of AAJ. Marketing for Seed–Series B startups. I maintain ${skills} open-source marketing skills ` +
       `for AI agents; ${engines} of them do the math.`,
+    tools: `${tools} free marketing tool${tools === 1 ? "" : "s"}`,
+    tools_link: `Open all ${tools} free tool${tools === 1 ? "" : "s"}`,
   };
 }
 
@@ -75,6 +81,12 @@ export function buildCounts(skills) {
     engine_scripts: engines.reduce((sum, s) => sum + s.jsFiles.length, 0),
     categories: categories.length,
     mcp_tools: MCP_TOOLS.length,
+    tools: {
+      free_tools: SITE_COUNTS.free_tools,
+      skills_with_browser_tool: SITE_COUNTS.skills_with_browser_tool,
+      source: SITE_COUNTS.source,
+      copied_on: SITE_COUNTS.copied_on,
+    },
     agents: AGENTS,
     phases,
     by_category: byCategory,
