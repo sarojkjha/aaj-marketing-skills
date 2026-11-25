@@ -6,8 +6,8 @@ description: >-
   which types belong on which page, which properties Google requires, and
   whether the markup matches what the page shows. Also use when the user
   mentions schema markup, JSON-LD, structured data, rich results,
-  SoftwareApplication, Organization schema, FAQPage, HowTo, Article or
-  BreadcrumbList markup, meta tags, Open Graph tags, llms.txt, or "is our schema
+  SoftwareApplication, Organization schema, FAQPage, HowTo, Article, VideoObject,
+  Event, LocalBusiness, ProfilePage or BreadcrumbList markup, meta tags, Open Graph tags, llms.txt, or "is our schema
   right". Produces a page-by-page type map, a sourced check of each page's
   JSON-LD and the exact fixes, or generates the JSON-LD, meta tags and llms.txt
   from the user's own facts and checks them.
@@ -22,7 +22,7 @@ metadata:
   card: >-
     Maps schema types to pages, then checks each page's JSON-LD against Google's
     docs and the visible text.
-  version: 1.1.0
+  version: 1.2.0
   sprint: ai-visibility
   topic: ai-search
   secondary_topics: [content-seo, website-conversion]
@@ -68,6 +68,10 @@ The user is adding schema to a site, fixing markup a validator complained about,
 | Blog post, guide, research | `Article` / `BlogPosting` | No required properties; recommends author (Person or Organization, with name and url), datePublished, dateModified, headline, image. |
 | Visible FAQ section | `FAQPage` | Google stopped showing FAQ rich results on 7 May 2026 and removed the docs on 15 June 2026. Valid schema.org; use only where it mirrors a visible FAQ. |
 | Step-by-step instructions | `HowTo` | Google removed How-to docs on 14 September 2023; the rich result is not shown on desktop or mobile. Valid schema.org. |
+| Product demo or explainer video | `VideoObject` | Required: name, thumbnailUrl, uploadDate (ISO 8601, with a time zone if there is a time). Recommended: description, duration, contentUrl or embedUrl (opened 2026-11-25). |
+| Conference, meetup or in-person workshop | `Event` | Required: name, startDate, location with its address. Google: "Virtual experiences that have no real-world component aren't supported", so an online-only webinar gets valid markup but no event result (opened 2026-11-25). |
+| A business customers visit | `LocalBusiness` (or a subtype) | Required: name, address. Recommended: telephone, url, openingHoursSpecification, geo, priceRange (opened 2026-11-25). |
+| Founder, author or team member page | `ProfilePage` | Required: mainEntity, a Person or Organization with a name. Google lists "an employee page on a company website" among valid uses (opened 2026-11-25). |
 | Any page below the home page | `BreadcrumbList` | At least two ListItems; each needs name and position; item (URL) on all but the last. Mirror the visible trail. |
 
 Ratings belong only where real ratings are shown on the page. Never add an `aggregateRating` to qualify for a rich result. Google also notes that reviews an organization controls about itself, on pages using Organization markup, are not eligible for star review snippets.
@@ -92,9 +96,9 @@ node resources/schema-check.js --help
 
 Input a page type and a JSON-LD blob, a JSON string, or HTML containing `<script type="application/ld+json">`. Add `html` or `visibleText` to compare markup with what readers see. The engine parses every block and `@graph`, checks `@context` and `@type`, checks every node of a known type (and that the page's own type is present), and returns findings at four levels (fix, eligibility, improve, info), each with the source URL it relies on and a verdict: *Fix before publishing*, *Valid, not rich-result eligible*, or *Ready to publish*.
 
-**Generate mode (the fix step).** Pass `{"generate": {...}}` instead of a page to check. Give the page type (`home`, `software`, `product`, `article` or `other`), the page's full URL, its title, description, image and site name, the facts for its main entity, optional breadcrumbs, an optional llms.txt outline, and the page's `html` or `visibleText` if you have them. The engine returns:
+**Generate mode (the fix step).** Pass `{"generate": {...}}` instead of a page to check. Give the page type (`home`, `software`, `product`, `article`, `video`, `event`, `localbusiness`, `profile` or `other`), the page's full URL, its title, description, image and site name, the facts for its main entity, optional breadcrumbs, an optional llms.txt outline, and the page's `html` or `visibleText` if you have them. The engine returns:
 
-- **JSON-LD**, one script block per node: Organization and WebSite for a home page, SoftwareApplication, Product or Article for the others, and BreadcrumbList when two or more crumbs are given.
+- **JSON-LD**, one script block per node: Organization and WebSite for a home page; SoftwareApplication, Product, Article, VideoObject, Event, LocalBusiness or ProfilePage for the others; and BreadcrumbList when two or more crumbs are given.
 - **Meta tags:** `<title>`, meta description, an absolute canonical (Google: "Use absolute paths rather than relative paths"), the Open Graph tags (ogp.me lists og:title, og:type, og:image and og:url as required), and a `twitter:card` tag. The `twitter:card` tag is AAJ's addition.
 - **An llms.txt** in the llmstxt.org format: an H1 name (the only required section), a blockquote summary, details, then H2 sections of links.
 - **The checker's findings** on what was generated, compared with the page text when given.
@@ -128,6 +132,13 @@ Added for generate mode, opened on 2026-10-29:
 - Google, Canonical URLs: https://developers.google.com/search/docs/crawling-indexing/consolidate-duplicate-urls
 - The Open Graph protocol: https://ogp.me/
 - llms.txt proposal: https://llmstxt.org/
+
+Added for video, event, local business and profile pages, opened on 2026-11-25:
+
+- Google, Video (VideoObject): https://developers.google.com/search/docs/appearance/structured-data/video
+- Google, Event: https://developers.google.com/search/docs/appearance/structured-data/event
+- Google, Local business: https://developers.google.com/search/docs/appearance/structured-data/local-business
+- Google, Profile page: https://developers.google.com/search/docs/appearance/structured-data/profile-page
 
 The `twitter:card` tag is AAJ's addition; the engine labels it so.
 
