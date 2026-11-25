@@ -5,7 +5,7 @@
 
 **Decision it supports:** How should we split our paid budget across channels to get the most customers under our CAC ceiling?
 
-**Inputs:** Business model, monthly budget OR CAC target OR customer goal, LTV, and per channel either CPC / click-to-lead % / lead-to-customer % (cost-per-lead for directories) or last period's spend, clicks, leads and customers
+**Inputs:** Business model, monthly budget OR CAC target OR customer goal, LTV, and per channel either CPC / click-to-lead % / lead-to-customer % (cost-per-lead for directories) or a past period's spend, clicks, leads and customers
 
 **Output:** A per-channel budget split with projected customers, blended CAC, LTV:CAC, ROAS, payback, weekly and daily pacing, and a what-if range on costs
 
@@ -31,7 +31,7 @@ No engine needs customer names, emails or other personal data; leave them out.
 - It stops with an error on unrecognised fields, a missing budget, CAC target or customer goal for the chosen mode, and unknown channel keys. It can't check your CPC, conversion rates or results against your account.
 - Any channel you don't supply in full uses AAJ's illustrative CPC, conversion and close rates, which are not benchmarks. Default channels you leave out stay in the plan on those placeholders.
 - It reports paid-media CAC only. Fully-loaded CAC is higher. The range moves every channel's cost by the same share, 20% by AAJ's default: a what-if on your inputs, not a forecast band.
-- The diminishing-returns curve and each channel's scale cap are modelled, not measured from your account, and it can't see attribution lag on deals that close weeks after the click.
+- The diminishing-returns curve and each channel's scale cap are modelled, not measured. Results you give fix one point on the curve; the cap still shapes the rest. It can't see attribution lag on deals that close weeks after the click.
 
 **Review before acting:** Whoever runs paid media replaces every placeholder channel with account data, and the founder or finance lead confirms the LTV and budget, before the split sets spend. Rebalance monthly and track ROAS to 90 days.
 

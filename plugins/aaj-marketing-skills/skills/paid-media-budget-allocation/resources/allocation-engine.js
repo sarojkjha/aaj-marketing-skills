@@ -41,12 +41,19 @@
  *   funnel (default): baseCAC = (cpc / (cvr/100)) / (l2c/100)
  *   cpl  (Capterra/G2, pay-per-lead): baseCAC = cpl / (l2c/100)
  *
- * A channel can be given as last period's results instead of rates, and the engine
- * works the rates out (rounded to four decimals):
+ * A channel can be given as a past period's results instead of rates:
  *   { "key": "google", "results": { "spend": 12000, "clicks": 2100, "leads": 170, "customers": 21 }, "cap": 30000 }
+ *   The engine works the rates out (rounded to four decimals):
  *     cpc = spend / clicks, cvr = leads / clicks, l2c = customers / leads
+ *   and fits the channel's base CAC so its curve passes through those results: at that
+ *   monthly spend it gives exactly those customers. Typed rates are read as the cost at low
+ *   spend; results are an average at the spend you ran, which already includes some
+ *   diminishing returns, so their base CAC is lower than spend / customers:
+ *     baseCAC = (cap / (customers x DR)) x ln(1 + DR x spend / cap)
+ *   "months": 3 inside results says the figures cover three months (default 1); they are
+ *   averaged to a month, because budgets and caps are monthly.
  *   No "leads"? Then cvr = customers / clicks and l2c = 100 (each converting click is a customer).
- *   No "customers" yet? Give "leads" in results and "l2c" beside them.
+ *   No "customers" yet? Give "leads" in results and "l2c" beside them: customers = leads x l2c.
  *   Pay-per-lead channels take { "spend", "leads", "customers" }: cpl = spend / leads.
  *
  * Pacing: per day = month / 30.4 and per week = per day x 7. 30.4 is the average number
@@ -107,10 +114,16 @@ function fromResults(model, r) {
   }
   return out;
 }
-// The channel as the engine uses it: a "results" block replaced by the rates it gives.
+// The channel as the engine uses it: a "results" block replaced by the rates it gives and
+// the monthly point (spend, customers) its curve is fitted through.
 function withRates(o, model) {
   if (!o.results) return o;
-  const eff = Object.assign({}, o, fromResults(model, o.results), { fromResults: true });
+  const r = o.results, months = r.months || 1;
+  const eff = Object.assign({}, o, fromResults(model, r), { fromResults: true });
+  const customers = r.customers != null ? r.customers : r.leads * eff.l2c / 100;
+  eff.obsSpend = r.spend / months;
+  eff.obsCustomers = customers / months;
+  eff.obsMonths = months;
   delete eff.results;
   return eff;
 }
@@ -189,9 +202,12 @@ const PRESETS = {
 // ---------------------------------------------------------------------------
 // Engine (verified — do not "optimize" the math)
 // ---------------------------------------------------------------------------
-function econ(c) {
+function econ(c, DR) {
   const cpl = c.model === 'cpl' ? c.cpl : c.cpc / (c.cvr / 100);
-  return Object.assign({}, c, { baseCAC: cpl / (c.l2c / 100), cplValue: cpl });
+  // Given as results: the base CAC that makes the curve give those customers at that spend.
+  const fitted = c.obsSpend != null;
+  const baseCAC = fitted ? (c.cap / (c.obsCustomers * DR)) * Math.log(1 + (DR * c.obsSpend) / c.cap) : cpl / (c.l2c / 100);
+  return Object.assign({}, c, { baseCAC, cplValue: cpl, fitted });
 }
 const custFromSpend  = (S, b, cap, DR) => (S <= 0 ? 0 : (cap / (b * DR)) * Math.log(1 + (DR * S) / cap));
 const spendForMarginal = (lam, b, cap, DR) => (lam <= b ? 0 : (cap / DR) * (lam / b - 1));
@@ -239,7 +255,7 @@ function allocateGoal(chs, G, DR) {
 // ---------------------------------------------------------------------------
 // Runner
 // ---------------------------------------------------------------------------
-function buildChannels(cfg) {
+function buildChannels(cfg, DR) {
   const preset = PRESETS[cfg.model] || PRESETS.saas;
   const map = {};
   // Seed defaults from the preset (not when only the listed channels are wanted).
@@ -256,7 +272,7 @@ function buildChannels(cfg) {
     const placeholder = missing.length > 0;
     map[o.key] = Object.assign({ key: o.key, model: 'funnel' }, base, o, { placeholder, placeholderFields: missing.length === need.length ? null : missing });
   });
-  return Object.keys(map).map(k => econ(map[k]));
+  return Object.keys(map).map(k => econ(map[k], DR));
 }
 
 // Unknown fields, a missing budget and mistyped channel keys used to run on
@@ -285,10 +301,11 @@ function validate(c) {
     const model = o.model || (c.onlyListedChannels ? undefined : (preset.ch[o.key] || {}).model) || 'funnel';
     const r = o.results, at = o.key + '.results';
     const shape = model === 'cpl' ? '{spend, leads, customers}' : '{spend, clicks, leads, customers}';
+    if (r && typeof r === 'object' && r.months !== undefined && !(Number.isInteger(r.months) && r.months >= 1 && r.months <= 36)) errs.push(at + '.months is a whole number of months from 1 to 36.');
     if (!r || typeof r !== 'object' || Array.isArray(r)) { errs.push(at + ' is ' + shape + ' for one period.'); rated[i] = null; return; }
     const allowed = model === 'cpl' ? ['spend', 'leads', 'customers'] : ['spend', 'clicks', 'leads', 'customers'];
-    const before = errs.length;
-    const extra = Object.keys(r).filter(k => !allowed.includes(k));
+    const before = errs.length - (r.months !== undefined && !(Number.isInteger(r.months) && r.months >= 1 && r.months <= 36) ? 1 : 0);
+    const extra = Object.keys(r).filter(k => !allowed.includes(k) && k !== 'months');
     if (extra.length) errs.push(at + ': unrecognised field ' + extra.map(k => '"' + k + '"').join(', ') + '. ' + (model === 'cpl' ? LABEL[o.key] + ' is paid per lead, so results are ' : 'Expected: ') + shape + '.');
     for (const k of allowed) if (r[k] !== undefined && !(typeof r[k] === 'number' && Number.isFinite(r[k]) && r[k] > 0)) errs.push(at + '.' + k + ' must be a number above 0.');
     const clash = ['cpc', 'cvr', 'cpl'].filter(k => o[k] !== undefined);
@@ -344,8 +361,10 @@ function two(n) { return (Math.round(n * 100) / 100).toLocaleString('en-US'); }
 function mathLines(label, c, spend, DR) {
   const customers = custFromSpend(spend, c.baseCAC, c.cap, DR);
   const rows = [
-    ['Cost per lead', c.model === 'cpl' ? `${money2(c.cpl)} (paid per lead)` : `${money2(c.cpc)} a click \u00f7 ${num(c.cvr)}% click-to-lead = ${money2(c.cplValue)}`],
-    ['Base CAC', `${money2(c.cplValue)} \u00f7 ${num(c.l2c)}% lead-to-customer = ${money(c.baseCAC)}`],
+    ['Cost per lead', c.model === 'cpl' ? `${money2(c.cpl)} (paid per lead)` : `${money2(c.cpc)} a click \u00f7 ${num(c.cvr)}% ${c.clickToCustomer ? 'click-to-customer (no lead stage given)' : 'click-to-lead'} = ${money2(c.cplValue)}`],
+    c.fitted
+      ? ['Base CAC', `fitted to ${money(c.obsSpend)} a month for ${two(c.obsCustomers)} customers: (${money(c.cap)} cap \u00f7 (${two(c.obsCustomers)} \u00d7 ${num(DR)})) \u00d7 ln(1 + ${num(DR)} \u00d7 ${money(c.obsSpend)} \u00f7 ${money(c.cap)}) = ${money(c.baseCAC)}`]
+      : ['Base CAC', `${money2(c.cplValue)} \u00f7 ${num(c.l2c)}% lead-to-customer = ${money(c.baseCAC)}`],
     ['Customers', `(${money(c.cap)} cap \u00f7 (${money(c.baseCAC)} \u00d7 ${num(DR)})) \u00d7 ln(1 + ${num(DR)} \u00d7 ${money(spend)} \u00f7 ${money(c.cap)}) = ${two(customers)}`],
     ['Average CAC', `${money(spend)} \u00f7 ${two(customers)} = ${money(spend / customers)}`],
     ['Next customer', `${money(c.baseCAC)} \u00d7 (1 + ${num(DR)} \u00d7 ${money(spend)} \u00f7 ${money(c.cap)}) = ${money(marginalCAC(spend, c.baseCAC, c.cap, DR))}`],
@@ -393,7 +412,7 @@ function run(cfg) {
   const acv = cfg.acv != null ? cfg.acv : (own ? null : preset.acv);
   const margin = cfg.margin != null ? cfg.margin : (own ? null : preset.margin);
   const mode = cfg.mode || 'budget';
-  const chs = buildChannels(cfg);
+  const chs = buildChannels(cfg, DR);
 
   let spends, note = '';
   if (mode === 'cac') {
@@ -427,6 +446,7 @@ function run(cfg) {
       leads: Math.round(leads),
       inputs: c.model === 'cpl' ? { cpl: c.cpl, l2c: c.l2c, cap: c.cap } : { cpc: c.cpc, cvr: c.cvr, l2c: c.l2c, cap: c.cap },
       fromResults: !!c.fromResults,
+      observed: c.fitted ? { monthlySpend: Math.round(c.obsSpend * 100) / 100, monthlyCustomers: Math.round(c.obsCustomers * 100) / 100, cac: Math.round(c.obsSpend / c.obsCustomers), months: c.obsMonths } : null,
       placeholderInputs: !!c.placeholder,
       placeholderFields: !c.placeholder ? [] : (c.placeholderFields || (c.model === 'cpl' ? ['cpl', 'l2c', 'cap'] : ['cpc', 'cvr', 'l2c', 'cap']))
     };
@@ -483,7 +503,15 @@ function run(cfg) {
   out.push(pad('BLENDED', 14) + padl(money(totSpend), 10) + padl('100%', 6) + padl(money(totalPace.daily), 9) + padl(one(totCust), 11) + padl(money(blendedCAC), 9));
   out.push('');
   const derived = chs.filter(c => c.fromResults);
-  if (derived.length) out.push('From results: ' + derived.map(c => `${LABEL[c.key]} ` + (c.model === 'cpl' ? `cost per lead ${money2(c.cpl)}, lead-to-customer ${num(c.l2c)}%` : c.clickToCustomer ? `CPC ${money2(c.cpc)}, click-to-customer ${num(c.cvr)}% (no lead stage given)` : `CPC ${money2(c.cpc)}, click-to-lead ${num(c.cvr)}%, lead-to-customer ${num(c.l2c)}%`)).join('; ') + '.');
+  if (derived.length) {
+    out.push("From results (each curve is fitted through the channel's own monthly spend and customers):");
+    derived.forEach(c => {
+      const rates = c.model === 'cpl' ? `Cost per lead ${money2(c.cpl)}, lead-to-customer ${num(c.l2c)}%` : c.clickToCustomer ? `CPC ${money2(c.cpc)}, click-to-customer ${num(c.cvr)}% (no lead stage given)` : `CPC ${money2(c.cpc)}, click-to-lead ${num(c.cvr)}%, lead-to-customer ${num(c.l2c)}%`;
+      out.push(`  ${LABEL[c.key]}: ${money(c.obsSpend)} a month for ${two(c.obsCustomers)} customers (${money(c.obsSpend / c.obsCustomers)} each${c.obsMonths > 1 ? `, ${c.obsMonths} months averaged` : ''}). Base CAC at low spend ${money(c.baseCAC)}. ${rates}.`);
+    });
+    derived.filter(c => c.obsSpend > c.cap).forEach(c => out.push(`\u26a0 ${LABEL[c.key]} spent ${money(c.obsSpend)} a month, above its ${money(c.cap)} scale cap, so the fit leans heavily on the cap. Check it before budgeting from this.`));
+    out.push('');
+  }
   const metrics = [];
   if (ltvcac != null) metrics.push(`LTV:CAC ${one(ltvcac)}:1`);
   if (roas != null) metrics.push(`ROAS ${one(roas)}x`);

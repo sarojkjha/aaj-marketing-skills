@@ -23,7 +23,7 @@ metadata:
   sprint: unit-economics-retention
   topic: paid-media
   agents: [Claude Code, Cursor, OpenAI Codex, Windsurf, Cline]
-  inputs: Business model, monthly budget OR CAC target OR customer goal, LTV, and per channel either CPC / click-to-lead % / lead-to-customer % (cost-per-lead for directories) or last period's spend, clicks, leads and customers
+  inputs: Business model, monthly budget OR CAC target OR customer goal, LTV, and per channel either CPC / click-to-lead % / lead-to-customer % (cost-per-lead for directories) or a past period's spend, clicks, leads and customers
   outputs: A per-channel budget split with projected customers, blended CAC, LTV:CAC, ROAS, payback, weekly and daily pacing, and a what-if range on costs
   related_aaj:
     - https://aajconsult.com/tools/paid-media-budget-allocator
@@ -46,7 +46,7 @@ Allocate a paid advertising budget across channels by **cost per customer**, not
 
 1. **Set the CAC ceiling from LTV.** David Skok's SaaS guidance puts LTV:CAC **above 3:1** ([SaaS Metrics 2.0](https://www.forentrepreneurs.com/saas-metrics-2/)). Work backwards: ceiling ≈ LTV ÷ 3. This is the most you should pay per customer from ads (blended). Note this is *paid-media* CAC; fully-loaded CAC is higher.
 2. **Pick the channel set for the model.** Don't run every channel — pick the 3–5 where the buyer actually researches and purchases. See `resources/channel-benchmarks.md` for the default set per model.
-3. **Get a base CAC per channel** from the funnel inputs (formula below). This is the cost per customer at efficient, modest spend. If the user has last period's results per channel (spend, clicks, leads, customers), pass those as `results` and let the engine work the rates out; don't divide them yourself.
+3. **Get a base CAC per channel** from the funnel inputs (formula below). This is the cost per customer at efficient, modest spend. If the user has a past period's results per channel (spend, clicks, leads, customers), pass those as `results`: the engine works the rates out and fits the channel's curve through them. Don't divide them yourself, and don't type an average cost per customer in as if it were the cost at low spend.
 4. **Allocate against diminishing returns.** Each channel gets more expensive as you scale (you exhaust the best-matched audience), so the cheapest channel is *not* where all the budget goes. Fund each channel until the cost of its next customer hits the target, then stop. Channels whose first customer already costs more than the target drop out — correctly.
 5. **Present the split** with projected customers, blended CAC, LTV:CAC, ROAS, payback, pacing and the range, plus guardrails.
 
@@ -72,13 +72,16 @@ Allocation by objective:
 
 DR presets: **gentle 0.4 · moderate 0.8 (default) · aggressive 1.5.**
 
-From last period's results (rates rounded to four decimals):
+From a past period's results (rates rounded to four decimals):
 
 ```
 CPC = spend ÷ clicks      click→lead % = leads ÷ clicks      lead→customer % = customers ÷ leads
   · No lead stage: click→lead % = customers ÷ clicks and lead→customer % = 100
   · Pay-per-lead channels: CPL = spend ÷ leads
+Base CAC, fitted         = (cap / (customers · DR)) · ln(1 + DR · spend / cap)     # per month
 ```
+
+Results are an average at the spend that was run, so they already include some diminishing returns. The engine therefore fits Base CAC so the curve passes through them: at that monthly spend it gives exactly those customers, and Base CAC comes out below spend ÷ customers. Rates typed in directly are read as the cost at low spend, as before. Set `"months"` inside `results` when the figures cover more than one month; they are averaged to a month, because budgets and caps are monthly. If a channel's results are above its scale cap the engine says so: the fit then leans heavily on the cap, so check it.
 
 Pacing and range:
 
@@ -102,8 +105,8 @@ node .agents/skills/paid-media-budget-allocation/resources/allocation-engine.js
 # Custom — pass a JSON config
 node .agents/skills/paid-media-budget-allocation/resources/allocation-engine.js '{"model":"saas","mode":"budget","budget":30000,"diminishingReturns":"moderate","channels":[{"key":"capterra","model":"cpl","cpl":90,"l2c":22,"cap":8000}]}'
 
-# Your channels only, from last period's results, with the worked math
-node .agents/skills/paid-media-budget-allocation/resources/allocation-engine.js '{"mode":"budget","budget":20000,"onlyListedChannels":true,"ltv":15000,"showMath":true,"channels":[{"key":"google","results":{"spend":12000,"clicks":2100,"leads":170,"customers":21},"cap":30000},{"key":"linkedin","results":{"spend":6000,"clicks":520,"leads":61},"l2c":18,"cap":15000}]}'
+# Your channels only, from past results (LinkedIn's cover a quarter), with the worked math
+node .agents/skills/paid-media-budget-allocation/resources/allocation-engine.js '{"mode":"budget","budget":20000,"onlyListedChannels":true,"ltv":15000,"showMath":true,"channels":[{"key":"google","results":{"spend":12000,"clicks":2100,"leads":170,"customers":21},"cap":30000},{"key":"linkedin","results":{"spend":18000,"clicks":1560,"leads":183,"months":3},"l2c":18,"cap":15000}]}'
 
 # Schema and channel keys
 node .agents/skills/paid-media-budget-allocation/resources/allocation-engine.js --help
