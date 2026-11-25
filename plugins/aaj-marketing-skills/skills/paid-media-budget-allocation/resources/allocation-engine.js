@@ -391,8 +391,10 @@ function rangeLines(mode, cfg, R, ltvcac) {
   }
   if (lo.ltvCac != null && lo.ltvCac >= 0.05 && hi.ltvCac >= 0.05) {
     L.push(`  LTV:CAC runs ${one(lo.ltvCac)}:1 to ${one(hi.ltvCac)}:1.`);
-    if (ltvcac >= 3 && hi.ltvCac < 3) L.push(`\u26a0 At ${num(p)}% higher costs LTV:CAC falls to ${one(hi.ltvCac)}:1, below 3:1. Check the inputs that carry the plan before scaling.`);
-    else if (ltvcac < 3 && lo.ltvCac >= 3) L.push(`\u2022 At ${num(p)}% lower costs LTV:CAC reaches ${one(lo.ltvCac)}:1, above 3:1.`);
+    // Two decimals, cut not rounded: a ratio just under 3 must not print as "3:1, below 3:1".
+    const cut2 = n => (Math.floor(n * 100) / 100).toLocaleString('en-US', { maximumFractionDigits: 2 });
+    if (ltvcac >= 3 && hi.ltvCac < 3) L.push(`\u26a0 At ${num(p)}% higher costs LTV:CAC falls to ${cut2(hi.ltvCac)}:1, below 3:1. Check the inputs that carry the plan before scaling.`);
+    else if (ltvcac < 3 && lo.ltvCac >= 3) L.push(`\u2022 At ${num(p)}% lower costs LTV:CAC reaches ${cut2(lo.ltvCac)}:1, at or above 3:1.`);
   }
   return L;
 }
