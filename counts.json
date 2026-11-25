@@ -6,6 +6,12 @@
   "engine_scripts": 69,
   "categories": 10,
   "mcp_tools": 5,
+  "tools": {
+    "free_tools": 58,
+    "skills_with_browser_tool": 49,
+    "source": "https://aajconsult.com/counts.json",
+    "copied_on": "2026-11-24"
+  },
   "agents": [
     "Claude Code",
     "OpenAI Codex",
@@ -75,7 +81,9 @@
     "github_about": "The math layer for marketing agents: 84 skills, 69 with deterministic engines that return numbers and a verdict. Keep your writing skills, add the arithmetic. MIT, no API key.",
     "product_hunt_tagline": "Marketing skills that do the math for your AI agent",
     "product_hunt_description": "Open-source marketing skills for AI agents. 69 of the 84 run deterministic engines: LTV:CAC, pipeline coverage, A/B significance, budget splits. Same input, same answer, code you can read. MIT.",
-    "maker_bio": "Founder of AAJ. Marketing for Seed–Series B startups. I maintain 84 open-source marketing skills for AI agents; 69 of them do the math."
+    "maker_bio": "Founder of AAJ. Marketing for Seed–Series B startups. I maintain 84 open-source marketing skills for AI agents; 69 of them do the math.",
+    "tools": "58 free marketing tools",
+    "tools_link": "Open all 58 free tools"
   },
   "catalog": [
     {
