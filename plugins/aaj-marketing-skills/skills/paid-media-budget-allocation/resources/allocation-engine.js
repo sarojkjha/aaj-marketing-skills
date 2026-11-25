@@ -265,8 +265,11 @@ function buildChannels(cfg, DR) {
   (cfg.channels || []).forEach(raw => {
     // Own-channels mode never borrows a preset's numbers or channel model (review, Oct 29).
     const base = cfg.onlyListedChannels ? {} : (preset.ch[raw.key] || {});
-    const o = withRates(raw, raw.model || base.model || 'funnel');
-    const need = o.model === 'cpl' ? ['cpl', 'l2c', 'cap'] : ['cpc', 'cvr', 'l2c', 'cap'];
+    // The channel's model is the config's, else the preset's (Capterra/G2 is pay-per-lead there).
+    // Reading it from the config alone flagged a per-lead channel's CPC as a placeholder (Nov 25, 2026).
+    const model = raw.model || base.model || 'funnel';
+    const o = withRates(raw, model);
+    const need = model === 'cpl' ? ['cpl', 'l2c', 'cap'] : ['cpc', 'cvr', 'l2c', 'cap'];
     // The inputs still on a placeholder. null means all of them (a channel not listed at all).
     const missing = need.filter(f => o[f] == null);
     const placeholder = missing.length > 0;
