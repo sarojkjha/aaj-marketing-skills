@@ -304,6 +304,30 @@ if (pluginManifest && claudeMarketplace && codexMarketplace) {
   if (claudeMarketplace.name !== codexMarketplace.name) manifestProblems.push(`the Claude Code and Codex marketplaces are named differently ("${claudeMarketplace.name}" and "${codexMarketplace.name}")`);
   const installName = `${pluginManifest.name}@${claudeMarketplace.name}`;
   if (!next.includes(installName)) manifestProblems.push(`README.md does not show the install name ${installName}`);
+  // Nov 24, 2026: the Codex marketplace pointed at a folder with no .codex-plugin/plugin.json,
+  // so the install the skills site offers had no manifest to read. Check the whole chain:
+  // marketplace entry -> plugin folder -> Codex manifest -> skills and MCP config it names.
+  const entry = (codexMarketplace.plugins || []).find((p) => p.name === pluginManifest.name);
+  const rel = entry?.source?.path;
+  if (entry && (entry.source?.source !== "local" || typeof rel !== "string" || !rel.startsWith("./"))) {
+    manifestProblems.push(`.agents/plugins/marketplace.json: the "${pluginManifest.name}" entry needs source { "source": "local", "path": "./..." }`);
+  } else if (entry) {
+    const dir = join(REPO_ROOT, rel);
+    const codexRel = join(rel, ".codex-plugin", "plugin.json").replace(/^\.\//, "");
+    const codex = readManifest(codexRel);
+    if (codex) {
+      if (codex.name !== pluginManifest.name) manifestProblems.push(`${codexRel} names "${codex.name}", not "${pluginManifest.name}"`);
+      if (codex.version !== pluginManifest.version) manifestProblems.push(`${codexRel} is version ${codex.version}, the Claude manifest is ${pluginManifest.version}`);
+      for (const key of ["skills", "mcpServers"]) {
+        const p = codex[key];
+        if (typeof p !== "string" || !p.startsWith("./") || !existsSync(join(dir, p))) manifestProblems.push(`${codexRel}: "${key}" must be a ./ path that exists in ${rel}`);
+      }
+      for (const key of ["composerIcon", "logo"]) {
+        const p = codex.interface?.[key];
+        if (p && !existsSync(join(dir, p))) manifestProblems.push(`${codexRel}: interface.${key} ${p} does not exist`);
+      }
+    }
+  }
 }
 if (manifestProblems.length) {
   console.error("Plugin manifests are incomplete:");

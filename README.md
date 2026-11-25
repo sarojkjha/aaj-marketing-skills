@@ -108,7 +108,7 @@ codex plugin marketplace add sarojkjha/aaj-marketing-skills
 codex plugin add aaj-marketing-skills@aaj
 ```
 
-`codex plugin marketplace upgrade aaj` picks up new skills. Codex reads `.agents/plugins/marketplace.json`, and both clients load every skill in `skills/`.
+`codex plugin marketplace upgrade aaj` picks up new skills. Codex reads `.agents/plugins/marketplace.json`, which points at the same plugin folder Claude Code installs (`plugins/aaj-marketing-skills`, with its own `.codex-plugin/plugin.json`). The plugin loads every skill and starts the same local engines MCP server, so Codex can call `run_engine` too.
 
 ---
 

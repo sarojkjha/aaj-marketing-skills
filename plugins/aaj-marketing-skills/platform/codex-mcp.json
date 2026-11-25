@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "aaj-engines": {
+      "cwd": ".",
+      "command": "node",
+      "args": [
+        "./platform/mcp/server.mjs"
+      ]
+    }
+  }
+}
