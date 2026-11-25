@@ -18,6 +18,7 @@
  *
  *   {
  *     "pageType": "software",      // software | product | organization | faq | howto | article | breadcrumb
+ *                                  // | video | event | localbusiness | profile
  *                                  // (aliases: saas, app, home, about, blog, post, faqpage, breadcrumblist...)
  *                                  // omit to check every node found
  *     "jsonld": { ... } | [ ... ] | "<json string>" | "<html with ld+json scripts>",
@@ -30,7 +31,8 @@
  * then check what was built (against your page text, if you give it):
  *
  *   { "generate": {
- *       "pageType": "home",                  // home | software | product | article | other
+ *       "pageType": "home",                  // home | software | product | article | video | event
+ *                                            // | localbusiness | profile | other
  *       "url": "https://example.com/",       // the page's full address (required)
  *       "title": "...", "description": "...", "image": "https://...", "siteName": "...",
  *       "organization": { "name", "url", "logo", "description", "sameAs": [] },        // home
@@ -40,13 +42,25 @@
  *                    "priceCurrency", "availability", "ratingValue", "ratingCount" }, // product
  *       "article": { "headline", "authorName", "authorUrl", "authorType", "datePublished",
  *                    "dateModified", "image", "publisherName" },                       // article
+ *       "video": { "name", "description", "thumbnailUrl", "uploadDate", "duration",
+ *                  "contentUrl", "embedUrl" },                                        // video
+ *       "event": { "name", "description", "startDate", "endDate", "venueName", "streetAddress",
+ *                  "addressLocality", "addressRegion", "postalCode", "addressCountry",
+ *                  "onlineUrl", "organizerName", "organizerUrl", "image", "price",
+ *                  "priceCurrency", "offerUrl" },                                     // event
+ *       "localBusiness": { "name", "businessType", "description", "telephone", "url", "image",
+ *                  "priceRange", "streetAddress", "addressLocality", "addressRegion",
+ *                  "postalCode", "addressCountry" },                                 // localbusiness
+ *       "profile": { "name", "entityType", "jobTitle", "description", "image", "url",
+ *                  "sameAs": [], "worksFor", "dateCreated", "dateModified" },          // profile
  *       "breadcrumbs": [ { "name", "url" } ],                                          // any page
  *       "llms": { "name", "summary", "details", "sections": [ { "title", "links": [ { "title", "url", "note" } ] } ] },
  *       "html": "..." | "visibleText": "..."  // optional: the page, to check the markup against
  *   }, "today": "2026-10-29" }
  *
  *   It marks up only what you enter: no rating without a value and a count, no price you didn't
- *   give. FAQ and HowTo are not generated: Google no longer shows those rich results.
+ *   give. FAQ and HowTo are not generated: Google no longer shows those rich results. An online-only
+ *   event gets valid markup and a note: Google shows only events with a physical location.
  *
  * LEVELS
  *   fix          the markup is broken, or says something the page does not show
@@ -57,7 +71,8 @@
  * Sources are the pages opened on 2026-10-10: Google Search Central structured data
  * docs (software-app, product-snippet, review-snippet, organization, article,
  * breadcrumb, sd-policies, ai-features, documentation changelog) and schema.org type
- * pages. Generate mode adds pages opened on 2026-10-29: Google's site-names, title-link,
+ * pages. Video, event, local business and profile page checks follow Google's docs for
+ * those features, opened on 2026-11-25. Generate mode adds pages opened on 2026-10-29: Google's site-names, title-link,
  * snippet and consolidate-duplicate-urls docs, ogp.me and llmstxt.org. The twitter:card
  * tag is AAJ's addition and is labelled so. Google changes these pages; re-check the
  * source URL each finding cites.
@@ -94,6 +109,10 @@ const SRC = {
   organization: G + 'structured-data/organization',
   article: G + 'structured-data/article',
   breadcrumb: G + 'structured-data/breadcrumb',
+  video: G + 'structured-data/video',
+  event: G + 'structured-data/event',
+  localBusiness: G + 'structured-data/local-business',
+  profilePage: G + 'structured-data/profile-page',
   policies: G + 'structured-data/sd-policies',
   aiFeatures: G + 'ai-features',
   changelog: 'https://developers.google.com/search/updates',
@@ -105,7 +124,11 @@ const SRC = {
   sArticle: 'https://schema.org/Article',
   sOrganization: 'https://schema.org/Organization',
   sBreadcrumb: 'https://schema.org/BreadcrumbList',
+  sEvent: 'https://schema.org/Event',
 };
+// LocalBusiness and the subtypes this tool generates and recognises (schema.org has many more).
+const LOCAL_TYPES = ['LocalBusiness', 'ProfessionalService', 'Store', 'Restaurant', 'Dentist', 'LegalService', 'AccountingService',
+  'FinancialService', 'MedicalClinic', 'HomeAndConstructionBusiness', 'AutomotiveBusiness', 'HealthAndBeautyBusiness', 'SportsActivityLocation'];
 
 // Page types and the schema.org @type values that satisfy them.
 const KINDS = {
@@ -116,6 +139,10 @@ const KINDS = {
   howto: { label: 'HowTo', types: ['HowTo'] },
   article: { label: 'Article', types: ['Article', 'NewsArticle', 'BlogPosting', 'TechArticle', 'ScholarlyArticle', 'Report'] },
   breadcrumb: { label: 'BreadcrumbList', types: ['BreadcrumbList'] },
+  video: { label: 'VideoObject', types: ['VideoObject'] },
+  event: { label: 'Event', types: ['Event', 'BusinessEvent', 'EducationEvent', 'SocialEvent', 'ExhibitionEvent', 'Festival', 'MusicEvent', 'SportsEvent', 'TheaterEvent'] },
+  localbusiness: { label: 'LocalBusiness', types: LOCAL_TYPES },
+  profile: { label: 'ProfilePage', types: ['ProfilePage'] },
 };
 const ALIASES = {
   software: 'software', softwareapplication: 'software', webapplication: 'software', saas: 'software', app: 'software', pricing: 'software',
@@ -125,6 +152,10 @@ const ALIASES = {
   howto: 'howto', 'how-to': 'howto', guide: 'howto',
   article: 'article', blog: 'article', blogposting: 'article', post: 'article', newsarticle: 'article',
   breadcrumb: 'breadcrumb', breadcrumbs: 'breadcrumb', breadcrumblist: 'breadcrumb',
+  video: 'video', videoobject: 'video',
+  event: 'event', events: 'event',
+  localbusiness: 'localbusiness', 'local-business': 'localbusiness', local: 'localbusiness',
+  profile: 'profile', profilepage: 'profile', 'profile-page': 'profile',
 };
 
 const isObj = (v) => v !== null && typeof v === 'object' && !Array.isArray(v);
@@ -294,6 +325,66 @@ const CHECKS = {
     }
   },
 
+  video(n, path, add, textNorm) {
+    // Google's required VideoObject properties: name, thumbnailUrl, uploadDate.
+    if (!has(n.name)) add('eligibility', 'video-no-name', path, 'No "name". Google requires the video\'s title for video results.', SRC.video);
+    else if (textNorm !== null && !visibleHas(textNorm, n.name)) add('improve', 'video-name-not-visible', path, `The video title "${str(n.name).slice(0, 80)}" is not in the page text. Show the title next to the video.`, SRC.policies);
+    if (!has(n.thumbnailUrl)) add('eligibility', 'video-no-thumbnail', path, 'No "thumbnailUrl". Google requires a URL of the video\'s own thumbnail image.', SRC.video);
+    if (!has(n.uploadDate)) add('eligibility', 'video-no-upload-date', path, 'No "uploadDate". Google requires the date the video was first published, in ISO 8601.', SRC.video);
+    else if (!parseIsoDate(n.uploadDate)) add('fix', 'video-bad-date', path, `uploadDate "${str(n.uploadDate)}" is not an ISO 8601 date.`, SRC.video);
+    else if (/T/.test(str(n.uploadDate)) && !/(Z|[+-]\d{2}:?\d{2})$/.test(str(n.uploadDate))) add('improve', 'video-date-no-zone', path, 'uploadDate has a time but no time zone. Google recommends including time zone information.', SRC.video);
+    const missing = ['description', 'duration'].filter((k) => !has(n[k]));
+    if (!has(n.contentUrl) && !has(n.embedUrl)) missing.push('contentUrl or embedUrl');
+    if (missing.length) add('improve', 'video-recommended', path, `Google recommends ${missing.join(', ')}.`, SRC.video);
+  },
+
+  event(n, path, add, textNorm, today) {
+    // Google's required Event properties: name, startDate, location, location.address.
+    if (!has(n.name)) add('eligibility', 'event-no-name', path, 'No "name". Google requires the event\'s full title.', SRC.event);
+    else if (textNorm !== null && !visibleHas(textNorm, n.name)) add('fix', 'name-not-visible', path, `The event name "${str(n.name).slice(0, 80)}" does not appear in the page text.`, SRC.policies);
+    const start = has(n.startDate) ? parseIsoDate(n.startDate) : null;
+    if (!has(n.startDate)) add('eligibility', 'event-no-start', path, 'No "startDate". Google requires the start date and time, in ISO 8601.', SRC.event);
+    else if (!start) add('fix', 'event-bad-date', path, `startDate "${str(n.startDate)}" is not an ISO 8601 date.`, SRC.event);
+    const end = has(n.endDate) ? parseIsoDate(n.endDate) : null;
+    if (has(n.endDate) && !end) add('fix', 'event-bad-end', path, `endDate "${str(n.endDate)}" is not an ISO 8601 date.`, SRC.event);
+    if (start && end && end < start) add('fix', 'event-end-before-start', path, 'endDate is before startDate.', SRC.sEvent);
+    if (today && (end || start) && (end || start) < today) add('info', 'event-past', path, 'The event has ended. Keep the markup if the page stays up, but expect no event result for it.', SRC.event);
+    const locs = list(n.location);
+    const places = locs.filter((l) => isObj(l) && !typesOf(l).includes('VirtualLocation'));
+    const virtual = locs.some((l) => isObj(l) && typesOf(l).includes('VirtualLocation')) || /Online/.test(str(n.eventAttendanceMode));
+    if (!places.length) {
+      if (virtual) add('info', 'event-online', path, 'This is an online-only event. Google: "Virtual experiences that have no real-world component aren\'t supported. Events must take place in a physical location." The markup is valid schema.org, but expect no Google event result.', SRC.event);
+      else add('eligibility', 'event-no-location', path, 'No "location" with a place. Google requires the venue, with its address.', SRC.event);
+    } else if (!places.some((l) => has(l.address))) add('eligibility', 'event-no-address', `${path}.location`, 'The location has no "address". Google requires the venue\'s address.', SRC.event);
+    const missing = ['description', 'endDate', 'eventStatus', 'image', 'organizer', 'offers'].filter((k) => !has(n[k]));
+    if (missing.length) add('improve', 'event-recommended', path, `Google recommends ${missing.join(', ')}.`, SRC.event);
+  },
+
+  localbusiness(n, path, add, textNorm) {
+    // Google's required LocalBusiness properties: name, address.
+    if (!has(n.name)) add('eligibility', 'local-no-name', path, 'No "name". Google requires the business name.', SRC.localBusiness);
+    else if (textNorm !== null && !visibleHas(textNorm, n.name)) add('fix', 'name-not-visible', path, `The name "${str(n.name)}" does not appear in the page text.`, SRC.policies);
+    if (!has(n.address)) add('eligibility', 'local-no-address', path, 'No "address". Google requires the business\'s physical location.', SRC.localBusiness);
+    const missing = ['telephone', 'url', 'openingHoursSpecification', 'geo', 'priceRange'].filter((k) => !has(n[k]));
+    if (missing.length) add('improve', 'local-recommended', path, `Google recommends ${missing.join(', ')}, where they apply.`, SRC.localBusiness);
+    if (has(n.aggregateRating) || has(n.review)) {
+      add('info', 'org-self-serving', path, 'LocalBusiness markup carries ratings or reviews. Google: if the entity controls the reviews about itself, its pages are ineligible for the star review feature.', SRC.review);
+      checkRating(n, path, add, textNorm);
+    }
+  },
+
+  profile(n, path, add, textNorm) {
+    // Google's required ProfilePage properties: mainEntity (a Person or Organization) with a name or alternateName.
+    const me = list(n.mainEntity)[0];
+    if (!isObj(me)) { add('eligibility', 'profile-no-entity', path, 'No "mainEntity". Google requires the Person or Organization the profile is about.', SRC.profilePage); return; }
+    const t = typesOf(me);
+    if (!t.includes('Person') && !t.some((x) => /Organization$/.test(x))) add('eligibility', 'profile-entity-type', `${path}.mainEntity`, `mainEntity is typed ${t.join('/') || 'nothing'}. Google expects a Person or an Organization.`, SRC.profilePage);
+    if (!has(me.name) && !has(me.alternateName)) add('eligibility', 'profile-no-name', `${path}.mainEntity`, 'mainEntity has no "name" (or alternateName), which Google requires.', SRC.profilePage);
+    else if (has(me.name) && textNorm !== null && !visibleHas(textNorm, me.name)) add('fix', 'name-not-visible', `${path}.mainEntity`, `The name "${str(me.name)}" does not appear in the page text.`, SRC.policies);
+    const missing = ['description', 'image', 'sameAs'].filter((k) => !has(me[k]));
+    if (missing.length) add('improve', 'profile-recommended', `${path}.mainEntity`, `Google recommends ${missing.join(', ')} on the person or organization.`, SRC.profilePage);
+  },
+
   faq(n, path, add, textNorm) {
     add('info', 'faq-retired', path, 'Google stopped showing FAQ rich results on 7 May 2026 and removed the FAQ documentation on 15 June 2026. The markup is still valid schema.org; keep it only where it mirrors a visible FAQ, and expect no Google appearance from it.', SRC.changelog);
     const qs = list(n.mainEntity);
@@ -388,7 +479,7 @@ function check(cfg) {
   let kind = null;
   if (cfg.pageType !== undefined && cfg.pageType !== null && cfg.pageType !== '') {
     kind = ALIASES[String(cfg.pageType).toLowerCase().replace(/\s+/g, '')];
-    if (!kind) die(`Unknown pageType "${cfg.pageType}".`, 'Use one of: software, product, organization, faq, howto, article, breadcrumb.');
+    if (!kind) die(`Unknown pageType "${cfg.pageType}".`, 'Use one of: software, product, organization, faq, howto, article, breadcrumb, video, event, localbusiness, profile.');
   }
   let today = new Date(Date.UTC(new Date().getUTCFullYear(), new Date().getUTCMonth(), new Date().getUTCDate()));
   if (cfg.today !== undefined) {
@@ -460,13 +551,18 @@ const GSRC = {
   ogp: 'https://ogp.me/',
   llms: 'https://llmstxt.org/',
 };
-const GEN_TYPES = ['home', 'software', 'product', 'article', 'other'];
-const GEN_FIELDS = ['pageType', 'url', 'title', 'description', 'image', 'siteName', 'organization', 'software', 'product', 'article', 'breadcrumbs', 'llms', 'html', 'visibleText'];
+const GEN_TYPES = ['home', 'software', 'product', 'article', 'video', 'event', 'localbusiness', 'profile', 'other'];
+const GEN_FIELDS = ['pageType', 'url', 'title', 'description', 'image', 'siteName', 'organization', 'software', 'product', 'article', 'video', 'event', 'localBusiness', 'profile', 'breadcrumbs', 'llms', 'html', 'visibleText'];
+const ADDRESS = ['streetAddress', 'addressLocality', 'addressRegion', 'postalCode', 'addressCountry'];
 const GEN_SUB = {
   organization: ['name', 'url', 'logo', 'description', 'sameAs'],
   software: ['name', 'description', 'applicationCategory', 'operatingSystem', 'price', 'priceCurrency', 'ratingValue', 'ratingCount'],
   product: ['name', 'description', 'image', 'brand', 'sku', 'price', 'priceCurrency', 'availability', 'ratingValue', 'ratingCount'],
   article: ['headline', 'authorName', 'authorUrl', 'authorType', 'datePublished', 'dateModified', 'image', 'publisherName'],
+  video: ['name', 'description', 'thumbnailUrl', 'uploadDate', 'duration', 'contentUrl', 'embedUrl'],
+  event: ['name', 'description', 'startDate', 'endDate', 'venueName'].concat(ADDRESS, ['onlineUrl', 'organizerName', 'organizerUrl', 'image', 'price', 'priceCurrency', 'offerUrl']),
+  localBusiness: ['name', 'businessType', 'description', 'telephone', 'url', 'image', 'priceRange'].concat(ADDRESS),
+  profile: ['name', 'entityType', 'jobTitle', 'description', 'image', 'url', 'sameAs', 'worksFor', 'dateCreated', 'dateModified'],
   llms: ['name', 'summary', 'details', 'sections'],
 };
 // Google's product snippet docs list these availability values.
@@ -528,14 +624,32 @@ function genRating(o, path, add, label) {
   return { '@type': 'AggregateRating', ratingValue: v, ratingCount: c };
 }
 // YYYY-MM-DD, or a date and time in ISO 8601 (T separator, valid hours and minutes, optional zone).
-function genDate(v, label, path, add) {
+function genDate(v, label, path, add, src) {
   const s = str(v);
   const m = /^(\d{4}-\d{2}-\d{2})(?:T([01]\d|2[0-3]):([0-5]\d)(?::([0-5]\d)(?:\.\d+)?)?(Z|[+-](?:[01]\d|2[0-3]):?[0-5]\d)?)?$/.exec(s);
   if (!m || !parseIsoDate(m[1])) die(`"${label}" must be an ISO 8601 date such as 2026-10-29 or 2026-10-29T09:00:00+01:00 (got "${s}").`);
-  if (m[2] !== undefined && !m[5]) add('improve', 'date-no-zone', path, `${label.replace(/^.*\./, '')} has a time but no time zone. Google: "We recommend that you provide timezone information".`, SRC.article);
+  if (m[2] !== undefined && !m[5]) add('improve', 'date-no-zone', path, `${label.replace(/^.*\./, '')} has a time but no time zone. Google: "We recommend that you provide timezone information".`, src || SRC.article);
   return s;
 }
 function setIf(o, k, v) { if (has(v)) o[k] = typeof v === 'string' ? v.trim() : v; }
+// A PostalAddress from whichever address fields were given; null when none were.
+function genAddress(o) {
+  const a = { '@type': 'PostalAddress' };
+  ADDRESS.forEach((k) => setIf(a, k, oneLine(str(o[k]))));
+  return Object.keys(a).length > 1 ? a : null;
+}
+// ISO 8601 duration such as PT1M54S or PT2H.
+function genDuration(v, label) {
+  const s = str(v).toUpperCase();
+  if (!s) return '';
+  if (!/^P(?=\d|T\d)(\d+D)?(T(?=\d)(\d+H)?(\d+M)?(\d+(\.\d+)?S)?)?$/.test(s)) die(`"${label}" must be an ISO 8601 duration such as PT1M54S (1 minute 54 seconds) or PT1H (got "${str(v)}").`);
+  return s;
+}
+function genSameAs(v, label) {
+  if (v === undefined || v === null) return [];
+  if (!Array.isArray(v) || v.length > 20) die(`"${label}" must be a list of up to 20 profile URLs.`);
+  return v.map((u, i) => { if (typeof u !== 'string') die(`${label}[${i}] must be a profile URL.`); return genUrl(u, `${label}[${i}]`, false); }).filter(Boolean);
+}
 
 function generate(cfg) {
   const extra = Object.keys(cfg).filter((k) => !['generate', 'today'].includes(k));
@@ -639,6 +753,78 @@ function generate(cfg) {
       setIf(n.author, 'url', genUrl(a.authorUrl, 'the author URL', false));
     }
     if (has(a.publisherName)) n.publisher = { '@type': 'Organization', name: oneLine(a.publisherName) };
+    nodes.push(n);
+  } else if (type === 'video') {
+    const v = genObj(g.video, 'video') || {};
+    if (!str(v.name)) die('Give the video\'s title ("generate.video.name").');
+    const n = { '@context': 'https://schema.org', '@type': 'VideoObject', name: oneLine(v.name) };
+    setIf(n, 'description', oneLine(str(v.description)));
+    setIf(n, 'thumbnailUrl', genUrl(v.thumbnailUrl, 'the thumbnail URL ("video.thumbnailUrl")', false));
+    if (has(v.uploadDate)) n.uploadDate = genDate(v.uploadDate, 'video.uploadDate', 'VideoObject', add, SRC.video);
+    setIf(n, 'duration', genDuration(v.duration, 'video.duration'));
+    setIf(n, 'contentUrl', genUrl(v.contentUrl, 'the video file URL ("video.contentUrl")', false));
+    setIf(n, 'embedUrl', genUrl(v.embedUrl, 'the player URL ("video.embedUrl")', false));
+    nodes.push(n);
+  } else if (type === 'event') {
+    const e = genObj(g.event, 'event') || {};
+    if (!str(e.name)) die('Give the event\'s name ("generate.event.name").');
+    if (!has(e.startDate)) die('Give the start date and time ("generate.event.startDate"), such as 2026-12-10T18:00-08:00.');
+    const n = { '@context': 'https://schema.org', '@type': 'Event', name: oneLine(e.name) };
+    setIf(n, 'description', oneLine(str(e.description)));
+    n.startDate = genDate(e.startDate, 'event.startDate', 'Event', add, SRC.event);
+    if (has(e.endDate)) n.endDate = genDate(e.endDate, 'event.endDate', 'Event', add, SRC.event);
+    const addr = genAddress(e);
+    const online = genUrl(e.onlineUrl, 'the online event URL ("event.onlineUrl")', false);
+    if (!addr && !online) die('Give the venue\'s address (at least a city), or the online event\'s URL ("event.onlineUrl").', 'Google shows only events with a physical location; an online-only event still gets valid markup.');
+    if (has(e.venueName) && !addr) die('event.venueName needs the venue\'s address.');
+    const place = addr ? { '@type': 'Place' } : null;
+    if (place) { setIf(place, 'name', oneLine(str(e.venueName))); place.address = addr; }
+    const virt = online ? { '@type': 'VirtualLocation', url: online } : null;
+    n.eventAttendanceMode = 'https://schema.org/' + (place && virt ? 'MixedEventAttendanceMode' : virt ? 'OnlineEventAttendanceMode' : 'OfflineEventAttendanceMode');
+    n.eventStatus = 'https://schema.org/EventScheduled';
+    n.location = place && virt ? [place, virt] : place || virt;
+    setIf(n, 'image', genUrl(e.image, 'the event image URL', false));
+    if (has(e.organizerName)) { n.organizer = { '@type': 'Organization', name: oneLine(e.organizerName) }; setIf(n.organizer, 'url', genUrl(e.organizerUrl, 'the organizer URL', false)); }
+    else if (has(e.organizerUrl)) die('event.organizerUrl needs event.organizerName.');
+    const price = genPrice(e.price, 'event.price');
+    const cur = genCurrency(e.priceCurrency, 'event.priceCurrency');
+    if (price === null && (cur || has(e.offerUrl))) die('event.priceCurrency and event.offerUrl go in the offer, so they need event.price (0 for a free event).');
+    if (price !== null) {
+      n.offers = { '@type': 'Offer', price, url: genUrl(e.offerUrl, 'the ticket or registration URL', false) || url };
+      if (cur) n.offers.priceCurrency = cur;
+      else if (+price > 0) add('improve', 'no-currency', 'Event', 'A price was given without a currency. Add priceCurrency, such as USD.', SRC.event);
+    }
+    nodes.push(n);
+  } else if (type === 'localbusiness') {
+    const b = genObj(g.localBusiness, 'localBusiness') || {};
+    if (!str(b.name)) die('Give the business name ("generate.localBusiness.name").');
+    const t = str(b.businessType) || 'LocalBusiness';
+    if (!LOCAL_TYPES.includes(t)) die(`"localBusiness.businessType" must be one of ${LOCAL_TYPES.join(', ')}.`, 'Leave it out for LocalBusiness.');
+    const addr = genAddress(b);
+    if (!addr) die('Give the business address, at least a city ("generate.localBusiness.addressLocality").', 'Google requires the physical location. A business with no address customers visit is better marked up as an Organization (the home page type).');
+    const n = { '@context': 'https://schema.org', '@type': t, name: oneLine(b.name), address: addr };
+    setIf(n, 'description', oneLine(str(b.description)));
+    setIf(n, 'telephone', oneLine(str(b.telephone)));
+    setIf(n, 'url', genUrl(b.url, 'the business URL', false) || origin + '/');
+    setIf(n, 'image', genUrl(b.image, 'the business image URL', false));
+    setIf(n, 'priceRange', oneLine(str(b.priceRange)));
+    nodes.push(n);
+  } else if (type === 'profile') {
+    const pr = genObj(g.profile, 'profile') || {};
+    if (!str(pr.name)) die('Give the name of the person or organization ("generate.profile.name").');
+    const et = { person: 'Person', organization: 'Organization' }[str(pr.entityType).toLowerCase() || 'person'];
+    if (!et) die('"profile.entityType" must be Person or Organization.');
+    if (et === 'Organization' && (has(pr.jobTitle) || has(pr.worksFor))) die('profile.jobTitle and profile.worksFor are for a Person.');
+    const me = { '@type': et, name: oneLine(pr.name) };
+    setIf(me, 'jobTitle', oneLine(str(pr.jobTitle)));
+    setIf(me, 'description', oneLine(str(pr.description)));
+    setIf(me, 'image', genUrl(pr.image, 'the profile image URL', false));
+    setIf(me, 'url', genUrl(pr.url, 'the profile URL', false));
+    if (has(pr.worksFor)) me.worksFor = { '@type': 'Organization', name: oneLine(pr.worksFor) };
+    const same = genSameAs(pr.sameAs, 'generate.profile.sameAs');
+    if (same.length) me.sameAs = same;
+    const n = { '@context': 'https://schema.org', '@type': 'ProfilePage', mainEntity: me };
+    ['dateCreated', 'dateModified'].forEach((k) => { if (has(pr[k])) n[k] = genDate(pr[k], 'profile.' + k, 'ProfilePage', add, SRC.profilePage); });
     nodes.push(n);
   }
 
