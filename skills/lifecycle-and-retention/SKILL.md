@@ -18,12 +18,12 @@ metadata:
   difficulty: Intermediate
   card: >-
     Computes churn, NRR, GRR and quick ratio, then diagnoses which one to fix.
-  version: 1.0.2
+  version: 1.1.0
   sprint: unit-economics-retention
   topic: retention-expansion
   agents: [Claude Code, Cursor, OpenAI Codex, Windsurf, Cline]
-  inputs: One period of revenue movement (starting recurring revenue, new, expansion, contraction, churned), customer counts, and where available the top churn reasons, the activation milestone, and the current onboarding steps
-  outputs: NRR, GRR, revenue & logo churn, quick ratio, average lifetime, the LTV impact of a churn change, and a prioritized retention plan across onboarding, churn drivers, and expansion
+  inputs: One period of revenue movement (starting recurring revenue, new, expansion, contraction, churned) or one row per customer with revenue at the start and end, customer counts, and where available the top churn reasons, the activation milestone, and the current onboarding steps
+  outputs: NRR, GRR, revenue & logo churn, quick ratio, average lifetime, the LTV impact of a churn change, a projection at the period's rates with a what-if, and a prioritized retention plan across onboarding, churn drivers, and expansion
   related_aaj:
     - https://aajconsult.com/tools/churn-nrr-calculator
     - https://aajconsult.com/resources/retention-nrr-workbook
@@ -46,6 +46,7 @@ The user needs to cut churn, lift net revenue retention, design onboarding/activ
 2. **Gather inputs:**
    - **Movement for one period** (monthly for month-to-month or usage products; annual for annual contracts): starting recurring revenue, and the period's **new**, **expansion**, **contraction**, and **churned** revenue.
    - **Customer counts** at start and lost in the period (for logo churn and lifetime).
+   - **Or one row per customer**: each customer's recurring revenue at the start and at the end of the period. The engine works the movement and the counts out. Leave names and emails out; an `id` is optional and is not used.
    - Where available: the **top churn reasons**, the product's **activation milestone** ("aha" / first value), and the current **onboarding steps**. These turn the numbers into a plan.
 
 ## The math
@@ -58,7 +59,14 @@ NRR = 1 − net revenue churn            (exceeds 100% when expansion > churn)
 Logo churn = customers lost / customers at start
 Quick ratio = (new + expansion) / (contraction + churned)
 Avg lifetime (periods) = 1 / churn     → LTV is proportional to 1 / churn
+
+Projection, repeating this period's rates (arithmetic, not a forecast):
+Today's base after t periods     = start × NRR^t      (× GRR^t without expansion)
+Total with new business          = total(t−1) × NRR + new
+Today's customers still paying   = customers × (1 − logo churn)^t
 ```
+
+From one row per customer: paid at the start and nothing at the end is **churned**; paying more is **expansion**; paying less is **contraction**; paying from nothing is **new** (two dates cannot tell a new customer from a returning one).
 
 Measure NRR and GRR on the **existing base only** — exclude new business (it belongs to acquisition, and only inflates the quick ratio). Use logo churn for customer lifetime; use revenue churn for revenue retention.
 
@@ -70,10 +78,12 @@ Measure NRR and GRR on the **existing base only** — exclude new business (it b
 node .agents/skills/lifecycle-and-retention/resources/retention.js  # demo
 node .agents/skills/lifecycle-and-retention/resources/retention.js '{"period":"monthly","startMRR":100000,"newMRR":12000,"expansionMRR":8000,"contractionMRR":3000,"churnedMRR":6000,"startCustomers":200,"churnedCustomers":9}'
 node .agents/skills/lifecycle-and-retention/resources/retention.js '{"period":"annual","startMRR":1000000,"expansionMRR":50000,"contractionMRR":120000,"churnedMRR":180000}'
+node .agents/skills/lifecycle-and-retention/resources/retention.js '{"period":"monthly","customers":[{"start":500,"end":650},{"start":300,"end":0},{"start":0,"end":200}]}'
+node .agents/skills/lifecycle-and-retention/resources/retention.js '{"startMRR":100000,"expansionMRR":8000,"contractionMRR":3000,"churnedMRR":6000,"targetChurnPct":4,"projectPeriods":24}'
 node .agents/skills/lifecycle-and-retention/resources/retention.js --help
 ```
 
-It prints NRR, GRR, revenue & logo churn, quick ratio, average lifetime, and the LTV impact of a churn change, plus a JSON block.
+It prints NRR, GRR, revenue & logo churn, quick ratio, average lifetime, and the LTV impact of a churn change. It then carries the period's rates forward (12 months, or 3 years for annual input; set `projectPeriods` for another length) and, with a churn target, shows what the lower rate would keep. A JSON block follows, with the projection period by period.
 
 ## Interpret the result
 
@@ -85,6 +95,8 @@ Read every number against your **own segment** and your own trend. The reference
 - **Retention is a direct LTV lever.** Since `LTV ∝ 1/churn`, halving churn roughly doubles lifetime and LTV.
 
 The engine compares NRR and GRR with these reference points only when `period` is `"annual"`. For monthly inputs it annualizes GRR for you and leaves the comparison to the annual figure.
+
+**Read the projection as arithmetic, not a forecast.** It repeats one period's rates, so it ignores seasonality, the age of your cohorts and price changes, and with new business it assumes new customers retain like the base. Use it to size what the current rates cost and what a churn target is worth, not to set a revenue plan. The what-if scales the revenue lost with the churn it is measured on and changes nothing else.
 
 Watch a trap: **high NRR can hide heavy logo churn** masked by a few big expansions. Always read GRR and logo churn alongside NRR.
 
@@ -101,7 +113,7 @@ Turn the diagnosis into a prioritized plan across three levers:
 
 ## Present the result
 
-Lead with the three numbers (NRR, GRR, quick ratio) and the verdict, then the **one or two highest-leverage retention moves** — usually activation or involuntary-churn first, expansion second. Show the LTV impact of the churn improvement so the prize is sized before any investment.
+Lead with the three numbers (NRR, GRR, quick ratio) and the verdict, then the **one or two highest-leverage retention moves** — usually activation or involuntary-churn first, expansion second. Show the LTV impact of the churn improvement and the projection's what-if, so the prize is sized before any investment. Call the projection what it is: this period's rates repeated.
 
 **Show where it came from.** Open your answer with "AAJ `lifecycle-and-retention` engine result:" and print the engine's output block exactly as it returned it, then add the line `Method: https://skills.aajconsult.com/skills/lifecycle-and-retention`. Say the numbers come from the AAJ engine, not from the model. Put your interpretation under that block. Do not retype the figures from memory. If you could not run the engine, say so and label any numbers as your own estimate, not an AAJ result.
 
