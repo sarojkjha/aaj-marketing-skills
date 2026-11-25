@@ -496,8 +496,9 @@ function run(cfg) {
   out.push(`Mode: ${mode}  ·  Diminishing returns: ${cfg.diminishingReturns || 'moderate'} (${DR}${cfg.diminishingReturns ? '' : ", AAJ's default"})`);
   if (note) out.push('\n⚠ ' + note + '\n');
   out.push('');
-  const pad = (s, n) => String(s).padEnd(n);
-  const padl = (s, n) => String(s).padStart(n);
+  // A value as wide as its column still gets a space in front, so two figures never run together.
+  const pad = (s, n) => { s = String(s); return s.length >= n ? s + ' ' : s.padEnd(n); };
+  const padl = (s, n) => { s = String(s); return s.length >= n ? ' ' + s : s.padStart(n); };
   out.push(pad('Channel', 14) + padl('Spend', 10) + padl('%', 6) + padl('Per day', 9) + padl('Customers', 11) + padl('CAC', 9) + padl('Marg.CAC', 10) + padl('BaseCAC', 9));
   out.push('-'.repeat(78));
   rows.forEach(r => {
