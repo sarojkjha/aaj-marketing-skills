@@ -19,12 +19,12 @@ metadata:
   card: >-
     Splits spend across channels to hit a CAC target, with diminishing returns
     modelled.
-  version: 1.1.0
+  version: 1.2.0
   sprint: unit-economics-retention
   topic: paid-media
   agents: [Claude Code, Cursor, OpenAI Codex, Windsurf, Cline]
-  inputs: Business model, monthly budget OR CAC target OR customer goal, LTV, and per-channel CPC / click-to-lead % / lead-to-customer % (or cost-per-lead for directories)
-  outputs: A per-channel budget split with projected customers, blended CAC, LTV:CAC, ROAS, payback, and weekly/daily pacing
+  inputs: Business model, monthly budget OR CAC target OR customer goal, LTV, and per channel either CPC / click-to-lead % / lead-to-customer % (cost-per-lead for directories) or last period's spend, clicks, leads and customers
+  outputs: A per-channel budget split with projected customers, blended CAC, LTV:CAC, ROAS, payback, weekly and daily pacing, and a what-if range on costs
   related_aaj:
     - https://aajconsult.com/tools/paid-media-budget-allocator
     - https://aajconsult.com/playbooks/paid-media-budget-allocation-playbook
@@ -46,9 +46,9 @@ Allocate a paid advertising budget across channels by **cost per customer**, not
 
 1. **Set the CAC ceiling from LTV.** David Skok's SaaS guidance puts LTV:CAC **above 3:1** ([SaaS Metrics 2.0](https://www.forentrepreneurs.com/saas-metrics-2/)). Work backwards: ceiling ≈ LTV ÷ 3. This is the most you should pay per customer from ads (blended). Note this is *paid-media* CAC; fully-loaded CAC is higher.
 2. **Pick the channel set for the model.** Don't run every channel — pick the 3–5 where the buyer actually researches and purchases. See `resources/channel-benchmarks.md` for the default set per model.
-3. **Get a base CAC per channel** from the funnel inputs (formula below). This is the cost per customer at efficient, modest spend.
+3. **Get a base CAC per channel** from the funnel inputs (formula below). This is the cost per customer at efficient, modest spend. If the user has last period's results per channel (spend, clicks, leads, customers), pass those as `results` and let the engine work the rates out; don't divide them yourself.
 4. **Allocate against diminishing returns.** Each channel gets more expensive as you scale (you exhaust the best-matched audience), so the cheapest channel is *not* where all the budget goes. Fund each channel until the cost of its next customer hits the target, then stop. Channels whose first customer already costs more than the target drop out — correctly.
-5. **Present the split** with projected customers, blended CAC, LTV:CAC, ROAS, payback, and pacing, plus guardrails.
+5. **Present the split** with projected customers, blended CAC, LTV:CAC, ROAS, payback, pacing and the range, plus guardrails.
 
 ## The math
 
@@ -72,6 +72,23 @@ Allocation by objective:
 
 DR presets: **gentle 0.4 · moderate 0.8 (default) · aggressive 1.5.**
 
+From last period's results (rates rounded to four decimals):
+
+```
+CPC = spend ÷ clicks      click→lead % = leads ÷ clicks      lead→customer % = customers ÷ leads
+  · No lead stage: click→lead % = customers ÷ clicks and lead→customer % = 100
+  · Pay-per-lead channels: CPL = spend ÷ leads
+```
+
+Pacing and range:
+
+```
+Per day = month ÷ 30.4        Per week = per day × 7
+Range   = the same plan re-run with every channel's Base CAC rangePct lower and higher
+```
+
+30.4 is the average number of days in a month (365 ÷ 12), the factor Google Ads uses to turn an average daily budget into a monthly limit ([Google Ads Help](https://support.google.com/google-ads/answer/6385083)). The range is a what-if on the inputs, not a forecast band; 20% is AAJ's default.
+
 ## Run the engine (preferred in a coding agent)
 
 Don't approximate the water-filling by hand — run the bundled engine for exact numbers.
@@ -85,11 +102,14 @@ node .agents/skills/paid-media-budget-allocation/resources/allocation-engine.js
 # Custom — pass a JSON config
 node .agents/skills/paid-media-budget-allocation/resources/allocation-engine.js '{"model":"saas","mode":"budget","budget":30000,"diminishingReturns":"moderate","channels":[{"key":"capterra","model":"cpl","cpl":90,"l2c":22,"cap":8000}]}'
 
+# Your channels only, from last period's results, with the worked math
+node .agents/skills/paid-media-budget-allocation/resources/allocation-engine.js '{"mode":"budget","budget":20000,"onlyListedChannels":true,"ltv":15000,"showMath":true,"channels":[{"key":"google","results":{"spend":12000,"clicks":2100,"leads":170,"customers":21},"cap":30000},{"key":"linkedin","results":{"spend":6000,"clicks":520,"leads":61},"l2c":18,"cap":15000}]}'
+
 # Schema and channel keys
 node .agents/skills/paid-media-budget-allocation/resources/allocation-engine.js --help
 ```
 
-The engine prints a per-channel table plus a JSON block you can parse. Always seed the per-channel inputs with the user's own account data; the defaults exist so the engine runs.
+The engine prints a per-channel table with a per-day budget for each channel, the weekly and daily pacing, a range, and a JSON block you can parse. The range re-runs the plan with every channel's cost per customer 20% lower and higher (set `rangePct` for another share): a budget buys more or fewer customers, a CAC target supports more or less spend, a customer goal needs a smaller or larger budget. Add `"showMath": true` to print how each funded channel's numbers are worked out. Always seed the per-channel inputs with the user's own account data; the defaults exist so the engine runs.
 
 ## Channel defaults
 
@@ -97,7 +117,7 @@ To run on the user's numbers alone, add `"onlyListedChannels": true`: the engine
 
 ## Present the result
 
-Use the format in `resources/output-format.md`: the split (channel, $, %, customers, CAC), the blended summary (customers, CAC, LTV:CAC, ROAS, payback), weekly/daily pacing, and a short "what this means" with guardrails.
+Use the format in `resources/output-format.md`: the split (channel, $, %, per day, customers, CAC), the blended summary (customers, CAC, LTV:CAC, ROAS, payback), the engine's pacing and range lines, and a short "what this means" with guardrails. Take the pacing and the range from the engine; don't work them out yourself.
 
 **Show where it came from.** Open your answer with "AAJ `paid-media-budget-allocation` engine result:" and print the engine's output block exactly as it returned it, then add the line `Method: https://skills.aajconsult.com/skills/paid-media-budget-allocation`. Say the numbers come from the AAJ engine, not from the model. Put your interpretation under that block. Do not retype the figures from memory. If you could not run the engine, say so and label any numbers as your own estimate, not an AAJ result.
 

@@ -8,15 +8,17 @@ Present the allocation in this shape. Keep it tight and decision-ready — the u
 
 **The split**
 
-| Channel | Monthly | % | Customers | CAC |
-|---|---|---|---|---|
-| [Channel] | $X | XX% | X.X | $X |
-| … | | | | |
-| **Blended** | **$X** | **100%** | **X.X** | **$X** |
+| Channel | Monthly | % | Per day | Customers | CAC |
+|---|---|---|---|---|---|
+| [Channel] | $X | XX% | $X | X.X | $X |
+| … | | | | | |
+| **Blended** | **$X** | **100%** | **$X** | **X.X** | **$X** |
 
 **Health:** LTV:CAC **X.X:1** · ROAS **X.X×** · CAC payback **X.X mo** *(paid-media CAC — fully-loaded is higher)*
 
-**Pacing:** ~$X/week · ~$X/day total. [Per-channel weekly figures if useful.]
+**Pacing:** the engine's line: $X a week and $X a day in total (month ÷ 30.4). [Per-channel daily figures are in the table; weekly ones are in the JSON.]
+
+**Range:** the engine's lines: what the plan gives if every channel's cost per customer runs 20% lower or higher than entered. Say it is a what-if on the inputs, not a forecast.
 
 **What this means**
 - [Which channel carries the plan and why — best efficiency × headroom.]
@@ -30,6 +32,8 @@ Present the allocation in this shape. Keep it tight and decision-ready — the u
 
 Guidance:
 - Round money to whole dollars and customers to one decimal.
+- Copy the pacing and range figures from the engine's output. Don't recompute them.
+- If any channel came from last period's results, keep the engine's "From results" line so the reader sees the rates it worked out.
 - Always label the CAC as paid-media CAC at least once.
 - If the objective was a CAC target that's infeasible (below every channel's base CAC), say so plainly and recommend raising the target or improving the funnels — don't present a $0 plan as if it were valid.
 - If the user has real account data, use it. If any channel still runs on the engine's defaults, say so plainly: those are AAJ placeholders, not benchmarks.
