@@ -94,8 +94,8 @@ Optional inputs, all added in 1.1.0. Leave them out and the output is the same a
 |---|---|---|
 | `closedWon` or `closedWonDeals` | Revenue already closed won this period, as a figure or as the deals `[{ name, amount }]`, which the engine adds up | The forecast, commit and best case start from it, and coverage is measured on what is left to close |
 | `deals[].closeDate` | The deal's close date, `YYYY-MM-DD`; a longer ISO timestamp is read by its first ten characters | A month-by-month view |
-| `periodEnd` | The last day of the period | Deals dated after it are left out and reported on their own line |
-| `asOf` | Today's date | Open deals whose close date has passed are flagged. The engine never reads the clock |
+| `periodEnd` | The last day of the period | Deals dated after it are left out and reported on their own line, by name |
+| `asOf` | Today's date | Open deals whose close date has passed are flagged, by name. The engine never reads the clock |
 | `deals[].probability` | The deal's own probability, 0 to 1, as CRMs store one per deal | It takes the place of the stage's. With one on every deal, `stageProbabilities` can be left out |
 | `stageTotals` | `{ stage: amount }`, in place of `deals`, when all you have is a total per stage | The outputs that need deals (dates, the chance, the largest deals) are left out |
 | `slipRate` | The share of the open forecast you expect to slip past the period, 0 to 1 | A what-if line. Nothing else moves |
@@ -114,7 +114,7 @@ The forecast engine and its input shape live in `resources/forecast.js`. Stage p
 - **Coverage ratio** against what is left to close, with a healthy/thin flag.
 - **Gap to target**, **new pipeline needed** at the current win rate, and the **wins needed** at the average deal size.
 - The **chance of reaching the target**, with its assumption in the same sentence: each deal closes on its own.
-- The **flags**: deals after the period, deals with no close date, deals whose close date has passed. Name the deals behind each one if the user asks.
+- The **flags**: deals after the period, deals with no close date, deals whose close date has passed. The engine names up to ten deals behind each, largest first; report them as printed and do not work out from the dates which deals are meant.
 - The **largest deals by weight**, and what the forecast is without each.
 - The **recommended lever**: advance deals, build pipeline or improve conversion.
 

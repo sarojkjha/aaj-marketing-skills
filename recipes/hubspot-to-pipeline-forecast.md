@@ -52,8 +52,9 @@ engine. Read only; change nothing in HubSpot.
    with the values exactly as HubSpot returns them. Each closed-won deal is
    { name, amount }.
 7. Report the engine's numbers as printed. Do not recompute or round them.
-   Name the deals behind each flag the engine prints (after the period, close
-   date passed, no close date), and list any deals you left out and why.
+   The engine names the deals behind each flag (after the period, close date
+   passed, no close date): report those as printed too. List any deals you
+   left out and why.
 ```
 
 ## 4. How HubSpot's fields map to the engine
@@ -92,7 +93,7 @@ The input the engine receives looks like this (Example Co. is fictional and so i
 }
 ```
 
-For that input the engine reports a 25% win rate (12 won of 48 closed), $30,000 closed won and $170,000 left to close. It leaves the $120,000 deal dated January out of the forecast, and flags the $90,000 deal whose close date has passed. The weighted forecast is $127,500 against the $200,000 target, coverage of what is left is 0.9x where the win rate needs about 4.0x, and the chance of reaching the target is 0%: even with both remaining deals won, the total is $20,000 short.
+For that input the engine reports a 25% win rate (12 won of 48 closed), $30,000 closed won and $170,000 left to close. It leaves the $120,000 deal dated January out of the forecast, and flags the $90,000 deal whose close date has passed, both by name. The weighted forecast is $127,500 against the $200,000 target, coverage of what is left is 0.9x where the win rate needs about 4.0x, and the chance of reaching the target is 0%: even with both remaining deals won, the total is $20,000 short.
 
 **To use your own stage rates instead of HubSpot's:** leave `probability` off the deals and add `stageProbabilities`, a number from 0 to 1 for each stage, keyed by the stage value HubSpot returns.
 

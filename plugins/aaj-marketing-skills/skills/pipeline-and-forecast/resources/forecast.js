@@ -107,6 +107,8 @@ const EARLY_PROB = 0.25;
 const EARLY_SHARE_ADVANCE = 0.5;
 /** How many of the largest deals are listed. */
 const TOP_DEALS = 3;
+/** How many deals are named under each flag (after the period, no close date, close date passed). */
+const FLAG_DEALS = 10;
 /** Up to this many uncertain deals, the chance walks every combination. */
 const CHANCE_EXACT_DEALS = 20;
 /** Past that, the chance is a table of at most this many steps: exact when the amounts fit, a range when they do not. */
@@ -428,7 +430,14 @@ function compute(inp) {
     leverText = "IMPROVE CONVERSION — coverage is fine but the weighted forecast is short; push late-stage deals and lift win rate.";
   }
 
-  const group = (list) => (list.length ? { deals: list.length, amount: sum(list, (d) => d.amount), weighted: sum(list, (d) => d.amount * prob(d)) } : null);
+  // A flagged group: its count and totals, and its largest deals by name so nobody has to
+  // work out from the dates which deals are meant.
+  const group = (list) => {
+    if (!list.length) return null;
+    const named = list.map((d, i) => ({ d, i })).sort((a, b) => b.d.amount - a.d.amount || a.i - b.i).slice(0, FLAG_DEALS)
+      .map((x) => ({ name: x.d.name || "(unnamed)", amount: x.d.amount, closeDate: x.d.closeDate || null }));
+    return { deals: list.length, amount: sum(list, (d) => d.amount), weighted: sum(list, (d) => d.amount * prob(d)), list: named, more: list.length - named.length };
+  };
   const anyDate = byDeal && deals.some((d) => d.closeDate);
   const undated = byDeal && (periodEnd || anyDate) ? open.filter((d) => !d.closeDate) : [];
   const pastDue = byDeal && asOf ? open.filter((d) => d.closeDate && d.closeDate < asOf) : [];
@@ -495,8 +504,8 @@ function compute(inp) {
     period: periodEnd ? { end: periodEnd, asOf, daysLeft: asOf ? dayNumber(periodEnd) - dayNumber(asOf) : null } : null,
     asOf,
     afterPeriod: group(later),
-    noCloseDate: undated.length ? { deals: undated.length, amount: sum(undated, (d) => d.amount) } : null,
-    pastDue: pastDue.length ? { deals: pastDue.length, amount: sum(pastDue, (d) => d.amount) } : null,
+    noCloseDate: group(undated),
+    pastDue: group(pastDue),
     byMonth, needed, chance, topDeals, slip,
   };
 }
@@ -524,9 +533,13 @@ function render(r, source) {
   }
   out.push("Win rate:              " + wr + (r.winFrom ? `   (${r.winFrom.won} won of ${r.winFrom.closed} closed)` : ""));
   out.push("Open pipeline:         " + money(r.openPipeline) + "  (" + plural(r.openCount, r.mode === "deals" ? "deal" : "stage total") + ")");
-  if (r.afterPeriod) out.push("  After the period:    " + money(r.afterPeriod.amount) + " in " + plural(r.afterPeriod.deals, "deal") + ", left out of everything below");
-  if (r.noCloseDate) out.push("  No close date:       " + money(r.noCloseDate.amount) + " in " + plural(r.noCloseDate.deals, "deal") + (r.period ? ", counted in the period" : ", counted"));
-  if (r.pastDue) out.push("  Close date passed:   " + money(r.pastDue.amount) + " in " + plural(r.pastDue.deals, "deal") + ", still counted. Check each is still closing this period.");
+  const named = (g) => {
+    for (const d of g.list) out.push("    " + d.name + "  " + money(d.amount) + (d.closeDate ? "  " + d.closeDate : ""));
+    if (g.more) out.push("    … and " + g.more.toLocaleString("en-US") + " more");
+  };
+  if (r.afterPeriod) { out.push("  After the period:    " + money(r.afterPeriod.amount) + " in " + plural(r.afterPeriod.deals, "deal") + ", left out of everything below"); named(r.afterPeriod); }
+  if (r.noCloseDate) { out.push("  No close date:       " + money(r.noCloseDate.amount) + " in " + plural(r.noCloseDate.deals, "deal") + (r.period ? ", counted in the period" : ", counted")); named(r.noCloseDate); }
+  if (r.pastDue) { out.push("  Close date passed:   " + money(r.pastDue.amount) + " in " + plural(r.pastDue.deals, "deal") + ", still counted. Check each is still closing this period."); named(r.pastDue); }
   if (r.ownProbability) {
     out.push("  Probabilities:       " + (r.ownProbability === r.dealCount
       ? (r.dealCount === 1 ? "the deal carries its own" : "every deal carries its own")
@@ -596,6 +609,7 @@ function render(r, source) {
   out.push("");
   out.push("--- JSON ---");
   const g = (x, f) => (x ? f(x) : null);
+  const flag = (x) => ({ deals: x.deals, amount: r2(x.amount), weighted: r2(x.weighted), list: x.list.map((d) => ({ name: d.name, amount: r2(d.amount), closeDate: d.closeDate })), more: x.more });
   out.push(JSON.stringify({
     mode: r.mode,
     target: r2(r.target), closedWon: r2(r.closedWon), leftToClose: r.closedCovers ? 0 : r2(r.leftToClose), winRate: r4(r.winRate),
@@ -606,9 +620,9 @@ function render(r, source) {
     gap: r.onTarget ? Math.min(0, r2(r.gap)) : r2(r.gap), newPipelineNeeded: r2(r.newPipelineNeeded),
     lever: r.lever, leverText: r.leverText,
     period: r.period,
-    afterPeriod: g(r.afterPeriod, (x) => ({ deals: x.deals, amount: r2(x.amount), weighted: r2(x.weighted) })),
-    noCloseDate: g(r.noCloseDate, (x) => ({ deals: x.deals, amount: r2(x.amount) })),
-    pastDue: g(r.pastDue, (x) => ({ deals: x.deals, amount: r2(x.amount) })),
+    afterPeriod: g(r.afterPeriod, flag),
+    noCloseDate: g(r.noCloseDate, flag),
+    pastDue: g(r.pastDue, flag),
     byMonth: g(r.byMonth, (rows) => rows.map((m) => ({ month: m.month, afterPeriod: m.afterPeriod, deals: m.deals, amount: r2(m.amount), weighted: r2(m.weighted) }))),
     needed: g(r.needed, (x) => ({ averageDealSize: r2(x.averageDealSize), from: x.from, wins: x.wins, dealsToAdd: x.dealsToAdd })),
     chance: g(r.chance, (x) => ({ low: r4(x.low), high: r4(x.high), exact: x.exact })),
@@ -626,7 +640,7 @@ function run(cfg, source) {
   return { result, text: render(result, source || "your input") };
 }
 
-module.exports = { run, prepare, compute, render, chanceOfReaching, chanceText, dateOf, COMMIT_PROB, EARLY_PROB, EARLY_SHARE_ADVANCE, TOP_DEALS, CHANCE_EXACT_DEALS, CHANCE_STEPS };
+module.exports = { run, prepare, compute, render, chanceOfReaching, chanceText, dateOf, atLeast, COMMIT_PROB, EARLY_PROB, EARLY_SHARE_ADVANCE, TOP_DEALS, FLAG_DEALS, CHANCE_EXACT_DEALS, CHANCE_STEPS };
 
 function main() {
   const args = parseArgs(process.argv);
