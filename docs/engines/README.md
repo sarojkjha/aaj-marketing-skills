@@ -58,7 +58,7 @@ One page per engine: the decision it supports, its inputs and output, setup, whe
 | [Plg Upgrade Prompts](plg-upgrade-prompts.md) | Diagnose | Which upgrade prompt and funnel stage is losing the most paid upgrades, and are the differences between prompts real? |
 | [Positioning Statement](positioning-statement.md) | Design | Who exactly is our product for, against what alternative, and is our positioning specific and defensible enough to use? |
 | [PR & Earned Media](pr-and-earned-media.md) | Execute | Is this story worth pitching to journalists yet, and are the pitch and press materials ready? |
-| [Pricing & Packaging](pricing-and-packaging.md) | Design | Do our tiers and price points hold together: is the top tier a real anchor, and where does revenue actually come from? |
+| [Pricing & Packaging](pricing-and-packaging.md) | Design | Do our tiers and price points hold together, where does revenue come from, and what would a price change do to it? |
 | [Pricing Page Teardown](pricing-page-teardown.md) | Diagnose | Where does our pricing page lose buyers, and can a live price test answer our question in the time we have? |
 | [Product Launch](product-launch.md) | Execute | How big a launch does this change deserve, is it ready for a date, and what has to happen on which day? |
 | [Referral Program Design](referral-program-design.md) | Design | Would a referral program bring in customers more cheaply than the channel it replaces, and what is the most we can pay in rewards? |
