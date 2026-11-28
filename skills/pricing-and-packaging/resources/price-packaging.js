@@ -28,22 +28,24 @@
  *   {
  *     "tiers": [                       required, 1 to 20 tiers, each with its own name
  *       { "name": "Starter",           required
- *         "price": 29,                 required, 0 or more: the list price for one month,
- *                                      per customer, or per seat when "seats" is given
+ *         "price": 29,                 required, 0 or more, in dollars: the list price for one
+ *                                      month, per customer, or per seat when "seats" is given
  *         "customers": 600,            required, a whole number, 0 or more
- *         "seats": 4,                  optional, above 0: average seats a customer on this
+ *         "seats": 4,                  optional, 1 or more: average seats a customer on this
  *                                      tier pays for. Giving it makes "price" a per-seat price
  *         "usage": 12,                 optional, 0 or more: average usage revenue per customer
  *                                      per month, on top of the plan price
  *         "annualShare": 40,           optional, 0 to 100: percent of this tier's customers
  *                                      who pay yearly
- *         "annualDiscount": 20,        optional, 0 to 100: this tier's discount for paying
- *                                      yearly, in place of the top-level one
+ *         "annualDiscount": 20,        optional, 0 to under 100: this tier's discount for
+ *                                      paying yearly, in place of the top-level one
  *         "cost": 6 }                  optional, 0 or more: cost to serve one customer for a month
  *     ],
- *     "annualDiscount": 17,            optional, 0 to 100: percent off the list price for paying yearly
+ *     "annualDiscount": 17,            optional, 0 to under 100: percent off the list price for
+ *                                      paying yearly
  *     "targetMargin": 80,              optional, 0 to under 100: your gross margin target. A tier
- *                                      with a cost then gets a price floor: cost / (1 - target)
+ *                                      with a cost then gets a floor, the least one customer must
+ *                                      bring in a month to meet it: cost / (1 - target)
  *     "scenario": {                    optional: a change to test against today
  *       "tiers": [ { "name": "Growth", "price": 119, "customerChange": -20 } ],
  *                                      a new price, a change in customers (minus for customers
@@ -59,6 +61,7 @@
  *   revenue per customer = plan revenue + usage
  *   tier MRR = customers x revenue per customer
  * Percentages are given as percentages: 20 for 20%, not 0.2.
+ * Dollar figures are rounded to the cent, and cents are printed only when there are any.
  *
  * No customers yet? Enter your estimated mix as counts per 100 customers (60, 30, 10)
  * and treat the result as an assumption: MRR then reads per 100 customers.
@@ -94,20 +97,29 @@ const ARPU_LIFT = 1.6;    // ARPU against the entry tier: at or over this the mi
 const FEW_TIERS = 3;      // fewer tiers than this: no middle tier to compare against
 const MANY_TIERS = 5;     // more tiers than this: flagged as harder to read
 const MAX_TIERS = 20;
+const MAX_FIGURE = 1e12;  // a result with a figure at or past this is refused: cents would no longer be exact
 const TIER_FIELDS = ["name", "price", "customers", "seats", "usage", "annualShare", "annualDiscount", "cost"];
 const TOP_FIELDS = ["tiers", "annualDiscount", "targetMargin", "scenario"];
-const EPS = 1e-9;         // slack for a count that should land exactly on a whole number
+const EPS = 1e-9;         // slack when comparing two figures that should be equal
 
-// Half a cent rounds up, as a person would round it, even when the binary value sits a hair under.
-function round(n, d) { const f = Math.pow(10, d); return Math.round(n * f + (n >= 0 ? 1e-7 : -1e-7)) / f; }
+// Rounds to d places, the half away from zero, as a person would. A figure that is exactly on the
+// half (10,286.955) can sit a hair under it once it is stored in binary, so a hair is allowed for.
+function round(n, d) {
+  const f = Math.pow(10, d), v = Math.abs(n) * f;
+  const r = Math.round(v + Math.max(1e-7, v * 1e-14)) / f;
+  return n < 0 && r !== 0 ? -r : r;
+}
 function pct(part, whole) { return whole > 0 ? round((part / whole) * 100, 1) : 0; }
 function fmtInt(n) { return String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, ","); }
 function fmtNum(n) {
   const r = round(Math.abs(n), 2), whole = Math.floor(r + EPS), cents = Math.round((r - whole) * 100);
   return (n < 0 && r > 0 ? "-" : "") + fmtInt(whole) + (cents ? "." + (cents < 10 ? "0" : "") + cents : "");
 }
-// Whole dollars, for totals.
-function money(n) { if (!isFinite(n)) n = 0; return (n < 0 && Math.round(n) !== 0 ? "-$" : "$") + fmtInt(Math.abs(n)); }
+// A plain number with up to two decimals and no padding: 5, 4.5, 33.33.
+function fmtPlain(n) {
+  const r = round(Math.abs(n), 2), whole = Math.floor(r + EPS), frac = round(r - whole, 2);
+  return (n < 0 && r > 0 ? "-" : "") + fmtInt(whole) + (frac ? String(frac).slice(1) : "");
+}
 // Dollars with cents only when there are any: $91, $72.47, $1,234.50.
 function usd(n) { if (!isFinite(n)) n = 0; const s = fmtNum(n); return s.charAt(0) === "-" ? "-$" + s.slice(1) : "$" + s; }
 function plural(n, one, many) { return fmtInt(n) + " " + (n === 1 ? one : many); }
@@ -125,7 +137,7 @@ function readTier(t, cfg) {
   const annualDiscount = isNum(t.annualDiscount) ? t.annualDiscount : (cfg && isNum(cfg.annualDiscount) ? cfg.annualDiscount : 0);
   const cost = isNum(t.cost) ? t.cost : null;
   const list = price * (seats === null ? 1 : seats);
-  const off = (annualShare / 100) * (annualDiscount / 100);
+  const off = (annualShare * annualDiscount) / 10000;   // share x discount, both given as percentages
   const perCustomer = list * (1 - off) + usage;
   return {
     name: (t.name && String(t.name).trim()) || "(tier)",
@@ -203,6 +215,7 @@ function analyze(cfg) {
   const topRevenueDriver = byRevenue[0] ? { name: byRevenue[0].name, revenueShare: byRevenue[0].revenueShare } : null;
   const largestCustomerTier = byCustomers[0] ? { name: byCustomers[0].name, customerShare: byCustomers[0].customerShare } : null;
   const entryRow = entry ? enriched[sorted.indexOf(entry)] : null;
+  const entryLeads = !!entryRow && byRevenue[0] === entryRow, entryIsLargest = !!entryRow && byCustomers[0] === entryRow;
   const entryRevenueShare = entryRow ? entryRow.revenueShare : 0;
   const topRevenueShare = enriched.length ? enriched[enriched.length - 1].revenueShare : 0;
 
@@ -238,25 +251,29 @@ function analyze(cfg) {
   const has = totalCustomers > 0;
   if (has && summary.arpuVsEntry) {
     const entryText = entry.unit === "seat"
-      ? "the " + usd(entry.list) + " a customer on your entry tier pays at list (" + fmtNum(entry.seats) + (entry.seats === 1 ? " seat" : " seats") + " at " + usd(entry.price) + ")"
+      ? "the " + usd(entry.list) + " a customer on your entry tier pays at list (" + fmtPlain(entry.seats) + (entry.seats === 1 ? " seat" : " seats") + " at " + usd(entry.price) + ")"
       : "your entry price of " + usd(entry.price);
-    insights.push((freeCustomers > 0 ? "ARPU across paying customers is " + usd(paidARPU) : "Blended ARPU is " + usd(blendedARPU)) +
-      ", " + summary.arpuVsEntry + "x " + entryText + ". " +
-      (summary.arpuVsEntry >= ARPU_LIFT ? "Your mix lifts revenue well above the entry tier." : "That is barely above entry: most customers are not moving up the ladder.") +
+    const lead = freeCustomers > 0 ? "ARPU across paying customers is " + usd(paidARPU) : "Blended ARPU is " + usd(blendedARPU);
+    if (priced.length < 2) insights.push(lead + ".");   // one priced tier: no ladder to compare against
+    else if (arpuForEntry < entry.list - EPS) insights.push(lead + ", under " + entryText + ".");
+    else insights.push(lead + ", " + summary.arpuVsEntry + "x " + entryText + ". " +
+      (summary.arpuVsEntry >= ARPU_LIFT ? "Your mix lifts revenue well above the entry tier." : "That is close to the entry tier: either most customers sit low on the ladder, or the tiers are priced close together.") +
       " (" + ARPU_LIFT + "x is AAJ's rule of thumb, not a benchmark.)");
   }
   if (has && freeCustomers > 0) {
     insights.push(fmtInt(freeCustomers) + " of " + plural(totalCustomers, "account", "accounts") + " " + (freeCustomers === 1 ? "pays" : "pay") + " nothing (" +
       pct(freeCustomers, totalCustomers) + "%). Across every account, ARPU is " + usd(blendedARPU) + ".");
   }
-  if (has && totalRevenue > 0 && topRevenueDriver) {
+  if (has && topRevenueDriver && enriched.filter((t) => t.revenue > 0).length > 1) {
     insights.push('Your revenue engine is the "' + topRevenueDriver.name + '" tier at ' + topRevenueDriver.revenueShare + "% of revenue.");
   }
   if (has && totalRevenue > 0 && priced.length >= 2) {
-    if (topRevenueDriver.name === entry.name) {
+    if (entryLeads) {
+      const cheapest = "your cheapest " + (sorted[0] !== entry ? "paid " : "") + "tier";
       flags.push("entry-heavy");
-      insights.push("Most of your revenue comes from your cheapest " + (sorted[0] !== entry ? "paid " : "") + "tier (" + entryRevenueShare + "%), so few customers are moving up. In AAJ's view, look at the upgrade path and whether your value metric gives customers a reason to move up.");
-    } else if (largestCustomerTier.name === entry.name && entryRevenueShare < largestCustomerTier.customerShare) {
+      insights.push((entryRevenueShare > 50 ? "Most of your revenue comes from " + cheapest + " (" + entryRevenueShare + "%)" : cheapest.charAt(0).toUpperCase() + cheapest.slice(1) + " brings in more revenue than any other tier (" + entryRevenueShare + "%)") +
+        ". In AAJ's view, look at the upgrade path and whether your value metric gives customers a reason to move up.");
+    } else if (entryIsLargest && entryRevenueShare < largestCustomerTier.customerShare) {
       insights.push(largestCustomerTier.customerShare + "% of customers sit on your entry tier, but it brings in only " + entryRevenueShare + "% of revenue. In AAJ's view, that gap is where to look for expansion.");
     }
   }
@@ -277,27 +294,27 @@ function analyze(cfg) {
     insights.push("You have " + summary.tierCount + " tiers. In AAJ's view, more than four or five makes the choice harder to read; check where buyers stall before adding another.");
   }
   if (has && discountCost > 0) {
-    insights.push("About " + plural(summary.annualCustomers, "customer pays", "customers pay") + " yearly. The annual discount gives up " + money(discountCost) +
+    insights.push("About " + plural(summary.annualCustomers, "customer pays", "customers pay") + " yearly. The annual discount gives up " + usd(discountCost) +
       " a month against list prices, " + summary.discountShare + "% of plan revenue at list.");
   }
   if (has && usageRevenue > 0) {
-    insights.push("Usage brings in " + money(usageRevenue) + " a month, " + summary.usageShare + "% of revenue.");
+    insights.push("Usage brings in " + usd(usageRevenue) + " a month, " + summary.usageShare + "% of revenue.");
   }
   if (has && margin) {
     sorted.forEach((t) => {
       if (t.cost === null || t.customers === 0) return;
       if (t.perCustomer <= 0) {
-        if (t.cost > 0) insights.push('"' + t.name + '" earns nothing and costs ' + money(t.customers * t.cost) + " a month to serve (" + plural(t.customers, "customer", "customers") + " at " + usd(t.cost) + ").");
+        if (t.cost > 0) insights.push('"' + t.name + '" earns nothing and costs ' + usd(t.customers * t.cost) + " a month to serve (" + plural(t.customers, "customer", "customers") + " at " + usd(t.cost) + ").");
       } else if (t.perCustomer < t.cost - EPS) {
         flags.push("loses-money");
         insights.push('"' + t.name + '" costs more to serve than it earns: ' + usd(t.cost) + " a customer against " + usd(t.perCustomer) + ".");
       } else if (target !== null && t.perCustomer < t.cost / (1 - target / 100) - EPS) {
         flags.push("below-floor");
-        insights.push('"' + t.name + '" is under your ' + target + "% margin target: it earns " + usd(t.perCustomer) + " a customer and the target needs " + usd(t.cost / (1 - target / 100)) + " at a cost of " + usd(t.cost) + ".");
+        insights.push('"' + t.name + '" is under your ' + fmtPlain(target) + "% margin target: it earns " + usd(t.perCustomer) + " a customer and the target needs " + usd(t.cost / (1 - target / 100)) + " at a cost of " + usd(t.cost) + ".");
       }
     });
     if (margin.complete && margin.marginPct !== null) {
-      insights.push("Gross margin across the tiers is " + margin.marginPct + "%: " + money(totalRevenue - margin.cost) + " a month after " + money(margin.cost) + " to serve.");
+      insights.push("Gross margin across the tiers is " + margin.marginPct + "%: " + usd(totalRevenue - margin.cost) + " a month after " + usd(margin.cost) + " to serve.");
     } else if (!margin.complete) {
       insights.push("Give a cost for every tier with customers to see the gross margin across the tiers.");
     }
@@ -336,6 +353,24 @@ function scenarioTiers(cfg) {
   return { tiers: next, log: log };
 }
 
+// A tier of n customers earning r0 each today, at r1 each after a price change. The whole-number
+// answers are checked against the revenue itself, so a count that lands exactly on the line stays on it.
+function canLose(n, r0, r1) {      // the most customers who can leave with the tier still earning n x r0
+  const need = n * r0 * (1 - 1e-12);
+  let x = Math.max(0, Math.min(n, Math.floor(n * (1 - r0 / r1))));
+  while (x < n && (n - x - 1) * r1 >= need) x++;
+  while (x > 0 && (n - x) * r1 < need) x--;
+  return x;
+}
+function mustGain(n, r0, r1) {     // the fewest extra customers for the tier to earn n x r0 again
+  const need = n * r0 * (1 - 1e-12), y0 = n * (r0 / r1 - 1);
+  if (!(y0 < MAX_FIGURE)) return y0;   // past what this engine counts: the input check refuses it
+  let y = Math.max(0, Math.ceil(y0));
+  while (y > 0 && (n + y - 1) * r1 >= need) y--;
+  while ((n + y) * r1 < need) y++;
+  return y;
+}
+
 function whatIf(cfg, before) {
   const sc = scenarioTiers(cfg);
   const rest = {};
@@ -358,43 +393,43 @@ function whatIf(cfg, before) {
   });
 
   // For each new price: how many customers the tier can lose, or must gain, to earn what it earns today.
-  const priceChanges = [];
+  const priceChanges = [], changed = [];
   rows.forEach((r) => {
     if (!r._priced || r.priceAfter === r.priceBefore) return;
-    const r0 = r._0.perCustomer, r1 = r._1.perCustomer, n = r.customersBefore, up = r1 > r0;
+    const r0 = r._0.perCustomer, r1 = r._1.perCustomer, n = r.customersBefore, up = r.priceAfter > r.priceBefore;
     const c = { name: r.name, from: r.priceBefore, to: r.priceAfter, direction: up ? "increase" : "decrease",
       changePct: r.priceBefore > 0 ? round(Math.abs(r.priceAfter / r.priceBefore - 1) * 100, 1) : null,
       customers: n, breakEvenCustomers: null, breakEvenPct: null };
-    if (up) {
-      c.breakEvenCustomers = Math.floor(n * (1 - r0 / r1) + EPS);
-      c.breakEvenPct = round((1 - r0 / r1) * 100, 1);
-    } else if (r1 > 0) {
-      c.breakEvenCustomers = Math.ceil(n * (r0 / r1 - 1) - EPS);
-      c.breakEvenPct = round((r0 / r1 - 1) * 100, 1);
+    if (r1 > 0) {
+      c.breakEvenCustomers = up ? canLose(n, r0, r1) : mustGain(n, r0, r1);
+      c.breakEvenPct = round((up ? 1 - r0 / r1 : r0 / r1 - 1) * 100, 1);
     }
-    priceChanges.push(c);
+    priceChanges.push(c); changed.push(r);
   });
 
   const moved = (cfg.scenario.moves || []).reduce((s, m) => s + m.customers, 0);
   const readout = [];
   const dm = a.mrr - b.mrr;
-  if (Math.abs(dm) < 0.005) readout.push("MRR stays at " + money(b.mrr) + ", and ARR at " + money(b.arr) + ".");
-  else readout.push("MRR goes from " + money(b.mrr) + " to " + money(a.mrr) + " (" + (dm > 0 ? "up " : "down ") + money(Math.abs(dm)) + (b.mrr > 0 ? ", " + round(Math.abs(dm) / b.mrr * 100, 1) + "%" : "") + "). ARR goes from " + money(b.arr) + " to " + money(a.arr) + ".");
-  readout.push("Blended ARPU " + (a.blendedARPU === b.blendedARPU ? "stays at " + usd(b.blendedARPU) : "goes from " + usd(b.blendedARPU) + " to " + usd(a.blendedARPU)) + ", with " +
+  const empty = a.totalCustomers === 0 && b.totalCustomers === 0;
+  if (empty) readout.push("There are no customers on any tier, before or after, so the scenario changes nothing yet.");
+  else if (Math.abs(dm) < 0.005) readout.push("MRR stays at " + usd(b.mrr) + ", and ARR at " + usd(b.arr) + ".");
+  else readout.push("MRR goes from " + usd(b.mrr) + " to " + usd(a.mrr) + " (" + (dm > 0 ? "up " : "down ") + usd(Math.abs(dm)) + (b.mrr > 0 ? ", " + round(Math.abs(dm) / b.mrr * 100, 1) + "%" : "") + "). ARR goes from " + usd(b.arr) + " to " + usd(a.arr) + ".");
+  if (!empty) readout.push("Blended ARPU " + (a.blendedARPU === b.blendedARPU ? "stays at " + usd(b.blendedARPU) : "goes from " + usd(b.blendedARPU) + " to " + usd(a.blendedARPU)) + ", with " +
     (a.totalCustomers === b.totalCustomers ? "the same " + plural(b.totalCustomers, "customer", "customers") : plural(a.totalCustomers, "customer", "customers") + " against " + fmtInt(b.totalCustomers) + " today") + ".");
-  priceChanges.forEach((c) => {
-    const row = rows.filter((r) => r.name === c.name)[0];
+  priceChanges.forEach((c, i) => {
+    if (empty) return;
+    const row = changed[i];
     const per = row.unit === "seat" ? " a seat" : "";
     const head = '"' + c.name + '" at ' + usd(c.to) + per + ", " + (c.direction === "increase" ? "up" : "down") + " from " + usd(c.from) + (c.changePct !== null ? " (" + c.changePct + "%)" : "") + ": ";
-    const ends = " In this scenario it ends with " + plural(row.customersAfter, "customer", "customers") + " and " + money(row.mrrAfter) + " a month, against " + money(row.mrrBefore) + " today.";
-    if (c.customers === 0) readout.push(head + "no customers are on this tier today, so there is nothing to lose or win back." + ends);
+    const ends = " In this scenario it ends with " + plural(row.customersAfter, "customer", "customers") + " and " + usd(row.mrrAfter) + " a month, against " + usd(row.mrrBefore) + " today.";
+    if (c.customers === 0) readout.push(head + "no customers are on this tier today, so there is nothing to lose or win back." + (row.customersAfter > 0 ? ends : ""));
     else if (c.direction === "increase") readout.push(head + "the tier earns at least what it earns today if no more than " + fmtInt(c.breakEvenCustomers) + " of its " + plural(c.customers, "customer leaves", "customers leave") + " (" + c.breakEvenPct + "%)." + ends);
     else if (c.breakEvenCustomers === null) readout.push(head + "at this price no number of customers earns what the tier earns today." + ends);
     else readout.push(head + "the tier needs " + plural(c.breakEvenCustomers, "more customer", "more customers") + " than its " + fmtInt(c.customers) + " (" + c.breakEvenPct + "%) to earn what it earns today." + ends);
   });
   if (moved > 0) readout.push(plural(moved, "customer changes", "customers change") + " tier. Each is counted as an average customer of the tier they move to.");
   const gb = side(before).grossProfit, ga = side(after).grossProfit;
-  if (gb !== null && ga !== null) readout.push("Gross profit " + (ga === gb ? "stays at " + money(gb) : "goes from " + money(gb) + " to " + money(ga)) + " a month.");
+  if (gb !== null && ga !== null) readout.push("Gross profit " + (ga === gb ? "stays at " + usd(gb) : "goes from " + usd(gb) + " to " + usd(ga)) + " a month.");
 
   return {
     before: side(before), after: side(after),
@@ -421,7 +456,12 @@ function validate(cfg) {
     if (!isNum(v) || v < 0 || (upTo ? v > max : v >= max)) errs.push(where + " must be a percentage from 0 to " + (upTo ? "" : "under ") + max + ".");
     else if (v > 0 && v < 1) errs.push(where + " is " + v + ". Give a percentage: 20 for 20%, not 0.2.");
   };
-  if (cfg.annualDiscount !== undefined) percent(cfg.annualDiscount, '"annualDiscount"', 100, true);
+  // A dollar amount: 0, or one cent or more. Anything smaller would print as $0 and mislead.
+  const dollars = (v, where) => {
+    if (!isNum(v) || v < 0) errs.push(where + " must be a number, 0 or more.");
+    else if (v > 0 && v < 0.01) errs.push(where + " is " + v + ", under one cent. Give dollars: 29 for $29, 0.5 for 50 cents.");
+  };
+  if (cfg.annualDiscount !== undefined) percent(cfg.annualDiscount, '"annualDiscount"', 100, false);
   if (cfg.targetMargin !== undefined) percent(cfg.targetMargin, '"targetMargin"', 100, false);
   if (!Array.isArray(cfg.tiers) || !cfg.tiers.length) {
     errs.push('"tiers" must be a list with at least one tier: [{ "name": "Starter", "price": 29, "customers": 600 }, ...].');
@@ -437,14 +477,13 @@ function validate(cfg) {
     if (typeof t.name !== "string" || !t.name.trim()) errs.push(label + ': "name" is required.');
     else if (seen.hasOwnProperty("$" + nameKey(t.name))) errs.push("Two tiers are named " + q(t.name.trim()) + ". Give each tier its own name.");
     else { seen["$" + nameKey(t.name)] = true; known["$" + nameKey(t.name)] = t; }
-    ["price", "customers"].forEach((k) => {
-      if (!isNum(t[k]) || t[k] < 0) errs.push(label + ': "' + k + '" must be a number, 0 or more.');
-      else if (k === "customers" && Math.floor(t[k]) !== t[k]) errs.push(label + ': "customers" must be a whole number.');
-    });
-    ["usage", "cost"].forEach((k) => { if (t[k] !== undefined && (!isNum(t[k]) || t[k] < 0)) errs.push(label + ': "' + k + '" must be a number, 0 or more.'); });
-    if (t.seats !== undefined && (!isNum(t.seats) || t.seats <= 0)) errs.push(label + ': "seats" must be a number above 0: the average seats a customer on this tier pays for.');
-    if (t.annualShare !== undefined && (!isNum(t.annualShare) || t.annualShare < 0 || t.annualShare > 100)) errs.push(label + ': "annualShare" must be a percentage from 0 to 100.');
-    if (t.annualDiscount !== undefined) percent(t.annualDiscount, label + ': "annualDiscount"', 100, true);
+    if (!isNum(t.customers) || t.customers < 0) errs.push(label + ': "customers" must be a number, 0 or more.');
+    else if (Math.floor(t.customers) !== t.customers) errs.push(label + ': "customers" must be a whole number.');
+    dollars(t.price, label + ': "price"');
+    ["usage", "cost"].forEach((k) => { if (t[k] !== undefined) dollars(t[k], label + ': "' + k + '"'); });
+    if (t.seats !== undefined && (!isNum(t.seats) || t.seats < 1)) errs.push(label + ': "seats" must be a number, 1 or more: the average seats a customer on this tier pays for.');
+    if (t.annualShare !== undefined) percent(t.annualShare, label + ': "annualShare"', 100, true);
+    if (t.annualDiscount !== undefined) percent(t.annualDiscount, label + ': "annualDiscount"', 100, false);
   });
 
   const sc = cfg.scenario;
@@ -465,12 +504,13 @@ function validate(cfg) {
       if (!s || typeof s !== "object" || Array.isArray(s)) { errs.push(at + ' must be {"name", "price", "customerChange"}.'); sound = false; return; }
       const bad = Object.keys(s).filter((k) => ["name", "price", "customerChange"].indexOf(k) < 0);
       if (bad.length) { errs.push(at + ": unrecognised field " + list(bad) + ". Expected: name, price, customerChange."); sound = false; }
-      if (!has(s.name)) { errs.push("scenario: no tier is named " + q(String(s.name === undefined ? "" : s.name)) + "."); sound = false; return; }
+      if (typeof s.name !== "string" || !s.name.trim()) { errs.push(at + ': "name" is required: the tier to change.'); sound = false; return; }
+      if (!has(s.name)) { errs.push("scenario: no tier is named " + q(s.name.trim()) + "."); sound = false; return; }
       const k = "$" + nameKey(s.name), label = q(String(s.name).trim());
       if (listed[k]) { errs.push("scenario: " + label + " is listed twice."); sound = false; return; }
       listed[k] = true;
       if (s.price === undefined && s.customerChange === undefined) { errs.push("scenario: " + label + ' needs a "price" or a "customerChange".'); sound = false; }
-      if (s.price !== undefined && (!isNum(s.price) || s.price < 0)) { errs.push("scenario: " + label + ': "price" must be a number, 0 or more.'); sound = false; }
+      if (s.price !== undefined) { const before = errs.length; dollars(s.price, "scenario: " + label + ': "price"'); if (errs.length > before) sound = false; }
       if (s.customerChange !== undefined) {
         if (!isNum(s.customerChange) || Math.floor(s.customerChange) !== s.customerChange) { errs.push("scenario: " + label + ': "customerChange" must be a whole number: minus for customers who leave, plus for customers who join.'); sound = false; }
         else pool[k] += s.customerChange;
@@ -482,7 +522,10 @@ function validate(cfg) {
       const bad = Object.keys(m).filter((k) => ["from", "to", "customers"].indexOf(k) < 0);
       if (bad.length) { errs.push(at + ": unrecognised field " + list(bad) + ". Expected: from, to, customers."); sound = false; }
       let ok = true;
-      ["from", "to"].forEach((k) => { if (!has(m[k])) { errs.push("scenario: no tier is named " + q(String(m[k] === undefined ? "" : m[k])) + "."); ok = false; } });
+      ["from", "to"].forEach((k) => {
+        if (typeof m[k] !== "string" || !m[k].trim()) { errs.push(at + ': "' + k + '" is required: the name of a tier.'); ok = false; }
+        else if (!has(m[k])) { errs.push("scenario: no tier is named " + q(m[k].trim()) + "."); ok = false; }
+      });
       if (ok && nameKey(m.from) === nameKey(m.to)) { errs.push("scenario: a move needs two different tiers, and this one goes from " + q(String(m.from).trim()) + " to itself."); ok = false; }
       if (!isNum(m.customers) || m.customers <= 0 || Math.floor(m.customers) !== m.customers) { errs.push(at + ': "customers" must be a whole number above 0.'); ok = false; }
       if (!ok) { sound = false; return; }
@@ -497,7 +540,17 @@ function validate(cfg) {
       });
     }
   }
+  // Last, with everything else in order: figures too large to show to the cent are refused, not printed.
+  if (!errs.length && outOfRange(analyze(cfg))) {
+    errs.push("These numbers come to a figure of " + fmtInt(MAX_FIGURE) + " or more, which this engine does not show exactly. Check the prices, customer counts and percentages.");
+  }
   return errs;
+}
+// True when any number in a result is not finite, or is at or past MAX_FIGURE.
+function outOfRange(v) {
+  if (typeof v === "number") return !isFinite(v) || Math.abs(v) >= MAX_FIGURE;
+  if (v && typeof v === "object") return Object.keys(v).some((k) => outOfRange(v[k]));
+  return false;
 }
 // The name the web tool has always called.
 function validateTiers(cfg) { return validate(cfg); }
@@ -522,6 +575,13 @@ const DEMO = {
 
 function pad(s, n) { s = "" + s; return s.length >= n ? s : s + " ".repeat(n - s.length); }
 function padl(s, n) { s = "" + s; return s.length >= n ? s : " ".repeat(n - s.length) + s; }
+// A plain-text table: a header row, a rule, then the rows. Columns are as wide as their widest cell.
+function table(head, rows, right, indent) {
+  const all = [head].concat(rows);
+  const w = head.map((_, i) => all.reduce((m, r) => Math.max(m, String(r[i]).length), 0));
+  const line = (r) => (indent || "") + r.map((c, i) => (right[i] ? padl(c, w[i]) : pad(c, w[i]))).join("  ").replace(/\s+$/, "");
+  return [line(head), line(w.map((n) => "-".repeat(n)))].concat(rows.map(line));
+}
 
 function render(r, source) {
   const L = [];
@@ -529,34 +589,31 @@ function render(r, source) {
   L.push("Pricing and ARPU model");
   L.push("Source: " + source);
   L.push("");
-  L.push(pad("Tier", 14) + padl("Price", 9) + padl("Customers", 11) + padl("Per customer", 14) + padl("MRR", 12) + padl("Rev %", 8) + padl("Cust %", 8) + padl("Step", 7));
-  L.push("-".repeat(14) + " " + "-".repeat(8) + "  " + "-".repeat(9) + "  " + "-".repeat(12) + "  " + "-".repeat(10) + "  " + "-".repeat(6) + "  " + "-".repeat(6) + "  " + "-".repeat(5));
-  r.tiers.forEach((t) => {
-    L.push(
-      pad(t.name.slice(0, 13), 14) +
-      padl(usd(t.price) + (t.unit === "seat" ? "/seat" : ""), 9) +
-      padl(fmtInt(t.customers), 11) +
-      padl(usd(t.revenuePerCustomer), 14) +
-      padl(money(t.revenue), 12) +
-      padl(t.revenueShare + "%", 8) +
-      padl(t.customerShare + "%", 8) +
-      padl(t.stepMultiple ? t.stepMultiple + "x" : "-", 7)
-    );
-  });
+  table(["Tier", "Price", "Customers", "Per customer", "MRR", "Rev %", "Cust %", "Step"],
+    r.tiers.map((t) => [t.name, usd(t.price) + (t.unit === "seat" ? "/seat" : ""), fmtInt(t.customers), usd(t.revenuePerCustomer), usd(t.revenue),
+      t.revenueShare + "%", t.customerShare + "%", t.stepMultiple ? t.stepMultiple + "x" : "-"]),
+    [false, true, true, true, true, true, true, true]).forEach((l) => L.push(l));
   const details = r.tiers.map((t) => {
     const parts = [];
-    if (t.unit === "seat") parts.push(fmtNum(t.seats) + (t.seats === 1 ? " seat" : " seats") + " a customer, " + usd(t.listPerCustomer) + " at list");
-    if (t.annualShare > 0) parts.push(t.annualShare + "% pay yearly at " + t.annualDiscount + "% off");
+    if (t.unit === "seat") parts.push(fmtPlain(t.seats) + (t.seats === 1 ? " seat" : " seats") + " a customer, " + usd(t.listPerCustomer) + " at list");
+    if (t.annualShare > 0) parts.push(fmtPlain(t.annualShare) + "% pay yearly" + (t.annualDiscount > 0 ? " at " + fmtPlain(t.annualDiscount) + "% off" : " at no discount"));
     if (t.usage > 0) parts.push("usage " + usd(t.usage) + " a customer");
-    if (t.cost !== null) parts.push("costs " + usd(t.cost) + " a customer to serve" + (t.marginPct !== null ? " (margin " + t.marginPct + "%)" : "") + (t.floor !== null ? ", floor " + usd(t.floor) : ""));
+    if (t.cost !== null) {
+      const notes = [];
+      if (t.marginPct !== null) notes.push("margin " + t.marginPct + "%");
+      if (t.floor !== null) notes.push("the " + fmtPlain(r.margin.target) + "% target needs " + usd(t.floor) + " a customer");
+      parts.push("costs " + usd(t.cost) + " a customer to serve" + (notes.length ? " (" + notes.join("; ") + ")" : ""));
+    }
     return parts.length ? "  " + t.name + ": " + parts.join("; ") : null;
   }).filter(Boolean);
   if (details.length) { L.push(""); L.push("How each tier is charged"); details.forEach((d) => L.push(d)); }
   L.push("");
-  L.push("MRR:            " + money(s.mrr));
-  L.push("ARR:            " + money(s.arr));
-  L.push("Blended ARPU:   " + usd(s.blendedARPU) + (s.freeCustomers > 0 ? "   (" + usd(s.paidARPU) + " across paying customers)" : "") +
-    (s.arpuVsEntry ? "   (" + s.arpuVsEntry + "x the entry tier)" : ""));
+  L.push("MRR:            " + usd(s.mrr));
+  L.push("ARR:            " + usd(s.arr));
+  const beside = [];
+  if (s.freeCustomers > 0) beside.push(usd(s.paidARPU) + " across paying customers");
+  if (s.arpuVsEntry) beside.push(s.arpuVsEntry + "x the entry tier");
+  L.push("Blended ARPU:   " + usd(s.blendedARPU) + (beside.length ? "   (" + beside.join(", ") + ")" : ""));
   if (r.ladder.steps.length) {
     L.push("Price ladder:   " + r.tiers.map((t) => usd(r.ladder.basis === "customer" ? t.listPerCustomer : t.price)).join(" -> ") +
       (r.ladder.basis === "seat" ? "   (per seat)" : r.ladder.basis === "customer" ? "   (what one customer pays at list)" : ""));
@@ -566,7 +623,7 @@ function render(r, source) {
       ? "Weak: the top tier is only " + r.ladder.anchorMultiple + "x the tier below"
       : "OK: the top tier is " + r.ladder.anchorMultiple + "x the tier below"));
   }
-  if (r.margin && r.margin.complete && r.margin.marginPct !== null) L.push("Gross margin:   " + r.margin.marginPct + "%   (" + money(r.margin.grossProfit) + " a month)");
+  if (r.margin && r.margin.complete && r.margin.marginPct !== null) L.push("Gross margin:   " + r.margin.marginPct + "%   (" + usd(r.margin.grossProfit) + " a month)");
   L.push("");
   L.push("Read-out:");
   if (!r.insights.length) L.push("  - No customers on any tier yet, so there is no mix to read.");
@@ -576,17 +633,19 @@ function render(r, source) {
     const delta = (n, f) => (n > 0 ? "+" : n < 0 ? "-" : "") + f(Math.abs(n));
     L.push("");
     L.push("What if");
-    L.push(pad("", 14) + padl("Today", 14) + padl("Scenario", 14) + padl("Change", 14));
-    L.push(pad("MRR", 14) + padl(money(b.mrr), 14) + padl(money(a.mrr), 14) + padl(delta(sc.change.mrr, money), 14) + (sc.change.mrrPct !== null ? "  (" + delta(sc.change.mrrPct, String) + "%)" : ""));
-    L.push(pad("ARR", 14) + padl(money(b.arr), 14) + padl(money(a.arr), 14) + padl(delta(a.arr - b.arr, money), 14));
-    L.push(pad("Blended ARPU", 14) + padl(usd(b.arpu), 14) + padl(usd(a.arpu), 14) + padl(delta(sc.change.arpu, usd), 14));
-    L.push(pad("Customers", 14) + padl(fmtInt(b.customers), 14) + padl(fmtInt(a.customers), 14) + padl(delta(sc.change.customers, fmtInt), 14));
+    table(["", "Today", "Scenario", "Change"], [
+      ["MRR", usd(b.mrr), usd(a.mrr), delta(sc.change.mrr, usd) + (sc.change.mrrPct !== null ? " (" + delta(sc.change.mrrPct, String) + "%)" : "")],
+      ["ARR", usd(b.arr), usd(a.arr), delta(a.arr - b.arr, usd)],
+      ["Blended ARPU", usd(b.arpu), usd(a.arpu), delta(sc.change.arpu, usd)],
+      ["Customers", fmtInt(b.customers), fmtInt(a.customers), delta(sc.change.customers, fmtInt)]
+    ], [false, true, true, false]).forEach((l) => L.push(l));
     const moved = sc.tiers.filter((t) => t.priceBefore !== t.priceAfter || t.customersBefore !== t.customersAfter);
     if (moved.length) {
       const span = (x, y, f) => (x === y ? f(x) : f(x) + " to " + f(y));
       L.push("");
-      L.push("  " + pad("Tier", 14) + pad("Price", 16) + pad("Customers", 18) + "MRR");
-      moved.forEach((t) => L.push("  " + pad(t.name.slice(0, 13), 14) + pad(span(t.priceBefore, t.priceAfter, usd), 16) + pad(span(t.customersBefore, t.customersAfter, fmtInt), 18) + span(t.mrrBefore, t.mrrAfter, money)));
+      table(["Tier", "Price", "Customers", "MRR"],
+        moved.map((t) => [t.name, span(t.priceBefore, t.priceAfter, usd) + (t.unit === "seat" ? " a seat" : ""), span(t.customersBefore, t.customersAfter, fmtInt), span(t.mrrBefore, t.mrrAfter, usd)]),
+        [false, false, false, false]).forEach((l) => L.push(l));
     }
     L.push("");
     sc.readout.forEach((i) => L.push("  - " + i));
@@ -642,5 +701,5 @@ function main() {
 
 if (require.main === module) main();
 
-module.exports = { analyze, analyzePricing, validate, validateTiers, readTier, scenarioTiers, usd, money, fmtInt, fmtNum, round,
-  ANCHOR_MIN, ARPU_LIFT, FEW_TIERS, MANY_TIERS, MAX_TIERS, TIER_FIELDS, TOP_FIELDS };
+module.exports = { analyze, analyzePricing, validate, validateTiers, readTier, scenarioTiers, render, usd, fmtInt, fmtNum, fmtPlain, round,
+  ANCHOR_MIN, ARPU_LIFT, FEW_TIERS, MANY_TIERS, MAX_TIERS, MAX_FIGURE, TIER_FIELDS, TOP_FIELDS };
