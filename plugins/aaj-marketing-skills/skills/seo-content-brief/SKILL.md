@@ -18,13 +18,13 @@ metadata:
   difficulty: Starter
   card: >-
     Produces a writer-ready brief: intent, answer block, entities, internal links.
-  version: 1.1.1
+  version: 1.2.0
   sprint: ai-visibility
   topic: content-seo
   secondary_topics: [ai-search]
   agents: [Claude Code, Cursor, OpenAI Codex, Windsurf, Cline]
-  inputs: Target query, the audience and their awareness state, what currently ranks for it, existing pages on the topic, and the business outcome the page should drive
-  outputs: A writer-ready brief — intent classification, the 40-60 word answer block, H2/H3 structure, entities and subtopics to cover, citation and statistic targets, internal links, schema type, and success criteria
+  inputs: Target query, the reader and what they already know, the titles that rank for it, existing pages on the topic or a Search Console export filtered to the query, and the business outcome the page should drive
+  outputs: A writer-ready brief with the intent, the 40-60 word answer block, headings, entities to cover, named sources, internal links, schema type, success criteria, the pages of yours that already show for the query, and a mark on every line an AI proposed that nobody has checked
   related_aaj:
     - https://aajconsult.com/tools/seo-geo-readiness-scorer
     - https://aajconsult.com/resources/content-calendar-repurposing-tracker
@@ -46,8 +46,9 @@ The user is planning content that hasn't been written yet — a blog post, a gui
 
 1. **Read the brand/product context first** (`.agents/product-marketing.md` / `.agents/aaj-brand.md`) for audience, voice, and the offer this content should route toward.
 2. **Get the target query and the business outcome.** A brief without a defined next action produces content that ranks and converts nothing.
-3. **Look at what actually ranks.** Ask the user to paste the current top results, or fetch them. The SERP is the clearest available statement of what the engine believes the intent is — arguing with it rarely works.
-4. **Inventory existing pages on the topic.** Cannibalisation is easier to prevent than to unwind.
+3. **Look at what actually ranks.** Ask the user to paste the current top results, or fetch them. The SERP is the clearest available statement of what the engine believes the intent is — arguing with it rarely works. Titles you gathered yourself, that nobody has checked against the live results page, are drafts: list them under `drafts` (see "Run the tool").
+4. **Inventory existing pages on the topic.** Cannibalisation is easier to prevent than to unwind. If the user has Search Console, ask for the Pages table of an export filtered to the target query: it shows which of their pages Google already answers this query with.
+5. **Ask whether this is a new page or a rewrite.** If the brief updates a page the user already has, that page is not a second page competing with itself. Pass it as `updates`.
 
 ## Method
 
@@ -59,14 +60,14 @@ Four decisions drive the brief, in order:
 
 **3. Coverage.** List the entities and subtopics the page must address to read as complete. Completeness against the topic beats word count — "aim for 2,000 words" is a proxy that produces padding.
 
-**4. Citability.** Specify what makes the page worth citing rather than summarising: original data, a named source per claim, precise statistics, a real example. The GEO study (Aggarwal et al., KDD 2024) found quotations, statistics and cited sources raised a page's share of an AI answer by roughly 27–41% — but inside a fixed five-source context, and end-to-end studies since found the gains don't transfer reliably. Brief for them because they make the page checkable and worth citing, not for a predicted lift. That is a structural property you brief for, not a style you edit in later.
+**4. Citability.** Specify what makes the page worth citing rather than summarising: original data, a named source per claim, precise statistics, a real example. The GEO study (Aggarwal et al., KDD 2024) found quotations, statistics and cited sources raised a page's share of an AI answer by roughly 27 to 41%, inside a fixed context of five sources. Two end-to-end studies since (C-SEO Bench, Puerto et al., NeurIPS 2025; SAGEO Arena, Kim et al., 2026) found the gains don't carry reliably once retrieval and ranking are part of the test. Brief for them because they make the page checkable and worth citing, not for a predicted lift. That is a structural property you brief for, not a style you edit in later.
 
 See `resources/brief-template.md` for the full template, the intent-to-format map, the entity checklist, the cannibalisation test, and a worked example.
 
 ## Workflow
 
 1. **Classify intent from the SERP** and name the format it demands (guide, comparison, tool, listicle, definition).
-2. **Run the cannibalisation check.** If an existing page already targets this intent, the answer is usually to improve that page rather than publish a second one. Two pages competing for one intent split authority and often both drop.
+2. **Run the cannibalisation check.** If an existing page already targets this intent, the answer is usually to improve that page rather than publish a second one. Two pages competing for one intent split authority and often both drop. Use Search Console's own data when the user has it. Google's help page for the Performance report gives the steps under "See pages shown for a specific query": open the Queries tab, click the query (the whole report is then filtered to it), open the Pages tab, and export. Pass the Pages rows as `pages` and the query as `pagesFor`.
 3. **Write the answer block** — 40–60 words, direct, no preamble. If you can't write it, the topic isn't clear enough to brief.
 4. **Build the heading structure.** Phrase H2s as the questions people actually ask; answer each in the first two sentences beneath it. This is what makes a page extractable.
 5. **List entities and subtopics** the page must cover, drawn from what ranks and from the questions in People Also Ask.
@@ -79,13 +80,31 @@ See `resources/brief-template.md` for the full template, the intent-to-format ma
 
 ```bash
 node resources/brief-check.js --demo
-node resources/brief-check.js '{"query":"...","action":"...","serp":["title that ranks today","..."],"intent":"commercial","format":"comparison","answer":"...","existing":["/blog/page - commercial"],"entities":["..."],"headings":["...?"],"sources":["named source - URL"],"linksIn":["/page"],"schema":"Article","success":"..."}'
+node resources/brief-check.js '{"query":"...","action":"...","audience":"...","serp":["title that ranks today - https://its.link","..."],"intent":"commercial","format":"comparison","answer":"...","existing":["/blog/page - commercial"],"pages":[{"page":"https://example.com/blog/page","clicks":12,"impressions":410,"position":9.4}],"pagesFor":"the query the export was filtered to","entities":["..."],"headings":["...?"],"sources":["named source - URL"],"linksIn":["/page"],"schema":"Article","success":"..."}'
 node resources/brief-check.js --help
 ```
 
 `build(input)` reads the intent from the pasted titles (each title votes once, for its strongest format signal), lists the issues as blockers and smaller gaps, and gives the verdict: *Not ready for a writer*, *Ready, with gaps* or *Ready for a writer*. `briefText(input)` writes the brief in the same Markdown as the page. Add `--json` for both as one object.
 
-This is the code of the AAJ Content Brief Builder (https://aajconsult.com/tools/content-brief-builder), byte for byte; the site's guard fails if the two drift. Run it once the ranking titles, existing pages and draft answer block are in hand (workflow steps 1-3), and again before handing the brief over. List existing pages with the intent each serves after a dash, or the cannibalisation check cannot see them. Treat every blocker as a stop. The signal words are pattern rules, not a model of the search engine: when the tally is close, read the titles yourself. If no titles were pasted, the brief says the intent is inferred; keep that line in what you present.
+This is the code of the AAJ Content Brief Builder (https://aajconsult.com/tools/content-brief-builder), byte for byte; the site's guard fails if the two drift. Run it once the ranking titles, existing pages and draft answer block are in hand (workflow steps 1-3), and again before handing the brief over. Treat every blocker as a stop. The signal words are pattern rules, not a model of the search engine: when the tally is close, read the titles yourself. If no titles were pasted, the brief says the intent is inferred; keep that line in what you present.
+
+Optional inputs, added in 1.2.0:
+
+| Input | What it is | What the engine does with it |
+|---|---|---|
+| `audience` | Who reads the page and what they already know | Printed as the reader. Leaving it out is a smaller gap. |
+| `pages` and `pagesFor` | The Pages table of a Search Console export filtered to one query, as rows of `page`, `clicks`, `impressions` and `position`, and the query it was filtered to | Names the pages that hold the query. A page holds it with 20% or more of the query's impressions. On page one (an average position of 10 or better) that is a blocker; lower down it is a smaller gap. Rows filtered to another query are left out and reported. |
+| `updates` | The page this brief rewrites, as a path or a link | That page is not counted against the brief, in the Search Console rows or in `existing`. |
+| `notes` | Anything else the writer needs | Printed under "Notes for the writer". A word count in it is flagged. |
+| `drafts` | Lines of `serp`, `entities`, `headings` or `sources`, exactly as written, that an AI proposed and nobody has checked | Each is marked "(AI draft, not checked)" in the brief. Any draft keeps the verdict at *Ready, with gaps*. A source that is still a draft does not count as a named source. |
+
+The 20% share and the position of 10 are rules of this engine, drawn at the same two numbers as the `search-demand-reader` engine's. They are not benchmarks. List existing pages with the intent each serves after a dash, or the check on `existing` cannot see them. A page that holds the query on page one stops being a blocker in two ways: the brief updates it (`updates`), or it is listed under `existing` with a different intent, in which case the engine asks for the two pages to be linked. Rows that differ only after a `#` are counted as one page.
+
+A link after a title is kept for the brief and never read for signals. A year at the start of a title is not a list count, and "best practices" reads as a guide.
+
+`schema` takes `Article`, `Product`, `SoftwareApplication`, `FAQPage` or `HowTo`. The last two are still valid schema.org, but Google has not shown FAQ rich results since 7 May 2026 (Search Central documentation updates, 8 May 2026) or How-to rich results since 13 September 2023 (Search Central blog, 8 August 2023, updated 14 September 2023). The brief prints that note beside either one.
+
+If you are the AI filling in the titles, headings, entities or sources, and no person has checked them against the live pages, say so: put each of those lines in `drafts`. Do not clear a draft mark yourself.
 
 ## Present the result
 
@@ -104,6 +123,8 @@ Flag explicitly where you're inferring intent rather than reading it from a live
 - **Keyword density is not a thing.** It hasn't been for well over a decade. Cover the topic and the terms appear naturally.
 - **Answer first, then elaborate.** Burying the answer costs the featured snippet and the AI citation simultaneously.
 - **Brief the proof, not just the topic.** "Include a statistic here" produces a fabricated statistic. Name the source or supply the data.
+- **An AI's reading of the results is a draft.** Titles, headings, entities and sources an AI proposed stay marked until a person has checked them against the live pages. A source nobody has opened is not a named source.
+- **A rewrite is not a second page.** If the page that already ranks is the one being improved, say so with `updates` rather than deleting the evidence.
 - **A brief is not a licence to publish.** If the honest answer is that the user has nothing new to say on a topic, say so. Another undifferentiated post on a crowded query is a cost, not an asset.
 
 ## Related AAJ resources

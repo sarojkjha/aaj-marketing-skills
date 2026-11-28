@@ -3245,12 +3245,12 @@
       "id": "seo-content-brief",
       "slug": "seo-content-brief",
       "title": "SEO Content Brief",
-      "version": "1.1.1",
+      "version": "1.2.0",
       "phase": "Design",
       "category": "SEO, GEO & AEO",
       "decision": "What should this page answer, for which search intent, and is the brief complete enough to hand to a writer?",
-      "inputs": "Target query, the audience and their awareness state, what currently ranks for it, existing pages on the topic, and the business outcome the page should drive",
-      "outputs": "A writer-ready brief — intent classification, the 40-60 word answer block, H2/H3 structure, entities and subtopics to cover, citation and statistic targets, internal links, schema type, and success criteria",
+      "inputs": "Target query, the reader and what they already know, the titles that rank for it, existing pages on the topic or a Search Console export filtered to the query, and the business outcome the page should drive",
+      "outputs": "A writer-ready brief with the intent, the 40-60 word answer block, headings, entities to cover, named sources, internal links, schema type, success criteria, the pages of yours that already show for the query, and a mark on every line an AI proposed that nobody has checked",
       "engine": "skills/seo-content-brief/resources/brief-check.js",
       "setup": {
         "install": "npx skills add sarojkjha/aaj-marketing-skills --skill seo-content-brief",
@@ -3289,10 +3289,11 @@
       ],
       "limitations": [
         "Intent is read from the titles you paste, by signal-word patterns, one vote per title. It does not fetch the SERP or model the search engine; when the tally is close, read the titles yourself. With no titles, intent is inferred.",
-        "The cannibalisation check sees only the existing pages you list with their intent after a dash. A page you leave out, or list without its intent, is not checked.",
-        "It checks the brief is complete and well formed (a 40-60 word answer block, question headings, named sources), not that the answer is right or the sources are real."
+        "The cannibalisation check sees only the pages you list with their intent after a dash and the Search Console rows you pass. It cannot tell whether those rows were filtered to the query: it trusts the query you name.",
+        "A page holds a query with 20% or more of its impressions, and is on page one at an average position of 10 or better. Both are rules of this engine, not benchmarks, and a handful of impressions can cross them.",
+        "It checks the brief is complete and well formed (a 40-60 word answer block, question headings, named sources), not that the answer is right or a source is real. A line an AI wrote is marked only if it is listed under drafts."
       ],
-      "review": "The content lead checks the live SERP for the target query and the site's existing pages on the topic, and confirms each named source exists and supports its claim, before the brief goes to a writer."
+      "review": "The content lead checks the live results page for the target query and the site's existing pages on the topic, confirms each named source exists and supports its claim, and clears every AI draft mark, before the brief goes to a writer."
     },
     {
       "id": "seo-geo-aeo-audit",

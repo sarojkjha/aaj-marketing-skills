@@ -30,6 +30,27 @@ Run this before writing anything. Two pages targeting one intent split authority
 3. If yes, the decision is almost always to improve the existing page, not publish a second one.
 4. If genuinely different intents (e.g. "what is X" vs "X vs Y"), proceed — and cross-link them explicitly so the distinction is legible to both readers and crawlers.
 
+**Use Search Console when you have it.** It shows which of your pages Google already answers this query with, which a list from memory cannot. Google's help page for the Performance report gives the steps under "See pages shown for a specific query":
+
+1. Open the Queries tab.
+2. Click the query. The whole report is now filtered to it.
+3. Open the Pages tab, then export.
+
+Pass the Pages rows to the engine as `pages`, and the query as `pagesFor`. The engine applies two rules, drawn at the same two numbers as the `search-demand-reader` engine's. They are rules of the engine, not benchmarks:
+
+- A page **holds the query** when it has 20% or more of the query's impressions.
+- A page is **on page one** at an average position of 10 or better.
+
+| What Search Console shows | What the engine says |
+|---|---|
+| A page holds the query on page one | Blocker. Improve that page, or say which of the next two rows applies. |
+| That page is the one this brief rewrites (`updates`) | Nothing: a rewrite is not a second page. |
+| That page is listed under existing pages with another intent | Smaller gap: link the two pages to each other. |
+| A page holds the query lower down | Smaller gap: say in the notes whether the new page replaces it, merges with it or links to it. |
+| No page appears | Nothing. The brief records that the query was checked. |
+
+An export has at most 1,000 rows, and one that is not filtered to a query lists every page on the site. The engine cannot tell the difference, so it asks which query the rows were filtered to and leaves out rows for any other query.
+
 Worth stating plainly: a briefing skill that never says "don't write this" isn't doing its job. The most valuable output is sometimes "improve the post you already have."
 
 ---
@@ -63,7 +84,7 @@ Completeness against the topic is the target. Length is a byproduct — briefing
 
 ## 5. Citability
 
-What makes this page worth *citing* rather than summarising. The GEO study (Aggarwal et al., KDD 2024) found quotations, statistics and cited sources raised a page's share of an AI answer by roughly 27–41% — but inside a fixed five-source context, and end-to-end studies since found the gains don't transfer reliably. Brief for them because they make the page checkable and worth citing, not for a predicted lift. Brief for these deliberately:
+What makes this page worth *citing* rather than summarising. The GEO study (Aggarwal et al., KDD 2024) found quotations, statistics and cited sources raised a page's share of an AI answer by roughly 27 to 41%, inside a fixed context of five sources. Two end-to-end studies since (C-SEO Bench, Puerto et al., NeurIPS 2025; SAGEO Arena, Kim et al., 2026) found the gains don't carry reliably once retrieval and ranking are part of the test. Brief for them because they make the page checkable and worth citing, not for a predicted lift. Brief for these deliberately:
 
 - **Named sources per claim** — specify which. "Include a statistic" produces a fabricated statistic.
 - **Precise statistics** — real numbers with attribution.
@@ -96,7 +117,8 @@ What makes this page worth *citing* rather than summarising. The GEO study (Agga
 - Success = [ranking / citation / conversion target]
 
 ## Cannibalisation check
-- Existing pages on this topic: [list]
+- Existing pages on this topic: [list, with the intent each serves]
+- Search Console, filtered to the query: [pages shown, share of impressions, position]
 - Decision: [new page / improve existing] — [why]
 
 ## The answer block  (first ~100 words, 40-60 words)
@@ -130,7 +152,7 @@ H2: FAQ
 - URL: /[slug]
 - Title tag: [≤60 chars]
 - Meta description: [≤155 chars, ends on a complete phrase]
-- Schema: [Article / FAQPage / HowTo]
+- Schema: [Article / Product / SoftwareApplication]
 
 ## Do not
 - [common mistake for this topic]
@@ -214,7 +236,7 @@ H2: FAQ
 - Meta description: The median private B2B SaaS company spends 8% of ARR
   on marketing (SaaS Capital, 2026) — but for a startup the percentage is
   the wrong starting point. Here's the method that holds up.
-- Schema: Article + FAQPage
+- Schema: Article
 
 ## Do not
 - Do not give a single number as the answer. The honest answer is a method
@@ -228,7 +250,8 @@ H2: FAQ
 Before handing a brief to a writer:
 
 - [ ] Intent classified from an actual SERP, not inferred from the keyword
-- [ ] Cannibalisation checked against existing pages
+- [ ] Every title, heading, entity and source an AI proposed has been checked against the live pages
+- [ ] Cannibalisation checked against existing pages, and against Search Console when it is available
 - [ ] Answer block written — 40–60 words, standalone
 - [ ] H2s phrased as real questions
 - [ ] Entities listed; no word-count target
