@@ -2813,12 +2813,12 @@
       "id": "pricing-and-packaging",
       "slug": "pricing-and-packaging",
       "title": "Pricing & Packaging",
-      "version": "1.1.2",
+      "version": "1.2.0",
       "phase": "Design",
       "category": "Strategy & Positioning",
-      "decision": "Do our tiers and price points hold together: is the top tier a real anchor, and where does revenue actually come from?",
-      "inputs": "The ICP/segments and what each values, the differentiator, proof, rough willingness to pay, and competitor pricing.",
-      "outputs": "A value metric, good-better-best tiers with prices, a modeled blended ARPU, revenue mix, price ladder and anchor check, and the upgrade logic.",
+      "decision": "Do our tiers and price points hold together, where does revenue come from, and what would a price change do to it?",
+      "inputs": "The ICP/segments and what each values, the differentiator, proof, rough willingness to pay, competitor pricing, and for each tier its price and customers, with seats, usage, the share who pay yearly and the cost to serve when you have them.",
+      "outputs": "A value metric, good-better-best tiers with prices, modeled MRR, ARR, blended ARPU and revenue mix, the price ladder and anchor check, gross margin when costs are given, a what-if for a price or mix change with its break-even, and the upgrade logic.",
       "engine": "skills/pricing-and-packaging/resources/price-packaging.js",
       "setup": {
         "install": "npx skills add sarojkjha/aaj-marketing-skills --skill pricing-and-packaging",
@@ -2856,12 +2856,12 @@
         }
       ],
       "limitations": [
-        "It does the arithmetic on the tiers you enter: ARPU, revenue mix, price steps and the anchor. It can't tell you what buyers will pay or which value metric fits.",
-        "For a product with no customers, the mix is your estimate, so the ARPU and revenue mix are assumptions, not a forecast.",
-        "The 1.5x weak-anchor line is this engine's rule of thumb, not a published benchmark.",
-        "An unrecognised tier field, or a price or customer count that isn't a number, stops the run with an error naming the tier. It can't tell whether the numbers themselves are right."
+        "It does the arithmetic on the tiers you enter: MRR, ARPU, revenue mix, price steps, the anchor and margin. It can't tell you what buyers will pay, which value metric fits, or how many customers a price change will lose.",
+        "A what-if counts every customer on a tier as average. A break-even is how many customers a tier can lose or must add, not a forecast of how many will. A customer who moves tier is counted at the average of the tier they join.",
+        "The 1.5x weak-anchor line and the 1.6x ARPU line are AAJ's rules of thumb, not published benchmarks. For a product with no customers, the mix is your estimate, so every figure is an assumption.",
+        "Seats, usage, annual share and cost are averages you supply for each tier. MRR spreads a yearly payment over twelve months, so it is not cash received. The engine does not model churn over time, taxes or currencies."
       ],
-      "review": "Whoever owns pricing checks the tier prices and the customer mix, marked as an estimate if projected. The finance lead cross-checks the blended ARPU against CAC and payback in unit-economics before any price goes live."
+      "review": "Whoever owns pricing checks the tier prices, the customer mix and the per-tier averages, marked as estimates if projected, and owns the customers-lost number in any what-if. The finance lead cross-checks the blended ARPU against CAC and payback in unit-economics before any price goes live."
     },
     {
       "id": "pricing-page-teardown",

@@ -221,7 +221,7 @@ Every engine accepts `--demo` (a worked example, no config), `--help` (the input
 | **E** | [`marketing-maturity-assessment`](skills/marketing-maturity-assessment) | Scores marketing as a system across six dimensions, and names the weak links to fix first for your stage. | Diagnose |
 |  | [`messaging-framework`](skills/messaging-framework) | Structures the message hierarchy beneath the positioning. | Design |
 | **E** | [`positioning-statement`](skills/positioning-statement) | Produces a positioning statement pressure-tested against the competitive alternative. | Design |
-| **E** | [`pricing-and-packaging`](skills/pricing-and-packaging) | Designs tiers with an anchor check and a willingness-to-pay read. | Design |
+| **E** | [`pricing-and-packaging`](skills/pricing-and-packaging) | Models tiers with seats, usage and annual billing, then tests a price change. | Design |
 | **E** | [`pricing-page-teardown`](skills/pricing-page-teardown) | Scores a pricing page on 21 buyer checks, and says whether a price test can answer the question at your traffic. | Diagnose |
 |  | [`sales-led-vs-self-serve`](skills/sales-led-vs-self-serve) | Chooses self-serve, sales-led or a mix from the buyer and the unit economics, not from fashion. | Design |
 |  | [`value-proposition`](skills/value-proposition) | Sharpens the value proposition into something defensible. | Design |

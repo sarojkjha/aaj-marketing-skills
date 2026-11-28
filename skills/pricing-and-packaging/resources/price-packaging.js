@@ -3,7 +3,7 @@
  * price-packaging.js - AAJ pricing-and-packaging
  *
  * Models a tiered price list. Each tier has a monthly price and the number of
- * customers on it. The free Pricing and ARPU Modeler on aajconsult.com runs this
+ * customers on it. The free Pricing & ARPU Modeler on aajconsult.com runs this
  * same code, so the agent and the web tool give the same numbers.
  *
  * It returns:
@@ -88,7 +88,7 @@ process.argv = process.argv.map((a, i) =>
 
 "use strict";
 
-/* aaj:core:begin - the pricing model and input checks. The free Pricing and ARPU Modeler on
+/* aaj:core:begin - the pricing model and input checks. The free Pricing & ARPU Modeler on
    aajconsult.com embeds this block verbatim; the site's verify script checks it byte for byte. */
 
 // Where this engine draws its lines. The two ratios are AAJ's rules of thumb, not benchmarks.
@@ -122,6 +122,7 @@ function fmtPlain(n) {
 }
 // Dollars with cents only when there are any: $91, $72.47, $1,234.50.
 function usd(n) { if (!isFinite(n)) n = 0; const s = fmtNum(n); return s.charAt(0) === "-" ? "-$" + s.slice(1) : "$" + s; }
+function times(n) { return fmtPlain(n) + "x"; }   // a multiple: 2.9x, 3x, 3,411.9x
 function plural(n, one, many) { return fmtInt(n) + " " + (n === 1 ? one : many); }
 function isNum(v) { return typeof v === "number" && isFinite(v); }
 function nameKey(v) { return String(v == null ? "" : v).trim().toLowerCase(); }
@@ -256,9 +257,9 @@ function analyze(cfg) {
     const lead = freeCustomers > 0 ? "ARPU across paying customers is " + usd(paidARPU) : "Blended ARPU is " + usd(blendedARPU);
     if (priced.length < 2) insights.push(lead + ".");   // one priced tier: no ladder to compare against
     else if (arpuForEntry < entry.list - EPS) insights.push(lead + ", under " + entryText + ".");
-    else insights.push(lead + ", " + summary.arpuVsEntry + "x " + entryText + ". " +
+    else insights.push(lead + ", " + times(summary.arpuVsEntry) + " " + entryText + ". " +
       (summary.arpuVsEntry >= ARPU_LIFT ? "Your mix lifts revenue well above the entry tier." : "That is close to the entry tier: either most customers sit low on the ladder, or the tiers are priced close together.") +
-      " (" + ARPU_LIFT + "x is AAJ's rule of thumb, not a benchmark.)");
+      " (" + times(ARPU_LIFT) + " is AAJ's rule of thumb, not a benchmark.)");
   }
   if (has && freeCustomers > 0) {
     insights.push(fmtInt(freeCustomers) + " of " + plural(totalCustomers, "account", "accounts") + " " + (freeCustomers === 1 ? "pays" : "pay") + " nothing (" +
@@ -281,9 +282,9 @@ function analyze(cfg) {
     const how = basis === "customer" ? " The two are compared on what one customer pays at list, because some tiers are priced per seat and some per account." : "";
     if (anchorMultiple < ANCHOR_MIN) {
       flags.push("weak-anchor");
-      insights.push("Your top tier is only " + anchorMultiple + "x the tier below it, under the " + ANCHOR_MIN + "x this engine uses as its rule of thumb for an anchor. In AAJ's view, a higher top tier makes the middle tiers look more reasonable; test it rather than assume it." + how);
+      insights.push("Your top tier is only " + times(anchorMultiple) + " the tier below it, under the " + times(ANCHOR_MIN) + " this engine uses as its rule of thumb for an anchor. In AAJ's view, a higher top tier makes the middle tiers look more reasonable; test it rather than assume it." + how);
     } else {
-      insights.push("Your top tier is " + anchorMultiple + "x the tier below, at or above the " + ANCHOR_MIN + "x this engine uses as its rule of thumb for an anchor." + how);
+      insights.push("Your top tier is " + times(anchorMultiple) + " the tier below, at or above the " + times(ANCHOR_MIN) + " this engine uses as its rule of thumb for an anchor." + how);
     }
   }
   if (has && summary.tierCount > 0 && summary.tierCount < FEW_TIERS) {
@@ -379,7 +380,7 @@ function whatIf(cfg, before) {
   const b = before.summary, a = after.summary;
   const side = (r) => ({
     mrr: r.summary.mrr, arr: r.summary.arr, arpu: r.summary.blendedARPU, customers: r.summary.totalCustomers,
-    grossProfit: r.margin && r.margin.complete ? r.margin.grossProfit : null
+    grossProfit: r.margin ? r.margin.grossProfit : null   // null when a tier with customers has no cost
   });
   const rows = cfg.tiers.map((t, i) => {
     const t0 = readTier(t, cfg), t1 = readTier(sc.tiers[i], cfg), l = sc.log[nameKey(t.name)];
@@ -423,9 +424,9 @@ function whatIf(cfg, before) {
     const head = '"' + c.name + '" at ' + usd(c.to) + per + ", " + (c.direction === "increase" ? "up" : "down") + " from " + usd(c.from) + (c.changePct !== null ? " (" + c.changePct + "%)" : "") + ": ";
     const ends = " In this scenario it ends with " + plural(row.customersAfter, "customer", "customers") + " and " + usd(row.mrrAfter) + " a month, against " + usd(row.mrrBefore) + " today.";
     if (c.customers === 0) readout.push(head + "no customers are on this tier today, so there is nothing to lose or win back." + (row.customersAfter > 0 ? ends : ""));
-    else if (c.direction === "increase") readout.push(head + "the tier earns at least what it earns today if no more than " + fmtInt(c.breakEvenCustomers) + " of its " + plural(c.customers, "customer leaves", "customers leave") + " (" + c.breakEvenPct + "%)." + ends);
+    else if (c.direction === "increase") readout.push(head + "the tier earns at least what it earns today if no more than " + fmtInt(c.breakEvenCustomers) + " of its " + plural(c.customers, "customer leaves", "customers leave") + " (the break-even is about " + c.breakEvenPct + "%)." + ends);
     else if (c.breakEvenCustomers === null) readout.push(head + "at this price no number of customers earns what the tier earns today." + ends);
-    else readout.push(head + "the tier needs " + plural(c.breakEvenCustomers, "more customer", "more customers") + " than its " + fmtInt(c.customers) + " (" + c.breakEvenPct + "%) to earn what it earns today." + ends);
+    else readout.push(head + "the tier needs " + plural(c.breakEvenCustomers, "more customer", "more customers") + " than its " + fmtInt(c.customers) + " to earn what it earns today (the break-even is about " + c.breakEvenPct + "% more)." + ends);
   });
   if (moved > 0) readout.push(plural(moved, "customer changes", "customers change") + " tier. Each is counted as an average customer of the tier they move to.");
   const gb = side(before).grossProfit, ga = side(after).grossProfit;
@@ -477,9 +478,9 @@ function validate(cfg) {
     if (typeof t.name !== "string" || !t.name.trim()) errs.push(label + ': "name" is required.');
     else if (seen.hasOwnProperty("$" + nameKey(t.name))) errs.push("Two tiers are named " + q(t.name.trim()) + ". Give each tier its own name.");
     else { seen["$" + nameKey(t.name)] = true; known["$" + nameKey(t.name)] = t; }
+    dollars(t.price, label + ': "price"');
     if (!isNum(t.customers) || t.customers < 0) errs.push(label + ': "customers" must be a number, 0 or more.');
     else if (Math.floor(t.customers) !== t.customers) errs.push(label + ': "customers" must be a whole number.');
-    dollars(t.price, label + ': "price"');
     ["usage", "cost"].forEach((k) => { if (t[k] !== undefined) dollars(t[k], label + ': "' + k + '"'); });
     if (t.seats !== undefined && (!isNum(t.seats) || t.seats < 1)) errs.push(label + ': "seats" must be a number, 1 or more: the average seats a customer on this tier pays for.');
     if (t.annualShare !== undefined) percent(t.annualShare, label + ': "annualShare"', 100, true);
@@ -591,7 +592,7 @@ function render(r, source) {
   L.push("");
   table(["Tier", "Price", "Customers", "Per customer", "MRR", "Rev %", "Cust %", "Step"],
     r.tiers.map((t) => [t.name, usd(t.price) + (t.unit === "seat" ? "/seat" : ""), fmtInt(t.customers), usd(t.revenuePerCustomer), usd(t.revenue),
-      t.revenueShare + "%", t.customerShare + "%", t.stepMultiple ? t.stepMultiple + "x" : "-"]),
+      t.revenueShare + "%", t.customerShare + "%", t.stepMultiple ? times(t.stepMultiple) : "-"]),
     [false, true, true, true, true, true, true, true]).forEach((l) => L.push(l));
   const details = r.tiers.map((t) => {
     const parts = [];
@@ -612,7 +613,7 @@ function render(r, source) {
   L.push("ARR:            " + usd(s.arr));
   const beside = [];
   if (s.freeCustomers > 0) beside.push(usd(s.paidARPU) + " across paying customers");
-  if (s.arpuVsEntry) beside.push(s.arpuVsEntry + "x the entry tier");
+  if (s.arpuVsEntry && r.tiers.filter((t) => t.multipleVsEntry !== null).length > 1) beside.push(times(s.arpuVsEntry) + " the entry tier");
   L.push("Blended ARPU:   " + usd(s.blendedARPU) + (beside.length ? "   (" + beside.join(", ") + ")" : ""));
   if (r.ladder.steps.length) {
     L.push("Price ladder:   " + r.tiers.map((t) => usd(r.ladder.basis === "customer" ? t.listPerCustomer : t.price)).join(" -> ") +
@@ -620,8 +621,8 @@ function render(r, source) {
   }
   if (r.ladder.anchorMultiple !== null) {
     L.push("Anchor check:   " + (r.ladder.anchorMultiple < ANCHOR_MIN
-      ? "Weak: the top tier is only " + r.ladder.anchorMultiple + "x the tier below"
-      : "OK: the top tier is " + r.ladder.anchorMultiple + "x the tier below"));
+      ? "Weak: the top tier is only " + times(r.ladder.anchorMultiple) + " the tier below"
+      : "OK: the top tier is " + times(r.ladder.anchorMultiple) + " the tier below"));
   }
   if (r.margin && r.margin.complete && r.margin.marginPct !== null) L.push("Gross margin:   " + r.margin.marginPct + "%   (" + usd(r.margin.grossProfit) + " a month)");
   L.push("");
