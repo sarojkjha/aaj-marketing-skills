@@ -555,25 +555,8 @@ function outOfRange(v) {
 }
 // The name the web tool has always called.
 function validateTiers(cfg) { return validate(cfg); }
-/* aaj:core:end */
 
-/* ----------------------------- CLI ----------------------------- */
-
-// Example Co. is fictional. Its tiers, mix and scenario are invented to show the model at work.
-const DEMO = {
-  tiers: [
-    { name: "Starter",    price: 29,  customers: 600, annualShare: 20 },
-    { name: "Growth",     price: 99,  customers: 300, annualShare: 40 },
-    { name: "Scale",      price: 299, customers: 80,  annualShare: 50 },
-    { name: "Enterprise", price: 999, customers: 20,  annualShare: 100 }
-  ],
-  annualDiscount: 17,
-  scenario: {
-    tiers: [{ name: "Growth", price: 119, customerChange: -20 }],
-    moves: [{ from: "Starter", to: "Growth", customers: 30 }]
-  }
-};
-
+// ---- the result as plain text: what the command line prints and what the web tool copies
 function pad(s, n) { s = "" + s; return s.length >= n ? s : s + " ".repeat(n - s.length); }
 function padl(s, n) { s = "" + s; return s.length >= n ? s : " ".repeat(n - s.length) + s; }
 // A plain-text table: a header row, a rule, then the rows. Columns are as wide as their widest cell.
@@ -582,6 +565,21 @@ function table(head, rows, right, indent) {
   const w = head.map((_, i) => all.reduce((m, r) => Math.max(m, String(r[i]).length), 0));
   const line = (r) => (indent || "") + r.map((c, i) => (right[i] ? padl(c, w[i]) : pad(c, w[i]))).join("  ").replace(/\s+$/, "");
   return [line(head), line(w.map((n) => "-".repeat(n)))].concat(rows.map(line));
+}
+
+// How one tier of a result is charged, in words. Empty for a flat price with nothing added.
+function chargedHow(t, target) {
+  const parts = [];
+  if (t.unit === "seat") parts.push(fmtPlain(t.seats) + (t.seats === 1 ? " seat" : " seats") + " a customer, " + usd(t.listPerCustomer) + " at list");
+  if (t.annualShare > 0) parts.push(fmtPlain(t.annualShare) + "% pay yearly" + (t.annualDiscount > 0 ? " at " + fmtPlain(t.annualDiscount) + "% off" : " at no discount"));
+  if (t.usage > 0) parts.push("usage " + usd(t.usage) + " a customer");
+  if (t.cost !== null) {
+    const notes = [];
+    if (t.marginPct !== null) notes.push("margin " + t.marginPct + "%");
+    if (t.floor !== null && target !== null) notes.push("the " + fmtPlain(target) + "% target needs " + usd(t.floor) + " a customer");
+    parts.push("costs " + usd(t.cost) + " a customer to serve" + (notes.length ? " (" + notes.join("; ") + ")" : ""));
+  }
+  return parts.join("; ");
 }
 
 function render(r, source) {
@@ -594,19 +592,7 @@ function render(r, source) {
     r.tiers.map((t) => [t.name, usd(t.price) + (t.unit === "seat" ? "/seat" : ""), fmtInt(t.customers), usd(t.revenuePerCustomer), usd(t.revenue),
       t.revenueShare + "%", t.customerShare + "%", t.stepMultiple ? times(t.stepMultiple) : "-"]),
     [false, true, true, true, true, true, true, true]).forEach((l) => L.push(l));
-  const details = r.tiers.map((t) => {
-    const parts = [];
-    if (t.unit === "seat") parts.push(fmtPlain(t.seats) + (t.seats === 1 ? " seat" : " seats") + " a customer, " + usd(t.listPerCustomer) + " at list");
-    if (t.annualShare > 0) parts.push(fmtPlain(t.annualShare) + "% pay yearly" + (t.annualDiscount > 0 ? " at " + fmtPlain(t.annualDiscount) + "% off" : " at no discount"));
-    if (t.usage > 0) parts.push("usage " + usd(t.usage) + " a customer");
-    if (t.cost !== null) {
-      const notes = [];
-      if (t.marginPct !== null) notes.push("margin " + t.marginPct + "%");
-      if (t.floor !== null) notes.push("the " + fmtPlain(r.margin.target) + "% target needs " + usd(t.floor) + " a customer");
-      parts.push("costs " + usd(t.cost) + " a customer to serve" + (notes.length ? " (" + notes.join("; ") + ")" : ""));
-    }
-    return parts.length ? "  " + t.name + ": " + parts.join("; ") : null;
-  }).filter(Boolean);
+  const details = r.tiers.map((t) => { const how = chargedHow(t, r.margin ? r.margin.target : null); return how ? "  " + t.name + ": " + how : null; }).filter(Boolean);
   if (details.length) { L.push(""); L.push("How each tier is charged"); details.forEach((d) => L.push(d)); }
   L.push("");
   L.push("MRR:            " + usd(s.mrr));
@@ -657,6 +643,24 @@ function render(r, source) {
   return L.join("\n");
 }
 
+// Example Co. is fictional. Its tiers, mix and scenario are invented to show the model at work.
+const DEMO = {
+  tiers: [
+    { name: "Starter",    price: 29,  customers: 600, annualShare: 20 },
+    { name: "Growth",     price: 99,  customers: 300, annualShare: 40 },
+    { name: "Scale",      price: 299, customers: 80,  annualShare: 50 },
+    { name: "Enterprise", price: 999, customers: 20,  annualShare: 100 }
+  ],
+  annualDiscount: 17,
+  scenario: {
+    tiers: [{ name: "Growth", price: 119, customerChange: -20 }],
+    moves: [{ from: "Starter", to: "Growth", customers: 30 }]
+  }
+};
+/* aaj:core:end */
+
+/* ----------------------------- CLI ----------------------------- */
+
 function main() {
   const argv = process.argv.slice(2);
   const jsonOut = argv.indexOf("--json") >= 0;
@@ -702,5 +706,5 @@ function main() {
 
 if (require.main === module) main();
 
-module.exports = { analyze, analyzePricing, validate, validateTiers, readTier, scenarioTiers, render, usd, fmtInt, fmtNum, fmtPlain, round,
+module.exports = { DEMO, analyze, analyzePricing, validate, validateTiers, readTier, scenarioTiers, render, chargedHow, usd, fmtInt, fmtNum, fmtPlain, times, round,
   ANCHOR_MIN, ARPU_LIFT, FEW_TIERS, MANY_TIERS, MAX_TIERS, MAX_FIGURE, TIER_FIELDS, TOP_FIELDS };
